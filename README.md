@@ -6,7 +6,7 @@
 
 Windows PowerShell module for accessing the LogicMonitor REST API.
 
-NOTE: This is a community open source project and is not an official LogicMonitor integration. Any bugs/issues with this module should be reported via a submitted issue within the lm-powershell-module repo along with any feature requests. If you would like to contribute to the development of this module, please contact steven.villardi@logicmonitor.com for details.
+**NOTE:** This is a community open source project and is not an official LogicMonitor integration. Any bugs/issues/support with this module should be reported via a submitted issue within the lm-powershell-module repo along with any feature requests. If you would like to contribute to the development of this module, please contact steven.villardi@logicmonitor.com for details.
 
 This project is also published in the PowerShell Gallery at https://www.powershellgallery.com/packages/Logic.Monitor/.
 
@@ -64,7 +64,7 @@ Connect-LMAccount -UseCachedCredential
 
 # Examples
 
-Most Get commands can pull info by id or name to allow for easier retrevial without needing to know the specific resource id. The name paramters in get commands can also accept wildcard values. All responses will return objects in list view so for readablility you may want to pipe the output to **Format-Table**.
+Most Get commands can pull info by id or name to allow for easier retrieval without needing to know the specific resource id. The name parameters in get commands can also accept wildcard values. All responses will return objects in list view so for readability you may want to pipe the output to **Format-Table**.
 
 Get list of devices:
 
@@ -82,12 +82,12 @@ Get-LMDevice -Name device.example.com
 Get-LMDevice -DisplayName "corp*"
 ```
 
-When modifying or removing a device you can use the Name paramter instead of id but wildcard values cannot be used.
+When modifying or removing a device you can use the Name parameter instead of id but wildcard values cannot be used.
 
 Modify a device:
 
 ```powershell
-#Change device Name,DisplayName,Descrition,Link and set collector assignment
+#Change device Name,DisplayName,Description,Link and set collector assignment
 Set-LMDevice -Id 1 -DisplayName "New Device Name" -NewName "device.example.com" -Description "Critical Device" -Link "http://device.example.com" -PreferredCollectorId 1
 
 #Add/Update custom properties to a resource and disable alerting
@@ -174,7 +174,7 @@ Get-LMUser -Filter "email -contains 'steve' -or email -ne '$null'"
 Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Critical'"
 ```
 
-**Note:** Using the -Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retreive the required id. When performing a large amount of changes using id is the prefered method to avoid excesive lookups and avoid any potential API throttling.
+**Note:** Using the -Name parameter to target a resource during a Set/Remove command will perform an initial get request for you automatically to retrieve the required id. When performing a large amount of changes using id is the preferred method to avoid excessive lookups and avoid any potential API throttling.
 
 # Additional Code Examples and Documentation
 
@@ -446,7 +446,7 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 - Set-LMWebsiteGroup*
 - Remove-LMWebsiteGroup*
 
-***Note**: Supports Pipline Input
+***Note**: Supports Pipeline Input
 
 # Change List
 

@@ -56,7 +56,7 @@ $Output
 #   Example CSV:
 #   id,displayname,description,properties,collector_id,group_ids
 #   "192.168.1.1","core-switch01","TX HQ switch","snmp.community=public,location=Austin TX","1","2,4,6"
-#   "192.168.2.1","core-switch02","FL HQ switch","snmp.community=public,location=Oralndo FL","2","7,8,9"
+#   "192.168.2.1","core-switch02","FL HQ switch","snmp.community=public,location=Orlando FL","2","7,8,9"
 #
 $csvPath = "path/to/import.csv"
 $devices = Import-Csv -Path $csvPath
