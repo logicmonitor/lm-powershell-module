@@ -8,7 +8,7 @@ schema: 2.0.0
 # Disconnect-LMAccount
 
 ## SYNOPSIS
-Disconnect from a previouslly connected LM portal
+Disconnect from a previously connected LM portal
 
 ## SYNTAX
 

@@ -15,13 +15,13 @@ Exports the latest version of a device config for a select set of devices
 ### Device (Default)
 ```
 Export-LMDeviceConfigBackup -DeviceId <Int32> [-InstanceNameFilter <Regex>] [-ConfigSourceNameFilter <Regex>]
- [-Path <String>] [<CommonParameters>]
+ [-Path <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DeviceGroup
 ```
 Export-LMDeviceConfigBackup -DeviceGroupId <Int32> [-InstanceNameFilter <Regex>]
- [-ConfigSourceNameFilter <Regex>] [-Path <String>] [<CommonParameters>]
+ [-ConfigSourceNameFilter <Regex>] [-Path <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -108,6 +108,21 @@ Path to export the csv backup to
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

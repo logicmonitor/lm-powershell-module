@@ -14,12 +14,14 @@ Exports a specified logicmodule
 
 ### Id (Default)
 ```
-Export-LMLogicModule -LogicModuleId <Int32> -Type <String> [-DownloadPath <String>] [<CommonParameters>]
+Export-LMLogicModule -LogicModuleId <Int32> -Type <String> [-DownloadPath <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Export-LMLogicModule -LogicModuleName <String> -Type <String> [-DownloadPath <String>] [<CommonParameters>]
+Export-LMLogicModule -LogicModuleName <String> -Type <String> [-DownloadPath <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -95,6 +97,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: (Get-Location).Path
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
