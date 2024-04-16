@@ -1,12 +1,12 @@
-[![Build PSGallery Release](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml/badge.svg?event=release)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/main.yml)\
-[![Test Current Build on PowerShell Core](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test.yml/badge.svg)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test.yml)\
-[![Test Current Build on Windows Powershell 5.1](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test-win.yml/badge.svg)](https://github.com/stevevillardi/Logic.Monitor/actions/workflows/test-win.yml)
+[![Build PSGallery Release](https://github.com/logicmonitor/lm-powershell-module/actions/workflows/main.yml/badge.svg?event=release)](https://github.com/logicmonitor/lm-powershell-module/actions/workflows/main.yml)\
+[![Test Current Build on PowerShell Core 7.4.1](https://github.com/logicmonitor/lm-powershell-module/actions/workflows/test.yml/badge.svg)](https://github.com/logicmonitor/lm-powershell-module/actions/workflows/test.yml)\
+[![Test Current Build on Windows Powershell 5.1](https://github.com/logicmonitor/lm-powershell-module/actions/workflows/test-win.yml/badge.svg)](https://github.com/logicmonitor/lm-powershell-module/actions/workflows/test-win.yml)
 
 # General
 
 Windows PowerShell module for accessing the LogicMonitor REST API.
 
-NOTE: This is a personal project and is not an offically supported LogicMonitor integration. If an official LM PS module is of interest I suggest entering your feedback within your LM portal so interest can be recored. Any bugs/issues with this module should be reported via a submitted issue within the Logic.Monitor repo along with any feature requests.
+NOTE: This is a community open source project and is not an official LogicMonitor integration. Any bugs/issues with this module should be reported via a submitted issue within the lm-powershell-module repo along with any feature requests. If you would like to contribute to the development of this module, please contact steven.villardi@logicmonitor.com for details.
 
 This project is also published in the PowerShell Gallery at https://www.powershellgallery.com/packages/Logic.Monitor/.
 
