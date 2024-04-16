@@ -101,13 +101,13 @@
             # LicenseUri = ''
 
             # A URL to the main website for this project.
-            ProjectUri   = 'https://github.com/stevevillardi/Logic.Monitor'
+            ProjectUri   = 'https://github.com/logicmonitor/lm-powershell-module'
 
             # A URL to an icon representing this module.
             # IconUri = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = 'See github product site for change log: https://github.com/stevevillardi/Logic.Monitor'
+            ReleaseNotes = 'See github product site for change log: https://github.com/logicmonitor/lm-powershell-module'
 
             # Prerelease string of this module
             # Prerelease = ''
