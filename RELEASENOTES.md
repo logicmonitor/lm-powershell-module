@@ -1,11 +1,22 @@
 # Previous module release notes
+## 5.1.3
+### Updated Cmdlets:
+- **New-LMRole**:
+  - Update cmdlet to support provisioning new LMX RBAC permissions.
+
+- **Set-LMRole**:
+  - Update cmdlet to support provisioning new LMX RBAC permissions.
+
+- **Invoke-LMActiveDiscovery**:
+  - Added pipeline support for device id. You can now pipe results cmdlets that return device objects directly to this command.
+
 ## 5.1.2
 ### Updated Cmdlets:
 - **Get-LMDevice**:
-  - When using the -Delta switch, in addition to the result output a variable called $LMDeltaId will also be set to allow for programatic retrieval of the DeltaId. Disconnecting from a portal will clear this variable.
+  - When using the -Delta switch, in addition to the result output a variable called $LMDeltaId will also be set to allow for programmatic retrieval of the DeltaId. Disconnecting from a portal will clear this variable.
 
 - **New-LMUser**:
-  - When letting the user creation process generate a temp password the result will be stored in a output variable called $LMUserData to allow for programatic access to the temp credentials used to create an account. Disconnecting from a portal will clear this variable.
+  - When letting the user creation process generate a temp password the result will be stored in a output variable called $LMUserData to allow for programmatic access to the temp credentials used to create an account. Disconnecting from a portal will clear this variable.
 
 - **Disconnect-LMAccount**:
   - Add support for clearing LMDeltaId and LMUserdata variables upon disconnect from a portal.
@@ -19,7 +30,7 @@
 ## 5.1.1
 ### Updated Cmdlets:
 - **Get-LMDevice**:
-  - Support for Delta queries is now GA. Using the -Filter, -Name or -DisplayName parameters along with -Delta will allow you to reterieve a Delta token which can be supplied to future API calls to only return resources that have changed since the last API call. The token is good for 30minutes before a new one will need to be regenerated.
+  - Support for Delta queries is now GA. Using the -Filter, -Name or -DisplayName parameters along with -Delta will allow you to retrieve a Delta token which can be supplied to future API calls to only return resources that have changed since the last API call. The token is good for 30minutes before a new one will need to be regenerated.
 
   - Initial EA support for advanced property filters. This is the first release with support for advanced property filters, please report any bugs or feature requests through the github issues page.
 
@@ -113,7 +124,7 @@ Get-LMDevice -Id 123  | Remove-LMDevice -WhatIf
 ```
 
 **Support for -Confirm parameter on destructive cmdlets**:
-- All destructive cmdlets (*Remove-LM<cmdletName>*) now support the -Confirm parameter. The Confirm switch instructs the cmdlet to which it is applied to stop processing before any changes are made. The default value of the Confirm switch is $true when not specified. When true the cmdlet prompts you to acknowledge each action before it continues. When you use the Confirm switch, you can step through changes to objects to make sure that changes are made only to the specific objects that you want to change. This functionality is useful when you apply changes to many objects and want precise control over the operation of the Shell. A confirmation prompt is displayed for each object before the Shell modifies the object. **Note**: Since this is a breaking change please ensure any scripted automations that leverage destructive cmdlets are updated prior to updating to this version. Simply updating any existing removal cmdlets with *-Confirm:$false* is all that is needed to mitigate this new behavior.
+- All destructive cmdlets (*Remove-LM<cmdletName>*) now support the -Confirm parameter. The Confirm switch instructs the cmdlet to which it is applied to stop processing before any changes are made. The default value of the Confirm switch is $true when not specified. When true the cmdlet prompts you to acknowledge each action before it continues. When you use the Confirm switch, you can step through changes to objects to make sure that changes are made only to the specific objects that you want to change. This functionality is useful when you apply changes to many objects and want precise control over the operation of the Shell. A confirmation prompt is displayed for each object before the Shell modifies the object. **Note**: Since this is a breaking change please ensure any scripted automation that leverage destructive cmdlets are updated prior to updating to this version. Simply updating any existing removal cmdlets with *-Confirm:$false* is all that is needed to mitigate this new behavior.
 
 ```powershell
 Get-LMDevice -Id 123  | Remove-LMDevice
@@ -151,7 +162,7 @@ Remove-LMDevicedatasourceinstance -deviceid 123 -DatasourceId 37 -Wildvalue $nul
 ```
 
 **Support for clearing values with Set-LMx cmdlets**:
-- Historically Set-LMx cmdlets allowed you to modify details about an object but did not allow you to reset/null values that had already been set. Most parameters that accept [String] datatypes will now allow you to pass null values where accetped by the api. Example use case would be removing a description from a resource or a link on a user role.
+- Historically Set-LMx cmdlets allowed you to modify details about an object but did not allow you to reset/null values that had already been set. Most parameters that accept [String] datatypes will now allow you to pass null values where accepted by the api. Example use case would be removing a description from a resource or a link on a user role.
 
 ```powershell
 Set-LMDevice -id 123 -Description "hello world"
@@ -205,18 +216,18 @@ Set-LMDevice -id 123 -Description $null
 **Get-LMDeviceGroupDatasourceAlertSetting**: New cmdlet to retrieve alert settings for datasources associated with resources that are a member of a device group. Useful for looking up datasource ids and datapoint info so you can modify group level alert settings using Set-LMDeviceGroupDatasourceAlertSetting.
 **Set-LMDeviceGroupDatasourceAlertSetting**: New cmdlet to set group level alert settings for datasources associated with resources that are a member of a device group. 
 
-**Get-LMDeviceGroupDatasourceList**: New cmdlet to list out datasource info for all datasources assocaited with a specified device group.
+**Get-LMDeviceGroupDatasourceList**: New cmdlet to list out datasource info for all datasources associated with a specified device group.
 
 **Get-LMDeviceDatasourceInstanceAlertSetting**: New cmdlet to retrieve alert settings for datasources instances associated with a resource. Useful for looking up datasource ids and datapoint info so you can modify device/instance level alert settings using Set-LMDeviceDatasourceInstanceAlertSetting.
 **Set-LMDeviceDatasourceInstanceAlertSetting**: New cmdlet to set device/instance level alert settings for datasources associated with a resource. 
 
 ###### Example Usage:
-**Note:** Below examples use names to reference portal objects. You should use IDs where possible to avoid exsessive look ups when chaning configurations in bulk.
+**Note:** Below examples use names to reference portal objects. You should use IDs where possible to avoid excessive look ups when changing configurations in bulk.
 ```powershell
 #Get list of datasources associated with devices that are a member of the Villa Villardi resource group
 Get-LMDeviceGroupDatasourceList -Name "Villa Villardi"
 
-#Get alert seetings for HTTPS datasource at the Villa Villardi resource group level
+#Get alert settings for HTTPS datasource at the Villa Villardi resource group level
 Get-LMDeviceGroupDatasourceAlertSetting -Name "Villa Villardi" -DatasourceName "HTTPS"
 
 #Disable alerting at the resource group level for the HTTPS -> status datapoint for all resources in Villa Villardi resource group
@@ -265,7 +276,7 @@ Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceName NoData_Tasks_By_Type_
 
 ###### Updated Commands:
 **Get-LMAlert**: Made the sort option a parameter, defaults to sorting by resourceId if not specified.
-**Get-LMDatasource**: Output is now formated based on existing object type LogicMonitor.Datasource.
+**Get-LMDatasource**: Output is now formatted based on existing object type LogicMonitor.Datasource.
 **Get-LMDeviceData**: Fixed bug causing parameter set error when attempting to use instancename as a parameter.
 
 **New-LMPushMetricDataPoint**: Added datapoint description as an added output, this required changing the -Datapoints variable from a HashTable to an Object. Datapoint object schema should include @{Name,Description,Value}.
@@ -333,12 +344,12 @@ Remove-LMSDT -id HG_77
 **Set-LMNewUserMessage**: New command to update the new user welcome message that is sent out when new users are created in the portal.
 
 ###### Update Commands:
-**Initialize-LMPOVSetup**: Added updating the new user message tempalte as part of IncludeDefaults.
+**Initialize-LMPOVSetup**: Added updating the new user message template as part of IncludeDefaults.
 
 **New-LMUser**: Made *-Password* parameter optional. If no password is provided a randomly generated password will be assigned to the new user.
 
 ###### Bug Fixes/Updates:
-**Set-LMPortalLogo**: Temporaily removed from module, POST encoding changes for that endpoint have made this current cmdlet fail to work correctly. Will bring back in a future update
+**Set-LMPortalLogo**: Temporarily removed from module, POST encoding changes for that endpoint have made this current cmdlet fail to work correctly. Will bring back in a future update
 
 ## 4.4
 ###### New Features:
@@ -356,7 +367,7 @@ Remove-LMSDT -id HG_77
 ###### Update Commands:
 **Initialize-LMPOVSetup**: Added checks for dasboard import to skip attempting import if a dashboard is already present.
 
-**New/Set-LMWebsite**: Seperated out Wbecheck and Pingcheck parameter sets to make it easier to see which parameters are required for each type of check. Also added a parameter *-WebsiteSteps* that takes an array of steps to include in new or existing webchecks. See the step schema for how this object should be constructed. 
+**New/Set-LMWebsite**: Separated out Wbecheck and Pingcheck parameter sets to make it easier to see which parameters are required for each type of check. Also added a parameter *-WebsiteSteps* that takes an array of steps to include in new or existing webchecks. See the step schema for how this object should be constructed. 
 
 ```
 https://www.logicmonitor.com/swagger-ui-master/api-v3/lm-sdkv3-docs.html#api-Websites-addWebsite
@@ -380,7 +391,7 @@ https://www.logicmonitor.com/swagger-ui-master/api-v3/lm-sdkv3-docs.html#api-Web
 ## 4.2.1
 ###### Update Commands/Bug Fixes:
 **Search-LMDeviceConfigBackup**: Fix issue loading previous release on windows due to encoding bug in Search-LMDeviceConfigBackup
-**Invoke-LMDeviceDedupe**: Added support for exluding certain device types from dedupe processing, by default K8s resources are excluded.
+**Invoke-LMDeviceDedupe**: Added support for excluding certain device types from dedupe processing, by default K8s resources are excluded.
 
 ## 4.2
 ###### Feature Updates:
@@ -429,7 +440,7 @@ https://www.logicmonitor.com/swagger-ui-master/api-v3/lm-sdkv3-docs.html#api-Web
 
 Additional Filter Examples:
 ```powershell
-#Device Hostname contains UDM and aleting is disabled
+#Device Hostname contains UDM and alerting is disabled
 Get-LMDevice -Filter "disableAlerting -eq '$true' -and name -contains 'UDM'"
 
 #User email address either contains steve or is null
@@ -453,7 +464,7 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 - **Set-LMDatasource**: Fix regression bug preventing use of -AppliesTo parameter.
 
 ###### New Commands:
- - The following commands have been added in this release, see documentaiton for usage details:
+ - The following commands have been added in this release, see documentation for usage details:
     - **Get-LMNetscanGroup**
     - **Set-LMNetscanGroup**
     - **Remove-LMNetscanGroup**
@@ -464,7 +475,7 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 
 ## 4.1.1
 ###### Update Commands/Bug Fixes:
-- **Initalize-LMPOVSetup**: Fixed LM Logs datasource issue with importing an older core module that has collection issues. If you are using the POV setup command make sure you use this updated version for all new POVs. For existing POVs to ensure you have the latest core module for Logs either manually update the datasource using the LM Exchange/Repository or by running the bellow command:
+- **Initialize-LMPOVSetup**: Fixed LM Logs datasource issue with importing an older core module that has collection issues. If you are using the POV setup command make sure you use this updated version for all new POVs. For existing POVs to ensure you have the latest core module for Logs either manually update the datasource using the LM Exchange/Repository or by running the bellow command:
 
 ```powershell
 Import-LMRepositoryLogicModules -Type datasources -LogicModuleNames Windows_Events_LMLogs
@@ -480,7 +491,7 @@ Import-LMRepositoryLogicModules -Type datasources -LogicModuleNames Windows_Even
 - **Set-LMDatasource**: Add new parameter *-Datapoints* that takes an array of datapoints. See example documentation for usage.
 - **New-LMRole**: Added new setting permissions values for manage-collectors and view-collectors.
 - **Set-LMRole**: Added new setting permissions values for manage-collectors and view-collectors.
-- **Initalize-LMPOVSetup**: Added provisioning of lm_container user for use with LM Container. Fixed retry logic for Service Insight creation. Updated minimal monitoring applpiesto criteria.
+- **Initialize-LMPOVSetup**: Added provisioning of lm_container user for use with LM Container. Fixed retry logic for Service Insight creation. Updated minimal monitoring applpiesto criteria.
 - **Import-LMRepositoryLogicModules**: Updated command to align with the removal of the core version from the server parameter that was made in portal version 185. Enabled pipeline processing from Get-LMRepositoryLogicModules.
 - **Get-LMRepositoryLogicModules**: Updated command to align with the removal of the core version from the server parameter that was made in portal version 185.
 - **Get-LMDeviceConfigSourceData**: Added *-ConfigType* parameter to allow you to pull Delta or Full configuration data. Also added *-LatestConfigOnly* switch to only return the more recent configuration backup for the selected devices.
@@ -490,31 +501,31 @@ Import-LMRepositoryLogicModules -Type datasources -LogicModuleNames Windows_Even
 ## 4.0.3
 ###### Update Commands/Bug Fixes:
 - **Initialize-LMPOVSetup**: Added two new switches *-ReadOnlyMode* and *-RevertReadOnlyMode* that will convert and revert all non api accounts to/from readonly mode.
-- **Initialize-LMPOVSetup**: Added a new switch *-SetupCollectorServiceInsight* that will provision a service insight example aggregating important collector metrics accross all installed collectors in a portal. This example will be expanded on in future releases.
+- **Initialize-LMPOVSetup**: Added a new switch *-SetupCollectorServiceInsight* that will provision a service insight example aggregating important collector metrics across all installed collectors in a portal. This example will be expanded on in future releases.
 - **Import-LMLogicModule**: Added new *-File* switch that allows for providing a XML file object directly as opposed to just a FilePath previously.
 - **New-LMDevice**: Added support for -*DeviceType* to allow for setting the device type when provisioning a new resource, useful for creating service resources.
 
 ## 4.0.2
 ###### Update Commands/Bug Fixes:
 - Fixed **Set-LMCollector** bug causing automatic upgrade schedules to get reset when updating the collector
-- Updated **Export-LMDeviceConfigReport** to allow a bunch more filter options. You can now override the default ConfigSourceName and InstanceName filters that were previosuly used by setting the paramerters *-ConfigSourceNameFilter* and *-InstanceNameFilter* to a regex pattern you want to match against. You can no also limit the scope of the report to a single device or a group of devices.
+- Updated **Export-LMDeviceConfigReport** to allow a bunch more filter options. You can now override the default ConfigSourceName and InstanceName filters that were previously used by setting the parameters *-ConfigSourceNameFilter* and *-InstanceNameFilter* to a regex pattern you want to match against. You can no also limit the scope of the report to a single device or a group of devices.
 
 ## 4.0.1
 ###### Module Updates:
 - Fix scope bug on Connect-LMAccount cmdlet
-- Added support for **Bearer Token** authenticaiton when running Connect-LMAccount and New-LMCachedAccount
+- Added support for **Bearer Token** authentication when running Connect-LMAccount and New-LMCachedAccount
 
 ###### Update Commands/Bug Fixes:
 - **Initialize-LMPOVSetup**: Updated LM Logs datasource to use the latest core version 1.2 when setting up logs.
-- **New-LMCachedAccount**: Added new **CachedAccountName** parameter to allow storing of multiple crednetials for the same portal, it is optional and will default to the **AccountName** value if not specified.
-- **Get/Remove-LMCachedAccount**: Updated use the new parameter **CachedAccountName** as the required paramerter instead of **AccountName**.
-- **Get-LMOpsNotes**: Updated the **Name** parameter to **Tag** to allow for retrival of ops notes by tag since Name is not relevant.
+- **New-LMCachedAccount**: Added new **CachedAccountName** parameter to allow storing of multiple credentials for the same portal, it is optional and will default to the **AccountName** value if not specified.
+- **Get/Remove-LMCachedAccount**: Updated use the new parameter **CachedAccountName** as the required parameter instead of **AccountName**.
+- **Get-LMOpsNotes**: Updated the **Name** parameter to **Tag** to allow for retrieval of ops notes by tag since Name is not relevant.
 
 ## 4.0
 ###### Module Updates:
 - Automated build and release pipelines have been created to streamline the build and release process.
 - Pester testing framework has been created and will be added to throughout future versions to improve testing code coverage
-- All previous release notes have been migrated to a seperate release notes page. Going forward only current release notes will be present on the main page.
+- All previous release notes have been migrated to a separate release notes page. Going forward only current release notes will be present on the main page.
 
 ###### Update Commands/Bug Fixes:
 - **Set-LMUser**: Added new parameter *-NewUsername* to allow for updating the username property, previously there was a bug in the parameter sets that did not allow you to update the username.
@@ -586,7 +597,7 @@ Get-LMDevice -Name LM* | Set-LMDevice -Description "LogicMontior Collectors"
 
 - **Get-LMApiToken**: Added -Id as a new parameter to return a specific api token.
 
-- **Get/Set/Remove-LMDeviceDatasourceInstance**: Update parameter names for device id and device name to $DeviceId and $DeviceName in order to support pipeline processing and standarize parameter naming scheme.
+- **Get/Set/Remove-LMDeviceDatasourceInstance**: Update parameter names for device id and device name to $DeviceId and $DeviceName in order to support pipeline processing and standardize parameter naming scheme.
 
 ###### Bug Fixes:
 - **Get-LMOpsNote**: Fixed a typo that caused Get-LMOpsNote to not be available during module install. You can now use this command as intended.
@@ -595,9 +606,9 @@ Get-LMDevice -Name LM* | Set-LMDevice -Description "LogicMontior Collectors"
 
 ## 3.9
 ###### New Commands: 
-- **New-LMRole**: Added command to create new User roles within LM. This command accepts a PSCustomObject parameter *CustomPrivledgesObject* as a precreated privledge object for more advanced permission requirements but also has built in parameters to accomodate simipler permission requirements.
+- **New-LMRole**: Added command to create new User roles within LM. This command accepts a PSCustomObject parameter *CustomPrivledgesObject* as a precreated privilege object for more advanced permission requirements but also has built in parameters to accomodate simipler permission requirements.
 
-- **Set-LMRole**: Added command to create new User roles within LM. This command accepts a PSCustomObject parameter *CustomPrivledgesObject* as a precreated privledge object for more advanced permission requirements but also has built in parameters to accomodate simipler permission requirements.
+- **Set-LMRole**: Added command to create new User roles within LM. This command accepts a PSCustomObject parameter *CustomPrivledgesObject* as a precreated privilege object for more advanced permission requirements but also has built in parameters to accomodate simipler permission requirements.
 
 - **Set-LMDatasource**: Added command to update datasources with a number of parameters. This command will be expanded on in future released but currently support modifying the following properties:
   - Name
@@ -640,7 +651,7 @@ Get-LMDevice -Name LM* | Set-LMDevice -Description "LogicMontior Collectors"
 
 - **Get-LMRepositoryLogicModule**: CoreVersion no longer is an optional parameter and must be included in the parameter set when running.
 
-- **New-LMDevice**: Added parameter -AutoBalancedCollectorGroupId for specifying an autobalance collector group as the prefered collector group. Use PerferredCollectorId of 0 when using this parameter.
+- **New-LMDevice**: Added parameter -AutoBalancedCollectorGroupId for specifying an autobalance collector group as the preferred collector group. Use PerferredCollectorId of 0 when using this parameter.
 
 - **Get-LMAPIToken**: Added type parameter that accepts the value of LMv1 or Bearer to return the specified API token to return. Default value of this parameter is LMv1
 
@@ -648,7 +659,7 @@ Get-LMDevice -Name LM* | Set-LMDevice -Description "LogicMontior Collectors"
 
 - **Import-LMDashboard**: When using the parameter --ReplaceAPITokensOnImport the command will now generate a new lm api token per run and auto create an lm_dynamic_dashboards user and custom role with the required minimal permissions. Previously this command would leverage the logged in users api info which is not always ideal.
 
-- **Initalize-LMPOVSetup**: When using the parameter -SetupWindowsLMLogs or -RunAll the command will provision a purpose built user/role called lm-logs-ingest along with the required minimal permissons needed. In addition it the default name of the api user created for portal metrics has been renamed to lm_portal_metrics, previously is was lm_api. In addition, the Windows Logs datasource has also been updated to use the new core module along with setting the appropriate appliesTo logic.
+- **Initalize-LMPOVSetup**: When using the parameter -SetupWindowsLMLogs or -RunAll the command will provision a purpose built user/role called lm-logs-ingest along with the required minimal permissions needed. In addition it the default name of the api user created for portal metrics has been renamed to lm_portal_metrics, previously is was lm_api. In addition, the Windows Logs datasource has also been updated to use the new core module along with setting the appropriate appliesTo logic.
 
 ###### Bug Fixes: 
  - **Initalize-LMPOVSetup** : Fixed issue when running dynamic group cleanup and lm logs setup when duplicate folders exist for default devices by type resource groups.
@@ -702,7 +713,7 @@ If you are using the old cached account method the upgrade process will happen a
 ###### Bug Fixes:
 - **Import-LMMerakiCloud**: Fixed issue that prevented networks with tags applied from getting created during import
 - **New-LMNetScan**: Fixed typo in parameter IgnoreSystemIpDuplicates
-- **Initialize-LMPOVSetup**: Fixed LogTrackedQuery error when attemping to move Log Tracked Query folder to devices by type
+- **Initialize-LMPOVSetup**: Fixed LogTrackedQuery error when attempting to move Log Tracked Query folder to devices by type
 ###### Updated Commands:
 - **Get-LMDeviceProperty**: Added parameter **PropertyName** to allow for querying a single device property for a device
 - **Export-LMDeviceData**: Added parameter **DeviceDisplayName** and **DeviceHostName** to allow either field to be specific for export. Removed previous parameter DeviceName
@@ -716,7 +727,7 @@ If you are using the old cached account method the upgrade process will happen a
 
 ## 3.7.1
 ###### Updated Documentation:
--  [Module Documentation](https://github.com/stevevillardi/Logic.Monitor/tree/main/Documentation) is now available for all cmdlets. This section will continue to be enhanced through future releases along with more examples
+-  [Module Documentation](Documentation) is now available for all cmdlets. This section will continue to be enhanced through future releases along with more examples
 
 ###### Bug Fixes:
 - **New-LMPushMetricDataPoint**: Fixed an issue that was caused when providing a PSCustomObject instead of a hashtable as the input parameter for *-DataPoints*. The command now requires a hashtable which is inline with the rest of the module.

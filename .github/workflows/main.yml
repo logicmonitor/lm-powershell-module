@@ -100,7 +100,7 @@ jobs:
                       "emoji": true
                     },
                     "value": "click_me_123",
-                    "url": "https://github.com/stevevillardi/Logic.Monitor/releases",
+                    "url": "https://github.com/logicmonitor/lm-powershell-module/releases",
                     "action_id": "button-action"
                   }
                 },
@@ -118,7 +118,7 @@ jobs:
                       "emoji": true
                     },
                     "value": "click_me_123",
-                    "url": "https://github.com/stevevillardi/Logic.Monitor.SE/releases",
+                    "url": "https://github.com/logicmonitor/lm-powershell-module.SE/releases",
                     "action_id": "button-action"
                   }
                 },
@@ -148,7 +148,7 @@ jobs:
                   "elements": [
                     {
                       "type": "mrkdwn",
-                      "text": ":pushpin: Do you have a feature request or bug report? <https://github.com/stevevillardi/Logic.Monitor/issues|Submit a Github Issue>."
+                      "text": ":pushpin: Do you have a feature request or bug report? <https://github.com/logicmonitor/lm-powershell-module/issues|Submit a Github Issue>."
                     }
                   ]
                 }

@@ -4,7 +4,7 @@
 
 # General
 
-Windows PowerShell module for accessing the LogicMonitor REST API.
+PowerShell module for accessing the LogicMonitor REST API.
 
 This project is also published in the PowerShell Gallery at https://www.powershellgallery.com/packages/Logic.Monitor/.
 
@@ -455,15 +455,29 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 
 # Change List
 
-## 5.1.3
+## Important Update: Logic.Monitor PowerShell Module Transition
+
+We are excited to announce a significant update to the Logic.Monitor PowerShell module. Starting with version 6.0, the module will be relocating to a new repository within the LogicMonitor GitHub organization. The new repository will be named `lm-powershell-module`.
+
+This change aims to enhance visibility within the community and to foster a more centralized and collaborative environment for feedback and contributions. As a community-driven open source project, we believe this move will allow for more robust development and support, benefiting all users.
+
+## What This Means for You:
+- The new repository location will be active with the release of version 6.0.
+- Users are encouraged to start using the new repository for all future updates, issue tracking, and contributions.
+
+## Action Required:
+- Please update your bookmarks and local environments to point to the new repository: [https://github.com/LogicMonitor/lm-powershell-module](https://github.com/LogicMonitor/lm-powershell-module)
+- Subscribe to the repository to stay updated with the latest releases and discussions.
+
+We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
+
+## 6.0
 ### Updated Cmdlets:
-- **New-LMRole**:
-  - Update cmdlet to support provisioning new LMX RBAC permissions.
 
-- **Set-LMRole**:
-  - Update cmdlet to support provisioning new LMX RBAC permissions.
-
-- **Invoke-LMActiveDiscovery**:
-  - Added pipeline support for device id. You can now pipe results cmdlets that return device objects directly to this command.
 
 [Previous Release Notes](RELEASENOTES.md)
+
+# License
+Copyright, 2024, LogicMonitor, Inc.
+
+This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.

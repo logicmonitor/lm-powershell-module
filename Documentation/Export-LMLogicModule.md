@@ -129,7 +129,5 @@ You must run this command before you will be able to execute other commands incl
 
 ## RELATED LINKS
 
-[Module repo: https://github.com/stevevillardi/Logic.Monitor]()
-
 [PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
 

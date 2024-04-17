@@ -543,7 +543,7 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Module repo: https://github.com/stevevillardi/Logic.Monitor</maml:linkText>
+        <maml:linkText>Module repo: https://github.com/logicmonitor/lm-powershell-module</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -1294,7 +1294,7 @@ Creates a copy of the device specified by the $deviceObject variable with the na
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Module repo: https://github.com/stevevillardi/Logic.Monitor</maml:linkText>
+        <maml:linkText>Module repo: https://github.com/logicmonitor/lm-powershell-module</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -1551,7 +1551,7 @@ Creates a copy of the device specified by the $deviceObject variable with the na
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Module repo: https://github.com/stevevillardi/Logic.Monitor</maml:linkText>
+        <maml:linkText>Module repo: https://github.com/logicmonitor/lm-powershell-module</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>
@@ -2452,7 +2452,7 @@ Creates a copy of the device specified by the $deviceObject variable with the na
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Module repo: https://github.com/stevevillardi/Logic.Monitor</maml:linkText>
+        <maml:linkText>Module repo: https://github.com/logicmonitor/lm-powershell-module</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
       <maml:navigationLink>

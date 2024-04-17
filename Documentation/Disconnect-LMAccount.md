@@ -42,7 +42,5 @@ Once disconnect you will need to reconnect to a portal before you will be allowe
 
 ## RELATED LINKS
 
-[Module repo: https://github.com/stevevillardi/Logic.Monitor]()
-
 [PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
 
