@@ -22,10 +22,17 @@ jobs:
         shell: pwsh
         run: |
           ./Build.ps1
+          
           Set-Location ../
           Rename-Item -Path ./lm-powershell-module -NewName ./Logic.Monitor -Force
           Set-Location ./Logic.Monitor
+
           Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose
+
+          Set-Location ../
+          Rename-Item -Path ./Logic.Monitor -NewName ./lm-powershell-module -Force
+          Set-Location ./lm-powershell-module
+
           $GithubReleaseMessage = @'
           ${{github.event.release.body}}
           '@
