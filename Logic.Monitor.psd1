@@ -30,7 +30,7 @@
     Copyright          = ''
 
     # Description of the functionality provided by this module
-    Description        = 'PowerShell module to query the Logic Monitor API. This is a personal project and is not an offically supported LogicMonitor integration.'
+    Description        = 'PowerShell module to query the Logic Monitor API. This PowerShell module is developed as an open-source project and is not officially supported by LogicMonitor. It is maintained by a community of users who are passionate about enhancing its capabilities and functionality. While LogicMonitor recognizes the effort and ingenuity behind this module, please note that it is provided "as is" without any official support or warranty from LogicMonitor.'
 
     # Minimum version of the PowerShell engine required by this module
     PowerShellVersion  = '5.1'
