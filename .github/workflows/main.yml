@@ -27,7 +27,7 @@ jobs:
           Rename-Item -Path ./lm-powershell-module -NewName ./Logic.Monitor -Force
           Set-Location ./Logic.Monitor
 
-          #Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose
+          Publish-Module -path ./ -NuGetApiKey $env:NUGET_API_KEY -SkipAutomaticTags -Verbose
 
           Set-Location ../
           Rename-Item -Path ./Logic.Monitor -NewName ./lm-powershell-module -Force
