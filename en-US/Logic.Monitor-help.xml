@@ -543,10 +543,6 @@
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Module repo: https://github.com/logicmonitor/lm-powershell-module</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
         <maml:linkText>PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -1294,10 +1290,6 @@ Creates a copy of the device specified by the $deviceObject variable with the na
     </command:examples>
     <command:relatedLinks>
       <maml:navigationLink>
-        <maml:linkText>Module repo: https://github.com/logicmonitor/lm-powershell-module</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
-      <maml:navigationLink>
         <maml:linkText>PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor</maml:linkText>
         <maml:uri></maml:uri>
       </maml:navigationLink>
@@ -1550,10 +1542,6 @@ Creates a copy of the device specified by the $deviceObject variable with the na
       </command:example>
     </command:examples>
     <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Module repo: https://github.com/logicmonitor/lm-powershell-module</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor</maml:linkText>
         <maml:uri></maml:uri>
@@ -2451,10 +2439,6 @@ Creates a copy of the device specified by the $deviceObject variable with the na
       </command:example>
     </command:examples>
     <command:relatedLinks>
-      <maml:navigationLink>
-        <maml:linkText>Module repo: https://github.com/logicmonitor/lm-powershell-module</maml:linkText>
-        <maml:uri></maml:uri>
-      </maml:navigationLink>
       <maml:navigationLink>
         <maml:linkText>PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor</maml:linkText>
         <maml:uri></maml:uri>

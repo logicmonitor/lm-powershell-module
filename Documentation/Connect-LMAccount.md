@@ -259,5 +259,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
 
 ## RELATED LINKS
+
 [PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
 

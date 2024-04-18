@@ -186,272 +186,211 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 - [Code Snippet Library](EXAMPLES.md)
 - [Command Documentation](/Documentation)
 
-# Available Commands ( over 168 to date)
-
-#### Account Connectivity
+# Available Commands:
 
 - Connect-LMAccount
+
+- Copy-LMDashboard
+- Copy-LMDevice
+- Copy-LMReport
+
 - Disconnect-LMAccount
-- New-LMCachedAccount
-- Get-LMCachedAccount
-- Remove-LMCachedAccount*
 
-#### Actuve Discovery
+- Export-LMDeviceConfigBackup
+- Export-LMDeviceData
+- Export-LMLogicModule
 
-- Invoke-LMActiveDiscovery
-
-#### Alerts
-
+- Get-LMAccessGroup
+- Get-LMAccountStatus
 - Get-LMAlert
-- New-LMAlertAck
-- New-LMAlertNote
-
-#### Alert Rules
-
 - Get-LMAlertRule
-
-#### API Tokens
-
 - Get-LMAPIToken
-- New-LMAPIToken
-- Set-LMAPIToken*
-- Remove-LMAPIToken*
-
-#### AplliesTo
-
 - Get-LMAppliesToFunction
-- New-LMAppliesToFunction
-- Set-LMAppliesToFunction
-- Remove-LMAppliesToFunction
-
-#### Audit/Integration Logs
-
 - Get-LMAuditLogs
-- Get-LMIntegrationLogs
-
-#### Collector
-
+- Get-LMCachedAccount
 - Get-LMCollector
+- Get-LMCollectorDebugResult
 - Get-LMCollectorGroup
 - Get-LMCollectorInstaller
-- Get-LMCollectorVersion
-- New-LMCollector
-- Set-LMCollector*
-- Set-LMCollectorConfig*
-- Set-LMCollectorGroup*
-- Remove-LMCollectorGroup*
-- New-LMCollectorGroup
-
-#### Collector Debug
-
-- Get-LMCollectorDebugResult
-- Invoke-LMCollectorDebugCommand
-
-#### Dashboards
-
+- Get-LMCollectorVersions
+- Get-LMConfigSource
 - Get-LMDashboard
-- Copy-LMDashboard
 - Get-LMDashboardGroup
 - Get-LMDashboardWidget
-- Remove-LMDashboard*
-- Remove-LMDashboardGroup*
-- Remove-LMDashboardWidget*
-- Import-LMDashboard
-- New-LMDashboardGroup
-
-#### Datasources/LogicModules
-
 - Get-LMDatasource
-- Get-LMDatasourceGraph
-- New-LMDatasourceGraph
-- Get-LMDatasourceOverviewGraph
-- New-LMDatasourceOverviewGraph
-- Set-LMDatasource*
-- Set-LMTopologysource*
-- Set-LMPropertysource*
-- Set-LMConfigsource*
 - Get-LMDatasourceAssociatedDevices
-- Get-LMDatasourceUpdateHistory
+- Get-LMDatasourceGraph
 - Get-LMDatasourceMetadata
-- Remove-LMDatasource*
-- Remove-LMConfigsource*
-- Remove-LMTopologysource*
-- Remove-LMPropertysource*
-- Get-LMEventSource
-- Get-LMPropertySource
-- Get-LMTopologySource
-- Get-LMConfigSource
-- Export-LMLogicModule*
-- Import-LMLogicModule
-- Import-LMExchangeModule
-
-#### Devices
-
-- Copy-LMDevice
+- Get-LMDatasourceOverviewGraph
+- Get-LMDatasourceUpdateHistory
 - Get-LMDevice
-- Get-LMDeviceSDT
-- Get-LMDeviceSDTHistory
-- Get-LMDeviceProperty
-- Get-LMDeviceAlerts*
-- Get-LMDeviceAlertSettings*
+- Get-LMDeviceAlerts
+- Get-LMDeviceAlertSettings
+- Get-LMDeviceConfigSourceData
 - Get-LMDeviceData
 - Get-LMDeviceDatasourceInstance
-- Get-LMDeviceDatasourceInstanceGroup
 - Get-LMDeviceDatasourceInstanceAlertSetting
-- Set-LMDeviceDatasourceInstanceAlertSetting
+- Get-LMDeviceDatasourceInstanceGroup
 - Get-LMDeviceDatasourceList
-- Get-LMDeviceEventsourceList
-- Get-LMDeviceInstanceList
-- Export-LMDeviceConfigBackup
-- Get-LMDeviceConfigSourceData
-- New-LMDevice
-- New-LMDeviceDatasourceInstance
-- New-LMDeviceDatasourceInstanceGroup
-- Set-LMDeviceDatasourceInstance*
-- New-LMDeviceProperty
-- Set-LMDevice*
-- Set-LMDeviceProperty*
-- Remove-LMDevice*
-- Remove-LMDeviceDatasourceInstance*
-- Remove-DeviceProperty*
-- Export-LMDeviceData
-- Invoke-LMDeviceConfigSourceCollection
-
-#### Device Groups
-
-- Get-LMDeviceGroup*
-- Get-LMDeviceGroupSDT
-- Get-LMDeviceGroupSDTHistory
-- Get-LMDeviceGroupAlerts*
+- Get-LMDeviceEventSourceList
+- Get-LMDeviceGroup
+- Get-LMDeviceGroupAlerts
 - Get-LMDeviceGroupDatasourceAlertSetting
 - Get-LMDeviceGroupDatasourceList
 - Get-LMDeviceGroupDevices
 - Get-LMDeviceGroupGroups
 - Get-LMDeviceGroupProperty
-- New-LMDeviceGroup
-- New-LMDeviceGroupProperty
-- Set-LMDeviceGroup*
-- Set-LMDeviceGroupDatasourceAlertSetting
-- Remove-LMDeviceGroup*
-
-#### Escalation Chain
-
+- Get-LMDeviceGroupSDT
+- Get-LMDeviceGroupSDTHistory
+- Get-LMDeviceInstanceData
+- Get-LMDeviceInstanceList
+- Get-LMDeviceNetflowEndpoints
+- Get-LMDeviceNetflowFlows
+- Get-LMDeviceNetflowPorts
+- Get-LMDeviceProperty
+- Get-LMDeviceSDT
+- Get-LMDeviceSDTHistory
 - Get-LMEscalationChain
-
-#### LM Logs
-
-- Send-LMLogMessage
-
-#### Netscan
-
+- Get-LMEventSource
+- Get-LMIntegrationLogs
 - Get-LMNetscan
 - Get-LMNetscanExecution
 - Get-LMNetscanExecutionDevices
-- New-LMNetscan
-- Set-LMNetscan*
-- Remove-LMNetscan*
-- Invoke-LMNetscan
-- Invoke-LMCloudGroupNetScan
-- Get-LMUnmonitoredDevice
-- Set-LMUnmonitoredDevice
-- Remove-LMUnmonitoredDevice
 - Get-LMNetscanGroup
-- Set-LMNetscanGroup*
-- Remove-LMNetscanGroup*
-- New-LMNetscanGroup
-
-#### Ops Notes
-
 - Get-LMOpsNote
-- New-LMOpsNote
-- Set-LMOpsNote*
-- Remove-LMOpsNote*
-
-#### Portal Info
-
 - Get-LMPortalInfo
-- Get-LMUsageMetrics
-- Set-LMPortalInfo
-- Set-LMNewUserMessage
-
-#### Push Metrics (Ingest API)
-- New-LMPushMetricDataPoint
-- New-LMPushMetricInstance
-- Send-LMPushMetric
-- Set-LMPushModuleDeviceProperty
-- Set-LMPushModuleInstanceProperty
-
-#### Recipient Group
-
+- Get-LMPropertySource
 - Get-LMRecipientGroup
-
-#### Reports
-
-- Copy-LMReport
 - Get-LMReport
 - Get-LMReportGroup
-- New-LMReportGroup
-- Set-LMReportGroup*
-- Remove-LMReportGroup*
-- Remove-LMReport*
-
-#### Repository (LogicModules)
-
 - Get-LMRepositoryLogicModules
-- Import-LMRepositoryLogicModules*
-
-#### SDT (Scheduled Down Time)
+- Get-LMRole
 - Get-LMSDT
-- Set-LMSDT*
-- Remove-LMSDT*
-- New-LMDeviceSDT
-- New-LMDeviceGroupSDT
-- New-LMDeviceDatasourceSDT
-- New-LMDeviceDatasourceInstanceSDT
-
-#### Topology (Beta)
-
 - Get-LMTopologyMap
 - Get-LMTopologyMapData
-
-#### Users and Roles
-
-- Get-LMRole
+- Get-LMTopologySource
+- Get-LMUnmonitoredDevice
+- Get-LMUsageMetrics
 - Get-LMUser
 - Get-LMUserGroup
-- New-LMUser
-- New-LMRole
-- New-LMApiUser
-- Set-LMUser*
-- Set-LMRole*
-- Remove-LMUser*
-- Remove-LMRole*
-- Invoke-LMUserLogoff
-
-#### Websites
-
 - Get-LMWebsite
 - Get-LMWebsiteAlerts
-- Get-LMWebsiteCheckPoint
+- Get-LMWebsiteCheckpoint
 - Get-LMWebsiteData
-- Get-LMWebsiteProperty
-- Get-LMWebsiteSDT
-- Get-LMWebsiteSDTHistory
-- New-LMWebsite
-- Set-LMWebsite*
-- Remove-LMWebsite*
-
-#### Website Groups
-
 - Get-LMWebsiteGroup
 - Get-LMWebsiteGroupAlerts
 - Get-LMWebsiteGroupSDT
 - Get-LMWebsiteGroupSDTHistory
-- New-LMWebsiteGroup
-- Set-LMWebsiteGroup*
-- Remove-LMWebsiteGroup*
+- Get-LMWebsiteProperty
+- Get-LMWebsiteSDT
+- Get-LMWebsiteSDTHistory
 
-***Note**: Supports Pipeline Input
+- Import-LMDashboard
+- Import-LMExchangeModule
+- Import-LMLogicModule
+- Import-LMRepositoryLogicModules
+
+- Invoke-LMActiveDiscovery
+- Invoke-LMCloudGroupNetScan
+- Invoke-LMCollectorDebugCommand
+- Invoke-LMDeviceConfigSourceCollection
+- Invoke-LMNetScan
+- Invoke-LMUserLogoff
+
+- New-LMAlertAck
+- New-LMAlertEscalation
+- New-LMAlertNote
+- New-LMAPIToken
+- New-LMAPIUser
+- New-LMAppliesToFunction
+- New-LMCachedAccount
+- New-LMCollector
+- New-LMCollectorGroup
+- New-LMDashboardGroup
+- New-LMDatasourceGraph
+- New-LMDatasourceOverviewGraph
+- New-LMDevice
+- New-LMDeviceDatasourceInstance
+- New-LMDeviceDatasourceInstanceGroup
+- New-LMDeviceDatasourceInstanceSDT
+- New-LMDeviceDatasourceSDT
+- New-LMDeviceGroup
+- New-LMDeviceGroupSDT
+- New-LMDeviceProperty
+- New-LMDeviceSDT
+- New-LMEnhancedNetScan
+- New-LMNetScan
+- New-LMNetscanGroup
+- New-LMOpsNote
+- New-LMPushMetricDataPoint
+- New-LMPushMetricInstance
+- New-LMReportGroup
+- New-LMRole
+- New-LMUser
+- New-LMWebsite
+- New-LMWebsiteGroup
+
+- Remove-LMAPIToken
+- Remove-LMAppliesToFunction
+- Remove-LMCachedAccount
+- Remove-LMCollectorGroup
+- Remove-LMConfigsource
+- Remove-LMDashboard
+- Remove-LMDashboardGroup
+- Remove-LMDashboardWidget
+- Remove-LMDatasource
+- Remove-LMDevice
+- Remove-LMDeviceDatasourceInstance
+- Remove-LMDeviceGroup
+- Remove-LMDeviceProperty
+- Remove-LMNetscan
+- Remove-LMNetscanGroup
+- Remove-LMOpsNote
+- Remove-LMPropertysource
+- Remove-LMReport
+- Remove-LMReportGroup
+- Remove-LMRole
+- Remove-LMSDT
+- Remove-LMTopologysource
+- Remove-LMUnmonitoredDevice
+- Remove-LMUser
+- Remove-LMWebsite
+- Remove-LMWebsiteGroup
+
+- Send-LMLogMessage
+- Send-LMPushMetric
+
+- Set-LMAPIToken
+- Set-LMAppliesToFunction
+- Set-LMCollector
+- Set-LMCollectorConfig
+- Set-LMCollectorGroup
+- Set-LMConfigsource
+- Set-LMDatasource
+- Set-LMDevice
+- Set-LMDeviceDatasourceInstance
+- Set-LMDeviceDatasourceInstanceAlertSetting
+- Set-LMDeviceGroup
+- Set-LMDeviceGroupDatasourceAlertSetting
+- Set-LMDeviceProperty
+- Set-LMNetscan
+- Set-LMNetscanGroup
+- Set-LMNewUserMessage
+- Set-LMOpsNote
+- Set-LMPortalInfo
+- Set-LMPropertysource
+- Set-LMPushModuleDeviceProperty
+- Set-LMPushModuleInstanceProperty
+- Set-LMReportGroup
+- Set-LMRole
+- Set-LMSDT
+- Set-LMTopologysource
+- Set-LMUnmonitoredDevice
+- Set-LMUser
+- Set-LMWebsite
+- Set-LMWebsiteGroup
+
+**Note**: Some commands accept pipeline input, see `Get-Command <cmdlet-name> -Module Logic.Monitor` for details.
 
 # Change List
 
@@ -472,8 +411,17 @@ This change aims to enhance visibility within the community and to foster a more
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
 ## 6.0
-### Updated Cmdlets:
+### New Cmdlets:
+ - **Get-LMDeviceInstanceData**: This cmdlet retrieves data for LogicMonitor device instances based on the specified parameters. The cmdlet can only retrieve data within the last 24 hours. You can use `Get-LMDeviceInstanceList` to quickly get a list of instances for a particular device.
+ - **New-LMAlertEscalation**: This cmdlet invokes an escalation for a LogicMonitor alert. It takes a *-Ids* parameter which is an array of alert ids to escalate.
+ - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 
+ 
+ **Note**: Access Groups are not available in all portals and needs to be enabled before any access group commands can be utilized.
 
+
+### Updated Cmdlets:
+ - **Set-LMDeviceDatasourceInstanceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
+ - **Set-LMDeviceGroupDatasourceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
 
 [Previous Release Notes](RELEASENOTES.md)
 
