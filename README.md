@@ -387,7 +387,7 @@ Set-LMSDT\
 Set-LMTopologysource\
 Set-LMUnmonitoredDevice\
 Set-LMUser\
-Set-LMWebsite\
+Set-LMWebsite
 
 **Note**: Some commands accept pipeline input, see `Get-Command <cmdlet-name> -Module Logic.Monitor` for details.
 
