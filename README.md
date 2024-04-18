@@ -189,17 +189,17 @@ Get-LMAlert -Filter "instanceName -eq 'Kubernetes_Scheduler' -and rule -eq 'Crit
 # Available Commands:
 
 Connect-LMAccount
-
+\
 Copy-LMDashboard
 Copy-LMDevice
 Copy-LMReport
-
+\
 Disconnect-LMAccount
-
+\
 Export-LMDeviceConfigBackup
 Export-LMDeviceData
 Export-LMLogicModule
-
+\
 Get-LMAccessGroup
 Get-LMAccountStatus
 Get-LMAlert
@@ -289,14 +289,14 @@ Import-LMDashboard
 Import-LMExchangeModule
 Import-LMLogicModule
 Import-LMRepositoryLogicModules
-
+\
 Invoke-LMActiveDiscovery
 Invoke-LMCloudGroupNetScan
 Invoke-LMCollectorDebugCommand
 Invoke-LMDeviceConfigSourceCollection
 Invoke-LMNetScan
 Invoke-LMUserLogoff
-
+\
 New-LMAlertAck
 New-LMAlertEscalation
 New-LMAlertNote
@@ -329,7 +329,7 @@ New-LMRole
 New-LMUser
 New-LMWebsite
 New-LMWebsiteGroup
-
+\
 Remove-LMAPIToken
 Remove-LMAppliesToFunction
 Remove-LMCachedAccount
@@ -356,10 +356,10 @@ Remove-LMUnmonitoredDevice
 Remove-LMUser
 Remove-LMWebsite
 Remove-LMWebsiteGroup
-
+\
 Send-LMLogMessage
 Send-LMPushMetric
-
+\
 Set-LMAPIToken
 Set-LMAppliesToFunction
 Set-LMCollector
