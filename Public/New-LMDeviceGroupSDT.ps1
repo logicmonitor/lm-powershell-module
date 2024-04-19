@@ -102,12 +102,12 @@ Function New-LMDeviceGroupSDT {
         [Parameter(Mandatory, ParameterSetName = 'Weekly-DeviceGroupName')]
         [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek-DeviceGroupId')]
         [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek-DeviceGroupName')]
-        [ValidateSet("Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday")]
+        [ValidateSet("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")]
         [String]$WeekDay,
 
         [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek-DeviceGroupId')]
         [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek-DeviceGroupName')]
-        [ValidateSet("First", "Second", "Third","Fourth","Last")]
+        [ValidateSet("First", "Second", "Third", "Fourth", "Last")]
         [String]$WeekOfMonth,
 
         [Parameter(Mandatory, ParameterSetName = 'Monthly-DeviceGroupId')]
@@ -146,12 +146,12 @@ Function New-LMDeviceGroupSDT {
             $DeviceGroupId = $LookupResult
         }
 
-        Switch -Wildcard ($PSCmdlet.ParameterSetName){
-            "OneTime-Device*" {$Occurance = "oneTime"}
-            "Daily-Device*" {$Occurance = "daily"}
-            "Monthly-Device*" {$Occurance = "monthly"}
-            "MonthlyByWeek-Device*" {$Occurance = "monthlyByWeek"}
-            "Weekly-Device*" {$Occurance = "weekly"}
+        Switch -Wildcard ($PSCmdlet.ParameterSetName) {
+            "OneTime-Device*" { $Occurance = "oneTime" }
+            "Daily-Device*" { $Occurance = "daily" }
+            "Monthly-Device*" { $Occurance = "monthly" }
+            "MonthlyByWeek-Device*" { $Occurance = "monthlyByWeek" }
+            "Weekly-Device*" { $Occurance = "weekly" }
         }
 
         #Build header and uri
@@ -161,15 +161,15 @@ Function New-LMDeviceGroupSDT {
             $Data = $null
 
             $Data = @{
-                comment         = $Comment
-                deviceGroupId        = $DeviceGroupId
-                sdtType         = $Occurance
+                comment       = $Comment
+                deviceGroupId = $DeviceGroupId
+                sdtType       = $Occurance
                 #timezone        = $Timezone
-                type            = "ResourceGroupSDT"
+                type          = "ResourceGroupSDT"
             }
 
-            Switch ($Occurance){
-               "onetime" {
+            Switch ($Occurance) {
+                "onetime" {
                     #Get UTC time based on selected timezone
                     # $TimeZoneID = [System.TimeZoneInfo]::FindSystemTimeZoneById($Timezone)
                     # $StartUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($StartDate.ToUniversalTime(), $TimeZoneID)
@@ -180,43 +180,43 @@ Function New-LMDeviceGroupSDT {
 
                     $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
                     $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
-                    $Data.Add('endDateTime',[math]::Round($EndDateTime))
-                    $Data.Add('startDateTime',[math]::Round($StartDateTime))
-               }
+                    $Data.Add('endDateTime', [math]::Round($EndDateTime))
+                    $Data.Add('startDateTime', [math]::Round($StartDateTime))
+                }
 
-               "daily" {
-                    $Data.Add('hour',$StartHour)
-                    $Data.Add('minute',$StartMinute)
-                    $Data.Add('endHour',$EndHour)
-                    $Data.Add('endMinute',$EndMinute)
-               } 
+                "daily" {
+                    $Data.Add('hour', $StartHour)
+                    $Data.Add('minute', $StartMinute)
+                    $Data.Add('endHour', $EndHour)
+                    $Data.Add('endMinute', $EndMinute)
+                } 
                
-               "weekly" {
-                    $Data.Add('hour',$StartHour)
-                    $Data.Add('minute',$StartMinute)
-                    $Data.Add('endHour',$EndHour)
-                    $Data.Add('endMinute',$EndMinute)
-                    $Data.Add('weekDay',$WeekDay)
-               } 
+                "weekly" {
+                    $Data.Add('hour', $StartHour)
+                    $Data.Add('minute', $StartMinute)
+                    $Data.Add('endHour', $EndHour)
+                    $Data.Add('endMinute', $EndMinute)
+                    $Data.Add('weekDay', $WeekDay)
+                } 
                
-               "monthly" {
-                    $Data.Add('hour',$StartHour)
-                    $Data.Add('minute',$StartMinute)
-                    $Data.Add('endHour',$EndHour)
-                    $Data.Add('endMinute',$EndMinute)
-                    $Data.Add('monthDay',$DayOfMonth)
-               } 
+                "monthly" {
+                    $Data.Add('hour', $StartHour)
+                    $Data.Add('minute', $StartMinute)
+                    $Data.Add('endHour', $EndHour)
+                    $Data.Add('endMinute', $EndMinute)
+                    $Data.Add('monthDay', $DayOfMonth)
+                } 
                
-               "monthlyByWeek" {
-                    $Data.Add('hour',$StartHour)
-                    $Data.Add('minute',$StartMinute)
-                    $Data.Add('endHour',$EndHour)
-                    $Data.Add('endMinute',$EndMinute)
-                    $Data.Add('weekDay',$WeekDay)
-                    $Data.Add('weekOfMonth',$WeekOfMonth)
-               } 
+                "monthlyByWeek" {
+                    $Data.Add('hour', $StartHour)
+                    $Data.Add('minute', $StartMinute)
+                    $Data.Add('endHour', $EndHour)
+                    $Data.Add('endMinute', $EndMinute)
+                    $Data.Add('weekDay', $WeekDay)
+                    $Data.Add('weekOfMonth', $WeekOfMonth)
+                } 
 
-               default {}
+                default {}
             }
 
             #Remove empty keys so we dont overwrite them
@@ -229,7 +229,7 @@ Function New-LMDeviceGroupSDT {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return $Response

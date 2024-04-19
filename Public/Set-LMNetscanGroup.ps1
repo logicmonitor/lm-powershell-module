@@ -33,8 +33,8 @@ Function Set-LMNetscanGroup {
 
             Try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $NewName
+                    description = $Description
+                    name        = $NewName
                 }
 
             

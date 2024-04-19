@@ -1,6 +1,6 @@
 Function Set-LMDeviceDatasourceInstance {
 
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [String]$DisplayName,
         
@@ -40,8 +40,8 @@ Function Set-LMDeviceDatasourceInstance {
 
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -74,13 +74,13 @@ Function Set-LMDeviceDatasourceInstance {
             #Build header and uri
             $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$instanceId"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "deviceDisplayName: $($PSItem.deviceDisplayName) | instanceId: $($PSItem.id) | instanceName: $($PSItem.name)"
             }
-            ElseIf($DeviceName){
+            ElseIf ($DeviceName) {
                 $Message = "deviceDisplayName: $DeviceName | instanceId: $InstanceId"
             }
-            Else{
+            Else {
                 $Message = "instanceId: $InstanceId | deviceId: $DeviceId"
             }
 
@@ -124,5 +124,5 @@ Function Set-LMDeviceDatasourceInstance {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

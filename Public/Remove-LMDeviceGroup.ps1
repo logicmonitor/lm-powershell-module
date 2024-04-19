@@ -61,13 +61,13 @@ Function Remove-LMDeviceGroup {
 
             $QueryParams = "?deleteChildren=$DeleteHostsandChildren&deleteHard=$HardDelete"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf($Name){
+            ElseIf ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
@@ -78,11 +78,11 @@ Function Remove-LMDeviceGroup {
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
                     
                     $Result = [PSCustomObject]@{
-                        Id = $Id
+                        Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
                     

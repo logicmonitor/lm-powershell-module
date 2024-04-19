@@ -95,10 +95,10 @@ Function New-LMEnhancedNetScan {
             $ResourcePath = "/setting/netscans"
 
             #Get Netscan GroupID
-            If($NetScanGroupName){
+            If ($NetScanGroupName) {
                 $NetScanGroupId = (Get-LMNetScanGroup -Name $NetScanGroupName).Id
             }
-            Else{
+            Else {
                 $NetScanGroupId = 1
             }
 
@@ -134,19 +134,19 @@ Function New-LMEnhancedNetScan {
 
             Try {
                 $Data = @{
-                    name                      = $Name
-                    collector                 = $CollectorId
-                    description               = $Description
-                    duplicate                 = $Duplicates
-                    method                    = $Method
-                    nextStart                 = $NextStart
-                    groovyScript              = $GroovyScript
-                    nextStartEpoch            = $NextStartEpoch
-                    nsgId                     = $NetScanGroupId
-                    credentials               = $Creds
-                    filters                   = $Filters
-                    schedule                  = $Schedule
-                    scriptType                = "embeded"
+                    name           = $Name
+                    collector      = $CollectorId
+                    description    = $Description
+                    duplicate      = $Duplicates
+                    method         = $Method
+                    nextStart      = $NextStart
+                    groovyScript   = $GroovyScript
+                    nextStartEpoch = $NextStartEpoch
+                    nsgId          = $NetScanGroupId
+                    credentials    = $Creds
+                    filters        = $Filters
+                    schedule       = $Schedule
+                    scriptType     = "embeded"
                 }
 
                 

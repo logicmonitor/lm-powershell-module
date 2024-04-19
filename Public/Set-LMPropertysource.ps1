@@ -43,13 +43,13 @@ Function Set-LMPropertysource {
 
             Try {
                 $Data = @{
-                    name                      = $NewName
-                    description               = $Description
-                    appliesTo                 = $appliesTo
-                    technology                = $TechNotes
-                    group                     = $Group
-                    groovyScript              = $Script
-                    scriptType                = $ScriptType
+                    name         = $NewName
+                    description  = $Description
+                    appliesTo    = $appliesTo
+                    technology   = $TechNotes
+                    group        = $Group
+                    groovyScript = $Script
+                    scriptType   = $ScriptType
                 }
 
                 #Remove empty keys so we dont overwrite them

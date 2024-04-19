@@ -76,7 +76,7 @@ Function Copy-LMDashboard {
         }
 
         #Lookup Dashboard Id
-        If($DashboardName) {
+        If ($DashboardName) {
             $LookupResult = (Get-LMDashboard -Name $DashboardName).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DashboardName) {
                 return
@@ -92,13 +92,13 @@ Function Copy-LMDashboard {
 
         Try {
             $Data = @{
-                name                                = $Name
-                description                         = $Description
-                groupId                             = $ParentGroupId
-                widgetTokens                        = $SourceDashboard.widgetTokens
-                widgetsConfig                       = $SourceDashboard.widgetsConfig
-                widgetsOrder                        = $SourceDashboard.widgetsOrder
-                sharable                           = $SourceDashboard.sharable
+                name          = $Name
+                description   = $Description
+                groupId       = $ParentGroupId
+                widgetTokens  = $SourceDashboard.widgetTokens
+                widgetsConfig = $SourceDashboard.widgetsConfig
+                widgetsOrder  = $SourceDashboard.widgetsOrder
+                sharable      = $SourceDashboard.sharable
             }
 
             $Data = ($Data | ConvertTo-Json)
@@ -108,7 +108,7 @@ Function Copy-LMDashboard {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return $Response

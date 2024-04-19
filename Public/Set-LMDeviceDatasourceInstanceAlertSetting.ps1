@@ -1,6 +1,6 @@
 Function Set-LMDeviceDatasourceInstanceAlertSetting {
 
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
@@ -47,8 +47,8 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
         [Int]$AlertForNoData
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -72,14 +72,14 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
 
             #Lookup HdsiId
             If ($DatasourceName) {
-                $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceName $DatasourceName -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName"}).Id
+                $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceName $DatasourceName -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName" }).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                     return
                 }
                 $HdsiId = $LookupResult
             }
-            Else{
-                $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceId -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName"}).Id
+            Else {
+                $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceId -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName" }).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                     return
                 }
@@ -88,14 +88,14 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
 
             #Lookup HdsiId
             If ($DatapointName) {
-                $LookupResult = (Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName $DatasourceName -Id $Id -InstanceName $InstanceName | Where-Object { $_.dataPointName -eq $DatapointName}).Id
+                $LookupResult = (Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName $DatasourceName -Id $Id -InstanceName $InstanceName | Where-Object { $_.dataPointName -eq $DatapointName }).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                     return
                 }
                 $DatapointId = $LookupResult
             }
-            Else{
-                $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceId -Id $Id -InstanceName $InstanceName | Where-Object { $_.dataPointName -eq $DatapointName}).Id
+            Else {
+                $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceId -Id $Id -InstanceName $InstanceName | Where-Object { $_.dataPointName -eq $DatapointName }).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                     return
                 }
@@ -109,13 +109,13 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
 
             Try {
                 $Data = @{
-                    disableAlerting      = $DisableAlerting
-                    alertExprNote        = $AlertExpressionNote
-                    alertExpr            = $AlertExpression
-                    alertClearTransitionInterval    = $AlertClearTransitionInterval
-                    alertClearInterval              = $AlertClearTransitionInterval
-                    alertTransitionInterval         = $AlertTransitionInterval
-                    alertForNoData                  = $AlertForNoData
+                    disableAlerting              = $DisableAlerting
+                    alertExprNote                = $AlertExpressionNote
+                    alertExpr                    = $AlertExpression
+                    alertClearTransitionInterval = $AlertClearTransitionInterval
+                    alertClearInterval           = $AlertClearTransitionInterval
+                    alertTransitionInterval      = $AlertTransitionInterval
+                    alertForNoData               = $AlertForNoData
                 }
 
                 #Remove empty keys so we dont overwrite them
@@ -145,5 +145,5 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

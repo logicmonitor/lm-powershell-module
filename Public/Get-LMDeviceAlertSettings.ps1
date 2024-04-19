@@ -10,11 +10,11 @@ Function Get-LMDeviceAlertSettings {
 
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
     
@@ -86,5 +86,5 @@ Function Get-LMDeviceAlertSettings {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

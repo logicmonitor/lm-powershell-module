@@ -1,6 +1,6 @@
 Function Set-LMCollectorGroup {
 
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
@@ -44,24 +44,24 @@ Function Set-LMCollectorGroup {
             #Build header and uri
             $ResourcePath = "/setting/collector/groups/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | Description: $($PSItem.description)"
             }
-            ElseIf($Name){
+            ElseIf ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
             Try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $NewName
-                    collectorGroupId                    = $CollectorGroupId
-                    customProperties                    = $customProperties
-                    autoBalance                         = $AutoBalance
-                    autoBalanceInstanceCountThreshold   = $AutoBalanceInstanceCountThreshold
+                    description                       = $Description
+                    name                              = $NewName
+                    collectorGroupId                  = $CollectorGroupId
+                    customProperties                  = $customProperties
+                    autoBalance                       = $AutoBalance
+                    autoBalanceInstanceCountThreshold = $AutoBalanceInstanceCountThreshold
                 }
 
             

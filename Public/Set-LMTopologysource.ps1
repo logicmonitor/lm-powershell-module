@@ -16,7 +16,7 @@ Function Set-LMTopologysource {
 
         [String]$TechNotes,
 
-        [ValidateSet("1800","3600","7200","21600")]
+        [ValidateSet("1800", "3600", "7200", "21600")]
         [Nullable[Int]]$PollingIntervalInSeconds,
 
         [String]$Group,
@@ -45,7 +45,7 @@ Function Set-LMTopologysource {
             $ResourcePath = "/setting/topologysources/$Id"
 
             $collectorAttribute = $null
-            If($ScriptType -or $Script){
+            If ($ScriptType -or $Script) {
                 $collectorAttribute = @{
                     groovyScript = $Script
                     scriptType   = $ScriptType
@@ -57,13 +57,13 @@ Function Set-LMTopologysource {
 
             Try {
                 $Data = @{
-                    name                      = $NewName
-                    description               = $Description
-                    appliesTo                 = $appliesTo
-                    technology                = $TechNotes
-                    group                     = $Group
-                    collectInterval           = $PollingIntervalInSeconds
-                    collectorAttribute        = $collectorAttribute
+                    name               = $NewName
+                    description        = $Description
+                    appliesTo          = $appliesTo
+                    technology         = $TechNotes
+                    group              = $Group
+                    collectInterval    = $PollingIntervalInSeconds
+                    collectorAttribute = $collectorAttribute
                 }
 
                 #Remove empty keys so we dont overwrite them

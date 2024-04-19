@@ -1,6 +1,6 @@
 Function Set-LMDatasource {
 
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -40,25 +40,25 @@ Function Set-LMDatasource {
             #Build header and uri
             $ResourcePath = "/setting/datasources/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | DisplayName: $($PSItem.displayName)"
             }
-            ElseIf($Name){
+            ElseIf ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
             Try {
                 $Data = @{
-                    name                      = $NewName
-                    displayName               = $DisplayName
-                    description               = $Description
-                    appliesTo                 = $appliesTo
-                    technology                = $TechNotes
-                    collectInterval           = $PollingIntervalInSeconds
-                    dataPoints                = $Datapoints
+                    name            = $NewName
+                    displayName     = $DisplayName
+                    description     = $Description
+                    appliesTo       = $appliesTo
+                    technology      = $TechNotes
+                    collectInterval = $PollingIntervalInSeconds
+                    dataPoints      = $Datapoints
                 }
 
                 #Remove empty keys so we dont overwrite them

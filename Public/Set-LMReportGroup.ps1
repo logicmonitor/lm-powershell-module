@@ -32,8 +32,8 @@ Function Set-LMReportGroup {
 
             Try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $NewName
+                    description = $Description
+                    name        = $NewName
                 }
 
             

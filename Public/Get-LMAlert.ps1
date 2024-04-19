@@ -56,13 +56,13 @@ Function Get-LMAlert {
         [Parameter(ParameterSetName = 'Range')]
         [Datetime]$EndDate,
 
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
         [String]$Id,
 
         [ValidateSet("*", "Warning", "Error", "Critical")]
         [String]$Severity = "*",
 
-        [ValidateSet("*", "websiteAlert", "dataSourceAlert", "eventSourceAlert","logAlert")]
+        [ValidateSet("*", "websiteAlert", "dataSourceAlert", "eventSourceAlert", "logAlert")]
         [String]$Type = "*",
 
         [Boolean]$ClearedAlerts = $false,
@@ -73,7 +73,7 @@ Function Get-LMAlert {
         [Parameter(ParameterSetName = 'Id')]
         [String[]]$CustomColumns,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000,
 
         [String]$Sort = "resourceId"
@@ -116,16 +116,16 @@ Function Get-LMAlert {
                     $resourcePath += "/$Id" 
                 
                     #Check if we need to add customColumns
-                    If($CustomColumns){
+                    If ($CustomColumns) {
                         $FormatedColumns = @()
-                        Foreach($Column in $CustomColumns){
+                        Foreach ($Column in $CustomColumns) {
                             $FormatedColumns += [System.Web.HTTPUtility]::UrlEncode($Column)
                         }
 
-                        If($QueryParams){
+                        If ($QueryParams) {
                             $QueryParams += "&customColumns=$($FormatedColumns -join ",")"
                         }
-                        Else{
+                        Else {
                             $QueryParams = "?customColumns=$($FormatedColumns -join",")"
                         }
                     }

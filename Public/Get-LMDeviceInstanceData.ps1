@@ -56,7 +56,7 @@ Function Get-LMDeviceInstanceData {
 
         #Convert to epoch, if not set use defaults
         If (!$StartDate) {
-            [int]$StartDate =  ([DateTimeOffset]$(Get-Date).AddHours(-24)).ToUnixTimeSeconds()
+            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddHours(-24)).ToUnixTimeSeconds()
         }
         Else {
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()

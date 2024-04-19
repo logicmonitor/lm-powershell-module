@@ -1,6 +1,6 @@
 Function Set-LMWebsite {
 
-    [CmdletBinding(DefaultParameterSetName="Website")]
+    [CmdletBinding(DefaultParameterSetName = "Website")]
     Param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -19,38 +19,38 @@ Function Set-LMWebsite {
 
         [Nullable[boolean]]$UseDefaultLocationSetting,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Nullable[boolean]]$TriggerSSLStatusAlert,
         
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Nullable[boolean]]$TriggerSSLExpirationAlert,
 
         [String]$GroupId,
 
-        [Parameter(ParameterSetName="Ping")]
+        [Parameter(ParameterSetName = "Ping")]
         [String]$PingAddress,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [String]$WebsiteDomain,
 
         [ValidateSet("http", "https")]
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [String]$HttpType,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [String[]]$SSLAlertThresholds,
         
-        [Parameter(ParameterSetName="Ping")]
+        [Parameter(ParameterSetName = "Ping")]
         [ValidateSet(5, 10, 15, 20, 30, 60)]
         [Nullable[Int]]$PingCount,
 
-        [Parameter(ParameterSetName="Ping")]
+        [Parameter(ParameterSetName = "Ping")]
         [Nullable[Int]]$PingTimeout,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Nullable[Int]]$PageLoadAlertTimeInMS,
 
-        [Parameter(ParameterSetName="Ping")]
+        [Parameter(ParameterSetName = "Ping")]
         [ValidateSet(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)]
         [Nullable[Int]]$PingPercentNotReceived,
 
@@ -71,12 +71,12 @@ Function Set-LMWebsite {
         [ValidateSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
         [Nullable[Int]]$PollingInterval,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [String[]]$WebsiteSteps
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -161,5 +161,5 @@ Function Set-LMWebsite {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

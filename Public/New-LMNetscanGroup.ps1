@@ -45,8 +45,8 @@ Function New-LMNetscanGroup {
 
             Try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $Name
+                    description = $Description
+                    name        = $Name
                 }
 
             

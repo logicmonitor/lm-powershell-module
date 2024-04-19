@@ -83,29 +83,29 @@ Function Import-LMDashboard {
             $Results = @()
             $DashboardList = @()
 
-            If($ParentGroupName){
+            If ($ParentGroupName) {
                 $ParentGroupId = (Get-LMDashboardGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
             }
-            If($ParentGroupId){
+            If ($ParentGroupId) {
                 $ParentGroupName = (Get-LMDashboardGroup -Id $ParentGroupId | Select-Object -First 1 ).Name
             }
 
-            If($FilePath){
-                If((Get-Item $FilePath) -is [System.IO.DirectoryInfo]){
+            If ($FilePath) {
+                If ((Get-Item $FilePath) -is [System.IO.DirectoryInfo]) {
                     $FullPath = (Resolve-Path $FilePath).Path
-                    $Files = Get-ChildItem $FullPath -Recurse | Where-Object {([IO.Path]::GetExtension($_.Name) -eq '.json')}
-                    Foreach($F in $Files){
+                    $Files = Get-ChildItem $FullPath -Recurse | Where-Object { ([IO.Path]::GetExtension($_.Name) -eq '.json') }
+                    Foreach ($F in $Files) {
                         #Convert from json into object
                         $RawFile = Get-Content $F.FullName -Raw | ConvertFrom-Json
                         $DashboardList += @{
-                            file = $RawFile
-                            path = $($F.DirectoryName -split $FullPath)[1]
-                            parentid = $ParentGroupId
+                            file       = $RawFile
+                            path       = $($F.DirectoryName -split $FullPath)[1]
+                            parentid   = $ParentGroupId
                             parentname = $ParentGroupName
                         }
                     }
                 }
-                Else{
+                Else {
                     If (!(Test-Path -Path $FilePath) -and (!([IO.Path]::GetExtension($FilePath) -eq '.json'))) {
                         Write-Error "File not found or is not a valid json file, check file path and try again"
                         Return
@@ -114,39 +114,39 @@ Function Import-LMDashboard {
                     #Convert from json into object
                     $RawFile = Get-Content $FilePath -Raw | ConvertFrom-Json
                     $DashboardList += @{
-                        file = $RawFile
-                        path = ""
-                        parentid = $ParentGroupId
+                        file       = $RawFile
+                        path       = ""
+                        parentid   = $ParentGroupId
                         parentname = $ParentGroupName
                     }
                 }
             }
 
-            If($File){
+            If ($File) {
                 $DashboardList += @{
-                    file = $File | ConvertFrom-Json
-                    path = ""
-                    parentid = $ParentGroupId
+                    file       = $File | ConvertFrom-Json
+                    path       = ""
+                    parentid   = $ParentGroupId
                     parentname = $ParentGroupName
                 }
             }
 
-            If($GithubUserRepo){
+            If ($GithubUserRepo) {
                 $Headers = @{}
-                If($GithubAccessToken){
-                    $Headers = @{"Authorization"="token $GithubAccessToken"}
+                If ($GithubAccessToken) {
+                    $Headers = @{"Authorization" = "token $GithubAccessToken" }
                 }
                 $Uri = "https://api.github.com/repos/$GithubUserRepo/git/trees/master?recursive=1"
-                $RepoData = (Invoke-RestMethod -Uri $Uri -Headers $Headers[0] -WebSession $Headers[1]).tree | Where-Object {$_.Path -like "*.json" -and $_.Path -notlike "Packages/LogicMonitor_Dashboards*"} | Select-Object path,url
-                If($RepoData){
+                $RepoData = (Invoke-RestMethod -Uri $Uri -Headers $Headers[0] -WebSession $Headers[1]).tree | Where-Object { $_.Path -like "*.json" -and $_.Path -notlike "Packages/LogicMonitor_Dashboards*" } | Select-Object path, url
+                If ($RepoData) {
                     $TotalItems = ($RepoData | Measure-Object).Count
                     Write-LMHost "[INFO]: Found $TotalItems JSON files from Github repo ($GithubUserRepo)"
-                    Foreach ($Item in $RepoData){
+                    Foreach ($Item in $RepoData) {
                         $EncodedDash = (Invoke-RestMethod -Uri $Item.url -Headers $Headers[0] -WebSession $Headers[1]).content
                         $DashboardList += @{
-                            file = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($EncodedDash)) | ConvertFrom-Json
-                            path = [System.IO.Path]::GetDirectoryName($Item.path)
-                            parentid = $ParentGroupId
+                            file       = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($EncodedDash)) | ConvertFrom-Json
+                            path       = [System.IO.Path]::GetDirectoryName($Item.path)
+                            parentid   = $ParentGroupId
                             parentname = $ParentGroupName
                         }
                         
@@ -155,39 +155,39 @@ Function Import-LMDashboard {
                 }
             }
     
-            If($ReplaceAPITokensOnImport -and !($APIToken)){
+            If ($ReplaceAPITokensOnImport -and !($APIToken)) {
                 $DashboardAPIRoleName = "lm-dynamic-dashboards"
                 $DashboardAPIUserName = "lm_dynamic_dashboards"
                 $DashboardAPIRole = Get-LMRole -Name $DashboardAPIRoleName
                 $DashboardAPIUser = Get-LMUser -Name $DashboardAPIUserName
-                If(!$DashboardAPIRole){
+                If (!$DashboardAPIRole) {
                     $DashboardAPIRole = New-LMRole -Name $DashboardAPIRoleName -ResourcePermission view -DashboardsPermission manage -Description "Auto provisioned for use with dynamic dashboards"
                     Write-LMHost "[INFO]: Successfully generated required API role ($DashboardAPIRoleName) for dynamic dashboards"
                 }
-                If(!$DashboardAPIUser){
+                If (!$DashboardAPIUser) {
                     $DashboardAPIUser = New-LMAPIUser -Username "$DashboardAPIUserName" -note "Auto provisioned for use with dynamic dashboards" -RoleNames @($DashboardAPIRoleName)
                     Write-LMHost "[INFO]: Successfully generated required API user ($DashboardAPIUserName) for dynamic dashboards"
                 }
-                If($DashboardAPIRole -and $DashboardAPIUser){
+                If ($DashboardAPIRole -and $DashboardAPIUser) {
                     $APIToken = New-LMAPIToken -Username $DashboardAPIUserName -Note "Auto provisioned for use with dynamic dashboards"
-                    If($APIToken){
+                    If ($APIToken) {
                         Write-LMHost "[INFO]: Successfully generated required API token for dynamic dashboards for user: $DashboardAPIUserName"
                     }
                 }
-                Else{
+                Else {
                     Write-LMHost "[WARN]: Unable to generate required API token for dynamic dashboards, manually update the required tokens to use dynamic dashboards" -ForegroundColor Yellow
                 }
             }
 
-            Foreach($Dashboard in $DashboardList){
+            Foreach ($Dashboard in $DashboardList) {
                 #Swap apiKeys for dynamic dashboards
-                If($ReplaceAPITokensOnImport){
-                    If($APIToken){
-                        If($Dashboard.file.widgetTokens.name -contains "apiKey"){
-                           $KeyIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apikey")
-                           $Dashboard.file.widgetTokens[$KeyIndex].value = $APIToken.accessKey
+                If ($ReplaceAPITokensOnImport) {
+                    If ($APIToken) {
+                        If ($Dashboard.file.widgetTokens.name -contains "apiKey") {
+                            $KeyIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apikey")
+                            $Dashboard.file.widgetTokens[$KeyIndex].value = $APIToken.accessKey
                         }
-                        If($Dashboard.file.widgetTokens.name -contains "apiID"){
+                        If ($Dashboard.file.widgetTokens.name -contains "apiID") {
                             $IdIndex = $Dashboard.file.widgetTokens.name.toLower().IndexOf("apiid")
                             $Dashboard.file.widgetTokens[$IdIndex].value = $APIToken.accessId
                         }
@@ -195,32 +195,32 @@ Function Import-LMDashboard {
                 }
 
                 #Check if a path has been provided and check if folder exists in selected root folder, if not create
-                If($Dashboard.path){
-                    [Array]$SubFolders = $Dashboard.path -split  "\\|/" | Where-Object {$_}
+                If ($Dashboard.path) {
+                    [Array]$SubFolders = $Dashboard.path -split "\\|/" | Where-Object { $_ }
 
-                    For($Index = 0; $Index -lt $($SubFolders | Measure-Object).Count; $Index++){
+                    For ($Index = 0; $Index -lt $($SubFolders | Measure-Object).Count; $Index++) {
 
-                        If($Index -eq 0){
-                            $DashboardGroup = Get-LMDashboardGroup -ParentGroupId $ParentGroupId | Where-Object {$_.Name -eq $SubFolders[$Index]}
+                        If ($Index -eq 0) {
+                            $DashboardGroup = Get-LMDashboardGroup -ParentGroupId $ParentGroupId | Where-Object { $_.Name -eq $SubFolders[$Index] }
 
-                            If(!$DashboardGroup){
+                            If (!$DashboardGroup) {
                                 Write-LMHost "[INFO]: Existing dashboard group not found for $($Subfolders[$Index]) creating new resource group under root group ($ParentGroupName)"
                                 $NewDashboardGroup = New-LMDashboardGroup -Name $SubFolders[$Index] -ParentGroupId $ParentGroupId
                                 $Dashboard.parentid = $NewDashboardGroup.id
                                 $Dashboard.parentname = $NewDashboardGroup.name
 
                             }
-                            Else{
+                            Else {
                                 $Dashboard.parentid = $DashboardGroup.id
                                 $Dashboard.parentname = $DashboardGroup.name
                             }
                         }
-                        Else{
-                            $DashboardGroup = Get-LMDashboardGroup -Name $Subfolders[$Index] | Where-Object { $_.fullPath -like "$($Subfolders[0])*$($Subfolders[$Index])"}
+                        Else {
+                            $DashboardGroup = Get-LMDashboardGroup -Name $Subfolders[$Index] | Where-Object { $_.fullPath -like "$($Subfolders[0])*$($Subfolders[$Index])" }
                             
-                            If(!$DashboardGroup){
+                            If (!$DashboardGroup) {
 
-                                $NewDashboardParentGroup = Get-LMDashboardGroup -Name $Subfolders[$Index-1] | Where-Object {$_.fullPath -like "$ParentGroupName*" -or $_.fullPath -eq $Subfolders[$Index-1]}
+                                $NewDashboardParentGroup = Get-LMDashboardGroup -Name $Subfolders[$Index - 1] | Where-Object { $_.fullPath -like "$ParentGroupName*" -or $_.fullPath -eq $Subfolders[$Index - 1] }
                                 Write-LMHost "[INFO]: Existing dashboard group not found for $($Subfolders[$Index]) creating new resource group under group ($($NewDashboardParentGroup.Name))"
                                 $NewDashboardGroup = New-LMDashboardGroup -Name $SubFolders[$Index] -ParentGroupId $NewDashboardParentGroup.id
 
@@ -228,7 +228,7 @@ Function Import-LMDashboard {
                                 $Dashboard.parentname = $NewDashboardGroup.name
 
                             }
-                            Else{
+                            Else {
                                 $Dashboard.parentid = $DashboardGroup.id
                                 $Dashboard.parentname = $DashboardGroup.name
                             }
@@ -238,14 +238,14 @@ Function Import-LMDashboard {
     
                 #Construct our object for import
                 $Data = @{
-                    description = $Dashboard.file.description
-                    groupId = [int]$Dashboard.parentid
-                    groupName = $Dashboard.parentname
-                    name = $Dashboard.file.name
-                    sharable = If($PrivateUserName){$False} Else{$True}
-                    owner = $PrivateUserName
-                    template = $Dashboard.file | Select-Object -ExcludeProperty group
-                    widgetTokens = $Dashboard.file.widgetTokens
+                    description          = $Dashboard.file.description
+                    groupId              = [int]$Dashboard.parentid
+                    groupName            = $Dashboard.parentname
+                    name                 = $Dashboard.file.name
+                    sharable             = If ($PrivateUserName) { $False } Else { $True }
+                    owner                = $PrivateUserName
+                    template             = $Dashboard.file | Select-Object -ExcludeProperty group
+                    widgetTokens         = $Dashboard.file.widgetTokens
                     widgetsConfigVersion = $Dashboard.file.widgetsConfigVersion
                 }
     
@@ -260,7 +260,7 @@ Function Import-LMDashboard {
         
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
                     Write-Output "Successfully imported dashboard: $($Dashboard.file.name)"
     
@@ -271,7 +271,7 @@ Function Import-LMDashboard {
                     Write-Output "Failed to import dashboard: $($Dashboard.file.name)"
                     $Proceed = Resolve-LMException -LMException $PSItem
                     If (!$Proceed) {
-                       # Return
+                        # Return
                     }
                 }
             }

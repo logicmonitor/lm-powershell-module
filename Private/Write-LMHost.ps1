@@ -29,28 +29,28 @@ Writes the error message "Error: Something went wrong." to the host console with
 
 Function Write-LMHost {
     Param (
-        [Object]$Message=$args[0],
+        [Object]$Message = $args[0],
     
         [Nullable[ConsoleColor]]$ForegroundColor,
 
         [Nullable[ConsoleColor]]$BackgroundColor
     )
     #Only log message content if switch is set to true during connect lm account
-    If($Script:LMAuth.Logging){
-        If($ForegroundColor -and !$BackgroundColor){
+    If ($Script:LMAuth.Logging) {
+        If ($ForegroundColor -and !$BackgroundColor) {
             Write-Host $Message -ForegroundColor $ForegroundColor
         }
-        ElseIf(!$ForegroundColor -and $BackgroundColor) {
+        ElseIf (!$ForegroundColor -and $BackgroundColor) {
             Write-Host $Message -BackgroundColor $BackgroundColor
         }
-        ElseIf($ForegroundColor -and $BackgroundColor){
+        ElseIf ($ForegroundColor -and $BackgroundColor) {
             Write-Host $Message -ForegroundColor $ForegroundColor -BackgroundColor $BackgroundColor
         }
-        Else{
+        Else {
             Write-Host $Message
         }
     }
-    Else{
+    Else {
         Write-Host $Message
     }
 }

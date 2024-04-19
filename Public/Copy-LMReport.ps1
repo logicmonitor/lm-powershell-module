@@ -48,8 +48,8 @@ Function Copy-LMReport {
 
         #Replace name and description if present
         $ReportObject.name = $Name
-        If($Description){$ReportObject.description = $Description}
-        If($ParentGroupId){$ReportObject.groupId = $ParentGroupId}
+        If ($Description) { $ReportObject.description = $Description }
+        If ($ParentGroupId) { $ReportObject.groupId = $ParentGroupId }
         
         #Build header and uri
         $ResourcePath = "/report/reports"

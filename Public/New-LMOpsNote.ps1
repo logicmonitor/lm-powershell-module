@@ -51,41 +51,41 @@ Function New-LMOpsNote {
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        If(!$NoteDate){
+        If (!$NoteDate) {
             [int64]$NoteDate = [DateTimeOffset]::Now.ToUnixTimeSeconds()
         }
-        Else{
+        Else {
             $Epoch = Get-Date -Date "01/01/1970"
             [int64]$NoteDate = (New-TimeSpan -Start $Epoch -End $NoteDate.ToUniversalTime()).TotalSeconds
         }
 
         $Scope = @()
-        If($ResourceIds -or $WebsiteIds -or $DeviceGroupIds){
-            Foreach($id in $DeviceIds){
+        If ($ResourceIds -or $WebsiteIds -or $DeviceGroupIds) {
+            Foreach ($id in $DeviceIds) {
                 $Scope += [PSCustomObject]@{
-                    type = "device"
-                    groupId = "0"
+                    type     = "device"
+                    groupId  = "0"
                     deviceId = $id
                 }
             }
-            Foreach($id in $WebsiteIds){
+            Foreach ($id in $WebsiteIds) {
                 $Scope += [PSCustomObject]@{
-                    type = "website"
-                    groupId = "0"
+                    type      = "website"
+                    groupId   = "0"
                     websiteId = $id
                 }
             }
-            Foreach($id in $DeviceGroupIds){
+            Foreach ($id in $DeviceGroupIds) {
                 $Scope += @{
-                    type = "deviceGroup"
+                    type    = "deviceGroup"
                     groupId = $id
                 }
             }
         }
 
         $TagList = @()
-        Foreach($tag in $Tags){
-            $TagList += @{name = $tag}
+        Foreach ($tag in $Tags) {
+            $TagList += @{name = $tag }
         }
 
 
@@ -110,7 +110,7 @@ Function New-LMOpsNote {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return $Response

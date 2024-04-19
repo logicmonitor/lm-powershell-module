@@ -1,6 +1,6 @@
 Function Remove-LMUnmonitoredDevice {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [String[]]$Ids
@@ -26,7 +26,7 @@ Function Remove-LMUnmonitoredDevice {
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
                     
                     Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.UnmonitoredDevice" )

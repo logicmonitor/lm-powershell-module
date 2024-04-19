@@ -35,12 +35,12 @@ Function Get-LMDeviceConfigSourceData {
         $Done = $false
         $Results = @()
 
-        Switch($ConfigType){
-            "Delta" {$ConfigField = "!config"}
-            "Full" {$ConfigField = "!deltaConfig"}
+        Switch ($ConfigType) {
+            "Delta" { $ConfigField = "!config" }
+            "Full" { $ConfigField = "!deltaConfig" }
         }
 
-        If($LatestConfigOnly){
+        If ($LatestConfigOnly) {
             $BatchSize = 1
             $SortParam = "&sort=-pollTimestamp"
         }
@@ -48,11 +48,11 @@ Function Get-LMDeviceConfigSourceData {
         #Loop through requests 
         While (!$Done) {
             #Build query params
-            If($ConfigId){
+            If ($ConfigId) {
                 $ResourcePath = $ResourcePath + "/$ConfigId"
                 $QueryParams = "?deviceId=$Id&deviceDataSourceId=$HdsId&instanceId=$HdsInsId&fields=$ConfigField"
             }
-            Else{
+            Else {
                 $QueryParams = "?size=$BatchSize&offset=$Count&fields=$ConfigField$SortParam"
             }
 
@@ -72,7 +72,7 @@ Function Get-LMDeviceConfigSourceData {
                     $Done = $true
                     Return $Response
                 }
-                ElseIf($LatestConfigOnly){
+                ElseIf ($LatestConfigOnly) {
                     Return $Response.Items
                 }
                 #Check result size and if needed loop again

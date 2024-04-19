@@ -43,8 +43,8 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
 
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -68,7 +68,7 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
 
             #Lookup DatapointId
             If ($DatapointName) {
-                $LookupResult = (Get-LMDeviceGroupDatasourceAlertSetting -Id $Id -DatasourceId $DatasourceId | Where-Object {$_.dataPointName -eq $DatapointName}).dataPointId
+                $LookupResult = (Get-LMDeviceGroupDatasourceAlertSetting -Id $Id -DatasourceId $DatasourceId | Where-Object { $_.dataPointName -eq $DatapointName }).dataPointId
                 If (Test-LookupResult -Result $LookupResult -LookupString $DatapointName) {
                     return
                 }
@@ -80,14 +80,14 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
 
             Try {
                 $dpConfig = @{
-                    disableAlerting                 = $DisableAlerting
-                    dataPointId                     = $DatapointId
-                    dataPointName                   = $DatapointName
-                    alertExprNote                   = $AlertExpressionNote
-                    alertExpr                       = $AlertExpression
-                    alertClearTransitionInterval    = $AlertClearTransitionInterval
-                    alertTransitionInterval         = $AlertTransitionInterval
-                    alertForNoData                  = $AlertForNoData
+                    disableAlerting              = $DisableAlerting
+                    dataPointId                  = $DatapointId
+                    dataPointName                = $DatapointName
+                    alertExprNote                = $AlertExpressionNote
+                    alertExpr                    = $AlertExpression
+                    alertClearTransitionInterval = $AlertClearTransitionInterval
+                    alertTransitionInterval      = $AlertTransitionInterval
+                    alertForNoData               = $AlertForNoData
 
                 }
 
@@ -120,5 +120,5 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

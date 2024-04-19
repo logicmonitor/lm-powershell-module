@@ -43,7 +43,7 @@ Function Get-LMCollectorInstaller {
         [Parameter(Mandatory, ParameterSetName = "Name")]
         [string]$Name,
 
-        [ValidateSet("nano", "small", "medium", "large", "extra_large","double_extra_large")]
+        [ValidateSet("nano", "small", "medium", "large", "extra_large", "double_extra_large")]
         [string]$Size = "medium",
 
         [ValidateSet("Win64", "Linux64")]
@@ -84,7 +84,7 @@ Function Get-LMCollectorInstaller {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+            #Issue request
             Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] -OutFile $DownloadPath
             
             Return $DownloadPath

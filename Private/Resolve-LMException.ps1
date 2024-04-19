@@ -29,13 +29,13 @@ Function Resolve-LMException {
     ELse {
         Switch ($LMException.Exception.GetType().FullName) {
             { "System.Net.WebException" -or "Microsoft.PowerShell.Commands.HttpResponseException" } {
-                Try{
+                Try {
                     $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json -ErrorAction SilentlyContinue).errorMessage
                     If (!$HttpException) {
                         $HttpException = ($LMException.ErrorDetails.Message | ConvertFrom-Json -ErrorAction Stop).message
                     }
                 }
-                Catch{
+                Catch {
                     $HttpException = $LMException.ErrorDetails.Message
                 }
                 $HttpStatusCode = $LMException.Exception.Response.StatusCode.value__
@@ -44,7 +44,7 @@ Function Resolve-LMException {
                 #Write to $Error object but suppress so stack trace is not displayed
                 Write-Error "Failed to execute web request($($HttpStatusCode)): $HttpException" -ErrorAction SilentlyContinue
                 #Pretty print error to console
-                If($ErrorActionPreference -ne "SilentlyContinue"){
+                If ($ErrorActionPreference -ne "SilentlyContinue") {
                     [Console]::ForegroundColor = 'red'
                     [Console]::Error.WriteLine("Failed to execute web request($($HttpStatusCode)): $HttpException")
                     [Console]::ResetColor()
@@ -58,7 +58,7 @@ Function Resolve-LMException {
                 #Write to $Error object but suppress so stack trace is not displayed
                 Write-Error "Failed to execute web request: $LMError" -ErrorAction SilentlyContinue
                 #Pretty print error to console
-                If($ErrorActionPreference -ne "SilentlyContinue"){
+                If ($ErrorActionPreference -ne "SilentlyContinue") {
                     [Console]::ForegroundColor = 'red'
                     [Console]::Error.WriteLine("Failed to execute web request: $LMError")
                     [Console]::ResetColor()

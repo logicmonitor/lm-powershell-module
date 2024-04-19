@@ -26,10 +26,10 @@ Function Get-LMAccountStatus {
     #Clear credential object from environment
     If ($Script:LMAuth) {
         $Result = [PSCustomObject]@{
-            Portal = $Script:LMAuth.Portal
-            Valid = $Script:LMAuth.Valid
+            Portal  = $Script:LMAuth.Portal
+            Valid   = $Script:LMAuth.Valid
             Logging = $Script:LMAuth.Logging
-            Type = $Script:LMAuth.Type
+            Type    = $Script:LMAuth.Type
         }
         return $Result
     }

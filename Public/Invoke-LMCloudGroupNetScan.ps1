@@ -46,11 +46,11 @@ Function Invoke-LMCloudGroupNetScan {
                 }
                 $Id = $LookupResult
             }
-            Else{
+            Else {
                 $GroupInfo = Get-LMDeviceGroup -Id $Id
             }
 
-            If($GroupInfo.groupType -notlike "*AWS*" -and $GroupInfo.groupType -notlike "*Azure*" -and $GroupInfo.groupType -notlike "*GCP*"){
+            If ($GroupInfo.groupType -notlike "*AWS*" -and $GroupInfo.groupType -notlike "*Azure*" -and $GroupInfo.groupType -notlike "*GCP*") {
                 Write-Error "Specified group: $($GroupInfo.Name) is not of type AWs/Azure/GCP. Please ensure the specified group is a Cloud group and try again."
             }
                 

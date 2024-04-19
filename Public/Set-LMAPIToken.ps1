@@ -1,6 +1,6 @@
 Function Set-LMAPIToken {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$AdminId,
@@ -18,8 +18,8 @@ Function Set-LMAPIToken {
 
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -35,10 +35,10 @@ Function Set-LMAPIToken {
             #Build header and uri
             $ResourcePath = "/setting/admins/$AdminId/apitokens/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | AccessId: $($PSItem.accessId)| AdminName:$($PSItem.adminName)"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
@@ -80,5 +80,5 @@ Function Set-LMAPIToken {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

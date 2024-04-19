@@ -166,7 +166,7 @@ Function New-LMUser {
 
         #Auto generate password if not provided
         $AutoGeneratePassword = $False
-        If(!$Password){
+        If (!$Password) {
             $Password = New-LMRandomCred
             $AutoGeneratePassword = $True
         }
@@ -206,16 +206,16 @@ Function New-LMUser {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-            If($AutoGeneratePassword){
-                If(!$global:LMUserData){
+            If ($AutoGeneratePassword) {
+                If (!$global:LMUserData) {
                     $UserData = New-Object System.Collections.ArrayList
-                    $UserData.Add([PSCustomObject]@{"Username"=$Username;"Temp_Password"=$Password}) | Out-Null
+                    $UserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
                     New-Variable -Name LMUserData -Scope global -Value $UserData
                 }
-                Else{
-                    $global:LMUserData.Add([PSCustomObject]@{"Username"=$Username;"Temp_Password"=$Password}) | Out-Null
+                Else {
+                    $global:LMUserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
                 }
                 
                 Write-LMHost "[INFO]: Auto generated password assigned to $Username`: $Password" -ForegroundColor Yellow

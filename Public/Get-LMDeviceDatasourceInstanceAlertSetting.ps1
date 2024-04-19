@@ -23,7 +23,7 @@ Function Get-LMDeviceDatasourceInstanceAlertSetting {
 
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
 
     )
@@ -49,14 +49,14 @@ Function Get-LMDeviceDatasourceInstanceAlertSetting {
         }
         #Lookup HdsiId
         If ($DatasourceName) {
-            $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceName $DatasourceName -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName"}).Id
+            $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceName $DatasourceName -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName" }).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                 return
             }
             $HdsiId = $LookupResult
         }
-        Else{
-            $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceId -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName"}).Id
+        Else {
+            $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceId -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName" }).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                 return
             }

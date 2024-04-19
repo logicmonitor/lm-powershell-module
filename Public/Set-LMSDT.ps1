@@ -1,6 +1,6 @@
 Function Set-LMSDT {
 
-    [CmdletBinding(DefaultParameterSetName="OneTime")]
+    [CmdletBinding(DefaultParameterSetName = "OneTime")]
     Param (
         [Parameter(Mandatory)]
         [String]$Id,
@@ -34,11 +34,11 @@ Function Set-LMSDT {
         [Nullable[Int]]$EndMinute,
 
         [Parameter(ParameterSetName = 'Recurring')]
-        [ValidateSet("Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday")]
+        [ValidateSet("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")]
         [String]$WeekDay,
 
         [Parameter(ParameterSetName = 'Recurring')]
-        [ValidateSet("First", "Second", "Third","Fourth","Last")]
+        [ValidateSet("First", "Second", "Third", "Fourth", "Last")]
         [String]$WeekOfMonth,
 
         [Parameter(ParameterSetName = 'Recurring')]
@@ -54,22 +54,22 @@ Function Set-LMSDT {
 
         Try {
             $Data = @{}
-            $Data.Add('comment',$Comment)
-            $Data.Add('hour',$StartHour)
-            $Data.Add('minute',$StartMinute)
-            $Data.Add('endHour',$EndHour)
-            $Data.Add('endMinute',$EndMinute)
-            $Data.Add('weekDay',$WeekDay)
-            $Data.Add('monthDay',$DayOfMonth)
-            $Data.Add('weekOfMonth',$WeekOfMonth)
+            $Data.Add('comment', $Comment)
+            $Data.Add('hour', $StartHour)
+            $Data.Add('minute', $StartMinute)
+            $Data.Add('endHour', $EndHour)
+            $Data.Add('endMinute', $EndMinute)
+            $Data.Add('weekDay', $WeekDay)
+            $Data.Add('monthDay', $DayOfMonth)
+            $Data.Add('weekOfMonth', $WeekOfMonth)
 
-            If($StartDate){
+            If ($StartDate) {
                 $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
-                $Data.Add('startDateTime',[math]::Round($StartDateTime))
+                $Data.Add('startDateTime', [math]::Round($StartDateTime))
             }
-            If($EndDate){
+            If ($EndDate) {
                 $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
-                $Data.Add('endDateTime',[math]::Round($EndDateTime))
+                $Data.Add('endDateTime', [math]::Round($EndDateTime))
             }
 
             #Remove empty keys so we dont overwrite them

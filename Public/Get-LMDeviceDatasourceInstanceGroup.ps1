@@ -26,7 +26,7 @@ Function Get-LMDeviceDatasourceInstanceGroup {
 
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
 
     )

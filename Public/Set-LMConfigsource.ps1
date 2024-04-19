@@ -1,6 +1,6 @@
 Function Set-LMConfigsource {
 
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -18,7 +18,7 @@ Function Set-LMConfigsource {
 
         [String]$TechNotes,
 
-        [ValidateSet("3600","14400","28800","86400")]
+        [ValidateSet("3600", "14400", "28800", "86400")]
         [String]$PollingIntervalInSeconds, #In Seconds
 
         [PSCustomObject]$ConfigChecks #Should be the full datapoints object from the output of Get-LMDatasource
@@ -41,25 +41,25 @@ Function Set-LMConfigsource {
             #Build header and uri
             $ResourcePath = "/setting/configsources/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | DisplayName: $($PSItem.displayName)"
             }
-            ElseIf($Name){
+            ElseIf ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
             Try {
                 $Data = @{
-                    name                      = $NewName
-                    displayName               = $DisplayName
-                    description               = $Description
-                    appliesTo                 = $appliesTo
-                    technology                = $TechNotes
-                    collectInterval           = $PollingIntervalInSeconds
-                    configChecks              = $ConfigChecks
+                    name            = $NewName
+                    displayName     = $DisplayName
+                    description     = $Description
+                    appliesTo       = $appliesTo
+                    technology      = $TechNotes
+                    collectInterval = $PollingIntervalInSeconds
+                    configChecks    = $ConfigChecks
                 }
 
                 #Remove empty keys so we dont overwrite them

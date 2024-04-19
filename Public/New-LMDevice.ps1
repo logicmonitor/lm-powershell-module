@@ -119,22 +119,22 @@ Function New-LMDevice {
 
             Try {
                 $Data = @{
-                    name                      = $Name
-                    displayName               = $DisplayName
-                    description               = $Description
-                    disableAlerting           = $DisableAlerting
-                    enableNetflow             = $EnableNetFlow
-                    customProperties          = $customProperties
-                    deviceType                = $DeviceType
-                    preferredCollectorId      = $PreferredCollectorId
-                    preferredCollectorGroupId = $PreferredCollectorGroupId
+                    name                         = $Name
+                    displayName                  = $DisplayName
+                    description                  = $Description
+                    disableAlerting              = $DisableAlerting
+                    enableNetflow                = $EnableNetFlow
+                    customProperties             = $customProperties
+                    deviceType                   = $DeviceType
+                    preferredCollectorId         = $PreferredCollectorId
+                    preferredCollectorGroupId    = $PreferredCollectorGroupId
                     autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId
-                    link                      = $Link
-                    netflowCollectorGroupId   = $NetflowCollectorGroupId
-                    netflowCollectorId        = $NetflowCollectorId
-                    logCollectorGroupId       = $LogCollectorGroupId
-                    logCollectorId            = $LogCollectorId
-                    hostGroupIds              = $HostGroupIds -join ","
+                    link                         = $Link
+                    netflowCollectorGroupId      = $NetflowCollectorGroupId
+                    netflowCollectorId           = $NetflowCollectorId
+                    logCollectorGroupId          = $LogCollectorGroupId
+                    logCollectorId               = $LogCollectorId
+                    hostGroupIds                 = $HostGroupIds -join ","
                 }
 
             

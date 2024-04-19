@@ -78,7 +78,7 @@ Function Send-LMPushMetric {
         If ($Script:LMAuth.Valid) {
 
             $QueryParams = $null
-            If($NewResourceHostName){
+            If ($NewResourceHostName) {
                 $QueryParams = "?create=true"
             }
                     
@@ -88,15 +88,15 @@ Function Send-LMPushMetric {
 
             Try {
                 $Data = @{
-                    resourceName            = $NewResourceHostName
-                    resourceDescription     = $NewResourceDescription
-                    resourceIds             = $ResourceIds
-                    resourceProperties      = $ResourceProperties
-                    dataSourceId            = $DatasourceId
-                    dataSource              = ($DatasourceName -replace '[#\\;=]', '_')
-                    dataSourceDisplayName   = ($DatasourceDisplayName -replace '[#\\;=]', '_')
-                    dataSourceGroup         = $DatasourceGroup
-                    instances               = $Instances
+                    resourceName          = $NewResourceHostName
+                    resourceDescription   = $NewResourceDescription
+                    resourceIds           = $ResourceIds
+                    resourceProperties    = $ResourceProperties
+                    dataSourceId          = $DatasourceId
+                    dataSource            = ($DatasourceName -replace '[#\\;=]', '_')
+                    dataSourceDisplayName = ($DatasourceDisplayName -replace '[#\\;=]', '_')
+                    dataSourceGroup       = $DatasourceGroup
+                    instances             = $Instances
 
                 }
 

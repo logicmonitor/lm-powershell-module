@@ -15,8 +15,8 @@ Function Set-LMPushModuleDeviceProperty {
         [String]$PropertyValue
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -33,8 +33,8 @@ Function Set-LMPushModuleDeviceProperty {
 
             Try {
                 $Data = @{
-                    resourceIds = @{"system.deviceid"=$Id}
-                    resourceProperties = @{$PropertyName=$PropertyValue}
+                    resourceIds        = @{"system.deviceid" = $Id }
+                    resourceProperties = @{$PropertyName = $PropertyValue }
                 }
 
                 $Data = ($Data | ConvertTo-Json)
@@ -60,5 +60,5 @@ Function Set-LMPushModuleDeviceProperty {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

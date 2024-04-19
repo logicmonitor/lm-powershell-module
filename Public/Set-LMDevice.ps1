@@ -1,6 +1,6 @@
 Function Set-LMDevice {
 
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -64,13 +64,13 @@ Function Set-LMDevice {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | DisplayName: $($PSItem.displayName)"
             }
-            ElseIf($Name){
+            ElseIf ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 

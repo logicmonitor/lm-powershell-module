@@ -63,11 +63,11 @@ Function New-LMCollectorGroup {
 
             Try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $Name
-                    autoBalance                         = $AutoBalance
-                    customProperties                    = $customProperties
-                    autoBalanceInstanceCountThreshold   = $AutoBalanceInstanceCountThreshold
+                    description                       = $Description
+                    name                              = $Name
+                    autoBalance                       = $AutoBalance
+                    customProperties                  = $customProperties
+                    autoBalanceInstanceCountThreshold = $AutoBalanceInstanceCountThreshold
                 }
 
             

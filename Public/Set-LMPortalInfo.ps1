@@ -16,13 +16,13 @@ Function Set-LMPortalInfo {
 
         [String]$CompanyDisplayName,
 
-        [ValidateSet(30,60,120,240,480,1440,10080,43200)]
+        [ValidateSet(30, 60, 120, 240, 480, 1440, 10080, 43200)]
         [Nullable[Int]]$UserSessionTimeoutInMin
 
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
             
@@ -30,19 +30,19 @@ Function Set-LMPortalInfo {
             $ResourcePath = "/setting/companySetting"
 
             $Data = @{
-                whiteList   = $Whitelist
-                sessionTimeoutInSeconds   = $UserSessionTimeoutInMin * 60
-                requireTwoFA   = $RequireTwoFA
-                alertTotalIncludeInAck   = $IncludeACKinAlertTotals
-                alertTotalIncludeInSdt   = $IncludeSDTinAlertTotals
-                companyDisplayName   = $CompanyDisplayName
-                enableRemoteSession   = $EnableRemoteSession
+                whiteList               = $Whitelist
+                sessionTimeoutInSeconds = $UserSessionTimeoutInMin * 60
+                requireTwoFA            = $RequireTwoFA
+                alertTotalIncludeInAck  = $IncludeACKinAlertTotals
+                alertTotalIncludeInSdt  = $IncludeSDTinAlertTotals
+                companyDisplayName      = $CompanyDisplayName
+                enableRemoteSession     = $EnableRemoteSession
             }
 
             #Remove empty keys so we dont overwrite them
             @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
 
-            If($ClearWhitelist){
+            If ($ClearWhitelist) {
                 $Data.whitelist = ""
             }
 
@@ -70,5 +70,5 @@ Function Set-LMPortalInfo {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

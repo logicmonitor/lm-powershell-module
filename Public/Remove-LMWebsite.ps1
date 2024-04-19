@@ -1,6 +1,6 @@
 Function Remove-LMWebsite {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -10,8 +10,8 @@ Function Remove-LMWebsite {
 
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -27,13 +27,13 @@ Function Remove-LMWebsite {
             #Build header and uri
             $ResourcePath = "/website/websites/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf($Name){
+            ElseIf ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
@@ -44,11 +44,11 @@ Function Remove-LMWebsite {
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
                     
                     $Result = [PSCustomObject]@{
-                        Id = $Id
+                        Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
                     
@@ -66,5 +66,5 @@ Function Remove-LMWebsite {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

@@ -37,7 +37,7 @@ A custom object with the following properties:
 - Message: A message indicating the success of the removal.
 #>
 Function Remove-LMDeviceDatasourceInstance {
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
@@ -60,8 +60,8 @@ Function Remove-LMDeviceDatasourceInstance {
 
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -93,13 +93,13 @@ Function Remove-LMDeviceDatasourceInstance {
             #Build header and uri
             $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "DeviceDisplayName: $($PSItem.deviceDisplayName) | DatasourceName: $($PSItem.name) | WildValue: $($PSItem.wildValue)"
             }
-            ElseIf($DatasourceName -and $DeviceName){
+            ElseIf ($DatasourceName -and $DeviceName) {
                 $Message = "DeviceName: $DeviceName | DatasourceName: $DatasourceName | WildValue: $WildValue"
             }
-            Else{
+            Else {
                 $Message = "DeviceId: $DeviceId | DatasourceId: $DatasourceId | WildValue: $WildValue"
             }
 
@@ -110,12 +110,12 @@ Function Remove-LMDeviceDatasourceInstance {
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
                     
                     $Result = [PSCustomObject]@{
                         InstanceId = $InstanceId
-                        Message = "Successfully removed ($Message)"
+                        Message    = "Successfully removed ($Message)"
                     }
                     
                     Return $Result
@@ -132,5 +132,5 @@ Function Remove-LMDeviceDatasourceInstance {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

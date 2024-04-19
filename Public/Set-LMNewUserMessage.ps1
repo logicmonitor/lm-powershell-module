@@ -20,8 +20,8 @@ Function Set-LMNewUserMessage {
 
             Try {
                 $Data = @{
-                    messageBody                         = $MessageBody
-                    messageSubject                      = $MessageSubject
+                    messageBody    = $MessageBody
+                    messageSubject = $MessageSubject
                 }
 
                 #Remove empty keys so we dont overwrite them

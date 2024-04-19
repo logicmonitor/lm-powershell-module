@@ -15,8 +15,8 @@ Function Set-LMDeviceProperty {
         [String]$PropertyValue
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -59,5 +59,5 @@ Function Set-LMDeviceProperty {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

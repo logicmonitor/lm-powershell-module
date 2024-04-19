@@ -44,7 +44,7 @@ Function Get-LMDeviceData {
 
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
 
     )
@@ -85,7 +85,7 @@ Function Get-LMDeviceData {
         #Lookup InstanceId
         If ($InstanceName) {
 
-            $LookupResult = (Get-LMDeviceDatasourceInstance -DeviceId $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.displayName -eq $InstanceName -or $_.name -like "*$InstanceName" -or $_.name -eq "$InstanceName"}).Id
+            $LookupResult = (Get-LMDeviceDatasourceInstance -DeviceId $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.displayName -eq $InstanceName -or $_.name -like "*$InstanceName" -or $_.name -eq "$InstanceName" }).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                 return
             }
@@ -114,7 +114,7 @@ Function Get-LMDeviceData {
             }
 
             #Add time range filter if provided data ranges
-            If($StartDate -and $EndDate){
+            If ($StartDate -and $EndDate) {
                 $QueryParams = $QueryParams + "&start=$StartDate&end=$EndDate"
             }
             
@@ -151,22 +151,22 @@ Function Get-LMDeviceData {
             }
         }
         #Convert results into readable format for consumption
-        If($Response){
+        If ($Response) {
             $DatapointResults = @($null) * ($Response.values | Measure-Object).Count
-            for ($v = 0 ; $v -lt ($Response.values | Measure-Object).Count ; $v++){
-                    $DatapointResults[$v] = [PSCustomObject]@{}
-                    $DatapointResults[$v] | Add-Member -MemberType NoteProperty -Name "TimestampEpoch" -Value $Response.time[$v]
+            for ($v = 0 ; $v -lt ($Response.values | Measure-Object).Count ; $v++) {
+                $DatapointResults[$v] = [PSCustomObject]@{}
+                $DatapointResults[$v] | Add-Member -MemberType NoteProperty -Name "TimestampEpoch" -Value $Response.time[$v]
 
-                    $TimestampConverted = (([System.DateTimeOffset]::FromUnixTimeMilliseconds($Response.time[$v])).DateTime).ToString()
-                    $DatapointResults[$v] | Add-Member -MemberType NoteProperty -Name "TimestampUTC" -Value $TimestampConverted
+                $TimestampConverted = (([System.DateTimeOffset]::FromUnixTimeMilliseconds($Response.time[$v])).DateTime).ToString()
+                $DatapointResults[$v] | Add-Member -MemberType NoteProperty -Name "TimestampUTC" -Value $TimestampConverted
 
-                for ($dp = 0 ; $dp -lt ($Response.dataPoints | Measure-Object).Count; $dp++){
+                for ($dp = 0 ; $dp -lt ($Response.dataPoints | Measure-Object).Count; $dp++) {
                     $DatapointResults[$v] | Add-Member -MemberType NoteProperty -Name $Response.dataPoints[$dp] -Value $Response.values[$v][$dp]
                 }
             }
             Return $DatapointResults
         }
-        Else{
+        Else {
             Return
         }
 

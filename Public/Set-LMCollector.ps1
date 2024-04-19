@@ -1,6 +1,6 @@
 Function Set-LMCollector {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
 
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
@@ -54,13 +54,13 @@ Function Set-LMCollector {
             #Build header and uri
             $ResourcePath = "/setting/collector/collectors/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.hostname) | Description: $($PSItem.description)"
             }
-            ElseIf($Name){
+            ElseIf ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
