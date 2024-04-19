@@ -290,7 +290,7 @@ Function New-LMWebsite {
                 $Data.testLocation = $TestLocations
             }
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "testLocation" -and $_ -ne "steps" -and $_ -ne "checkpoints") { $Data.Remove($_) } }
+            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "testLocation" -and $_ -ne "steps" -and $_ -ne "checkpoints") { $Data.Remove($_) } }
             $Data = ($Data | ConvertTo-Json -Depth 5)
             
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data

@@ -87,7 +87,7 @@ Function Invoke-LMCollectorDebugCommand {
 import com.santaba.agent.collector3.CollectorDb;
 def hostProps = [:];
 def instanceProps = [:];
-try {
+Try {
     hostProps = CollectorDb.getInstance().getHost("$CommandHostName").getProperties();
     instanceProps["wildvalue"] = "$CommandWildValue";
     }

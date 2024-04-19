@@ -77,7 +77,7 @@ Function Set-LMDeviceDatasourceInstance {
             If ($PSItem) {
                 $Message = "deviceDisplayName: $($PSItem.deviceDisplayName) | instanceId: $($PSItem.id) | instanceName: $($PSItem.name)"
             }
-            ElseIf ($DeviceName) {
+            Elseif ($DeviceName) {
                 $Message = "deviceDisplayName: $DeviceName | instanceId: $InstanceId"
             }
             Else {
@@ -97,7 +97,7 @@ Function Set-LMDeviceDatasourceInstance {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
 
                 $Data = ($Data | ConvertTo-Json)
 

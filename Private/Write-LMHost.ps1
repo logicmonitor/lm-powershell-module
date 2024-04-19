@@ -40,10 +40,10 @@ Function Write-LMHost {
         If ($ForegroundColor -and !$BackgroundColor) {
             Write-Host $Message -ForegroundColor $ForegroundColor
         }
-        ElseIf (!$ForegroundColor -and $BackgroundColor) {
+        Elseif (!$ForegroundColor -and $BackgroundColor) {
             Write-Host $Message -BackgroundColor $BackgroundColor
         }
-        ElseIf ($ForegroundColor -and $BackgroundColor) {
+        Elseif ($ForegroundColor -and $BackgroundColor) {
             Write-Host $Message -ForegroundColor $ForegroundColor -BackgroundColor $BackgroundColor
         }
         Else {

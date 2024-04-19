@@ -72,7 +72,7 @@ Function Get-LMDeviceConfigSourceData {
                     $Done = $true
                     Return $Response
                 }
-                ElseIf ($LatestConfigOnly) {
+                Elseif ($LatestConfigOnly) {
                     Return $Response.Items
                 }
                 #Check result size and if needed loop again

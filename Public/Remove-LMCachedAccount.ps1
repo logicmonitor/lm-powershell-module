@@ -37,7 +37,7 @@ Function Remove-LMCachedAccount {
     Process {
         If ($RemoveAllEntries) {
             $CachedAccounts = Get-SecretInfo -Vault Logic.Monitor
-            if ($PSCmdlet.ShouldProcess("$(($CachedAccounts | Measure-Object).Count) cached account(s)", "Remove All Cached Accounts")) {                
+            If ($PSCmdlet.ShouldProcess("$(($CachedAccounts | Measure-Object).Count) cached account(s)", "Remove All Cached Accounts")) {                
                 Foreach ($Account in $CachedAccounts.Name) {
                     Try {
                         Remove-Secret -Name $Account -Vault Logic.Monitor -Confirm:$false -ErrorAction Stop

@@ -46,7 +46,7 @@ Function Update-LogicMonitorModule {
         If ($Installed -is [Array]) {
             $InstalledVersion = $Installed[0].Version
         }
-        ElseIf ($Installed.Version) {
+        Elseif ($Installed.Version) {
             $InstalledVersion = $Installed.Version
         }
         Else {
@@ -65,7 +65,7 @@ Function Update-LogicMonitorModule {
             If ($CheckOnly) {
                 Write-LMHost "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, please consider upgrading to the latest version ($OnlineVersion) as soon as possible. Use the -AutoUpdateModule switch next time you connect to auto upgrade to the latest version." -ForegroundColor Yellow
             }
-            ElseIf ($UninstallFirst -eq $true) {
+            Elseif ($UninstallFirst -eq $true) {
                 Write-LMHost "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, uninstalling prior Module $Module version $InstalledVersion" -ForegroundColor Yellow
                 Uninstall-Module -Name $Module -Force -Verbose:$False
     

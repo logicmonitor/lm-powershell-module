@@ -70,7 +70,7 @@ Function Set-LMDeviceGroup {
             If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | Path: $($PSItem.fullPath)"
             }
-            ElseIf ($Name) {
+            Elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
             Else {
@@ -89,7 +89,7 @@ Function Set-LMDeviceGroup {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
             
                 $Data = ($Data | ConvertTo-Json)
 

@@ -177,7 +177,7 @@ Function Connect-LMAccount {
                     If ($Type -eq "LMv1") {
                         [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                     }
-                    ElseIf ($Type -eq "Bearer") {
+                    Elseif ($Type -eq "Bearer") {
                         [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                     }
                     Else {
@@ -202,7 +202,7 @@ Function Connect-LMAccount {
             [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
             $Type = "LMv1"
         }
-        ElseIf ($PsCmdlet.ParameterSetName -eq "SessionSync") {
+        Elseif ($PsCmdlet.ParameterSetName -eq "SessionSync") {
             $Session = Get-LMSession -AccountName $AccountName
             If ($Session) {
                 $AccessId = $Session.jSessionID #Session Id
@@ -210,7 +210,7 @@ Function Connect-LMAccount {
                 $Type = "SessionSync"
             }
             Else {
-                throw "Unable to validate session sync info for: $AccountName"
+                Throw "Unable to validate session sync info for: $AccountName"
             }
         }
         Else {
@@ -240,7 +240,7 @@ Function Connect-LMAccount {
         If ($AutoUpdateModuleVersion -and !$SkipVersionCheck) {
             Update-LogicMonitorModule
         }
-        ElseIf (!$SkipVersionCheck) {
+        Elseif (!$SkipVersionCheck) {
             Update-LogicMonitorModule -CheckOnly
         }
     }
@@ -271,7 +271,7 @@ Function Connect-LMAccount {
                     Return
                 }
                 Catch {
-                    throw "Unable to validate API token info"
+                    Throw "Unable to validate API token info"
                 }
             }
         }
@@ -284,14 +284,14 @@ Function Connect-LMAccount {
                     Return
                 }
                 Else {
-                    throw "Unable to verify api token permission levels, ensure api token has rights to view all/select resources or at minimum view access for Account Information"
+                    Throw "Unable to verify api token permission levels, ensure api token has rights to view all/select resources or at minimum view access for Account Information"
                 }
             }
             Catch {
     
                 #Clear credential object from environment
                 Remove-Variable LMAuth -Scope Script -ErrorAction SilentlyContinue
-                throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
+                Throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
             }
             Return
         }

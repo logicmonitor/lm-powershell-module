@@ -159,7 +159,7 @@ Function New-LMUser {
                 }
                 break
             }
-            ElseIf ($ViewPermission.ContainsKey($View)) {
+            Elseif ($ViewPermission.ContainsKey($View)) {
                 $ViewPermission[$View] = $true
             }
         }
@@ -197,7 +197,7 @@ Function New-LMUser {
             }
 
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
 
             $Data = ($Data | ConvertTo-Json)
 

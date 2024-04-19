@@ -59,7 +59,7 @@ Function Remove-LMNetscanGroup {
             If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf ($Name) {
+            Elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
             Else {

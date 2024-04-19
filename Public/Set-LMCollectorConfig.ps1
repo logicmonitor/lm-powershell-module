@@ -95,7 +95,7 @@ Function Set-LMCollectorConfig {
     Begin {}
     Process {
         Function Process-CollectorConfig {
-            Param(
+            Param (
                 $Config,
                 $ConfLine,
                 $Value
@@ -104,7 +104,7 @@ Function Set-LMCollectorConfig {
             $Value = $Value.toString().toLower()
 
             $ConfigArray = $Config.Split([Environment]::NewLine)
-            [int[]]$Index = [Linq.Enumerable]::Range(0, $ConfigArray.Count).Where({ param($i) $ConfigArray[$i] -match $ConfLine })
+            [int[]]$Index = [Linq.Enumerable]::Range(0, $ConfigArray.Count).Where({ Param($i) $ConfigArray[$i] -match $ConfLine })
             If (($Index | Measure-Object).Count -eq 1) {
                 Write-LMHost "[INFO]: Updating config parameter $ConfLine to value $Value."
                 $ConfigArray[$Index[0]] = "$ConfLine=$Value"
@@ -134,9 +134,9 @@ Function Set-LMCollectorConfig {
                     $SnippetArray = [System.Collections.ArrayList]@()
                     $cmdName = $MyInvocation.InvocationName
                     $paramList = (Get-Command -Name $cmdName).Parameters
-                    foreach ( $key in $paramList.Keys ) {
+                    Foreach ( $key in $paramList.Keys ) {
                         $value = (Get-Variable $key -ErrorAction SilentlyContinue).Value
-                        if ( ($value -or $value -eq 0) -and ($key -ne "Id" -and $key -ne "Name" -and $key -ne "WaitForRestart") ) {
+                        If ( ($value -or $value -eq 0) -and ($key -ne "Id" -and $key -ne "Name" -and $key -ne "WaitForRestart") ) {
                             $SnippetArray.Add(@{$key = $value }) | Out-Null
                         }
                     }
@@ -173,7 +173,7 @@ Function Set-LMCollectorConfig {
             If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.hostname) | Description: $($PSItem.description)"
             }
-            ElseIf ($Name) {
+            Elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
             Else {
@@ -192,7 +192,7 @@ Function Set-LMCollectorConfig {
                 
                 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
                 
                 $Data = ($Data | ConvertTo-Json)
                 

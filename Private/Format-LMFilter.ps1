@@ -52,7 +52,7 @@ Function Format-LMFilter {
             If ($Filter -match '\s+-and\s+') {
                 $FormatedFilter += ","
             }
-            ElseIf ($Filter -match '\s+-or\s+') {
+            Elseif ($Filter -match '\s+-or\s+') {
                 $FormatedFilter += "||"
             }
             Else {

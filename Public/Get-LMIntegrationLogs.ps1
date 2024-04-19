@@ -90,7 +90,7 @@ Function Get-LMIntegrationLogs {
                         $Done = $true
                         Write-LMHost "[WARN]: Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
                     }
-                    ElseIf ($Count -ge $Total -and $Total -ge 0) {
+                    Elseif ($Count -ge $Total -and $Total -ge 0) {
                         $Done = $true
                     }
                 }

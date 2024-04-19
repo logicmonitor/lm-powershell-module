@@ -17,7 +17,7 @@ Function Remove-LMUnmonitoredDevice {
             $Message = "Id(s): $Ids"
     
             Try {
-                if ($PSCmdlet.ShouldProcess($Message, "Remove Unmonitored Devices")) {                    
+                If ($PSCmdlet.ShouldProcess($Message, "Remove Unmonitored Devices")) {                    
                     [String[]]$Data = $Ids
                     $Data = ($Data | ConvertTo-Json -AsArray)
     

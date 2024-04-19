@@ -179,7 +179,7 @@ Function New-LMDeviceDatasourceInstanceSDT {
             }
 
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
 
             $Data = ($Data | ConvertTo-Json)
 

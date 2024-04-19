@@ -92,7 +92,7 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($dpConfig.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($dpConfig[$_]) -and $_ -ne "alertExpr" -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $dpConfig.Remove($_) } }
+                @($dpConfig.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($dpConfig[$_]) -and $_ -ne "alertExpr" -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $dpConfig.Remove($_) } }
 
                 $Data = @{
                     dpConfig = @($dpConfig)

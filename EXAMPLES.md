@@ -192,7 +192,7 @@ Set-LMDevice -Name "192.168.1.1" -DisplayName $deviceProperty
 #Method Three
 #Using Get-LMDeviceGroupDevices to retrieve a list of devices and loop through each and set the sysname value to the displayname
 $devices = Get-LMDeviceGroupDevices -Name "Cambium Wireless"
-foreach ($dev in $devices) {
+Foreach ($dev in $devices) {
     $deviceProperty = ($dev.systemProperties[$dev.systemProperties.name.IndexOf("system.sysname")].value)
     if($deviceProperty -and $dev.systemProperties.name.IndexOf("system.sysname") -ne -1){
         Set-LMDevice -Id $dev.id -DisplayName $deviceProperty
@@ -209,7 +209,7 @@ $processedDeviceList = @()
 $devices = Get-LMDeviceGroupDevices -Id "23"
 
 #Loop through each device and check for presence of property
-foreach ($dev in $devices) {
+Foreach ($dev in $devices) {
     $propName = "test.prop"
     $propValue = "1234"
     $currentPropValue = ($dev.customProperties[$dev.customProperties.name.IndexOf($propName)].value)

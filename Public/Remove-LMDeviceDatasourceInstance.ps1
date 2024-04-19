@@ -96,7 +96,7 @@ Function Remove-LMDeviceDatasourceInstance {
             If ($PSItem) {
                 $Message = "DeviceDisplayName: $($PSItem.deviceDisplayName) | DatasourceName: $($PSItem.name) | WildValue: $($PSItem.wildValue)"
             }
-            ElseIf ($DatasourceName -and $DeviceName) {
+            Elseif ($DatasourceName -and $DeviceName) {
                 $Message = "DeviceName: $DeviceName | DatasourceName: $DatasourceName | WildValue: $WildValue"
             }
             Else {

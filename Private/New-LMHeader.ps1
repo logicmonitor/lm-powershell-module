@@ -66,7 +66,7 @@ Function New-LMHeader {
         $Token = [System.Net.NetworkCredential]::new("", $Auth.BearerToken).Password
         $Header.Add("Authorization", "Bearer $Token")
     }
-    ElseIf ($Auth.Type -eq "SessionSync") {
+    Elseif ($Auth.Type -eq "SessionSync") {
         $SessionInfo = Get-LMSession -AccountName $Auth.Portal
         If ($SessionInfo) {
             $Header.Add("Cookie", "JSESSIONID=$($SessionInfo.jSessionID)")
@@ -74,7 +74,7 @@ Function New-LMHeader {
             $Header.Add("X-CSRF-Token", "$($SessionInfo.token)")
         }
         Else {
-            throw "Unable to generate header details, ensure you are connected to a portal and try again."
+            Throw "Unable to generate header details, ensure you are connected to a portal and try again."
         }
     }
     Else {
