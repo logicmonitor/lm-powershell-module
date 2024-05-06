@@ -409,18 +409,30 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.0
+## 6.1
 ### New Cmdlets:
- - **Get-LMDeviceInstanceData**: This cmdlet retrieves data for LogicMonitor device instances based on the specified parameters. The cmdlet can only retrieve data within the last 24 hours. You can use `Get-LMDeviceInstanceList` to quickly get a list of instances for a particular device.
- - **New-LMAlertEscalation**: This cmdlet invokes an escalation for a LogicMonitor alert. It takes a *-Ids* parameter which is an array of alert ids to escalate.
- - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 
- 
- **Note**: Access Groups are not available in all portals and needs to be enabled before any access group commands can be utilized.
-
+ - **Get-LMAWSAccountId**: This cmdlet is used to retrieve the AWS Account ID associated with the LogicMonitor account.
+ - **Get-LMConfigsourceUpdateHistory**: This cmdlet retrieves the update history for a LogicMonitor configuration source. It can be used to get information about the updates made to a configuration source, such as the update reasons and the modules that were updated..
+ - **Invoke-LMAWSAccountTest**: This cmdlet will test for required permissions needed to add an AWS account to LogicMonitor. 
+    ```
+    Invoke-LMAWSAccountTest -ExternalId "123456" -AccountId "987654" -AccessId "AKI123" -AccessKey "abc123" -AssumedRoleARN "arn:aws:iam::123456789012:role/MyRole" -CheckedServices "EC2,S3,RDS" -GroupId 123
+    ```
+- **Invoke-LMAzureAccountTest**: This cmdlet will test for required permissions needed to add an Azure account to LogicMonitor. 
+  ```
+  Invoke-LMAzureAccountTest -ClientId "xxxxxxxx" -SecretKey "xxxxxxxx" -SubscriptionIds "xxxxxxxx"
+  ```
+- **Invoke-LMAzureSubscriptionDiscovery**: This cmdlet invokes the Azure subscription discovery process to return subscriptions for a specified client Id. 
+  ```
+    Invoke-LMAzureSubscriptionDiscovery -ClientId "xxxxxxxx" -SecretKey "xxxxxxxx" -TenantId "xxxxxxxx"
+  ```
+- **Invoke-LMGCPAccountTest**: This cmdlet will test for required permissions needed to add an GCP project to LogicMonitor. 
+  ```
+   Invoke-LMGCPAccountTest -ServiceAccountKey "service-account-key" -ProjectId "project-id"
+  ```
 
 ### Updated Cmdlets:
- - **Set-LMDeviceDatasourceInstanceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
- - **Set-LMDeviceGroupDatasourceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
+ - **Get-LMDatasourceUpdateHistory**: Added custom object return type *LogicMonitor.ModuleUpdateHistory*.
+ - **Set-LMDevice**: Added additional parameter `-AutoBalancedCollectorGroupId` to specify an auto balanced collector group.
 
 [Previous Release Notes](RELEASENOTES.md)
 
