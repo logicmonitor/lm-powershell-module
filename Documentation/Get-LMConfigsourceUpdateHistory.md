@@ -5,59 +5,59 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDatasourceUpdateHistory
+# Get-LMConfigsourceUpdateHistory
 
 ## SYNOPSIS
-Retrieves the update history of a LogicMonitor datasource.
+Retrieves the update history for a LogicMonitor configuration source.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Get-LMDatasourceUpdateHistory -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMConfigsourceUpdateHistory -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDatasourceUpdateHistory [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMConfigsourceUpdateHistory [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Get-LMDatasourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMConfigsourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDatasourceUpdateHistory function retrieves the update history of a LogicMonitor datasource.
-It can be used to get information about the updates made to a datasource, such as the reasons for the updates.
+The Get-LMConfigsourceUpdateHistory function retrieves the update history for a LogicMonitor configuration source.
+It can be used to get information about the updates made to a configuration source, such as the update reasons and the modules that were updated.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LMDatasourceUpdateHistory -Id 1234
-Retrieves the update history of the datasource with ID 1234.
+Get-LMConfigsourceUpdateHistory -Id 1234
+Retrieves the update history for the configuration source with the ID 1234.
 ```
 
 ### EXAMPLE 2
 ```
-Get-LMDatasourceUpdateHistory -Name "MyDatasource"
-Retrieves the update history of the datasource with the name "MyDatasource".
+Get-LMConfigsourceUpdateHistory -Name "MyConfigSource"
+Retrieves the update history for the configuration source with the name "MyConfigSource".
 ```
 
 ### EXAMPLE 3
 ```
-Get-LMDatasourceUpdateHistory -DisplayName "My Datasource"
-Retrieves the update history of the datasource with the display name "My Datasource".
+Get-LMConfigsourceUpdateHistory -DisplayName "My Config Source"
+Retrieves the update history for the configuration source with the display name "My Config Source".
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the datasource.
+The ID of the configuration source.
 This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
@@ -73,10 +73,9 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the datasource.
-This parameter is used to look up the ID of the datasource.
-If the name is provided, the function will automatically retrieve the ID of the datasource.
-This parameter is used in the 'Name' parameter set.
+The name of the configuration source.
+This parameter is used to look up the ID of the configuration source.
+This parameter is used when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -91,10 +90,9 @@ Accept wildcard characters: False
 ```
 
 ### -DisplayName
-The display name of the datasource.
-This parameter is used to look up the ID of the datasource.
-If the display name is provided, the function will automatically retrieve the ID of the datasource.
-This parameter is used in the 'DisplayName' parameter set.
+The display name of the configuration source.
+This parameter is used to look up the ID of the configuration source.
+This parameter is used when using the 'DisplayName' parameter set.
 
 ```yaml
 Type: String
@@ -109,9 +107,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object that can be used to filter the results.
-The filter object should contain properties that match the properties of the datasource.
-Only datasources that match the filter will be included in the results.
+A filter object that specifies additional filtering criteria for the update history.
+This parameter is optional.
 
 ```yaml
 Type: Object
@@ -126,8 +123,9 @@ Accept wildcard characters: False
 ```
 
 ### -BatchSize
-The number of results to retrieve in each batch.
+The number of results to retrieve per request.
 The default value is 1000.
+This parameter is optional.
 
 ```yaml
 Type: Int32
