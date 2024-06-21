@@ -5,28 +5,22 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDatasourceUpdateHistory
+# Set-LMAccessGroup
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### Id (Default)
+### Id
 ```
-Get-LMDatasourceUpdateHistory -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+Set-LMAccessGroup [-Id <Int32>] [-NewName <String>] [-Description <String>] [-Tenant <String>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDatasourceUpdateHistory [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-### DisplayName
-```
-Get-LMDatasourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Set-LMAccessGroup [-Name <String>] [-NewName <String>] [-Description <String>] [-Tenant <String>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -44,6 +38,21 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
+### -Description
+{{ Fill Description Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Id
 {{ Fill Id Description }}
 
@@ -52,10 +61,10 @@ Type: Int32
 Parameter Sets: Id
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -74,26 +83,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisplayName
-{{ Fill DisplayName Description }}
+### -NewName
+{{ Fill NewName Description }}
 
 ```yaml
 Type: String
-Parameter Sets: DisplayName
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Object
 Parameter Sets: (All)
 Aliases:
 
@@ -104,11 +98,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Tenant
+{{ Fill Tenant Description }}
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
@@ -139,7 +133,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.Int32
 ## OUTPUTS
 
 ### System.Object

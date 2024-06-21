@@ -5,29 +5,35 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDatasourceUpdateHistory
+# Get-LMDeviceDatasourceInstanceAlertRecipients
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### Id (Default)
+### Name-dsName
 ```
-Get-LMDatasourceUpdateHistory -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-### Name
-```
-Get-LMDatasourceUpdateHistory [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName <String> -Name <String> -InstanceName <String>
+ -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### DisplayName
+### Id-dsName
 ```
-Get-LMDatasourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName <String> -Id <Int32> -InstanceName <String>
+ -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+### Name-dsId
+```
+Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId <Int32> -Name <String> -InstanceName <String>
+ -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+### Id-dsId
+```
+Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId <Int32> -Id <Int32> -InstanceName <String>
+ -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -44,12 +50,72 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
+### -DataPointName
+{{ Fill DataPointName Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatasourceId
+{{ Fill DatasourceId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Name-dsId, Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DatasourceName
+{{ Fill DatasourceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Id-dsName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Id
 {{ Fill Id Description }}
 
 ```yaml
 Type: Int32
-Parameter Sets: Id
+Parameter Sets: Id-dsName, Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceName
+{{ Fill InstanceName Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -64,55 +130,10 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: Name-dsName, Name-dsId
 Aliases:
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-{{ Fill DisplayName Description }}
-
-```yaml
-Type: String
-Parameter Sets: DisplayName
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False

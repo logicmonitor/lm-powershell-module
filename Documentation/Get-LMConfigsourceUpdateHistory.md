@@ -5,47 +5,60 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDatasourceUpdateHistory
+# Get-LMConfigsourceUpdateHistory
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves the update history for a LogicMonitor configuration source.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Get-LMDatasourceUpdateHistory -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMConfigsourceUpdateHistory -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDatasourceUpdateHistory [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMConfigsourceUpdateHistory [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### DisplayName
 ```
-Get-LMDatasourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMConfigsourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMConfigsourceUpdateHistory function retrieves the update history for a LogicMonitor configuration source.
+It can be used to get information about the updates made to a configuration source, such as the update reasons and the modules that were updated.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Get-LMConfigsourceUpdateHistory -Id 1234
+Retrieves the update history for the configuration source with the ID 1234.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Get-LMConfigsourceUpdateHistory -Name "MyConfigSource"
+Retrieves the update history for the configuration source with the name "MyConfigSource".
+```
+
+### EXAMPLE 3
+```
+Get-LMConfigsourceUpdateHistory -DisplayName "My Config Source"
+Retrieves the update history for the configuration source with the display name "My Config Source".
+```
 
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+The ID of the configuration source.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: Int32
@@ -54,13 +67,15 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+The name of the configuration source.
+This parameter is used to look up the ID of the configuration source.
+This parameter is used when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -75,7 +90,9 @@ Accept wildcard characters: False
 ```
 
 ### -DisplayName
-{{ Fill DisplayName Description }}
+The display name of the configuration source.
+This parameter is used to look up the ID of the configuration source.
+This parameter is used when using the 'DisplayName' parameter set.
 
 ```yaml
 Type: String
@@ -90,7 +107,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+A filter object that specifies additional filtering criteria for the update history.
+This parameter is optional.
 
 ```yaml
 Type: Object
@@ -105,7 +123,9 @@ Accept wildcard characters: False
 ```
 
 ### -BatchSize
-{{ Fill BatchSize Description }}
+The number of results to retrieve per request.
+The default value is 1000.
+This parameter is optional.
 
 ```yaml
 Type: Int32
@@ -114,7 +134,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -139,10 +159,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

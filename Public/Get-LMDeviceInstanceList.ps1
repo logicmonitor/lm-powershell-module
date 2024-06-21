@@ -63,7 +63,6 @@ Function Get-LMDeviceInstanceList {
                     return $Response.Total
                 }
 
-
                 #Stop looping if single device, no need to continue
                 If (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true

@@ -15,21 +15,21 @@ schema: 2.0.0
 ### Id
 ```
 Set-LMDevice -Id <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
- [-PreferredCollectorId <Int32>] [-PreferredCollectorGroupId <Int32>] [-Properties <Hashtable>]
- [-HostGroupIds <String[]>] [-PropertiesMethod <String>] [-Link <String>] [-DisableAlerting <Boolean>]
- [-EnableNetFlow <Boolean>] [-NetflowCollectorGroupId <Int32>] [-NetflowCollectorId <Int32>]
- [-LogCollectorGroupId <Int32>] [-LogCollectorId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-PreferredCollectorId <Int32>] [-PreferredCollectorGroupId <Int32>] [-AutoBalancedCollectorGroupId <Int32>]
+ [-Properties <Hashtable>] [-HostGroupIds <String[]>] [-PropertiesMethod <String>] [-Link <String>]
+ [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-NetflowCollectorGroupId <Int32>]
+ [-NetflowCollectorId <Int32>] [-LogCollectorGroupId <Int32>] [-LogCollectorId <Int32>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMDevice -Name <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
- [-PreferredCollectorId <Int32>] [-PreferredCollectorGroupId <Int32>] [-Properties <Hashtable>]
- [-HostGroupIds <String[]>] [-PropertiesMethod <String>] [-Link <String>] [-DisableAlerting <Boolean>]
- [-EnableNetFlow <Boolean>] [-NetflowCollectorGroupId <Int32>] [-NetflowCollectorId <Int32>]
- [-LogCollectorGroupId <Int32>] [-LogCollectorId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+ [-PreferredCollectorId <Int32>] [-PreferredCollectorGroupId <Int32>] [-AutoBalancedCollectorGroupId <Int32>]
+ [-Properties <Hashtable>] [-HostGroupIds <String[]>] [-PropertiesMethod <String>] [-Link <String>]
+ [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-NetflowCollectorGroupId <Int32>]
+ [-NetflowCollectorId <Int32>] [-LogCollectorGroupId <Int32>] [-LogCollectorId <Int32>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -45,6 +45,21 @@ PS C:\> {{ Add example code here }}
 {{ Add example description here }}
 
 ## PARAMETERS
+
+### -AutoBalancedCollectorGroupId
+{{ Fill AutoBalancedCollectorGroupId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -Confirm
 Prompts you for confirmation before running the cmdlet.

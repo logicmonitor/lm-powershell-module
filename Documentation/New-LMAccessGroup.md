@@ -5,28 +5,15 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDatasourceUpdateHistory
+# New-LMAccessGroup
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### Id (Default)
 ```
-Get-LMDatasourceUpdateHistory -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-### Name
-```
-Get-LMDatasourceUpdateHistory [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-### DisplayName
-```
-Get-LMDatasourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
+New-LMAccessGroup [-Name] <String> [[-Description] <String>] [[-Tenant] <String>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -44,16 +31,16 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Id
-{{ Fill Id Description }}
+### -Description
+{{ Fill Description Description }}
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
+Type: String
+Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
+Required: False
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -64,56 +51,26 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisplayName
-{{ Fill DisplayName Description }}
+### -Tenant
+{{ Fill Tenant Description }}
 
 ```yaml
 Type: String
-Parameter Sets: DisplayName
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Object
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

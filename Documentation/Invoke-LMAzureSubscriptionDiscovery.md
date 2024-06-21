@@ -5,116 +5,87 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDatasourceUpdateHistory
+# Invoke-LMAzureSubscriptionDiscovery
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Invokes the Azure subscription discovery process to return subscriptions for a specified client Id.
 
 ## SYNTAX
 
-### Id (Default)
 ```
-Get-LMDatasourceUpdateHistory -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-### Name
-```
-Get-LMDatasourceUpdateHistory [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
-```
-
-### DisplayName
-```
-Get-LMDatasourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Invoke-LMAzureSubscriptionDiscovery [-ClientId] <String> [-SecretKey] <String> [-TenantId] <String>
+ [[-IsChinaAccount] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Invoke-LMAzureSubscriptionDiscovery function is used to discover Azure subscriptions by making API requests to the LogicMonitor platform.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Invoke-LMAzureSubscriptionDiscovery -ClientId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -SecretKey "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -TenantId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+```
 
 ## PARAMETERS
 
-### -Id
-{{ Fill Id Description }}
+### -ClientId
+The client ID of the Azure Active Directory application.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-{{ Fill Name Description }}
+### -SecretKey
+The secret key of the Azure Active Directory application.
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisplayName
-{{ Fill DisplayName Description }}
+### -TenantId
+The tenant ID of the Azure Active Directory application.
 
 ```yaml
 Type: String
-Parameter Sets: DisplayName
+Parameter Sets: (All)
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 3
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Filter
-{{ Fill Filter Description }}
+### -IsChinaAccount
+Specifies whether the Azure account is a China account.
+Default value is $false.
 
 ```yaml
-Type: Object
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
+Position: 4
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -139,10 +110,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS
