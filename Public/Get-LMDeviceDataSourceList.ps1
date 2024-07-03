@@ -1,11 +1,64 @@
+<#
+.SYNOPSIS
+Retrieves a list of device data sources from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMDeviceDatasourceList function retrieves a list of device data sources from LogicMonitor based on the specified parameters. It supports filtering by device ID or device name, and allows customization of the batch size for pagination.
+
+.PARAMETER Id
+Specifies the ID of the device for which to retrieve the data sources. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the name of the device for which to retrieve the data sources. This parameter is mandatory when using the 'Name' parameter set.
+
+.PARAMETER Filter
+Specifies additional filters to apply to the data sources. This parameter accepts an object representing the filter criteria.
+
+.PARAMETER BatchSize
+Specifies the number of data sources to retrieve per batch. The default value is 1000.
+
+.EXAMPLE
+Get-LMDeviceDatasourceList -Id 1234
+Retrieves the data sources for the device with ID 1234.
+
+.EXAMPLE
+Get-LMDeviceDatasourceList -Name "MyDevice"
+Retrieves the data sources for the device with the name "MyDevice".
+
+.EXAMPLE
+Get-LMDeviceDatasourceList -Filter "Property -eq 'Value'"
+Retrieves the data sources that match the specified filter criteria.
+
+#>
+Function Get-LMDeviceDatasourceList {
+    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    Param (
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Alias('DeviceId')]
+        [Int]$Id,
+
+        [Parameter(ParameterSetName = 'Name')]
+        [Alias('DeviceName')]
+        [String]$Name,
+
+        [Object]$Filter,
+
+        [ValidateRange(1, 1000)]
+        [Int]$BatchSize = 1000
+    )
+    # Rest of the code...
+}
+
 Function Get-LMDeviceDatasourceList {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Alias('DeviceId')]
         [Int]$Id,
 
         [Parameter(ParameterSetName = 'Name')]
+        [Alias('DeviceName')]
         [String]$Name,
 
         [Object]$Filter,

@@ -1,3 +1,61 @@
+<#
+.SYNOPSIS
+Sets the properties of a LogicMonitor device datasource instance.
+
+.DESCRIPTION
+The Set-LMDeviceDatasourceInstance function is used to set the properties of a LogicMonitor device datasource instance. It allows you to update the display name, wild values, description, custom properties, monitoring and alerting settings, and instance group ID of the specified instance.
+
+.PARAMETER DisplayName
+Specifies the new display name for the instance.
+
+.PARAMETER WildValue
+Specifies the first wild value for the instance.
+
+.PARAMETER WildValue2
+Specifies the second wild value for the instance.
+
+.PARAMETER Description
+Specifies the description for the instance.
+
+.PARAMETER Properties
+Specifies a hashtable of custom properties for the instance.
+
+.PARAMETER StopMonitoring
+Specifies whether to stop monitoring the instance. This parameter accepts $true or $false.
+
+.PARAMETER DisableAlerting
+Specifies whether to disable alerting for the instance. This parameter accepts $true or $false.
+
+.PARAMETER InstanceGroupId
+Specifies the ID of the instance group to which the instance belongs.
+
+.PARAMETER InstanceId
+Specifies the ID of the instance to update. This parameter is mandatory and can be provided via pipeline.
+
+.PARAMETER DatasourceName
+Specifies the name of the datasource associated with the instance. This parameter is mandatory when using the 'Name-dsName' parameter set.
+
+.PARAMETER DatasourceId
+Specifies the ID of the datasource associated with the instance. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter set.
+
+.PARAMETER Id
+Specifies the ID of the device associated with the instance. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter set. This parameter can also be specified using the 'DeviceId' alias.
+
+.PARAMETER Name
+Specifies the name of the device associated with the instance. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter set. This parameter can also be specified using the 'DeviceName' alias.
+
+.EXAMPLE
+Set-LMDeviceDatasourceInstance -InstanceId 12345 -DisplayName "New Instance Name" -Description "Updated instance description"
+
+This example sets the display name and description of the instance with ID 12345.
+
+.EXAMPLE
+Get-LMDevice -Name "MyDevice" | Set-LMDeviceDatasourceInstance -DatasourceName "MyDatasource" -DisplayName "New Instance Name"
+
+This example retrieves the device with the name "MyDevice" and sets the display name of the instance associated with the datasource "MyDatasource".
+
+#>
+
 Function Set-LMDeviceDatasourceInstance {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
@@ -19,7 +77,6 @@ Function Set-LMDeviceDatasourceInstance {
         [String]$InstanceGroupId,
         
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
-        [Alias("Id")]
         [String]$InstanceId,
 
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
@@ -32,11 +89,13 @@ Function Set-LMDeviceDatasourceInstance {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
-        [String]$DeviceId,
+        [Alias('DeviceId')]
+        [String]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
-        [String]$DeviceName
+        [Alias('DeviceName')]
+        [String]$Name
 
     )
 
@@ -46,17 +105,17 @@ Function Set-LMDeviceDatasourceInstance {
         If ($Script:LMAuth.Valid) {
 
             #Lookup Device Id
-            If ($DeviceName) {
-                $LookupResult = (Get-LMDevice -Name $DeviceName).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
+            If ($Name) {
+                $LookupResult = (Get-LMDevice -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
-                $DeviceId = $LookupResult
+                $Id = $LookupResult
             }
 
             #Lookup DatasourceId
             If ($DatasourceName -or $DatasourceId) {
-                $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
+                $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                     return
                 }
@@ -72,16 +131,16 @@ Function Set-LMDeviceDatasourceInstance {
             }
             
             #Build header and uri
-            $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$instanceId"
+            $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$instanceId"
 
             If ($PSItem) {
                 $Message = "deviceDisplayName: $($PSItem.deviceDisplayName) | instanceId: $($PSItem.id) | instanceName: $($PSItem.name)"
             }
-            Elseif ($DeviceName) {
-                $Message = "deviceDisplayName: $DeviceName | instanceId: $InstanceId"
+            Elseif ($Name) {
+                $Message = "deviceDisplayName: $Name | instanceId: $InstanceId"
             }
             Else {
-                $Message = "instanceId: $InstanceId | deviceId: $DeviceId"
+                $Message = "instanceId: $InstanceId | Id: $Id"
             }
 
             Try {

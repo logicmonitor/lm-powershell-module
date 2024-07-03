@@ -1,5 +1,40 @@
-Function Get-LMDeviceDatasourceInstanceAlertRecipients {
+<#
+.SYNOPSIS
+Retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
 
+.DESCRIPTION
+The Get-LMDeviceDatasourceInstanceAlertRecipients function retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance. It requires valid API credentials and a logged-in session.
+
+.PARAMETER DatasourceName
+Specifies the name of the datasource. This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+.PARAMETER DatasourceId
+Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+
+.PARAMETER Id
+Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets. It can also be specified using the 'DeviceId' alias.
+
+.PARAMETER Name
+Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets. It can also be specified using the 'DeviceName' alias.
+
+.PARAMETER InstanceName
+Specifies the name of the datasource instance. This parameter is mandatory.
+
+.PARAMETER DataPointName
+Specifies the name of the data point. This parameter is mandatory.
+
+.EXAMPLE
+Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName "Ping-" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
+
+Retrieves the alert recipients for the "PingLossPercent" data point in the "CPU" datasource instance of the "Server01" device.
+
+.EXAMPLE
+Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId 123 -Id 456 -InstanceName "Instance01" -DataPointName "PingLossPercent"
+
+Retrieves the alert recipients for the "PingLossPercent" data point in the datasource instance with ID 123 of the device with ID 456.
+
+#>
+Function Get-LMDeviceDatasourceInstanceAlertRecipients {
     [CmdletBinding()]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
@@ -12,10 +47,12 @@ Function Get-LMDeviceDatasourceInstanceAlertRecipients {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Alias('DeviceId')]
         [Int]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Alias('DeviceName')]
         [String]$Name,
 
         [Parameter(Mandatory)]

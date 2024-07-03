@@ -51,10 +51,12 @@ Function New-LMDeviceDatasourceInstanceGroup {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Alias('DeviceId')]
         [Int]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Alias('DeviceName')]
         [String]$Name
 
     )

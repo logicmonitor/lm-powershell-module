@@ -1,3 +1,43 @@
+<#
+.SYNOPSIS
+Retrieves the alert settings for a specific LogicMonitor device datasource instance.
+
+.DESCRIPTION
+The Get-LMDeviceDatasourceInstanceAlertSetting function retrieves the alert settings for a specific LogicMonitor device datasource instance. It requires the device name or ID, datasource name or ID, and instance name as input parameters. Optionally, you can also provide a filter to narrow down the results. The function returns an array of alert settings for the specified instance.
+
+.PARAMETER DatasourceName
+Specifies the name of the datasource. This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter set.
+
+.PARAMETER DatasourceId
+Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter set.
+
+.PARAMETER Id
+Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter set. This parameter can also be specified using the 'DeviceId' alias.
+
+.PARAMETER Name
+Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter set. This parameter can also be specified using the 'DeviceName' alias.
+
+.PARAMETER InstanceName
+Specifies the name of the instance for which to retrieve the alert settings. This parameter is mandatory.
+
+.PARAMETER Filter
+Specifies a filter to narrow down the results. This parameter is optional.
+
+.PARAMETER BatchSize
+Specifies the number of results to retrieve per batch. The default value is 1000. This parameter is optional.
+
+.EXAMPLE
+Get-LMDeviceDatasourceInstanceAlertSetting -Name "MyDevice" -DatasourceName "MyDatasource" -InstanceName "MyInstance"
+Retrieves the alert settings for the instance named "MyInstance" of the datasource "MyDatasource" on the device named "MyDevice".
+
+.EXAMPLE
+Get-LMDeviceDatasourceInstanceAlertSetting -Id 123 -DatasourceId 456 -InstanceName "MyInstance" -Filter "Property -eq 'value'"
+Retrieves the alert settings for the instance named "MyInstance" of the datasource with ID 456 on the device with ID 123, applying the specified filter.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication. Make sure you are logged in before running any commands by using the Connect-LMAccount function.
+#>
+
 Function Get-LMDeviceDatasourceInstanceAlertSetting {
 
     [CmdletBinding()]
@@ -12,10 +52,12 @@ Function Get-LMDeviceDatasourceInstanceAlertSetting {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Alias('DeviceId')]
         [Int]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Alias('DeviceName')]
         [String]$Name,
 
         [Parameter(Mandatory)]
