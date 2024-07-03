@@ -84,6 +84,8 @@ Function Get-LMDeviceData {
 
         #Lookup InstanceId
         If ($InstanceName) {
+            #Replace brakets in instance name
+            $InstanceName = $InstanceName -replace "[\[\]]", "?"
 
             $LookupResult = (Get-LMDeviceDatasourceInstance -DeviceId $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.displayName -eq $InstanceName -or $_.name -like "*$InstanceName" -or $_.name -eq "$InstanceName" }).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {

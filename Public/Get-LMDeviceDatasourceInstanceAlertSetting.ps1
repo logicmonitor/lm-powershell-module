@@ -89,6 +89,10 @@ Function Get-LMDeviceDatasourceInstanceAlertSetting {
             }
             $HdsId = $LookupResult
         }
+
+        #Replace brakets in instance name
+        $InstanceName = $InstanceName -replace "[\[\]]", "?"
+        
         #Lookup HdsiId
         If ($DatasourceName) {
             $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceName $DatasourceName -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName" }).Id

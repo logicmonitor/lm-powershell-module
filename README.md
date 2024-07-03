@@ -409,18 +409,26 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.0
+## 6.1
 ### New Cmdlets:
- - **Get-LMDeviceInstanceData**: This cmdlet retrieves data for LogicMonitor device instances based on the specified parameters. The cmdlet can only retrieve data within the last 24 hours. You can use `Get-LMDeviceInstanceList` to quickly get a list of instances for a particular device.
- - **New-LMAlertEscalation**: This cmdlet invokes an escalation for a LogicMonitor alert. It takes a *-Ids* parameter which is an array of alert ids to escalate.
  - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 
+ - **New-LMAccessGroup**: This cmdlet creates a new LogicMonitor access group. 
+ - **Set-LMAccessGroup**: This cmdlet updates an existing LogicMonitor access group. 
+ - **Remove-LMAccessGroup**: This cmdlet removes a new LogicMonitor access group. 
+ - **Get-LMDeviceDatasourceInstanceAlertRecipients**: Retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
+ - **Remove-LMDeviceDatasourceInstanceGroup**: Removes a LogicMonitor device datasource instance group.
+ - **Set-LMDeviceDatasourceInstance**: Updates a LogicMonitor device datasource instance.
  
  **Note**: Access Groups are not available in all portals and needs to be enabled before any access group commands can be utilized.
 
 
 ### Updated Cmdlets:
- - **Set-LMDeviceDatasourceInstanceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
- - **Set-LMDeviceGroupDatasourceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
+ - **Get-LMDeviceDatasourceList**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Get-LMDeviceDatasourceInstance**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Get-LMDeviceDatasourceInstanceAlertSetting**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets. Also fixed bug causing an issue when trying to retrieve instances with special characters in the name.
+ - **Get-LMDeviceDatasourceInstanceGroup**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Remove-LMDeviceDatasourceInstance**: Fixed bug that would prevent a datasource instance from being delete due to missing instance id.
+
 
 [Previous Release Notes](RELEASENOTES.md)
 
