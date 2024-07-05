@@ -78,7 +78,7 @@ Function Send-LMPushMetric {
         If ($Script:LMAuth.Valid) {
 
             $QueryParams = $null
-            If($NewResourceHostName){
+            If ($NewResourceHostName) {
                 $QueryParams = "?create=true"
             }
                     
@@ -88,20 +88,20 @@ Function Send-LMPushMetric {
 
             Try {
                 $Data = @{
-                    resourceName            = $NewResourceHostName
-                    resourceDescription     = $NewResourceDescription
-                    resourceIds             = $ResourceIds
-                    resourceProperties      = $ResourceProperties
-                    dataSourceId            = $DatasourceId
-                    dataSource              = ($DatasourceName -replace '[#\\;=]', '_')
-                    dataSourceDisplayName   = ($DatasourceDisplayName -replace '[#\\;=]', '_')
-                    dataSourceGroup         = $DatasourceGroup
-                    instances               = $Instances
+                    resourceName          = $NewResourceHostName
+                    resourceDescription   = $NewResourceDescription
+                    resourceIds           = $ResourceIds
+                    resourceProperties    = $ResourceProperties
+                    dataSourceId          = $DatasourceId
+                    dataSource            = ($DatasourceName -replace '[#\\;=]', '_')
+                    dataSourceDisplayName = ($DatasourceDisplayName -replace '[#\\;=]', '_')
+                    dataSourceGroup       = $DatasourceGroup
+                    instances             = $Instances
 
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "instances") { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "instances") { $Data.Remove($_) } }
                 $Data = ($Data | ConvertTo-Json -Depth 10)
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data

@@ -10,7 +10,7 @@ Function Get-LMDeviceInstanceList {
 
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000,
 
         [Boolean]$CountOnly
@@ -62,7 +62,6 @@ Function Get-LMDeviceInstanceList {
                 If ($CountOnly) {
                     return $Response.Total
                 }
-
 
                 #Stop looping if single device, no need to continue
                 If (![bool]$Response.psobject.Properties["total"]) {

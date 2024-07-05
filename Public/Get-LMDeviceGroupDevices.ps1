@@ -12,7 +12,7 @@ Function Get-LMDeviceGroupDevices {
 
         [Boolean]$IncludeSubGroups = $false,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
@@ -65,7 +65,7 @@ Function Get-LMDeviceGroupDevices {
                 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                     #Stop looping if single device, no need to continue
@@ -92,7 +92,7 @@ Function Get-LMDeviceGroupDevices {
             }
             #Dedupe results
         }
-        If($Results){
+        If ($Results) {
             $Results = ($Results | Sort-Object -Property Id -Unique)
         }
         Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Device" )

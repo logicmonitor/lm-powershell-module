@@ -28,7 +28,7 @@ Function Import-LMExchangeModule {
             $ResourcePath = "/exchange/integrations/import"
 
             #Construct payload
-            $Data = @{items = @()}
+            $Data = @{items = @() }
             $Data.items += [PSCustomObject]@{
                 id = $LMExchangeId
             }

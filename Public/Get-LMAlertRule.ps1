@@ -41,7 +41,7 @@ Function Get-LMAlertRule {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds

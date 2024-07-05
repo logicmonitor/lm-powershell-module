@@ -25,13 +25,13 @@ Function Import-LMRepositoryLogicModules {
         [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources")]
         [String]$Type,
 
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias('Name')]
         [String[]]$LogicModuleNames
 
     )
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
                 
@@ -58,7 +58,7 @@ Function Import-LMRepositoryLogicModules {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
+                
                 Return "Modules imported successfully: $LogicModuleNames"
             }
             Catch [Exception] {
@@ -73,5 +73,5 @@ Function Import-LMRepositoryLogicModules {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

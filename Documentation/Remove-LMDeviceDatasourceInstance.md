@@ -15,25 +15,25 @@ Removes a device datasource instance from Logic Monitor.
 ### Name-dsName
 ```
 Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> [-WildValue <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-InstanceId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
 Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> [-WildValue <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-InstanceId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
 Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> [-WildValue <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-InstanceId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
 Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-WildValue <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-InstanceId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -44,13 +44,13 @@ It requires valid API credentials and the user must be logged in before running 
 
 ### EXAMPLE 1
 ```
-Remove-LMDeviceDatasourceInstance -DeviceName "MyDevice" -DatasourceName "MyDatasource" -WildValue "12345"
+Remove-LMDeviceDatasourceInstance -Name "MyDevice" -DatasourceName "MyDatasource" -WildValue "12345"
 Removes the device datasource instance with the specified device name, datasource name, and wildcard value.
 ```
 
 ### EXAMPLE 2
 ```
-Remove-LMDeviceDatasourceInstance -DeviceId 123 -DatasourceId 456 -WildValue "67890"
+Remove-LMDeviceDatasourceInstance -Id 123 -DatasourceId 456 -WildValue "67890"
 Removes the device datasource instance with the specified device ID, datasource ID, and wildcard value.
 ```
 
@@ -101,8 +101,7 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceId
-Specifies the ID of the device.
-This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
+{{ Fill DeviceId Description }}
 
 ```yaml
 Type: Int32
@@ -129,8 +128,7 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceName
-Specifies the name of the device.
-This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
+{{ Fill DeviceName Description }}
 
 ```yaml
 Type: String
@@ -155,6 +153,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -InstanceId
+{{ Fill InstanceId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases: Id
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```

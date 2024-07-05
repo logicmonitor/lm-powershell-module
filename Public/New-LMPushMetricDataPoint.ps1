@@ -47,27 +47,27 @@ Function New-LMPushMetricDataPoint {
         [System.Collections.Generic.List[object]]$DataPoints, # object with datapoint name and value
         [ValidateSet("counter", "derive", "gauge")]
         [String]$DataPointType = "gauge",
-        [ValidateSet("min", "max", "avg","sum","none","percentile")]
+        [ValidateSet("min", "max", "avg", "sum", "none", "percentile")]
         [String]$DataPointAggregationType = "none",
         [ValidateRange(0, 100)]
         [Int]$PercentileValue
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
-        If(!$DataPointsArray){
+        If (!$DataPointsArray) {
             $DataPointsArray = [System.Collections.Generic.List[object]]::New()
         }
         
         #Add each datapoint to new datapoint array
-        Foreach($Datapoint in $DataPoints){
+        Foreach ($Datapoint in $DataPoints) {
             $DataPointsArray.Add([PSCustomObject]@{
-                dataPointName               = $Datapoint.Name
-                dataPointType               = $DataPointType
-                dataPointDescription        = ($Datapoint.Description -replace '“|”','')
-                dataPointAggregationType    = $DataPointAggregationType
-                percentileValue             = $PercentileValue
-                values                      = @{$((Get-Date -UFormat %s).Split(".")[0])=$Datapoint.Value}
-            })
+                    dataPointName            = $Datapoint.Name
+                    dataPointType            = $DataPointType
+                    dataPointDescription     = ($Datapoint.Description -replace '“|”', '')
+                    dataPointAggregationType = $DataPointAggregationType
+                    percentileValue          = $PercentileValue
+                    values                   = @{$((Get-Date -UFormat %s).Split(".")[0]) = $Datapoint.Value }
+                })
         }
             
         Return $DataPointsArray

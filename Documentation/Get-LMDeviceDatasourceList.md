@@ -74,7 +74,7 @@ Accept wildcard characters: False
 ```yaml
 Type: Int32
 Parameter Sets: Id
-Aliases:
+Aliases: DeviceId
 
 Required: True
 Position: Named
@@ -89,7 +89,7 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: Name
-Aliases:
+Aliases: DeviceName
 
 Required: False
 Position: Named

@@ -33,7 +33,7 @@ Please ensure you are logged in before running any commands. Use Connect-LMAccou
 #>
 Function Remove-LMConfigsource {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -43,8 +43,8 @@ Function Remove-LMConfigsource {
 
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -61,13 +61,13 @@ Function Remove-LMConfigsource {
             #Build header and uri
             $ResourcePath = "/setting/configsources/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf($Name){
+            Elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
@@ -78,11 +78,11 @@ Function Remove-LMConfigsource {
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
 
                     $Result = [PSCustomObject]@{
-                        Id = $Id
+                        Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
                     
@@ -100,5 +100,5 @@ Function Remove-LMConfigsource {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

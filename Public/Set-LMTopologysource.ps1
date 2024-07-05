@@ -16,7 +16,7 @@ Function Set-LMTopologysource {
 
         [String]$TechNotes,
 
-        [ValidateSet("1800","3600","7200","21600")]
+        [ValidateSet("1800", "3600", "7200", "21600")]
         [Nullable[Int]]$PollingIntervalInSeconds,
 
         [String]$Group,
@@ -45,29 +45,29 @@ Function Set-LMTopologysource {
             $ResourcePath = "/setting/topologysources/$Id"
 
             $collectorAttribute = $null
-            If($ScriptType -or $Script){
+            If ($ScriptType -or $Script) {
                 $collectorAttribute = @{
                     groovyScript = $Script
                     scriptType   = $ScriptType
                     name         = "script"
                 }
                 #Remove empty keys so we dont overwrite them
-                @($collectorAttribute.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($collectorAttribute[$_])) { $collectorAttribute.Remove($_) } }
+                @($collectorAttribute.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($collectorAttribute[$_])) { $collectorAttribute.Remove($_) } }
             }
 
             Try {
                 $Data = @{
-                    name                      = $NewName
-                    description               = $Description
-                    appliesTo                 = $appliesTo
-                    technology                = $TechNotes
-                    group                     = $Group
-                    collectInterval           = $PollingIntervalInSeconds
-                    collectorAttribute        = $collectorAttribute
+                    name               = $NewName
+                    description        = $Description
+                    appliesTo          = $appliesTo
+                    technology         = $TechNotes
+                    group              = $Group
+                    collectInterval    = $PollingIntervalInSeconds
+                    collectorAttribute = $collectorAttribute
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
             
                 $Data = ($Data | ConvertTo-Json)
 

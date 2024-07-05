@@ -80,7 +80,7 @@ Function Send-LMLogMessage {
                     }
     
                     #Remove empty keys so we dont overwrite them
-                    @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+                    @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
                     $Entries += $Data
                     $Entries = ConvertTo-Json -InputObject $Entries
                 }

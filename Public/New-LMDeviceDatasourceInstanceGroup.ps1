@@ -51,10 +51,12 @@ Function New-LMDeviceDatasourceInstanceGroup {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Alias('DeviceId')]
         [Int]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Alias('DeviceName')]
         [String]$Name
 
     )
@@ -97,7 +99,7 @@ Function New-LMDeviceDatasourceInstanceGroup {
             }
 
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
             
             $Data = ($Data | ConvertTo-Json)
 
@@ -106,7 +108,7 @@ Function New-LMDeviceDatasourceInstanceGroup {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return $Response

@@ -62,24 +62,24 @@ Function New-LMHeader {
     $Header = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
     $Session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
 
-    If($Auth.Type -eq "Bearer"){
+    If ($Auth.Type -eq "Bearer") {
         $Token = [System.Net.NetworkCredential]::new("", $Auth.BearerToken).Password
         $Header.Add("Authorization", "Bearer $Token")
     }
-    ElseIf($Auth.Type -eq "SessionSync"){
+    Elseif ($Auth.Type -eq "SessionSync") {
         $SessionInfo = Get-LMSession -AccountName $Auth.Portal
-        If($SessionInfo){
+        If ($SessionInfo) {
             $Header.Add("Cookie", "JSESSIONID=$($SessionInfo.jSessionID)")
             $Session.Cookies.Add((New-Object System.Net.Cookie("JSESSIONID", $SessionInfo.jSessionID, "/", $SessionInfo.domain)))
             $Header.Add("X-CSRF-Token", "$($SessionInfo.token)")
         }
-        Else{
-            throw "Unable to generate header details, ensure you are connected to a portal and try again."
+        Else {
+            Throw "Unable to generate header details, ensure you are connected to a portal and try again."
         }
     }
-    Else{
+    Else {
         # Get current time in milliseconds...
-        $Epoch = [Math]::Round((New-TimeSpan -start (Get-Date -Date "1/1/1970") -end (Get-Date).ToUniversalTime()).TotalMilliseconds)
+        $Epoch = [Math]::Round((New-TimeSpan -Start (Get-Date -Date "1/1/1970") -End (Get-Date).ToUniversalTime()).TotalMilliseconds)
 
         # Concatenate general request details...
         If ($Method -eq "GET" -or $Method -eq "DELETE") {
@@ -105,5 +105,5 @@ Function New-LMHeader {
     $Header.Add("Content-Type", $ContentType)
     $Header.Add("X-Version", $Version)
 
-    Return @($Header,$Session)
+    Return @($Header, $Session)
 }

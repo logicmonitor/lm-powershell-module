@@ -27,17 +27,17 @@ Function New-LMDatasourceOverviewGraph {
         [Parameter(Mandatory)]
         $RawObject,
 
-        [Parameter(Mandatory,ParameterSetName = 'dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'dsId')]
         $DatasourceId,
 
-        [Parameter(Mandatory,ParameterSetName = 'dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'dsName')]
         $DatasourceName
 
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        If($DataSourceName){
+        If ($DataSourceName) {
             $LookupResult = (Get-LMDatasource -Name $DataSourceName).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DataSourceName) {
                 Return
@@ -56,7 +56,7 @@ Function New-LMDatasourceOverviewGraph {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DatasourceGraph" )

@@ -19,19 +19,19 @@ New-LMCachedAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
 #>
 Function New-LMCachedAccount {
 
-    [CmdletBinding(DefaultParameterSetName="LMv1")]
+    [CmdletBinding(DefaultParameterSetName = "LMv1")]
     Param (
-        [Parameter(Mandatory, ParameterSetName="LMv1")]
+        [Parameter(Mandatory, ParameterSetName = "LMv1")]
         [String]$AccessId,
 
-        [Parameter(Mandatory, ParameterSetName="LMv1")]
+        [Parameter(Mandatory, ParameterSetName = "LMv1")]
         [String]$AccessKey,
 
-        [Parameter(Mandatory, ParameterSetName="LMv1")]
-        [Parameter(Mandatory, ParameterSetName="Bearer")]
+        [Parameter(Mandatory, ParameterSetName = "LMv1")]
+        [Parameter(Mandatory, ParameterSetName = "Bearer")]
         [String]$AccountName,
 
-        [Parameter(Mandatory, ParameterSetName="Bearer")]
+        [Parameter(Mandatory, ParameterSetName = "Bearer")]
         [String]$BearerToken,
 
         [String]$CachedAccountName = $AccountName,
@@ -44,7 +44,7 @@ Function New-LMCachedAccount {
         Write-Host "[INFO]: Existing vault Logic.Monitor already exists, skipping creation"
     }
     Catch {
-        If($_.Exception.Message -like "*There are currently no extension vaults registered*") {
+        If ($_.Exception.Message -like "*There are currently no extension vaults registered*") {
             Write-Host "[INFO]: Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor"
             Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore
             Get-SecretStoreConfiguration | Out-Null
@@ -53,29 +53,29 @@ Function New-LMCachedAccount {
 
     $CurrentDate = Get-Date
     #Convert to secure string
-    If($BearerToken){
+    If ($BearerToken) {
         $Secret = $BearerToken | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
         [Hashtable]$Metadata = @{
-            Portal      = [String]$AccountName
-            Id          = "$($BearerToken.Substring(0,20))****"
-            Modified    = [DateTime]$CurrentDate
-            Type    = "Bearer"
+            Portal   = [String]$AccountName
+            Id       = "$($BearerToken.Substring(0,20))****"
+            Modified = [DateTime]$CurrentDate
+            Type     = "Bearer"
         }
     }
-    Else{
+    Else {
         $Secret = $AccessKey | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
         [Hashtable]$Metadata = @{
-            Portal      = [String]$AccountName
-            Id          = [String]$AccessId
-            Modified    = [DateTime]$CurrentDate
-            Type    = "LMv1"
+            Portal   = [String]$AccountName
+            Id       = [String]$AccessId
+            Modified = [DateTime]$CurrentDate
+            Type     = "LMv1"
         }
     }
-    Try{
+    Try {
         Set-Secret -Name $CachedAccountName -Secret $Secret -Vault Logic.Monitor -Metadata $Metadata -NoClobber:$(!$OverwriteExisting)
         Write-Host "[INFO]: Successfully created cached account ($CachedAccountName) secret for portal: $AccountName"
     }
-    Catch{
+    Catch {
         Write-Error $_.Exception.Message
     }
 

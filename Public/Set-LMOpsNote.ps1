@@ -20,43 +20,43 @@ Function Set-LMOpsNote {
         [String[]]$DeviceIds
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
-            If($NoteDate){
+            If ($NoteDate) {
                 $Epoch = Get-Date -Date "01/01/1970"
                 [int64]$NoteDate = (New-TimeSpan -Start $Epoch -End $NoteDate.ToUniversalTime()).TotalSeconds
             }
 
             $Scope = @()
-            If($ResourceIds -or $WebsiteIds -or $DeviceGroupIds){
-                Foreach($deviceId in $DeviceIds){
+            If ($ResourceIds -or $WebsiteIds -or $DeviceGroupIds) {
+                Foreach ($deviceId in $DeviceIds) {
                     $Scope += [PSCustomObject]@{
-                        type = "device"
-                        groupId = "0"
+                        type     = "device"
+                        groupId  = "0"
                         deviceId = $deviceId
                     }
                 }
-                Foreach($websiteId in $WebsiteIds){
+                Foreach ($websiteId in $WebsiteIds) {
                     $Scope += [PSCustomObject]@{
-                        type = "website"
-                        groupId = "0"
+                        type      = "website"
+                        groupId   = "0"
                         websiteId = $websiteId
                     }
                 }
-                Foreach($groupId in $DeviceGroupIds){
+                Foreach ($groupId in $DeviceGroupIds) {
                     $Scope += @{
-                        type = "deviceGroup"
+                        type    = "deviceGroup"
                         groupId = $groupId
                     }
                 }
             }
 
             $TagList = @()
-            Foreach($tag in $Tags){
-                $TagList += @{name = $tag}
+            Foreach ($tag in $Tags) {
+                $TagList += @{name = $tag }
             }
 
 
@@ -72,9 +72,9 @@ Function Set-LMOpsNote {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
 
-                If($ClearTags){
+                If ($ClearTags) {
                     $Data.tags = @()
                 }
 
@@ -101,5 +101,5 @@ Function Set-LMOpsNote {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

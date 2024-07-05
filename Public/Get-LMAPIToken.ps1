@@ -65,7 +65,7 @@ Function Get-LMAPIToken {
         [ValidateSet("LMv1", "Bearer", "*")]
         [String]$Type = "*",
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
@@ -80,7 +80,7 @@ Function Get-LMAPIToken {
         $Done = $false
         $Results = @()
 
-        If($Type -eq "Bearer"){
+        If ($Type -eq "Bearer") {
             $BearerParam = "&type=bearer"
         }
 

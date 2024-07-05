@@ -30,7 +30,7 @@ This function requires valid API credentials to be logged in. Use Connect-LMAcco
 #>
 Function Remove-LMCollectorGroup {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -53,13 +53,13 @@ Function Remove-LMCollectorGroup {
                 $Id = $LookupResult
             }
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $($PSItem.id) | Name: $($PSItem.name)"
             }
-            ElseIf ($Name) {
+            Elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
             
@@ -73,11 +73,11 @@ Function Remove-LMCollectorGroup {
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
  
                     $Result = [PSCustomObject]@{
-                        Id = $Id
+                        Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
                     

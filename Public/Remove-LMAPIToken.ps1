@@ -42,7 +42,7 @@ This function requires a valid API authentication. Make sure to log in using Con
 #>
 Function Remove-LMAPIToken {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$UserId,
@@ -58,8 +58,8 @@ Function Remove-LMAPIToken {
         [Int]$APITokenId
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -72,7 +72,7 @@ Function Remove-LMAPIToken {
                 $UserId = $LookupResult
             }
 
-            If($AccessId){
+            If ($AccessId) {
                 $LookupResult = (Get-LMAPIToken -AccessId $AccessId)
                 If (Test-LookupResult -Result $LookupResult -LookupString $AccessId) {
                     return
@@ -84,25 +84,25 @@ Function Remove-LMAPIToken {
             #Build header and uri
             $ResourcePath = "/setting/admins/$UserId/apitokens/$APITokenId"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $APITokenId | AccessId: $($PSItem.accessId)| AdminName:$($PSItem.adminName)"
             }
-            Else{
+            Else {
                 $Message = "Id: $APITokenId"
             }
 
             Try {
-                if ($PSCmdlet.ShouldProcess($Message, "Remove API Token")) {                    
+                If ($PSCmdlet.ShouldProcess($Message, "Remove API Token")) {                    
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
                     
                     $Result = [PSCustomObject]@{
-                        Id = $APITokenId
+                        Id      = $APITokenId
                         Message = "Successfully removed ($Message)"
                     }
                     
@@ -120,5 +120,5 @@ Function Remove-LMAPIToken {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     } 
-    End{}
+    End {}
 }

@@ -53,7 +53,7 @@ Function Get-LMAuditLogs {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
@@ -71,7 +71,7 @@ Function Get-LMAuditLogs {
 
         #Convert to epoch, if not set use defaults
         If (!$StartDate) {
-            If($PSCmdlet.ParameterSetName -ne "Id"){
+            If ($PSCmdlet.ParameterSetName -ne "Id") {
                 Write-LMHost "[WARN]: No start date specified, defaulting to last 30 days" -ForegroundColor Yellow
             }
             [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddDays(-30)).ToUnixTimeSeconds()
@@ -125,7 +125,7 @@ Function Get-LMAuditLogs {
                         $Done = $true
                         Write-LMHost "[WARN]: Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
                     }
-                    ElseIf ($Count -ge $Total -and $Total -ge 0) {
+                    Elseif ($Count -ge $Total -and $Total -ge 0) {
                         $Done = $true
                     }
                 }

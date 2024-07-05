@@ -41,7 +41,7 @@ Function Get-LMDeviceGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     Param (
-        [Parameter(ParameterSetName = 'Id',ValueFromPipeline)]
+        [Parameter(ParameterSetName = 'Id', ValueFromPipeline)]
         [Int]$Id,
 
         [Parameter(ParameterSetName = 'Name')]
@@ -50,7 +50,7 @@ Function Get-LMDeviceGroup {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
@@ -120,5 +120,5 @@ Function Get-LMDeviceGroup {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

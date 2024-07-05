@@ -59,7 +59,7 @@ Function New-LMAPIToken {
         }
         
         #Build header and uri
-        If($Type -eq "Bearer"){
+        If ($Type -eq "Bearer") {
             $Params = "?type=bearer"
         }
 
@@ -78,7 +78,7 @@ Function New-LMAPIToken {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.APIToken" )

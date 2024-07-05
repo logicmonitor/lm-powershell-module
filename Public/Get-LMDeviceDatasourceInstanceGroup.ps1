@@ -1,3 +1,45 @@
+<#
+.SYNOPSIS
+Retrieves the instance groups associated with a LogicMonitor device datasource.
+
+.DESCRIPTION
+The Get-LMDeviceDatasourceInstanceGroup function retrieves the instance groups associated with a LogicMonitor device datasource. It requires valid API credentials and a logged-in session.
+
+.PARAMETER DatasourceName
+Specifies the name of the datasource. This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+.PARAMETER DatasourceId
+Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+
+.PARAMETER Id
+Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId', 'Id-dsName', or 'Id-HdsId' parameter sets. This parameter is also aliased as 'DeviceId'.
+
+.PARAMETER Name
+Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName', 'Name-dsId', or 'Name-HdsId' parameter sets. This parameter is also aliased as 'DeviceName'.
+
+.PARAMETER HdsId
+Specifies the ID of the device datasource. This parameter is mandatory when using the 'Id-HdsId' or 'Name-HdsId' parameter sets.
+
+.PARAMETER Filter
+Specifies an optional filter to apply to the results.
+
+.PARAMETER BatchSize
+Specifies the number of results to retrieve per batch. The default value is 1000.
+
+.EXAMPLE
+Get-LMDeviceDatasourceInstanceGroup -DatasourceName "CPU" -Name "Server01"
+Retrieves the instance groups associated with the "CPU" datasource on the device named "Server01".
+
+.EXAMPLE
+Get-LMDeviceDatasourceInstanceGroup -DatasourceId 123 -Id 456
+Retrieves the instance groups associated with the datasource with ID 123 on the device with ID 456.
+
+#>
+
+Function Get-LMDeviceDatasourceInstanceGroup {
+    ...
+}
+
 Function Get-LMDeviceDatasourceInstanceGroup {
 
     [CmdletBinding()]
@@ -13,11 +55,13 @@ Function Get-LMDeviceDatasourceInstanceGroup {
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Id-HdsId')]
+        [Alias('DeviceId')]
         [Int]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-HdsId')]
+        [Alias('DeviceName')]
         [String]$Name,
 
         [Parameter(Mandatory, ParameterSetName = 'Id-HdsId')]
@@ -26,7 +70,7 @@ Function Get-LMDeviceDatasourceInstanceGroup {
 
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
 
     )

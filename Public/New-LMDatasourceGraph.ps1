@@ -38,7 +38,7 @@ Function New-LMDatasourceGraph {
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        If($DataSourceName){
+        If ($DataSourceName) {
             $LookupResult = (Get-LMDatasource -Name $DataSourceName).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DataSourceName) {
                 Return

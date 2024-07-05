@@ -31,10 +31,10 @@ This function requires PowerShell version 6.1 or higher to run.
 Function Import-LMLogicModule {
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'FilePath')]
+        [Parameter(Mandatory, ParameterSetName = 'FilePath')]
         [String]$FilePath,
 
-        [Parameter(Mandatory,ParameterSetName = 'File')]
+        [Parameter(Mandatory, ParameterSetName = 'File')]
         [Object]$File,
         
         [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource")]
@@ -49,7 +49,7 @@ Function Import-LMLogicModule {
         If ($Script:LMAuth.Valid) {
             
             #Get file content from path if not given file data directly
-            If($FilePath){
+            If ($FilePath) {
 
                 #Check for PS version 6.1 +
                 If (($PSVersionTable.PSVersion.Major -le 5) -or ($PSVersionTable.PSVersion.Major -eq 6 -and $PSVersionTable.PSVersion.Minor -lt 1)) {
@@ -76,7 +76,7 @@ Function Import-LMLogicModule {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation  -Payload $FilePath
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $FilePath
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = $File }

@@ -11,21 +11,21 @@ Specifies the name of the datasource. This parameter is mandatory when using the
 .PARAMETER DatasourceId
 Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
 
-.PARAMETER DeviceId
+.PARAMETER Id
 Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
 
-.PARAMETER DeviceName
+.PARAMETER Name
 Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
 
 .PARAMETER WildValue
 Specifies the wildcard value associated with the datasource instance.
 
 .EXAMPLE
-Remove-LMDeviceDatasourceInstance -DeviceName "MyDevice" -DatasourceName "MyDatasource" -WildValue "12345"
+Remove-LMDeviceDatasourceInstance -Name "MyDevice" -DatasourceName "MyDatasource" -WildValue "12345"
 Removes the device datasource instance with the specified device name, datasource name, and wildcard value.
 
 .EXAMPLE
-Remove-LMDeviceDatasourceInstance -DeviceId 123 -DatasourceId 456 -WildValue "67890"
+Remove-LMDeviceDatasourceInstance -Id 123 -DatasourceId 456 -WildValue "67890"
 Removes the device datasource instance with the specified device ID, datasource ID, and wildcard value.
 
 .INPUTS
@@ -37,7 +37,7 @@ A custom object with the following properties:
 - Message: A message indicating the success of the removal.
 #>
 Function Remove-LMDeviceDatasourceInstance {
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
@@ -56,12 +56,16 @@ Function Remove-LMDeviceDatasourceInstance {
         [String]$DeviceName,
 
         [Parameter(ValueFromPipelineByPropertyName)]
-        [String]$WildValue = $null
+        [String]$WildValue,
+
+        [Parameter(ValueFromPipelineByPropertyName)]
+        [Alias("Id")]
+        [Int]$InstanceId
 
     )
 
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
@@ -84,23 +88,27 @@ Function Remove-LMDeviceDatasourceInstance {
             }
 
             #Lookup Wildcard Id
-            $InstanceId = (Get-LMDeviceDataSourceInstance -DeviceId $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.wildValue -eq $WildValue } | Select-Object -First 1).Id
-            If (!$InstanceId) {
-                Write-Error "Unable to find assocaited datasource instance with wildcard value: $WildValue, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device"
-                return
+            If(!$InstanceId -and $WildValue) {
+                $InstanceId = (Get-LMDeviceDataSourceInstance -Id $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.wildValue -eq $WildValue }).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $InstanceId) {
+                    return
+                }
+            }
+            Else{
+                Write-Error "Please provide a valid instance ID or wildvalue to remove a device datasource instance."
             }
             
             #Build header and uri
             $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "DeviceDisplayName: $($PSItem.deviceDisplayName) | DatasourceName: $($PSItem.name) | WildValue: $($PSItem.wildValue)"
             }
-            ElseIf($DatasourceName -and $DeviceName){
-                $Message = "DeviceName: $DeviceName | DatasourceName: $DatasourceName | WildValue: $WildValue"
+            Elseif ($DatasourceName -and $DeviceName) {
+                $Message = "Name: $DeviceName | DatasourceName: $DatasourceName | WildValue: $WildValue"
             }
-            Else{
-                $Message = "DeviceId: $DeviceId | DatasourceId: $DatasourceId | WildValue: $WildValue"
+            Else {
+                $Message = "Id: $DeviceId | DatasourceId: $DatasourceId | WildValue: $WildValue"
             }
 
             Try {
@@ -110,12 +118,12 @@ Function Remove-LMDeviceDatasourceInstance {
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
                     
                     $Result = [PSCustomObject]@{
                         InstanceId = $InstanceId
-                        Message = "Successfully removed ($Message)"
+                        Message    = "Successfully removed ($Message)"
                     }
                     
                     Return $Result
@@ -132,5 +140,5 @@ Function Remove-LMDeviceDatasourceInstance {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

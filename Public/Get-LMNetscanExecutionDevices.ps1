@@ -2,18 +2,18 @@ Function Get-LMNetscanExecutionDevices {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
-        [Parameter(Mandatory,ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
         [String]$NspId,
 
-        [Parameter(Mandatory,ParameterSetName = 'Name')]
+        [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$NspName,
 
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds

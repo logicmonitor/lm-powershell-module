@@ -26,7 +26,7 @@ Get-LMAccessGroup -Name "MyAccessGroup"
 Retrieves the access group with the specified name.
 
 .EXAMPLE
-Get-LMAccessGroup -Filter @{ Property = "Value" }
+Get-LMAccessGroup -Filter "tenantId -eq 'Value'"
 Retrieves access groups based on the specified filter criteria.
 
 .NOTES
@@ -45,7 +45,7 @@ Function Get-LMAccessGroup {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
@@ -88,7 +88,7 @@ Function Get-LMAccessGroup {
                 #Stop looping if single device, no need to continue
                 If ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Role" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AccessGroup" )
                 }
                 #Check result size and if needed loop again
                 Else {
@@ -107,7 +107,7 @@ Function Get-LMAccessGroup {
                 }
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Role" )
+        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.AccessGroup" )
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

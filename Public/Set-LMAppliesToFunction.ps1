@@ -1,13 +1,13 @@
 Function Set-LMAppliesToFunction {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$Name,
 
         [String]$NewName,
 
-        [Parameter(Mandatory, ParameterSetName = 'Id',ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
 
         [String]$Description,
@@ -31,22 +31,22 @@ Function Set-LMAppliesToFunction {
         #Build header and uri
         $ResourcePath = "/setting/functions/$Id"
 
-        If($PSItem){
+        If ($PSItem) {
             $Message = "Id: $Id | Name: $($PSItem.name)"
         }
-        Else{
+        Else {
             $Message = "Id: $Id"
         }
 
         Try {
             $Data = @{
-                name                                = $NewName
-                description                         = $Description
-                code                                = $AppliesTo
+                name        = $NewName
+                description = $Description
+                code        = $AppliesTo
             }
 
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
 
             $Data = ($Data | ConvertTo-Json)
 
@@ -56,7 +56,7 @@ Function Set-LMAppliesToFunction {
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                    #Issue request
+                #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
                 Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AppliesToFunction" )

@@ -20,8 +20,8 @@ Function New-LMAlertEscalation {
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id
     )
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
             
@@ -38,7 +38,7 @@ Function New-LMAlertEscalation {
                 #Issue request
                 $Response = Invoke-WebRequest -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
 
-                If($Response.StatusCode -eq 200){
+                If ($Response.StatusCode -eq 200) {
                     Return "Successfully escalated alert id: $Id"
                 }
             }
@@ -53,5 +53,5 @@ Function New-LMAlertEscalation {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }
