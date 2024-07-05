@@ -1,3 +1,16 @@
+## 6.0
+### New Cmdlets:
+ - **Get-LMDeviceInstanceData**: This cmdlet retrieves data for LogicMonitor device instances based on the specified parameters. The cmdlet can only retrieve data within the last 24 hours. You can use `Get-LMDeviceInstanceList` to quickly get a list of instances for a particular device.
+ - **New-LMAlertEscalation**: This cmdlet invokes an escalation for a LogicMonitor alert. It takes a *-Ids* parameter which is an array of alert ids to escalate.
+ - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 
+ 
+ **Note**: Access Groups are not available in all portals and needs to be enabled before any access group commands can be utilized.
+
+
+### Updated Cmdlets:
+ - **Set-LMDeviceDatasourceInstanceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
+ - **Set-LMDeviceGroupDatasourceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
+ 
 # Previous module release notes
 ## 6.0
 ### New Cmdlets:

@@ -410,6 +410,7 @@ This change aims to enhance visibility within the community and to foster a more
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
 ## 6.1
+## 6.1
 ### New Cmdlets:
  - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 
  - **New-LMAccessGroup**: This cmdlet creates a new LogicMonitor access group. 

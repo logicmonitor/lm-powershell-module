@@ -18,6 +18,8 @@ Function Set-LMDevice {
 
         [Nullable[Int]]$PreferredCollectorGroupId,
 
+        [Nullable[Int]]$AutoBalancedCollectorGroupId,
+
         [Hashtable]$Properties,
 
         [String[]]$HostGroupIds, #Dynamic group ids will be ignored, operation will replace all existing groups
@@ -76,20 +78,21 @@ Function Set-LMDevice {
 
             Try {
                 $Data = @{
-                    name                      = $NewName
-                    displayName               = $DisplayName
-                    description               = $Description
-                    disableAlerting           = $DisableAlerting
-                    enableNetflow             = $EnableNetFlow
-                    customProperties          = $customProperties
-                    preferredCollectorId      = $PreferredCollectorId
-                    preferredCollectorGroupId = $PreferredCollectorGroupId
-                    link                      = $Link
-                    netflowCollectorGroupId   = $NetflowCollectorGroupId
-                    netflowCollectorId        = $NetflowCollectorId
-                    logCollectorGroupId       = $LogCollectorGroupId
-                    logCollectorId            = $LogCollectorId
-                    hostGroupIds              = $HostGroupIds -join ","
+                    name                         = $NewName
+                    displayName                  = $DisplayName
+                    description                  = $Description
+                    disableAlerting              = $DisableAlerting
+                    enableNetflow                = $EnableNetFlow
+                    customProperties             = $customProperties
+                    preferredCollectorId         = $PreferredCollectorId
+                    preferredCollectorGroupId    = $PreferredCollectorGroupId
+                    autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId
+                    link                         = $Link
+                    netflowCollectorGroupId      = $NetflowCollectorGroupId
+                    netflowCollectorId           = $NetflowCollectorId
+                    logCollectorGroupId          = $LogCollectorGroupId
+                    logCollectorId               = $LogCollectorId
+                    hostGroupIds                 = $HostGroupIds -join ","
                 }
 
                 

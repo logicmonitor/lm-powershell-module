@@ -1,39 +1,39 @@
 <#
 .SYNOPSIS
-Retrieves the update history of a LogicMonitor datasource.
+Retrieves the update history for a LogicMonitor configuration source.
 
 .DESCRIPTION
-The Get-LMDatasourceUpdateHistory function retrieves the update history of a LogicMonitor datasource. It can be used to get information about the updates made to a datasource, such as the reasons for the updates.
+The Get-LMConfigsourceUpdateHistory function retrieves the update history for a LogicMonitor configuration source. It can be used to get information about the updates made to a configuration source, such as the update reasons and the modules that were updated.
 
 .PARAMETER Id
-The ID of the datasource. This parameter is mandatory when using the 'Id' parameter set.
+The ID of the configuration source. This parameter is mandatory when using the 'Id' parameter set.
 
 .PARAMETER Name
-The name of the datasource. This parameter is used to look up the ID of the datasource. If the name is provided, the function will automatically retrieve the ID of the datasource. This parameter is used in the 'Name' parameter set.
+The name of the configuration source. This parameter is used to look up the ID of the configuration source. This parameter is used when using the 'Name' parameter set.
 
 .PARAMETER DisplayName
-The display name of the datasource. This parameter is used to look up the ID of the datasource. If the display name is provided, the function will automatically retrieve the ID of the datasource. This parameter is used in the 'DisplayName' parameter set.
+The display name of the configuration source. This parameter is used to look up the ID of the configuration source. This parameter is used when using the 'DisplayName' parameter set.
 
 .PARAMETER Filter
-A filter object that can be used to filter the results. The filter object should contain properties that match the properties of the datasource. Only datasources that match the filter will be included in the results.
+A filter object that specifies additional filtering criteria for the update history. This parameter is optional.
 
 .PARAMETER BatchSize
-The number of results to retrieve in each batch. The default value is 1000.
+The number of results to retrieve per request. The default value is 1000. This parameter is optional.
 
 .EXAMPLE
-Get-LMDatasourceUpdateHistory -Id 1234
-Retrieves the update history of the datasource with ID 1234.
+Get-LMConfigsourceUpdateHistory -Id 1234
+Retrieves the update history for the configuration source with the ID 1234.
 
 .EXAMPLE
-Get-LMDatasourceUpdateHistory -Name "MyDatasource"
-Retrieves the update history of the datasource with the name "MyDatasource".
+Get-LMConfigsourceUpdateHistory -Name "MyConfigSource"
+Retrieves the update history for the configuration source with the name "MyConfigSource".
 
 .EXAMPLE
-Get-LMDatasourceUpdateHistory -DisplayName "My Datasource"
-Retrieves the update history of the datasource with the display name "My Datasource".
+Get-LMConfigsourceUpdateHistory -DisplayName "My Config Source"
+Retrieves the update history for the configuration source with the display name "My Config Source".
 
 #>
-Function Get-LMDatasourceUpdateHistory {
+Function Get-LMConfigsourceUpdateHistory {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     Param (
@@ -55,7 +55,7 @@ Function Get-LMDatasourceUpdateHistory {
     If ($Script:LMAuth.Valid) {
 
         If ($Name) {
-            $LookupResult = (Get-LMDatasource -Name $Name).Id
+            $LookupResult = (Get-LMConfigsource -Name $Name).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
@@ -63,7 +63,7 @@ Function Get-LMDatasourceUpdateHistory {
         }
 
         If ($DisplayName) {
-            $LookupResult = (Get-LMDatasource -DisplayName $DisplayName).Id
+            $LookupResult = (Get-LMConfigsource -DisplayName $DisplayName).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DisplayName) {
                 return
             }
@@ -71,7 +71,7 @@ Function Get-LMDatasourceUpdateHistory {
         }
         
         #Build header and uri
-        $ResourcePath = "/setting/datasources/$Id/updatereasons"
+        $ResourcePath = "/setting/configsources/$Id/updatereasons"
 
         #Initalize vars
         $QueryParams = ""

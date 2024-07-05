@@ -143,5 +143,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
+[Module repo: https://github.com/logicmonitor/lm-powershell-module]()
+
 [PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
 
