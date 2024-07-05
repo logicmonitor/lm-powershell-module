@@ -143,7 +143,7 @@ Accept wildcard characters: False
 ```yaml
 Type: Int32
 Parameter Sets: Id-dsName, Id-dsId, Id-HdsId
-Aliases:
+Aliases: DeviceId
 
 Required: True
 Position: Named
@@ -158,7 +158,7 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: Name-dsName, Name-dsId, Name-HdsId
-Aliases:
+Aliases: DeviceName
 
 Required: True
 Position: Named

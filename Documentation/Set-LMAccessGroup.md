@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMAccessGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Sets the properties of a LogicMonitor access group.
 
 ## SYNTAX
 
@@ -25,36 +25,29 @@ Set-LMAccessGroup [-Name <String>] [-NewName <String>] [-Description <String>] [
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMAccessGroup function is used to set the properties of a LogicMonitor access group.
+It allows you to specify the access group either by its ID or by its name.
+You can set the new name, description, and tenant ID for the access group.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Set-LMAccessGroup -Id 123 -NewName "New Access Group" -Description "This is a new access group" -Tenant "abc123"
+Sets the properties of the access group with ID 123. The new name is set to "New Access Group", the description is set to "This is a new access group", and the tenant ID is set to "abc123".
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Set-LMAccessGroup -Name "Old Access Group" -NewName "New Access Group" -Description "This is a new access group" -Tenant "abc123"
+Sets the properties of the access group with name "Old Access Group". The new name is set to "New Access Group", the description is set to "This is a new access group", and the tenant ID is set to "abc123".
+```
 
 ## PARAMETERS
 
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the access group.
+This parameter is used when you want to set the properties of the access group by its ID.
 
 ```yaml
 Type: Int32
@@ -63,13 +56,14 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the name of the access group.
+This parameter is used when you want to set the properties of the access group by its name.
 
 ```yaml
 Type: String
@@ -84,7 +78,22 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the access group.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the new description for the access group.
 
 ```yaml
 Type: String
@@ -99,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -Tenant
-{{ Fill Tenant Description }}
+Specifies the tenant ID for the access group.
 
 ```yaml
 Type: String
@@ -133,10 +142,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires you to be logged in and have valid API credentials.
+Use the Connect-LMAccount function to log in before running this command.
 
 ## RELATED LINKS

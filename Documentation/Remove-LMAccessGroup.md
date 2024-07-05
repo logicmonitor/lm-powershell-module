@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-LMAccessGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes a LogicMonitor access group.
 
 ## SYNTAX
 
@@ -24,36 +24,27 @@ Remove-LMAccessGroup -Name <String> [-ProgressAction <ActionPreference>] [-WhatI
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMAccessGroup function removes a LogicMonitor access group based on the specified ID or name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Remove-LMAccessGroup -Id 123
+Removes the access group with the ID 123.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Remove-LMAccessGroup -Name "MyAccessGroup"
+Removes the access group with the name "MyAccessGroup".
+```
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+The ID of the access group to remove.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: Int32
@@ -62,13 +53,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+The name of the access group to remove.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -98,6 +90,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
 
@@ -118,10 +125,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
+### None.
 ## OUTPUTS
 
-### System.Object
+### System.Management.Automation.PSCustomObject
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
+Make sure to log in using Connect-LMAccount before running this command.
 
 ## RELATED LINKS

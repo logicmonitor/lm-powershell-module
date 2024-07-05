@@ -5,61 +5,59 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceDatasourceInstanceAlertRecipients
+# Remove-LMDeviceDatasourceInstanceGroup
 
 ## SYNOPSIS
-Retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
+Removes a LogicMonitor device datasource instance group.
 
 ## SYNTAX
 
 ### Name-dsName
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName <String> -Name <String> -InstanceName <String>
- -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Name <String> -InstanceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName <String> -Id <Int32> -InstanceName <String>
- -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Id <Int32> -InstanceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId <Int32> -Name <String> -InstanceName <String>
- -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Name <String> -InstanceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId <Int32> -Id <Int32> -InstanceName <String>
- -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Id <Int32> -InstanceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceDatasourceInstanceAlertRecipients function retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
+The Remove-LMDeviceDatasourceInstanceGroup function removes a LogicMonitor device datasource instance group based on the provided parameters.
 It requires valid API credentials and a logged-in session.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName "Ping-" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceName "CPU" -Name "Server01" -InstanceGroupName "Group1"
+Removes the instance group named "Group1" associated with the "CPU" datasource on the device named "Server01".
 ```
-
-Retrieves the alert recipients for the "PingLossPercent" data point in the "CPU" datasource instance of the "Server01" device.
 
 ### EXAMPLE 2
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId 123 -Id 456 -InstanceName "Instance01" -DataPointName "PingLossPercent"
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceId 123 -Id 456 -InstanceGroupName "Group2"
+Removes the instance group named "Group2" associated with the datasource ID 123 on the device ID 456.
 ```
-
-Retrieves the alert recipients for the "PingLossPercent" data point in the datasource instance with ID 123 of the device with ID 456.
 
 ## PARAMETERS
 
 ### -DatasourceName
-Specifies the name of the datasource.
+Specifies the name of the datasource associated with the instance group.
 This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
 
 ```yaml
@@ -75,7 +73,7 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceId
-Specifies the ID of the datasource.
+Specifies the ID of the datasource associated with the instance group.
 This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
 
 ```yaml
@@ -91,9 +89,9 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Specifies the ID of the device.
+Specifies the ID of the device associated with the instance group.
 This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
-It can also be specified using the 'DeviceId' alias.
+This parameter can also be specified using the 'DeviceId' alias.
 
 ```yaml
 Type: Int32
@@ -108,9 +106,9 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the device.
+Specifies the name of the device associated with the instance group.
 This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
-It can also be specified using the 'DeviceName' alias.
+This parameter can also be specified using the 'DeviceName' alias.
 
 ```yaml
 Type: String
@@ -124,8 +122,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -InstanceName
-Specifies the name of the datasource instance.
+### -InstanceGroupName
+Specifies the name of the instance group to be removed.
 This parameter is mandatory.
 
 ```yaml
@@ -140,16 +138,31 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DataPointName
-Specifies the name of the data point.
-This parameter is mandatory.
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
-Type: String
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases:
+Aliases: wi
 
-Required: True
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -176,6 +189,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this function.
 ## OUTPUTS
 
 ## NOTES

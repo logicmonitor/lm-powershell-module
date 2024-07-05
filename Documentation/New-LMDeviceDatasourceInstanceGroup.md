@@ -126,7 +126,7 @@ This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter se
 ```yaml
 Type: Int32
 Parameter Sets: Id-dsName, Id-dsId
-Aliases:
+Aliases: DeviceId
 
 Required: True
 Position: Named
@@ -142,7 +142,7 @@ This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' paramete
 ```yaml
 Type: String
 Parameter Sets: Name-dsName, Name-dsId
-Aliases:
+Aliases: DeviceName
 
 Required: True
 Position: Named

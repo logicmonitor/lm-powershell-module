@@ -8,80 +8,57 @@ schema: 2.0.0
 # Get-LMDeviceDatasourceInstance
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves instances of a LogicMonitor device datasource.
 
 ## SYNTAX
 
 ### Name-dsName
 ```
-Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> [-Filter <Object>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstance -DatasourceName <String> -Name <String> [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Get-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> [-Filter <Object>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstance -DatasourceName <String> -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> [-Filter <Object>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -Name <String> [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDeviceDatasourceInstance function retrieves instances of a LogicMonitor device datasource based on the specified parameters.
+It requires a valid API authentication and authorization.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Get-LMDeviceDatasourceInstance -DatasourceName "CPU" -Name "Server01" -BatchSize 500
+Retrieves instances of the "CPU" datasource for the device named "Server01" with a batch size of 500.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Get-LMDeviceDatasourceInstance -DatasourceId 1234 -Id 5678
+Retrieves instances of the datasource with ID 1234 for the device with ID 5678.
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatasourceId
-{{ Fill DatasourceId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Name-dsId, Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DatasourceName
-{{ Fill DatasourceName Description }}
+Specifies the name of the datasource.
+This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
 
 ```yaml
 Type: String
@@ -95,28 +72,48 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DeviceId
-{{ Fill DeviceId Description }}
+### -DatasourceId
+Specifies the ID of the datasource.
+This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id-dsName, Id-dsId
-Aliases: Id
+Parameter Sets: Name-dsId, Id-dsId
+Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DeviceName
-{{ Fill DeviceName Description }}
+### -Id
+Specifies the ID of the device.
+This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
+It can also be specified using the 'DeviceId' alias.
+
+```yaml
+Type: Int32
+Parameter Sets: Id-dsName, Id-dsId
+Aliases: DeviceId
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+Specifies the name of the device.
+This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
+It can also be specified using the 'DeviceName' alias.
 
 ```yaml
 Type: String
 Parameter Sets: Name-dsName, Name-dsId
-Aliases: Name
+Aliases: DeviceName
 
 Required: True
 Position: Named
@@ -126,7 +123,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+Specifies additional filters to apply to the instances.
+This parameter accepts an object representing the filter criteria.
 
 ```yaml
 Type: Object
@@ -136,6 +134,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+Specifies the number of instances to retrieve per batch.
+The default value is 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -160,10 +174,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires a valid API authentication and authorization.
+Use Connect-LMAccount to log in before running any commands.
 
 ## RELATED LINKS

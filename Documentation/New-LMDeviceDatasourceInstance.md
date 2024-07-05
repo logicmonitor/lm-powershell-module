@@ -220,7 +220,7 @@ Mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
 ```yaml
 Type: Int32
 Parameter Sets: Id-dsName, Id-dsId
-Aliases:
+Aliases: DeviceId
 
 Required: True
 Position: Named
@@ -236,7 +236,7 @@ Mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
 ```yaml
 Type: String
 Parameter Sets: Name-dsName, Name-dsId
-Aliases:
+Aliases: DeviceName
 
 Required: True
 Position: Named
