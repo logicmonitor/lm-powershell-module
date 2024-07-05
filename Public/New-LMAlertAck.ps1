@@ -28,8 +28,8 @@ Function New-LMAlertAck {
         [Parameter(Mandatory)]
         [String]$Note
     )
-    Begin{}
-    Process{
+    Begin {}
+    Process {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
             
@@ -39,8 +39,8 @@ Function New-LMAlertAck {
             Try {
 
                 $Data = @{
-                    alertIds = $Ids
-                    ackComment  = $Note
+                    alertIds   = $Ids
+                    ackComment = $Note
                 }
 
                 $Data = ($Data | ConvertTo-Json)
@@ -53,7 +53,7 @@ Function New-LMAlertAck {
                 #Issue request
                 $Response = Invoke-WebRequest -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                If($Response.StatusCode -eq 200){
+                If ($Response.StatusCode -eq 200) {
                     Return "Successfully acknowledged alert id(s): $Ids"
                 }
             }
@@ -68,5 +68,5 @@ Function New-LMAlertAck {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

@@ -24,9 +24,9 @@ Function Set-LMUnmonitoredDevice {
             Try {
                 $Data = @{
                     collectorId      = $CollectorId
-                    description               = $Description
-                    deviceGroupId             = $DeviceGroupId
-                    missingDeviceIds          = $Ids
+                    description      = $Description
+                    deviceGroupId    = $DeviceGroupId
+                    missingDeviceIds = $Ids
                 }
 
                 $Data = ($Data | ConvertTo-Json)

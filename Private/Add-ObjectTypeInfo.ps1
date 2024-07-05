@@ -96,7 +96,7 @@ function Add-ObjectTypeInfo {
         http://blogs.microsoft.co.il/scriptfanatic/2012/04/13/custom-objects-default-display-in-powershell-30/
     #>
     [CmdletBinding()] 
-    param(
+    Param (
         [Parameter( Mandatory = $true,
             Position = 0,
             ValueFromPipeline = $true )]
@@ -121,17 +121,17 @@ function Add-ObjectTypeInfo {
     )
     
     Begin {
-        if ($PSBoundParameters.ContainsKey('DefaultProperties')) {
+        If ($PSBoundParameters.ContainsKey('DefaultProperties')) {
             # define a subset of properties
             $ddps = New-Object System.Management.Automation.PSPropertySet DefaultDisplayPropertySet, $DefaultProperties
             $PSStandardMembers = [System.Management.Automation.PSMemberInfo[]]$ddps
         }
     }
     Process {
-        foreach ($Object in $InputObject) {
+        Foreach ($Object in $InputObject) {
             switch ($PSBoundParameters.Keys) {
                 'PropertyToAdd' {
-                    foreach ($Key in $PropertyToAdd.Keys) {
+                    Foreach ($Key in $PropertyToAdd.Keys) {
                         #Add some noteproperties. Slightly faster than Add-Member.
                         $Object.PSObject.Properties.Add( ( New-Object PSNoteProperty($Key, $PropertyToAdd[$Key]) ) )  
                     }
@@ -145,7 +145,7 @@ function Add-ObjectTypeInfo {
                     Add-Member -InputObject $Object -MemberType MemberSet -Name PSStandardMembers -Value $PSStandardMembers
                 }
             }
-            if ($Passthru) {
+            If ($Passthru) {
                 $Object
             }
         }

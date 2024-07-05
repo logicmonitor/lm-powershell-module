@@ -82,11 +82,11 @@ Function New-LMDeviceDatasourceSDT {
 
         [Parameter(Mandatory, ParameterSetName = 'Weekly')]
         [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek')]
-        [ValidateSet("Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday","Sunday")]
+        [ValidateSet("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")]
         [String]$WeekDay,
 
         [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek')]
-        [ValidateSet("First", "Second", "Third","Fourth","Last")]
+        [ValidateSet("First", "Second", "Third", "Fourth", "Last")]
         [String]$WeekOfMonth,
 
         [Parameter(Mandatory, ParameterSetName = 'Monthly')]
@@ -103,27 +103,27 @@ Function New-LMDeviceDatasourceSDT {
         #Build header and uri
         $ResourcePath = "/sdt/sdts"
 
-        Switch -Wildcard ($PSCmdlet.ParameterSetName){
-            "OneTime*" {$Occurance = "oneTime"}
-            "Daily*" {$Occurance = "daily"}
-            "Monthly*" {$Occurance = "monthly"}
-            "MonthlyByWeek*" {$Occurance = "monthlyByWeek"}
-            "Weekly*" {$Occurance = "weekly"}
+        Switch -Wildcard ($PSCmdlet.ParameterSetName) {
+            "OneTime*" { $Occurance = "oneTime" }
+            "Daily*" { $Occurance = "daily" }
+            "Monthly*" { $Occurance = "monthly" }
+            "MonthlyByWeek*" { $Occurance = "monthlyByWeek" }
+            "Weekly*" { $Occurance = "weekly" }
         }
 
         Try {
             $Data = $null
 
             $Data = @{
-                comment               = $Comment
-                deviceDataSourceId    = $deviceDataSourceId
-                sdtType               = $Occurance
+                comment            = $Comment
+                deviceDataSourceId = $deviceDataSourceId
+                sdtType            = $Occurance
                 #timezone             = $Timezone
-                type                  = "DeviceDataSourceSDT"
+                type               = "DeviceDataSourceSDT"
             }
 
-            Switch ($Occurance){
-               "onetime" {
+            Switch ($Occurance) {
+                "onetime" {
                     #Get UTC time based on selected timezone
                     # $TimeZoneID = [System.TimeZoneInfo]::FindSystemTimeZoneById($Timezone)
                     # $StartUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($StartDate.ToUniversalTime(), $TimeZoneID)
@@ -134,47 +134,47 @@ Function New-LMDeviceDatasourceSDT {
 
                     $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
                     $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
-                    $Data.Add('endDateTime',[math]::Round($EndDateTime))
-                    $Data.Add('startDateTime',[math]::Round($StartDateTime))
-               }
+                    $Data.Add('endDateTime', [math]::Round($EndDateTime))
+                    $Data.Add('startDateTime', [math]::Round($StartDateTime))
+                }
 
-               "daily" {
-                    $Data.Add('hour',$StartHour)
-                    $Data.Add('minute',$StartMinute)
-                    $Data.Add('endHour',$EndHour)
-                    $Data.Add('endMinute',$EndMinute)
-               } 
+                "daily" {
+                    $Data.Add('hour', $StartHour)
+                    $Data.Add('minute', $StartMinute)
+                    $Data.Add('endHour', $EndHour)
+                    $Data.Add('endMinute', $EndMinute)
+                } 
                
-               "weekly" {
-                    $Data.Add('hour',$StartHour)
-                    $Data.Add('minute',$StartMinute)
-                    $Data.Add('endHour',$EndHour)
-                    $Data.Add('endMinute',$EndMinute)
-                    $Data.Add('weekDay',$WeekDay)
-               } 
+                "weekly" {
+                    $Data.Add('hour', $StartHour)
+                    $Data.Add('minute', $StartMinute)
+                    $Data.Add('endHour', $EndHour)
+                    $Data.Add('endMinute', $EndMinute)
+                    $Data.Add('weekDay', $WeekDay)
+                } 
                
-               "monthly" {
-                    $Data.Add('hour',$StartHour)
-                    $Data.Add('minute',$StartMinute)
-                    $Data.Add('endHour',$EndHour)
-                    $Data.Add('endMinute',$EndMinute)
-                    $Data.Add('monthDay',$DayOfMonth)
-               } 
+                "monthly" {
+                    $Data.Add('hour', $StartHour)
+                    $Data.Add('minute', $StartMinute)
+                    $Data.Add('endHour', $EndHour)
+                    $Data.Add('endMinute', $EndMinute)
+                    $Data.Add('monthDay', $DayOfMonth)
+                } 
                
-               "monthlyByWeek" {
-                    $Data.Add('hour',$StartHour)
-                    $Data.Add('minute',$StartMinute)
-                    $Data.Add('endHour',$EndHour)
-                    $Data.Add('endMinute',$EndMinute)
-                    $Data.Add('weekDay',$WeekDay)
-                    $Data.Add('weekOfMonth',$WeekOfMonth)
-               } 
+                "monthlyByWeek" {
+                    $Data.Add('hour', $StartHour)
+                    $Data.Add('minute', $StartMinute)
+                    $Data.Add('endHour', $EndHour)
+                    $Data.Add('endMinute', $EndMinute)
+                    $Data.Add('weekDay', $WeekDay)
+                    $Data.Add('weekOfMonth', $WeekOfMonth)
+                } 
 
-               default {}
+                default {}
             }
 
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
 
             $Data = ($Data | ConvertTo-Json)
 
@@ -183,7 +183,7 @@ Function New-LMDeviceDatasourceSDT {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
+            #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
             Return $Response

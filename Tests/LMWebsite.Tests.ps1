@@ -6,7 +6,7 @@ Describe 'Website Testing New/Get/Set/Remove' {
     
     Describe 'New-LMWebsite' {
         It 'When given mandatory parameters, returns a created website with matching values' {
-            $Script:NewWebsite = New-LMWebsite -Name "Website.Build.Test"  -Webcheck -WebsiteDomain "example.com" -Description "BuildTest" -Properties @{"testprop"="BuildTest"}
+            $Script:NewWebsite = New-LMWebsite -Name "Website.Build.Test" -Webcheck -WebsiteDomain "example.com" -Description "BuildTest" -Properties @{"testprop" = "BuildTest" }
             $Script:NewWebsite | Should -Not -BeNullOrEmpty
             $Script:NewWebsite.Description | Should -BeExactly "BuildTest"
             $Script:NewWebsite.properties.name.IndexOf("testprop") | Should -Not -BeExactly -1
@@ -15,7 +15,7 @@ Describe 'Website Testing New/Get/Set/Remove' {
 
     Describe 'Get-LMWebsiteProperty' {
         It 'When given mandatory parameters, returns a specified property' {
-            $WebsiteProp = Get-LMWebsiteProperty -Id $Script:NewWebsite.Id | Where-Object {$_.name -eq "testprop"}
+            $WebsiteProp = Get-LMWebsiteProperty -Id $Script:NewWebsite.Id | Where-Object { $_.name -eq "testprop" }
             $WebsiteProp | Should -Not -BeNullOrEmpty
         }
     }
@@ -45,7 +45,7 @@ Describe 'Website Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMWebsite' {
         It 'When given a set of parameters, returns an updated website with matching values' {
-            { $Device = Set-LMWebsite -Id $Script:NewWebsite.Id -Description "Updated" -Properties @{"test"="123";"test2"="456"} -ErrorAction Stop
+            { $Device = Set-LMWebsite -Id $Script:NewWebsite.Id -Description "Updated" -Properties @{"test" = "123"; "test2" = "456" } -ErrorAction Stop
                 $Device.Description | Should -Be "Updated"
                 $Device.Properties.name.IndexOf("test") | Should -Not -BeExactly -1
                 $Device.Properties.name.IndexOf("test2") | Should -Not -BeExactly -1

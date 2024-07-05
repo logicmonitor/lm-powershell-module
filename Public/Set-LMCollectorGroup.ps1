@@ -1,6 +1,6 @@
 Function Set-LMCollectorGroup {
 
-    [CmdletBinding(SupportsShouldProcess,ConfirmImpact='None')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
@@ -44,29 +44,29 @@ Function Set-LMCollectorGroup {
             #Build header and uri
             $ResourcePath = "/setting/collector/groups/$Id"
 
-            If($PSItem){
+            If ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | Description: $($PSItem.description)"
             }
-            ElseIf($Name){
+            Elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id"
             }
 
             Try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $NewName
-                    collectorGroupId                    = $CollectorGroupId
-                    customProperties                    = $customProperties
-                    autoBalance                         = $AutoBalance
-                    autoBalanceInstanceCountThreshold   = $AutoBalanceInstanceCountThreshold
+                    description                       = $Description
+                    name                              = $NewName
+                    collectorGroupId                  = $CollectorGroupId
+                    customProperties                  = $customProperties
+                    autoBalance                       = $AutoBalance
+                    autoBalanceInstanceCountThreshold = $AutoBalanceInstanceCountThreshold
                 }
 
             
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
 
                 $Data = ($Data | ConvertTo-Json)
 

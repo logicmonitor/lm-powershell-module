@@ -1,3 +1,39 @@
+<#
+.SYNOPSIS
+Retrieves instances of a LogicMonitor device datasource.
+
+.DESCRIPTION
+The Get-LMDeviceDatasourceInstance function retrieves instances of a LogicMonitor device datasource based on the specified parameters. It requires a valid API authentication and authorization.
+
+.PARAMETER DatasourceName
+Specifies the name of the datasource. This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+.PARAMETER DatasourceId
+Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+
+.PARAMETER Id
+Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets. It can also be specified using the 'DeviceId' alias.
+
+.PARAMETER Name
+Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets. It can also be specified using the 'DeviceName' alias.
+
+.PARAMETER Filter
+Specifies additional filters to apply to the instances. This parameter accepts an object representing the filter criteria.
+
+.PARAMETER BatchSize
+Specifies the number of instances to retrieve per batch. The default value is 1000.
+
+.EXAMPLE
+Get-LMDeviceDatasourceInstance -DatasourceName "CPU" -Name "Server01" -BatchSize 500
+Retrieves instances of the "CPU" datasource for the device named "Server01" with a batch size of 500.
+
+.EXAMPLE
+Get-LMDeviceDatasourceInstance -DatasourceId 1234 -Id 5678
+Retrieves instances of the datasource with ID 1234 for the device with ID 5678.
+
+.NOTES
+This function requires a valid API authentication and authorization. Use Connect-LMAccount to log in before running any commands.
+#>
 Function Get-LMDeviceDatasourceInstance {
 
     [CmdletBinding()]
@@ -12,17 +48,17 @@ Function Get-LMDeviceDatasourceInstance {
     
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
-        [Alias("Id")]
-        [Int]$DeviceId,
+        [Alias("DeviceId")]
+        [Int]$Id,
     
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
-        [Alias("Name")]
-        [String]$DeviceName,
+        [Alias("DeviceName")]
+        [String]$Name,
 
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
 
     )
@@ -30,17 +66,17 @@ Function Get-LMDeviceDatasourceInstance {
     If ($Script:LMAuth.Valid) {
 
         #Lookup Device Id
-        If ($DeviceName) {
-            $LookupResult = (Get-LMDevice -Name $DeviceName).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
+        If ($Name) {
+            $LookupResult = (Get-LMDevice -Name $Name).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $DeviceId = $LookupResult
+            $Id = $LookupResult
         }
 
         #Lookup DatasourceId
         If ($DatasourceName -or $DatasourceId) {
-            $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
+            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                 return
             }
@@ -48,7 +84,7 @@ Function Get-LMDeviceDatasourceInstance {
         }
         
         #Build header and uri
-        $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances"
+        $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances"
 
         #Initalize vars
         $QueryParams = ""

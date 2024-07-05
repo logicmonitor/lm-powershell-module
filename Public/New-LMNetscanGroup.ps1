@@ -45,13 +45,13 @@ Function New-LMNetscanGroup {
 
             Try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $Name
+                    description = $Description
+                    name        = $Name
                 }
 
             
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
             
                 $Data = ($Data | ConvertTo-Json)
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data

@@ -88,7 +88,7 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMRole' {
         It 'When given an id, remove the role from logic monitor' {
-            { Remove-LMRole -Id $Script:NewRole.Id -ErrorAction Stop -Confirm:$false  } | Should -Not -Throw
+            { Remove-LMRole -Id $Script:NewRole.Id -ErrorAction Stop -Confirm:$false } | Should -Not -Throw
         }
     }
     

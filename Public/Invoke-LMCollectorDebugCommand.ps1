@@ -81,13 +81,13 @@ Function Invoke-LMCollectorDebugCommand {
     Process {
         If ($Script:LMAuth.Valid) {
 
-#Cannot indent or it breaks here-string format
-$DefaultGroovy =@"
+            #Cannot indent or it breaks here-string format
+            $DefaultGroovy = @"
 !groovy 
 import com.santaba.agent.collector3.CollectorDb;
 def hostProps = [:];
 def instanceProps = [:];
-try {
+Try {
     hostProps = CollectorDb.getInstance().getHost("$CommandHostName").getProperties();
     instanceProps["wildvalue"] = "$CommandWildValue";
     }
@@ -98,8 +98,8 @@ catch(Exception e) {
 $GroovyCommand
 "@
 
-#Cannot indent or it breaks here-string format
-$DefaultPosh =@"
+            #Cannot indent or it breaks here-string format
+            $DefaultPosh = @"
 !posh 
 
 $PoshCommand

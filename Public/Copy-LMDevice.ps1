@@ -47,25 +47,25 @@ Function Copy-LMDevice {
     Process {
         If ($Script:LMAuth.Valid) {
             #Strip out dynamic groups
-            $HostGroupIds = ($DeviceObjec.hostGroupIds -Split "," | Get-LMDeviceGroup | Where-Object {$_.appliesTo -eq ""}).Id -Join ","
+            $HostGroupIds = ($DeviceObjec.hostGroupIds -Split "," | Get-LMDeviceGroup | Where-Object { $_.appliesTo -eq "" }).Id -Join ","
 
             $Data = @{
-                name                      = $Name
-                displayName               = If($DisplayName){$DisplayName}Else{$DeviceObject.displayName}
-                description               = If($Description){$Description}Else{$DeviceObject.description}
-                disableAlerting           = $DeviceObject.disableAlerting
-                enableNetflow             = $DeviceObject.enableNetFlow
-                customProperties          = $DeviceObject.customProperties
-                deviceType                = $DeviceObject.deviceType
-                preferredCollectorId      = $DeviceObject.preferredCollectorId
-                preferredCollectorGroupId = $DeviceObject.preferredCollectorGroupId
+                name                         = $Name
+                displayName                  = If ($DisplayName) { $DisplayName }Else { $DeviceObject.displayName }
+                description                  = If ($Description) { $Description }Else { $DeviceObject.description }
+                disableAlerting              = $DeviceObject.disableAlerting
+                enableNetflow                = $DeviceObject.enableNetFlow
+                customProperties             = $DeviceObject.customProperties
+                deviceType                   = $DeviceObject.deviceType
+                preferredCollectorId         = $DeviceObject.preferredCollectorId
+                preferredCollectorGroupId    = $DeviceObject.preferredCollectorGroupId
                 autoBalancedCollectorGroupId = $DeviceObject.autoBalancedCollectorGroupId
-                link                      = $DeviceObject.link
-                netflowCollectorGroupId   = $DeviceObject.netflowCollectorGroupId
-                netflowCollectorId        = $DeviceObject.netflowCollectorId
-                logCollectorGroupId       = $DeviceObject.logCollectorGroupId
-                logCollectorId            = $DeviceObject.logCollectorId
-                hostGroupIds              = If($HostGroupIds){$HostGroupIds}Else{1}
+                link                         = $DeviceObject.link
+                netflowCollectorGroupId      = $DeviceObject.netflowCollectorGroupId
+                netflowCollectorId           = $DeviceObject.netflowCollectorId
+                logCollectorGroupId          = $DeviceObject.logCollectorGroupId
+                logCollectorId               = $DeviceObject.logCollectorId
+                hostGroupIds                 = If ($HostGroupIds) { $HostGroupIds }Else { 1 }
             }
                     
             #Build header and uri

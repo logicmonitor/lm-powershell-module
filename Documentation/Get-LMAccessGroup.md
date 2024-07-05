@@ -55,7 +55,7 @@ Retrieves the access group with the specified name.
 
 ### EXAMPLE 3
 ```
-Get-LMAccessGroup -Filter @{ Property = "Value" }
+Get-LMAccessGroup -Filter "tenantId -eq 'Value'"
 Retrieves access groups based on the specified filter criteria.
 ```
 

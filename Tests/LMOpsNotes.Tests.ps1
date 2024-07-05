@@ -23,7 +23,7 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
         }
         It 'When given an id should return that opsnote' {
             $Retry = 0
-            While(!$OpsNote -or $Retry -eq 5){
+            While (!$OpsNote -or $Retry -eq 5) {
                 $OpsNote = Get-LMOpsNote -Id $Script:NewOpsNote.Id -ErrorAction SilentlyContinue
                 $Retry++
             }
@@ -31,7 +31,7 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
         }
         It 'When given a tag should return specified opsnote matching that tag value' {
             $Retry = 0
-            While(!$OpsNote -or $Retry -eq 5){
+            While (!$OpsNote -or $Retry -eq 5) {
                 $OpsNote = Get-LMOpsNote -Tag $Script:NewOpsNote.Tags.name -ErrorAction SilentlyContinue
                 $Retry++
             }
@@ -39,8 +39,8 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
         }
         It 'When given a wildcard tag should return all opsnotes matching that wildcard value' {
             $Retry = 0
-            While(!$OpsNote -or $Retry -eq 5){
-                $OpsNote = Get-LMOpsNote -Tag "$(($Script:NewOpsNote.Tags.name.Split(".")[0]))*"  -ErrorAction SilentlyContinue
+            While (!$OpsNote -or $Retry -eq 5) {
+                $OpsNote = Get-LMOpsNote -Tag "$(($Script:NewOpsNote.Tags.name.Split(".")[0]))*" -ErrorAction SilentlyContinue
                 $Retry++
             }
             ($OpsNote | Measure-Object).Count | Should -BeGreaterThan 0

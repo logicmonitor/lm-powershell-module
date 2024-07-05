@@ -36,7 +36,7 @@ System.Management.Automation.PSCustomObject. The output object contains the foll
 #>
 Function Remove-LMDeviceProperty {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
@@ -65,10 +65,10 @@ Function Remove-LMDeviceProperty {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id/properties/$PropertyName"
 
-            If($Name){
+            If ($Name) {
                 $Message = "Id: $Id | Name: $Name | Property: $PropertyName"
             }
-            Else{
+            Else {
                 $Message = "Id: $Id | Property: $PropertyName"
             }
 
@@ -79,11 +79,11 @@ Function Remove-LMDeviceProperty {
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
                     
                     $Result = [PSCustomObject]@{
-                        Id = $Id
+                        Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
                     
@@ -101,5 +101,5 @@ Function Remove-LMDeviceProperty {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End{}
+    End {}
 }

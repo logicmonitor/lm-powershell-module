@@ -29,7 +29,7 @@ Function Test-LookupResult {
         return $true
     }
     #If empty stop processing since we have no Id to use
-    ElseIf (!$Result) {
+    Elseif (!$Result) {
         [Console]::ForegroundColor = 'red'
         [Console]::Error.WriteLine("Unable to find resource for the specified name value: $LookupString. Please check spelling and try again.")
         [Console]::ResetColor()

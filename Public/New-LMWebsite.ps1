@@ -107,10 +107,10 @@ Function New-LMWebsite {
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Parameter(Mandatory, ParameterSetName = "Website")]
         [Switch]$WebCheck,
 
-        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [Parameter(Mandatory, ParameterSetName = "Ping")]
         [Switch]$PingCheck,
 
         [Parameter(Mandatory)]
@@ -128,41 +128,41 @@ Function New-LMWebsite {
 
         [Nullable[boolean]]$UseDefaultLocationSetting = $true,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Nullable[boolean]]$TriggerSSLStatusAlert,
         
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Nullable[boolean]]$TriggerSSLExpirationAlert,
 
         [String]$GroupId,
 
-        [Parameter(Mandatory,ParameterSetName="Ping")]
+        [Parameter(Mandatory, ParameterSetName = "Ping")]
         [String]$PingAddress,
 
-        [Parameter(Mandatory,ParameterSetName="Website")]
+        [Parameter(Mandatory, ParameterSetName = "Website")]
         [String]$WebsiteDomain,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [ValidateSet("http", "https")]
         [String]$HttpType = "https",
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [String[]]$SSLAlertThresholds,
 
-        [Parameter(ParameterSetName="Ping")]
+        [Parameter(ParameterSetName = "Ping")]
         [ValidateSet(5, 10, 15, 20, 30, 60)]
         [Nullable[Int]]$PingCount,
 
-        [Parameter(ParameterSetName="Ping")]
+        [Parameter(ParameterSetName = "Ping")]
         [Nullable[Int]]$PingTimeout,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Nullable[Int]]$PageLoadAlertTimeInMS,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Nullable[boolean]]$IgnoreSSL,
 
-        [Parameter(ParameterSetName="Ping")]
+        [Parameter(ParameterSetName = "Ping")]
         [ValidateSet(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)]
         [Nullable[Int]]$PingPercentNotReceived,
 
@@ -183,29 +183,29 @@ Function New-LMWebsite {
         [ValidateSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
         [Nullable[Int]]$PollingInterval,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Object[]]$WebsiteSteps,
 
-        [Parameter(ParameterSetName="Website")]
+        [Parameter(ParameterSetName = "Website")]
         [Object[]]$CheckPoints
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        If($Webcheck){
+        If ($Webcheck) {
             $Type = "webcheck"
         }
-        Else{
+        Else {
             $Type = "pingcheck"
         }
 
         
         $Steps = @()
         If ($Type -eq "webcheck") {
-            If($WebsiteSteps){
+            If ($WebsiteSteps) {
                 $Steps = $WebsiteSteps
             }
-            Else{
+            Else {
                 $Steps += [PSCustomObject]@{
                     useDefaultRoot    = $true
                     url               = ""
@@ -279,18 +279,18 @@ Function New-LMWebsite {
                 steps                       = $Steps
             }
             
-            If($CheckPoints){
+            If ($CheckPoints) {
                 $TestLocations = [PSCustomObject]@{
-                    all = $true
-                    smgIds = @()
-                    collectorIds = @($CheckPoints.smgId.GetEnumerator() | Foreach-Object {If($_ -ne 0){[Int]$_}})
+                    all          = $true
+                    smgIds       = @()
+                    collectorIds = @($CheckPoints.smgId.GetEnumerator() | ForEach-Object { If ($_ -ne 0) { [Int]$_ } })
                 }
 
-                $Data.checkpoints  = $CheckPoints
+                $Data.checkpoints = $CheckPoints
                 $Data.testLocation = $TestLocations
             }
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "testLocation" -and $_ -ne "steps" -and  $_ -ne "checkpoints") { $Data.Remove($_) } }
+            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "testLocation" -and $_ -ne "steps" -and $_ -ne "checkpoints") { $Data.Remove($_) } }
             $Data = ($Data | ConvertTo-Json -Depth 5)
             
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data

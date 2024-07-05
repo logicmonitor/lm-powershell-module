@@ -37,7 +37,7 @@ Function New-LMRandomCred {
   
     #Construct randomized password
     For ($i = 0 ; $i -lt $Length ; $i++) {
-        $Result[$i] = $SymbolSet[$Bytes[$i]%$SymbolSet.Length]
+        $Result[$i] = $SymbolSet[$Bytes[$i] % $SymbolSet.Length]
     }
  
     #Return result

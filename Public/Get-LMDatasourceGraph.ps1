@@ -2,37 +2,37 @@ Function Get-LMDatasourceGraph {
 
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
-        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Int]$Id,
 
-        [Parameter(Mandatory,ParameterSetName = 'dsName')]
-        [Parameter(Mandatory,ParameterSetName = 'Id-dsName')]
-        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
-        [Parameter(Mandatory,ParameterSetName = 'Filter-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Filter-dsName')]
         [String]$DataSourceName,
         
-        [Parameter(Mandatory,ParameterSetName = 'dsId')]
-        [Parameter(Mandatory,ParameterSetName = 'Id-dsId')]
-        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
-        [Parameter(Mandatory,ParameterSetName = 'Filter-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Filter-dsId')]
         [String]$DataSourceId,
         
-        [Parameter(Mandatory,ParameterSetName = 'Name-dsId')]
-        [Parameter(Mandatory,ParameterSetName = 'Name-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [String]$Name,
         
-        [Parameter(Mandatory,ParameterSetName = 'Filter-dsId')]
-        [Parameter(Mandatory,ParameterSetName = 'Filter-dsName')]
+        [Parameter(Mandatory, ParameterSetName = 'Filter-dsId')]
+        [Parameter(Mandatory, ParameterSetName = 'Filter-dsName')]
         [Object]$Filter,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        If($DataSourceName){
+        If ($DataSourceName) {
             $LookupResult = (Get-LMDatasource -Name $DataSourceName).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $DataSourceName) {
                 Return

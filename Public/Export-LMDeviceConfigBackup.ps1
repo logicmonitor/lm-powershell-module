@@ -39,12 +39,12 @@ PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
 
 Function Export-LMDeviceConfigBackup {
 
-    [CmdletBinding(DefaultParameterSetName="Device")]
+    [CmdletBinding(DefaultParameterSetName = "Device")]
     Param (
-        [Parameter(ParameterSetName="DeviceGroup",Mandatory)]
+        [Parameter(ParameterSetName = "DeviceGroup", Mandatory)]
         [Int]$DeviceGroupId,
         
-        [Parameter(ParameterSetName="Device",Mandatory)]
+        [Parameter(ParameterSetName = "Device", Mandatory)]
         [Int]$DeviceId,
 
         [Regex]$InstanceNameFilter = "[rR]unning|[cC]urrent|[pP]aloAlto",
@@ -58,7 +58,7 @@ Function Export-LMDeviceConfigBackup {
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        If($DeviceId){
+        If ($DeviceId) {
             $network_devices = Get-LMDevice -id $DeviceId
         }
         Else {
@@ -77,9 +77,9 @@ Function Export-LMDeviceConfigBackup {
             $filtered_config_instance_count = 0
             Foreach ($config_source in $device_config_sources) {
                 $running_config_instance = Get-LMDeviceDatasourceInstance -DeviceId $config_source.deviceId -DatasourceId $config_source.dataSourceId
-                $filtered_config_instance = $running_config_instance | Where-Object { $_.displayName -Match $InstanceNameFilter}
+                $filtered_config_instance = $running_config_instance | Where-Object { $_.displayName -Match $InstanceNameFilter }
                 If ($filtered_config_instance) {
-                    Foreach($instance in $filtered_config_instance){
+                    Foreach ($instance in $filtered_config_instance) {
                         $filtered_config_instance_count++
                         $instance_list += [PSCustomObject]@{
                             deviceId              = $device.id
@@ -94,7 +94,7 @@ Function Export-LMDeviceConfigBackup {
                     }
                 }
             }
-            Write-LMHost " [INFO]: Found $filtered_config_instance_count configsource instance(s) using match filter ($InstanceNameFilter)."  -ForegroundColor Gray
+            Write-LMHost " [INFO]: Found $filtered_config_instance_count configsource instance(s) using match filter ($InstanceNameFilter)." -ForegroundColor Gray
         }
 
         #Loop through filtered instance list and pull config diff
@@ -112,7 +112,7 @@ Function Export-LMDeviceConfigBackup {
             #Loop through each set and built report
             Foreach ($device in $config_grouping) {
                 $config = $device.Group | Sort-Object -Property pollTimestamp -Descending | Select-Object -First 1
-                Write-LMHost " [INFO]: Found $(($device.Group | Measure-Object).Count) configsource instance version(s) for: $($config.deviceDisplayName), selecting latest config dated: $([datetimeoffset]::FromUnixTimeMilliseconds($config.pollTimestamp).DateTime)UTC"  -ForegroundColor Gray
+                Write-LMHost " [INFO]: Found $(($device.Group | Measure-Object).Count) configsource instance version(s) for: $($config.deviceDisplayName), selecting latest config dated: $([datetimeoffset]::FromUnixTimeMilliseconds($config.pollTimestamp).DateTime)UTC" -ForegroundColor Gray
                 $output_list += [PSCustomObject]@{
                     deviceDisplayName        = $config.deviceDisplayName
                     deviceInstanceName       = $config.instanceName
@@ -125,14 +125,14 @@ Function Export-LMDeviceConfigBackup {
             }
         }
 
-        If($output_list){
-            If($Path){
+        If ($output_list) {
+            If ($Path) {
                 #Generate CSV Export
                 $output_list | Export-Csv -Path $Path -NoTypeInformation
             }
             Return (Add-ObjectTypeInfo -InputObject $output_list -TypeName "LogicMonitor.ConfigBackup" )
         }
-        Else{
+        Else {
             Write-LMHost "[WARN]: Did not find any configs to output based on selected resource(s), check your parameters and try again." -ForegroundColor Yellow
         }
         

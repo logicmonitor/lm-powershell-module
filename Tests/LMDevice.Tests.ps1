@@ -64,7 +64,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMDevice' {
         It 'When given a set of parameters, returns an updated resource with matching values' {
-            { $Device = Set-LMDevice -Id $Script:NewDevice.Id -Description "Updated" -Properties @{"test"="123";"test2"="456"}  -ErrorAction Stop
+            { $Device = Set-LMDevice -Id $Script:NewDevice.Id -Description "Updated" -Properties @{"test" = "123"; "test2" = "456" } -ErrorAction Stop
                 $Device.Description | Should -Be "Updated"
                 $Device.CustomProperties.name.IndexOf("test") | Should -Not -BeExactly -1
                 $Device.CustomProperties.name.IndexOf("test2") | Should -Not -BeExactly -1
@@ -74,7 +74,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMDevice' {
         It 'When given an id, remove the device from logic monitor' {
-            { Remove-LMDevice -Id $Script:NewDevice.Id -HardDelete $true -Confirm:$false  -ErrorAction Stop} | Should -Not -Throw
+            { Remove-LMDevice -Id $Script:NewDevice.Id -HardDelete $true -Confirm:$false -ErrorAction Stop } | Should -Not -Throw
         }
     }
     

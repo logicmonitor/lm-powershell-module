@@ -73,17 +73,17 @@ Function Get-LMDevice {
         [Parameter(ParameterSetName = 'Delta')]
         [String]$DeltaId,
 
-        [ValidateRange(1,1000)]
+        [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
         
         #Build header and uri
-        If($Delta -or $DeltaId){
+        If ($Delta -or $DeltaId) {
             $ResourcePath = "/device/devices/delta"
         }
-        Else{
+        Else {
             $ResourcePath = "/device/devices"
         }
 
@@ -110,7 +110,7 @@ Function Get-LMDevice {
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
             }
-            If($Delta -and $DeltaIdResponse){
+            If ($Delta -and $DeltaIdResponse) {
                 $QueryParams = $QueryParams + "&deltaId=$DeltaIdResponse"
             }
             Try {
@@ -125,7 +125,7 @@ Function Get-LMDevice {
                 $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Store delta id if delta switch is present
-                If($Response.deltaId -and !$DeltaIdResponse){
+                If ($Response.deltaId -and !$DeltaIdResponse) {
                     $DeltaIdResponse = $Response.deltaId
                     Write-LMHost "[INFO]: Delta switch detected, for further queries you can use deltaId: $DeltaIdResponse to perform additional delta requests. This variable can be accessed by referencing the `$LMDeltaId " -ForegroundColor Yellow
                     Set-Variable -Name "LMDeltaId" -Value $DeltaIdResponse -Scope global

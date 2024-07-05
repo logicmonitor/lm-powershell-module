@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMDeviceDatasourceInstance
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Sets the properties of a LogicMonitor device datasource instance.
 
 ## SYNTAX
 
@@ -16,7 +16,7 @@ schema: 2.0.0
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -DeviceName <String>
+ [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -Name <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -24,7 +24,7 @@ Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-W
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -DeviceId <String>
+ [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -Id <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -32,7 +32,7 @@ Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-W
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -DeviceName <String>
+ [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -Name <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -40,31 +40,39 @@ Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-W
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -DeviceId <String>
+ [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -Id <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMDeviceDatasourceInstance function is used to set the properties of a LogicMonitor device datasource instance.
+It allows you to update the display name, wild values, description, custom properties, monitoring and alerting settings, and instance group ID of the specified instance.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Set-LMDeviceDatasourceInstance -InstanceId 12345 -DisplayName "New Instance Name" -Description "Updated instance description"
 ```
 
-{{ Add example description here }}
+This example sets the display name and description of the instance with ID 12345.
+
+### EXAMPLE 2
+```
+Get-LMDevice -Name "MyDevice" | Set-LMDeviceDatasourceInstance -DatasourceName "MyDatasource" -DisplayName "New Instance Name"
+```
+
+This example retrieves the device with the name "MyDevice" and sets the display name of the instance associated with the datasource "MyDatasource".
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
+### -DisplayName
+Specifies the new display name for the instance.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
-Aliases: cf
+Aliases:
 
 Required: False
 Position: Named
@@ -73,8 +81,148 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -WildValue
+Specifies the first wild value for the instance.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WildValue2
+Specifies the second wild value for the instance.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the description for the instance.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Properties
+Specifies a hashtable of custom properties for the instance.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StopMonitoring
+Specifies whether to stop monitoring the instance.
+This parameter accepts $true or $false.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableAlerting
+Specifies whether to disable alerting for the instance.
+This parameter accepts $true or $false.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceGroupId
+Specifies the ID of the instance group to which the instance belongs.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceId
+Specifies the ID of the instance to update.
+This parameter is mandatory and can be provided via pipeline.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -DatasourceName
+Specifies the name of the datasource associated with the instance.
+This parameter is mandatory when using the 'Name-dsName' parameter set.
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Id-dsName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DatasourceId
-{{ Fill DatasourceId Description }}
+Specifies the ID of the datasource associated with the instance.
+This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter set.
 
 ```yaml
 Type: String
@@ -100,43 +248,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DatasourceName
-{{ Fill DatasourceName Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Id-dsName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeviceId
-{{ Fill DeviceId Description }}
+### -Id
+Specifies the ID of the device associated with the instance.
+This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter set.
+This parameter can also be specified using the 'DeviceId' alias.
 
 ```yaml
 Type: String
 Parameter Sets: Id-dsName
-Aliases:
+Aliases: DeviceId
 
 Required: True
 Position: Named
@@ -148,7 +268,7 @@ Accept wildcard characters: False
 ```yaml
 Type: String
 Parameter Sets: Id-dsId
-Aliases:
+Aliases: DeviceId
 
 Required: True
 Position: Named
@@ -157,105 +277,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DeviceName
-{{ Fill DeviceName Description }}
+### -Name
+Specifies the name of the device associated with the instance.
+This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter set.
+This parameter can also be specified using the 'DeviceName' alias.
 
 ```yaml
 Type: String
 Parameter Sets: Name-dsName, Name-dsId
-Aliases:
+Aliases: DeviceName
 
 Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableAlerting
-{{ Fill DisableAlerting Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-{{ Fill DisplayName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InstanceGroupId
-{{ Fill InstanceGroupId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InstanceId
-{{ Fill InstanceId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases: Id
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Properties
-{{ Fill Properties Description }}
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StopMonitoring
-{{ Fill StopMonitoring Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -278,28 +310,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WildValue
-{{ Fill WildValue Description }}
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: String
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WildValue2
-{{ Fill WildValue2 Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
+Aliases: cf
 
 Required: False
 Position: Named
@@ -328,10 +345,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
 ## OUTPUTS
 
-### System.Object
 ## NOTES
 
 ## RELATED LINKS

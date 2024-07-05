@@ -24,7 +24,7 @@
     System.String. The function returns a string that represents the formatted filter.
 
 .NOTES
-    The function does not throw any errors. If a property in the Filter parameter is not in the PropList parameter, it is simply removed from the filter.
+    If a property in the Filter parameter is not in the PropList parameter, it is simply removed from the filter.
 #>
 Function Format-LMFilter-v1 {
     [CmdletBinding()]
@@ -48,7 +48,7 @@ Function Format-LMFilter-v1 {
     }
 
     #Create filter string from hash table and url encode
-    foreach ($Key in $($Filter.keys)) {
+    Foreach ($Key in $($Filter.keys)) {
         $FilterString += $Key + ":" + "`"$($Filter[$Key])`"" + ","
     }
     $FilterString = $FilterString.trimend(',')

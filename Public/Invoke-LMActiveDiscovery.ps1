@@ -69,7 +69,7 @@ Function Invoke-LMActiveDiscovery {
                 }
                 $deviceList = $LookupResult
             }
-            ElseIf ($Id) {
+            Elseif ($Id) {
                 $deviceList = $Id
             }
 
@@ -85,7 +85,7 @@ Function Invoke-LMActiveDiscovery {
                     return
                 }
             }
-            ElseIf ($GroupId) {
+            Elseif ($GroupId) {
                 $deviceList = (Get-LMDeviceGroupDevices -Id $GroupId).Id
                 If (!$deviceList) {
                     Write-Error "Unable to find devices for groupId: $GroupId, please check spelling and try again." 
@@ -107,7 +107,7 @@ Function Invoke-LMActiveDiscovery {
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
+                    #Issue request
                     $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
                     
                     Write-Host "Scheduled Active Discovery task for device id: $device."

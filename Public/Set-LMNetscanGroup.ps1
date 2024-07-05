@@ -33,13 +33,13 @@ Function Set-LMNetscanGroup {
 
             Try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $NewName
+                    description = $Description
+                    name        = $NewName
                 }
 
             
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
             
                 $Data = ($Data | ConvertTo-Json)
 
