@@ -409,7 +409,7 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.1
+## 6.2
 ### New Cmdlets:
  - **Get-LMAWSAccountId**: This cmdlet is used to retrieve the AWS Account ID associated with the LogicMonitor account.
  - **Get-LMConfigsourceUpdateHistory**: This cmdlet retrieves the update history for a LogicMonitor configuration source. It can be used to get information about the updates made to a configuration source, such as the update reasons and the modules that were updated..
