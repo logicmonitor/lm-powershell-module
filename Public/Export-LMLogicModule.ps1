@@ -47,7 +47,7 @@ Function Export-LMLogicModule {
         [String]$LogicModuleName,
 
         [Parameter(Mandatory)]
-        [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources")]
+        [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources","logsources")]
         [String]$Type,
 
         [String]$DownloadPath = (Get-Location).Path
@@ -91,6 +91,11 @@ Function Export-LMLogicModule {
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
                         $QueryParams = "?format=xml&v=3"
                     }
+                    "logsources" {
+                        $LogicModuleInfo = Get-LMLogSource -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
+                        $QueryParams = "?format=xml&v=3"
+                    }
                 }
                 #Verify our query only returned one result
                 If (Test-LookupResult -Result $LogicModuleInfo.Id -LookupString $LogicModuleName) {
@@ -123,6 +128,11 @@ Function Export-LMLogicModule {
                     }
                     "configsources" {
                         $LogicModuleInfo = Get-LMConfigSource -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
+                        $QueryParams = "?format=xml&v=3"
+                    }
+                    "logsources" {
+                        $LogicModuleInfo = Get-LMLogSource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
                         $QueryParams = "?format=xml&v=3"
                     }

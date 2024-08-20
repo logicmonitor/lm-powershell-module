@@ -37,7 +37,7 @@ Function Import-LMLogicModule {
         [Parameter(Mandatory, ParameterSetName = 'File')]
         [Object]$File,
         
-        [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource")]
+        [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource","logsource")]
         [String]$Type = "datasource",
 
         [Boolean]$ForceOverwrite = $false

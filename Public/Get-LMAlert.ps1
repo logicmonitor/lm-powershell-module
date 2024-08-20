@@ -62,7 +62,7 @@ Function Get-LMAlert {
         [ValidateSet("*", "Warning", "Error", "Critical")]
         [String]$Severity = "*",
 
-        [ValidateSet("*", "websiteAlert", "dataSourceAlert", "eventSourceAlert", "logAlert")]
+        [ValidateSet("*", "websiteAlert", "dataSourceAlert", "eventAlert", "logAlert")]
         [String]$Type = "*",
 
         [Boolean]$ClearedAlerts = $false,

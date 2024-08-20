@@ -1,4 +1,24 @@
 # Previous module release notes
+## 6.2
+### New Cmdlets:
+ - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 
+ - **New-LMAccessGroup**: This cmdlet creates a new LogicMonitor access group. 
+ - **Set-LMAccessGroup**: This cmdlet updates an existing LogicMonitor access group. 
+ - **Remove-LMAccessGroup**: This cmdlet removes a new LogicMonitor access group. 
+ - **Get-LMDeviceDatasourceInstanceAlertRecipients**: Retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
+ - **Remove-LMDeviceDatasourceInstanceGroup**: Removes a LogicMonitor device datasource instance group.
+ - **Set-LMDeviceDatasourceInstance**: Updates a LogicMonitor device datasource instance.
+ 
+ **Note**: Access Groups are not available in all portals and needs to be enabled before any access group commands can be utilized.
+
+
+### Updated Cmdlets:
+ - **Get-LMDeviceDatasourceList**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Get-LMDeviceDatasourceInstance**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Get-LMDeviceDatasourceInstanceAlertSetting**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets. Also fixed bug causing an issue when trying to retrieve instances with special characters in the name.
+ - **Get-LMDeviceDatasourceInstanceGroup**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Remove-LMDeviceDatasourceInstance**: Fixed bug that would prevent a datasource instance from being delete due to missing instance id.
+ 
 ## 6.1
 ### New Cmdlets:
  - **Get-LMAWSAccountId**: This cmdlet is used to retrieve the AWS Account ID associated with the LogicMonitor account.

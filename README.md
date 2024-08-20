@@ -207,6 +207,7 @@ Get-LMAlertRule\
 Get-LMAPIToken\
 Get-LMAppliesToFunction\
 Get-LMAuditLogs\
+Get-LMAWSAccountId\
 Get-LMCachedAccount\
 Get-LMCollector\
 Get-LMCollectorDebugResult\
@@ -214,6 +215,7 @@ Get-LMCollectorGroup\
 Get-LMCollectorInstaller\
 Get-LMCollectorVersions\
 Get-LMConfigSource\
+Get-LMConfigsourceUpdateHistory\
 Get-LMDashboard\
 Get-LMDashboardGroup\
 Get-LMDashboardWidget\
@@ -229,9 +231,10 @@ Get-LMDeviceAlertSettings\
 Get-LMDeviceConfigSourceData\
 Get-LMDeviceData\
 Get-LMDeviceDatasourceInstance\
+Get-LMDeviceDatasourceInstanceAlertRecipients\
 Get-LMDeviceDatasourceInstanceAlertSetting\
 Get-LMDeviceDatasourceInstanceGroup\
-Get-LMDeviceDatasourceList\
+Get-LMDeviceDataSourceList\
 Get-LMDeviceEventSourceList\
 Get-LMDeviceGroup\
 Get-LMDeviceGroupAlerts\
@@ -253,6 +256,7 @@ Get-LMDeviceSDTHistory\
 Get-LMEscalationChain\
 Get-LMEventSource\
 Get-LMIntegrationLogs\
+Get-LMLogSource\
 Get-LMNetscan\
 Get-LMNetscanExecution\
 Get-LMNetscanExecutionDevices\
@@ -284,19 +288,24 @@ Get-LMWebsiteGroupSDTHistory\
 Get-LMWebsiteProperty\
 Get-LMWebsiteSDT\
 Get-LMWebsiteSDTHistory\
-
+\
 Import-LMDashboard\
 Import-LMExchangeModule\
 Import-LMLogicModule\
 Import-LMRepositoryLogicModules\
 \
 Invoke-LMActiveDiscovery\
+Invoke-LMAWSAccountTest\
+Invoke-LMAzureAccountTest\
+Invoke-LMAzureSubscriptionDiscovery\
 Invoke-LMCloudGroupNetScan\
 Invoke-LMCollectorDebugCommand\
 Invoke-LMDeviceConfigSourceCollection\
+Invoke-LMGCPAccountTest\
 Invoke-LMNetScan\
 Invoke-LMUserLogoff\
 \
+New-LMAccessGroup\
 New-LMAlertAck\
 New-LMAlertEscalation\
 New-LMAlertNote\
@@ -318,8 +327,8 @@ New-LMDeviceGroup\
 New-LMDeviceGroupSDT\
 New-LMDeviceProperty\
 New-LMDeviceSDT\
-New-LMEnhancedNetScan\
-New-LMNetScan\
+New-LMEnhancedNetscan\
+New-LMNetscan\
 New-LMNetscanGroup\
 New-LMOpsNote\
 New-LMPushMetricDataPoint\
@@ -330,6 +339,7 @@ New-LMUser\
 New-LMWebsite\
 New-LMWebsiteGroup\
 \
+Remove-LMAccessGroup\
 Remove-LMAPIToken\
 Remove-LMAppliesToFunction\
 Remove-LMCachedAccount\
@@ -341,8 +351,10 @@ Remove-LMDashboardWidget\
 Remove-LMDatasource\
 Remove-LMDevice\
 Remove-LMDeviceDatasourceInstance\
+Remove-LMDeviceDatasourceInstanceGroup\
 Remove-LMDeviceGroup\
 Remove-LMDeviceProperty\
+Remove-LMLogsource\
 Remove-LMNetscan\
 Remove-LMNetscanGroup\
 Remove-LMOpsNote\
@@ -360,6 +372,7 @@ Remove-LMWebsiteGroup\
 Send-LMLogMessage\
 Send-LMPushMetric\
 \
+Set-LMAccessGroup\
 Set-LMAPIToken\
 Set-LMAppliesToFunction\
 Set-LMCollector\
@@ -373,7 +386,7 @@ Set-LMDeviceDatasourceInstanceAlertSetting\
 Set-LMDeviceGroup\
 Set-LMDeviceGroupDatasourceAlertSetting\
 Set-LMDeviceProperty\
-Set-LMNetscan\
+Set-LMNetScan\
 Set-LMNetscanGroup\
 Set-LMNewUserMessage\
 Set-LMOpsNote\
@@ -387,7 +400,11 @@ Set-LMSDT\
 Set-LMTopologysource\
 Set-LMUnmonitoredDevice\
 Set-LMUser\
-Set-LMWebsite
+Set-LMUserdata\
+Set-LMWebsite\
+Set-LMWebsiteGroup\
+\
+Test-LMAppliesToQuery\
 
 **Note**: Some commands accept pipeline input, see `Get-Command <cmdlet-name> -Module Logic.Monitor` for details.
 
@@ -409,25 +426,18 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.2
+## 6.3
 ### New Cmdlets:
- - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 
- - **New-LMAccessGroup**: This cmdlet creates a new LogicMonitor access group. 
- - **Set-LMAccessGroup**: This cmdlet updates an existing LogicMonitor access group. 
- - **Remove-LMAccessGroup**: This cmdlet removes a new LogicMonitor access group. 
- - **Get-LMDeviceDatasourceInstanceAlertRecipients**: Retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
- - **Remove-LMDeviceDatasourceInstanceGroup**: Removes a LogicMonitor device datasource instance group.
- - **Set-LMDeviceDatasourceInstance**: Updates a LogicMonitor device datasource instance.
- 
- **Note**: Access Groups are not available in all portals and needs to be enabled before any access group commands can be utilized.
+ - **Get-LMLogSource**: This cmdlet will retrieve data for specified LogSources.
+ - **Remove-LMLogSource**: This cmdlet will remove a specified LogSource.
+ - **Test-LMAppliesToQuery**: This cmdlet will retrieve the results for a specified AppliesToQuery string, similar to the Test AppliesTo button in the portal UI.
 
 
 ### Updated Cmdlets:
- - **Get-LMDeviceDatasourceList**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
- - **Get-LMDeviceDatasourceInstance**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
- - **Get-LMDeviceDatasourceInstanceAlertSetting**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets. Also fixed bug causing an issue when trying to retrieve instances with special characters in the name.
- - **Get-LMDeviceDatasourceInstanceGroup**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
- - **Remove-LMDeviceDatasourceInstance**: Fixed bug that would prevent a datasource instance from being delete due to missing instance id.
+ - **Export-LMLogicModule**: Added support for LogSources.
+ - **Get-LMAlert**: Fixed incorrect type filter for EventSources. Issue #11
+ - **New-LMOpsNote**: Fixed bug causing device and website ID scopes to not be properly set. Issue #10
+ - **Set-LMDeviceDatasourceInstanceAlertSetting**: Fixed bug causing instance id lookup to fail when specifying instance name.
 
 
 [Previous Release Notes](RELEASENOTES.md)
