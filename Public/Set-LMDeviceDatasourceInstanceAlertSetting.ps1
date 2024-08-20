@@ -72,34 +72,32 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
 
             #Replace brakets in instance name
             $InstanceName = $InstanceName -replace "[\[\]]", "?"
-
             #Lookup HdsiId
             If ($DatasourceName) {
                 $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceName $DatasourceName -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName" }).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
+                If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                     return
                 }
                 $HdsiId = $LookupResult
             }
             Else {
                 $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceId -DeviceId $Id | Where-Object { $_.name -like "*$InstanceName" }).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
+                If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceId) {
                     return
                 }
                 $HdsiId = $LookupResult
             }
-
-            #Lookup HdsiId
-            If ($DatapointName) {
+            #Lookup DatapointId
+            If ($DatasourceName) {
                 $LookupResult = (Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceName $DatasourceName -Id $Id -InstanceName $InstanceName | Where-Object { $_.dataPointName -eq $DatapointName }).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
+                If (Test-LookupResult -Result $LookupResult -LookupString $DatapointName) {
                     return
                 }
                 $DatapointId = $LookupResult
             }
             Else {
-                $LookupResult = (Get-LMDeviceDatasourceInstance -DatasourceId $DatasourceId -Id $Id -InstanceName $InstanceName | Where-Object { $_.dataPointName -eq $DatapointName }).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
+                $LookupResult = (Get-LMDeviceDatasourceInstanceAlertSetting -DatasourceId $DatasourceId -Id $Id -InstanceName $InstanceName | Where-Object { $_.dataPointName -eq $DatapointName }).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceId) {
                     return
                 }
                 $DatapointId = $LookupResult
@@ -108,7 +106,7 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$HdsiId/alertsettings/$DatapointId"
 
-            $Message = "Id: $Id | hostDatasourceId: $HdsId | datapointId: $DatapointId"
+            $Message = "Id: $Id | hostDatasourceId: $HdsId | instanceId: $HdsiId | datapointId: $DatapointId"
 
             Try {
                 $Data = @{

@@ -1467,6 +1467,53 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.Logsource-->
+      <View>
+         <Name>LogicMonitorLogsource</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.Logsource</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>logFields</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>resourceMapping</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>logFields</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>resourceMapping</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.Propertysource-->
       <View>
          <Name>LogicMonitorPropertysource</Name>
