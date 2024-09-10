@@ -2,7 +2,7 @@ name: Test Current Build on PowerShell Core
 
 on:
   push:
-    branches: [ main ]
+    branches: [ !master ]
     paths-ignore:
       - '**.md'
       - '**.yml'

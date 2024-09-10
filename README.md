@@ -446,9 +446,6 @@ We appreciate your continued support and enthusiasm for the Logic.Monitor PowerS
 ### New Cmdlets:
  - **New-LMAccessGroupMapping**: This cmdlet will create a new access group mapping/unmapping based on specified module and accessgroups.
 
-### Updated Cmdlets:
- - **Export-LMLogicModule**: Added support for LogSources.
-
 
 [Previous Release Notes](RELEASENOTES.md)
 
