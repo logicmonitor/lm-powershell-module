@@ -78,7 +78,6 @@ Function Update-LogicMonitorModule {
                 Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion
                 Update-LogicMonitorModule -CheckOnly -Modules @($Module)
             }
-            
         } 
         Else {
             Write-Information "[INFO]: Module $Module version $InstalledVersion is the latest version."
