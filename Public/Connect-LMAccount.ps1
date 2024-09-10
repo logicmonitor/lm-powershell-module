@@ -101,7 +101,7 @@ Function Connect-LMAccount {
     If ($UseCachedCredential -or $CachedAccountName) {
 
         Try {
-            $ExistingVault = Get-SecretVault -Name Logic.Monitor -ErrorAction Stop
+            Get-SecretVault -Name Logic.Monitor -ErrorAction Stop | Out-Null
             Write-Information "[INFO]: Existing vault Logic.Monitor already exists, skipping creation"
         }
         Catch {
