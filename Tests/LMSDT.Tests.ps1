@@ -28,17 +28,17 @@ Describe 'SDT Testing' {
 
     Describe 'Get-LMDeviceGroupSDT' {
         It 'When given a DeviceGroupId, returns SDTs for that group' {
-            $SDTs = Get-LMDeviceGroupSDT -Id 1
-            $SDTs | Should -Not -BeNullOrEmpty
-            $SDTs.Count | Should -BeGreaterThan 0
+            $SDT = Get-LMDeviceGroupSDT -Id 1
+            $SDT | Should -Not -BeNullOrEmpty
+            ($SDT | Measure-Object).Count  | Should -BeGreaterThan 0
         }
     }
 
     Describe 'Get-LMDeviceSDT' {
         It 'When given a DeviceId, returns SDTs for that device' {
-            $SDTs = Get-LMDeviceSDT -Id 123
-            $SDTs | Should -Not -BeNullOrEmpty
-            $SDTs.Count | Should -BeGreaterThan 0
+            $SDT = Get-LMDeviceSDT -Id 123
+            $SDT | Should -Not -BeNullOrEmpty
+            ($SDT | Measure-Object).Count  | Should -BeGreaterThan 0
         }
     }
 
@@ -46,12 +46,12 @@ Describe 'SDT Testing' {
         It 'When given no parameters, returns all SDTs' {
             $SDT = Get-LMSDT
             $SDT | Should -Not -BeNullOrEmpty
-            $SDT.Count | Should -BeGreaterThan 0
+            ($SDT | Measure-Object).Count  | Should -BeGreaterThan 0
         }
         It 'When given an id should return that SDT' {
             $SDT = Get-LMSDT -Id $Script:NewDeviceGroupSDT.Id
             $SDT | Should -Not -BeNullOrEmpty
-            $SDT.Count | Should -BeExactly 1
+            ($SDT | Measure-Object).Count | Should -BeExactly 1
         }
         It 'When given an invalid id, should empty response' {
             $SDT = Get-LMSDT -Id 0
