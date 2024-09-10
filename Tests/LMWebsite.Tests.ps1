@@ -1,7 +1,7 @@
 Describe 'Website Testing New/Get/Set/Remove' {
     BeforeAll {
         Import-Module $Module -Force
-        Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging
+        Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
     }
     
     Describe 'New-LMWebsite' {

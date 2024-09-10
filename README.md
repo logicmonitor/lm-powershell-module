@@ -426,18 +426,28 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.3
+## 6.4
+### Module Updates/Changes
+ - **Write-LMHost** has been removed entirely starting in this version and replaced with native Write-Information,Warning and Error cmdlets. If you would like to suppress the output of these cmdlets you can use the *\$InformationPreference*, *\$DebugPreference* and *\$WarningPreference* variables. Additionally you can use the *-DisableConsoleLogging* switch on Connect-LMAccount to suppress Write-Information output.
+ - New/Updated Pester tests have been added to validate the module builds and ensure functionality for the following cmdlets:
+   - AccessGroup
+   - AppliesToFunction
+   - AppliesToSearch
+   - Device
+   - DeviceGroup
+   - NetScanGroup
+   - OpsNotes
+   - ReportGroup
+   - SDT
+   - Users/Roles
+   - Website
+   - WebsiteGroup
+   
 ### New Cmdlets:
- - **Get-LMLogSource**: This cmdlet will retrieve data for specified LogSources.
- - **Remove-LMLogSource**: This cmdlet will remove a specified LogSource.
- - **Test-LMAppliesToQuery**: This cmdlet will retrieve the results for a specified AppliesToQuery string, similar to the Test AppliesTo button in the portal UI.
-
+ - **New-LMAccessGroupMapping**: This cmdlet will create a new access group mapping/unmapping based on specified module and accessgroups.
 
 ### Updated Cmdlets:
  - **Export-LMLogicModule**: Added support for LogSources.
- - **Get-LMAlert**: Fixed incorrect type filter for EventSources. Issue #11
- - **New-LMOpsNote**: Fixed bug causing device and website ID scopes to not be properly set. Issue #10
- - **Set-LMDeviceDatasourceInstanceAlertSetting**: Fixed bug causing instance id lookup to fail when specifying instance name.
 
 
 [Previous Release Notes](RELEASENOTES.md)

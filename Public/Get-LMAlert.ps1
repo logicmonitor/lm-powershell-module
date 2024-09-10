@@ -162,7 +162,7 @@ Function Get-LMAlert {
                     $Results += $Response.Items
                     If ($Count -ge $QueryLimit) {
                         $Done = $true
-                        Write-LMHost "[WARN]: Reached $QueryLimit record query limitation for this endpoint" -ForegroundColor Yellow
+                        Write-Warning "[WARN]: Reached $QueryLimit record query limitation for this endpoint" 
                     }
                     Elseif ($Count -ge $Total -and $Total -ge 0) {
                         $Done = $true

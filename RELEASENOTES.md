@@ -1,4 +1,17 @@
 # Previous module release notes
+## 6.3
+### New Cmdlets:
+ - **Get-LMLogSource**: This cmdlet will retrieve data for specified LogSources.
+ - **Remove-LMLogSource**: This cmdlet will remove a specified LogSource.
+ - **Test-LMAppliesToQuery**: This cmdlet will retrieve the results for a specified AppliesToQuery string, similar to the Test AppliesTo button in the portal UI.
+
+
+### Updated Cmdlets:
+ - **Export-LMLogicModule**: Added support for LogSources.
+ - **Get-LMAlert**: Fixed incorrect type filter for EventSources. Issue #11
+ - **New-LMOpsNote**: Fixed bug causing device and website ID scopes to not be properly set. Issue #10
+ - **Set-LMDeviceDatasourceInstanceAlertSetting**: Fixed bug causing instance id lookup to fail when specifying instance name.
+ 
 ## 6.2
 ### New Cmdlets:
  - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 

@@ -5,6 +5,22 @@
 ```powershell
 Get-LMAlert -StartDate $(Get-Date).AddDays(-1) -EndDate $(Get-Date) -ClearedAlerts $true | Group-Object -Property resourceTemplateName,datapointName | select count, @{N='Name';E={$_.Name.Split(",")[0]}}, @{N='Datapoint';E={$_.Name.Split(",")[1]}} | Sort-Object -Property count -Descending
 ```
+#### Create a new collector, download the installer and silent install
+
+```powershell
+#Connect to LogicMonitor account
+Connect-LMAccount -AccountName "<account name>" -AccessId "<access id>" -AccessKey "<access key>"
+
+#Create new collector and download the installer
+$Collector = New-LMCollector -Description "<enter description>"
+$FilePath = Get-LMCollectorInstaller -Id $Collector.Id -Size "medium" -OSandArch "Win64" -DownloadPath "C:\temp"
+
+#Install the collector silently
+.\$FilePath /q /a:administrator /p:'password'
+
+#Disconnect from LogicMonitor account
+Disconnect-LMAccount
+```
 
 #### Generate Website inventory report with specific properties
 ```powershell
