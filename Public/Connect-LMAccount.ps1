@@ -92,10 +92,10 @@ Function Connect-LMAccount {
     }
 
     If(!$DisableConsoleLogging.IsPresent) {
-        $InformationPreference = 'Continue'
+        $InformationPreference = 'SilentlyContinue'
     }
     Else {
-        $InformationPreference = 'SilentlyContinue'
+        $InformationPreference = 'Continue'
     }
 
     If ($UseCachedCredential -or $CachedAccountName) {
