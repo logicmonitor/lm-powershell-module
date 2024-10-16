@@ -91,7 +91,7 @@ Function Connect-LMAccount {
         Add-Type -AssemblyName System.Web
     }
 
-    If(!$DisableConsoleLogging.IsPresent) {
+    If($DisableConsoleLogging.IsPresent) {
         $InformationPreference = 'SilentlyContinue'
     }
     Else {
