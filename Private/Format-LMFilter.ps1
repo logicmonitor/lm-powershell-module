@@ -69,7 +69,7 @@ Function Format-LMFilter {
                                 '\s+-le\s+' { $FormatedFilter += "<:" }
                                 '\s+-contains\s+' { $FormatedFilter += "~" }
                                 '\s+-notcontains\s+' { $FormatedFilter += "!~" }
-                                default { Write-LMHost "[ERROR]: Invalid filter syntax: $Filter" -ForegroundColor Red }
+                                default { throw "[ERROR]: Invalid filter syntax: $Filter" }
                             }
                         }
                         Else {
@@ -78,10 +78,12 @@ Function Format-LMFilter {
                     }
                 }
                 Else {
-                    Write-LMHost "[ERROR]: Invalid filter syntax: $SingleFilterArray" -ForegroundColor Red
+                    throw "[ERROR]: Invalid filter syntax: $SingleFilterArray"
+                    
                 }
             }
         }
+        #$FormatedFilter = $FormatedFilter.Replace("\", "\\")
         Write-Debug "Constructed Filter-v2: $FormatedFilter"
         Return $FormatedFilter
     }

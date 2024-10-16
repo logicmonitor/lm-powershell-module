@@ -65,7 +65,7 @@ Function Invoke-LMGCPAccountTest {
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-            Write-LMHost "All services have been tested successfully" -ForegroundColor Green
+            Write-Information "All services have been tested successfully" 
             Return
         }
         Catch [Exception] {

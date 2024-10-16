@@ -2,7 +2,8 @@ name: Test Current Build on Windows Powershell 5.1
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - '**'
     paths-ignore:
       - '**.md'
       - '**.yml'

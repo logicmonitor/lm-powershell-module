@@ -143,7 +143,7 @@ $PoshCommand
                     While (!$CommandCompleted) {
                         $CommandResult = Get-LMCollectorDebugResult -SessionId $Response.sessionId -Id $Id
                         If ($CommandResult.errorMessage -eq "Agent has fetched the task, waiting for response") {
-                            Write-LMHost "[INFO]: Agent has fetched the task, waiting for response..." -ForegroundColor green
+                            Write-Information "[INFO]: Agent has fetched the task, waiting for response..." 
                             Start-Sleep -Seconds 5
                         }
                         Else {

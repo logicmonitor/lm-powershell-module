@@ -63,25 +63,24 @@ Function Update-LogicMonitorModule {
             
             # Uninstall the old version
             If ($CheckOnly) {
-                Write-LMHost "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, please consider upgrading to the latest version ($OnlineVersion) as soon as possible. Use the -AutoUpdateModule switch next time you connect to auto upgrade to the latest version." -ForegroundColor Yellow
+                Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, please consider upgrading to the latest version ($OnlineVersion) as soon as possible. Use the -AutoUpdateModule switch next time you connect to auto upgrade to the latest version."
             }
             Elseif ($UninstallFirst -eq $true) {
-                Write-LMHost "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, uninstalling prior Module $Module version $InstalledVersion" -ForegroundColor Yellow
+                Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, uninstalling prior Module $Module version $InstalledVersion"
                 Uninstall-Module -Name $Module -Force -Verbose:$False
     
-                Write-LMHost "[INFO]: Installing newer Module $Module version $OnlineVersion."
+                Write-Information "[INFO]: Installing newer Module $Module version $OnlineVersion."
                 Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion
                 Update-LogicMonitorModule -CheckOnly -Modules @($Module)
             }
             Else {
-                Write-LMHost "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module. Installing newer Module $Module version $OnlineVersion." -ForegroundColor Yellow
+                Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module. Installing newer Module $Module version $OnlineVersion."
                 Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion
                 Update-LogicMonitorModule -CheckOnly -Modules @($Module)
             }
-            
         } 
         Else {
-            Write-LMHost "[INFO]: Module $Module version $InstalledVersion is the latest version."
+            Write-Information "[INFO]: Module $Module version $InstalledVersion is the latest version."
         }
     }
 }

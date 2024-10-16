@@ -23,12 +23,15 @@ PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
 Function Disconnect-LMAccount {
     #Clear credential object from environment
     If ($Script:LMAuth) {
-        Write-LMHost "[INFO]: Successfully cleared login credentials for LM account." -ForegroundColor Green
+        Write-Information "[INFO]: Successfully cleared login credentials for LM account." 
         Remove-Variable -Name LMAuth -Scope Script -ErrorAction SilentlyContinue
         Remove-Variable -Name LMUserData -Scope Global -ErrorAction SilentlyContinue
         Remove-Variable -Name LMDeltaId -Scope Global -ErrorAction SilentlyContinue
     }
     Else {
-        Write-Host "[INFO]: Not currently connected to any LM account." -ForegroundColor Gray
+        Write-Information "[INFO]: Not currently connected to any LM account." 
     }
+
+    #Reset information preference
+    $InformationPreference = 'SilentlyContinue'
 }
