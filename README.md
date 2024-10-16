@@ -306,6 +306,7 @@ Invoke-LMNetScan\
 Invoke-LMUserLogoff\
 \
 New-LMAccessGroup\
+New-LMAccessGroupMapping\
 New-LMAlertAck\
 New-LMAlertEscalation\
 New-LMAlertNote\
@@ -405,7 +406,7 @@ Set-LMWebsite\
 Set-LMWebsiteGroup\
 \
 Test-LMAppliesToQuery\
-
+\
 **Note**: Some commands accept pipeline input, see `Get-Command <cmdlet-name> -Module Logic.Monitor` for details.
 
 # Change List

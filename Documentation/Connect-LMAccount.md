@@ -14,28 +14,28 @@ Connect to a specified LM portal to run commands against
 
 ### LMv1 (Default)
 ```
-Connect-LMAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-AutoUpdateModuleVersion]
- [-DisableConsoleLogging] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
+Connect-LMAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-DisableConsoleLogging]
+ [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### Bearer
 ```
-Connect-LMAccount -BearerToken <String> -AccountName <String> [-AutoUpdateModuleVersion]
- [-DisableConsoleLogging] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
+Connect-LMAccount -BearerToken <String> -AccountName <String> [-DisableConsoleLogging]
+ [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### SessionSync
 ```
-Connect-LMAccount -AccountName <String> [-SessionSync] [-AutoUpdateModuleVersion] [-DisableConsoleLogging]
+Connect-LMAccount -AccountName <String> [-SessionSync] [-DisableConsoleLogging] [-AutoUpdateModuleVersion]
  [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Cached
 ```
-Connect-LMAccount [-UseCachedCredential] [-CachedAccountName <String>] [-AutoUpdateModuleVersion]
- [-DisableConsoleLogging] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
+Connect-LMAccount [-UseCachedCredential] [-CachedAccountName <String>] [-DisableConsoleLogging]
+ [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
@@ -170,8 +170,10 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -AutoUpdateModuleVersion
-{{ Fill AutoUpdateModuleVersion Description }}
+### -DisableConsoleLogging
+Disables on stdout messages from displaying for any subsequent commands are run.
+Useful when building scripted logicmodules and you want to suppress unwanted output.
+Console logging is enabled by default.
 
 ```yaml
 Type: SwitchParameter
@@ -185,10 +187,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisableConsoleLogging
-Disables on stdout messages from displaying for any subsequent commands are run.
-Useful when building scripted logicmodules and you want to suppress unwanted output.
-Console logging is enabled by default.
+### -AutoUpdateModuleVersion
+{{ Fill AutoUpdateModuleVersion Description }}
 
 ```yaml
 Type: SwitchParameter
