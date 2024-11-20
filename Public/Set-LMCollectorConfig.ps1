@@ -104,7 +104,7 @@ Function Set-LMCollectorConfig {
             $Value = $Value.toString().toLower()
 
             $ConfigArray = $Config.Split([Environment]::NewLine)
-            [int[]]$Index = [Linq.Enumerable]::Range(0, $ConfigArray.Count).Where({ Param($i) $ConfigArray[$i] -match $ConfLine })
+            [int[]]$Index = [Linq.Enumerable]::Range(0, $ConfigArray.Count).Where({ Param($i) $ConfigArray[$i] -match "^$ConfLine" })
             If (($Index | Measure-Object).Count -eq 1) {
                 Write-LMHost "[INFO]: Updating config parameter $ConfLine to value $Value."
                 $ConfigArray[$Index[0]] = "$ConfLine=$Value"

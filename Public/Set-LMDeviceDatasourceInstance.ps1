@@ -20,6 +20,9 @@ Specifies the description for the instance.
 .PARAMETER Properties
 Specifies a hashtable of custom properties for the instance.
 
+.PARAMETER PropertiesMethod
+Specifies the method to use when updating the properties. Valid values are "Add", "Replace", or "Refresh".
+
 .PARAMETER StopMonitoring
 Specifies whether to stop monitoring the instance. This parameter accepts $true or $false.
 
@@ -69,6 +72,9 @@ Function Set-LMDeviceDatasourceInstance {
         [String]$Description,
 
         [Hashtable]$Properties,
+
+        [ValidateSet("Add", "Replace", "Refresh")] # Add will append to existing prop, Replace will update existing props if specified and add new props, refresh will replace existing props with new
+        [String]$PropertiesMethod = "Replace",
 
         [Nullable[boolean]]$StopMonitoring,
 
@@ -162,7 +168,7 @@ Function Set-LMDeviceDatasourceInstance {
 
                 If ($PSCmdlet.ShouldProcess($Message, "Set Device Datasource Instance")) { 
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
