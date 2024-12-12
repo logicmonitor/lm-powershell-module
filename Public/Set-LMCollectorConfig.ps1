@@ -106,11 +106,11 @@ Function Set-LMCollectorConfig {
             $ConfigArray = $Config.Split([Environment]::NewLine)
             [int[]]$Index = [Linq.Enumerable]::Range(0, $ConfigArray.Count).Where({ Param($i) $ConfigArray[$i] -match "^$ConfLine" })
             If (($Index | Measure-Object).Count -eq 1) {
-                Write-LMHost "[INFO]: Updating config parameter $ConfLine to value $Value."
+                Write-Information "[INFO]: Updating config parameter $ConfLine to value $Value."
                 $ConfigArray[$Index[0]] = "$ConfLine=$Value"
             }
             Else {
-                Write-LMHost "[WARN]: Multiple matches found for config parameter $ConfLine, skipping processing." -ForegroundColor Yellow
+                Write-Warning "[WARN]: Multiple matches found for config parameter $ConfLine, skipping processing." 
             }
             
             Return ([string]::Join([Environment]::NewLine, $ConfigArray))
@@ -197,7 +197,7 @@ Function Set-LMCollectorConfig {
                 $Data = ($Data | ConvertTo-Json)
                 
                 If ($PSCmdlet.ShouldProcess($Message, "Set Collector Config ")) {  
-                    Write-LMHost "[WARN]: This command will restart the targeted collector on update of the configuration" -ForegroundColor Yellow
+                    Write-Warning "[WARN]: This command will restart the targeted collector on update of the configuration" 
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
                     
@@ -217,7 +217,7 @@ Function Set-LMCollectorConfig {
         
                             $SubmitResponse = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
                             If ($SubmitResponse.errorMessage -eq "The task is still running") {
-                                Write-LMHost "[INFO]: The task is still running..."
+                                Write-Information "[INFO]: The task is still running..."
                                 Start-Sleep -Seconds 2
                                 $Tries++
                             }

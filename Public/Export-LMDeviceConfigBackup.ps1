@@ -67,12 +67,12 @@ Function Export-LMDeviceConfigBackup {
 
         #Loop through Network group devices and pull list of applied ConfigSources
         $instance_list = @()
-        Write-LMHost "[INFO]: Found $(($network_devices | Measure-Object).Count) devices."
+        Write-Information "[INFO]: Found $(($network_devices | Measure-Object).Count) devices."
         Foreach ($device in $network_devices) {
-            Write-LMHost "[INFO]: Collecting configurations for: $($device.displayName)"
+            Write-Information "[INFO]: Collecting configurations for: $($device.displayName)"
             $device_config_sources = Get-LMDeviceDatasourceList -id $device.id | Where-Object { $_.dataSourceType -eq "CS" -and $_.instanceNumber -gt 0 -and $_.dataSourceName -match $ConfigSourceNameFilter }
 
-            Write-LMHost " [INFO]: Found $(($device_config_sources | Measure-Object).Count) configsource(s) with discovered instances using match filter ($ConfigSourceNameFilter)." -ForegroundColor Gray
+            Write-Information "[INFO]: Found $(($device_config_sources | Measure-Object).Count) configsource(s) with discovered instances using match filter ($ConfigSourceNameFilter)." 
             #Loop through DSes and pull all instances matching running or current and add them to processing list
             $filtered_config_instance_count = 0
             Foreach ($config_source in $device_config_sources) {
@@ -94,7 +94,7 @@ Function Export-LMDeviceConfigBackup {
                     }
                 }
             }
-            Write-LMHost " [INFO]: Found $filtered_config_instance_count configsource instance(s) using match filter ($InstanceNameFilter)." -ForegroundColor Gray
+            Write-Information "[INFO]: Found $filtered_config_instance_count configsource instance(s) using match filter ($InstanceNameFilter)." 
         }
 
         #Loop through filtered instance list and pull config diff
@@ -108,11 +108,11 @@ Function Export-LMDeviceConfigBackup {
         If ($device_configs) {
             #Group Configs by device so we can work through each set
             $config_grouping = $device_configs | Group-Object -Property deviceId
-            Write-LMHost "[INFO]: Collecting latest device configurations from $(($config_grouping | Measure-Object).Count) devices."
+            Write-Information "[INFO]: Collecting latest device configurations from $(($config_grouping | Measure-Object).Count) devices."
             #Loop through each set and built report
             Foreach ($device in $config_grouping) {
                 $config = $device.Group | Sort-Object -Property pollTimestamp -Descending | Select-Object -First 1
-                Write-LMHost " [INFO]: Found $(($device.Group | Measure-Object).Count) configsource instance version(s) for: $($config.deviceDisplayName), selecting latest config dated: $([datetimeoffset]::FromUnixTimeMilliseconds($config.pollTimestamp).DateTime)UTC" -ForegroundColor Gray
+                Write-Information "[INFO]: Found $(($device.Group | Measure-Object).Count) configsource instance version(s) for: $($config.deviceDisplayName), selecting latest config dated: $([datetimeoffset]::FromUnixTimeMilliseconds($config.pollTimestamp).DateTime)UTC" 
                 $output_list += [PSCustomObject]@{
                     deviceDisplayName        = $config.deviceDisplayName
                     deviceInstanceName       = $config.instanceName
@@ -133,7 +133,7 @@ Function Export-LMDeviceConfigBackup {
             Return (Add-ObjectTypeInfo -InputObject $output_list -TypeName "LogicMonitor.ConfigBackup" )
         }
         Else {
-            Write-LMHost "[WARN]: Did not find any configs to output based on selected resource(s), check your parameters and try again." -ForegroundColor Yellow
+            Write-Warning "[WARN]: Did not find any configs to output based on selected resource(s), check your parameters and try again." 
         }
         
     }

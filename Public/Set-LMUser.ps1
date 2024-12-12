@@ -89,7 +89,7 @@ Function Set-LMUser {
                     $Roles += @{id = $RoleId }
                 }
                 Else {
-                    Write-LMHost "[WARN]: Unable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
+                    Write-Warning "[WARN]: Unable to locate user role named $Role, it will be skipped" 
                 }
             }
     

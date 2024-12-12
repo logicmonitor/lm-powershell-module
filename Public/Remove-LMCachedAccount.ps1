@@ -41,20 +41,20 @@ Function Remove-LMCachedAccount {
                 Foreach ($Account in $CachedAccounts.Name) {
                     Try {
                         Remove-Secret -Name $Account -Vault Logic.Monitor -Confirm:$false -ErrorAction Stop
-                        Write-Host "[INFO]: Removed cached account secret for: $Account"
+                        Write-Information "[INFO]: Removed cached account secret for: $Account"
                     }
                     Catch {
                         Write-Error $_.Exception.Message
                     }
                 }
-                Write-Host "[INFO]: Processed all entries from credential cache"
+                Write-Information "[INFO]: Processed all entries from credential cache"
             }
         }
         Else {
             If ($PSCmdlet.ShouldProcess($CachedAccountName, "Remove Cached Account")) {                
                 Try {
                     Remove-Secret -Name $CachedAccountName -Vault Logic.Monitor -Confirm:$false -ErrorAction Stop
-                    Write-Host "[INFO]: Removed cached account secret for: $CachedAccountName"
+                    Write-Information "[INFO]: Removed cached account secret for: $CachedAccountName"
                 }
                 Catch {
                     Write-Error $_.Exception.Message

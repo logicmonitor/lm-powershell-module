@@ -11,12 +11,6 @@ The external ID of the AWS account.
 .PARAMETER AccountId
 The account ID of the AWS account.
 
-.PARAMETER AccessId
-The access ID of the AWS account.
-
-.PARAMETER AccessKey
-The access key of the AWS account.
-
 .PARAMETER AssumedRoleARN
 The assumed role ARN of the AWS account.
 
@@ -27,7 +21,7 @@ The list of services to be checked during the test. Default value is a comma-sep
 The device group ID to which the AWS account belongs. Default value is -1 for no group.
 
 .EXAMPLE
-Invoke-LMAWSAccountTest -ExternalId "123456" -AccountId "987654" -AccessId "AKI123" -AccessKey "abc123" -AssumedRoleARN "arn:aws:iam::123456789012:role/MyRole" -CheckedServices "EC2,S3,RDS" -GroupId 123
+Invoke-LMAWSAccountTest -ExternalId "123456" -AccountId "987654" -AssumedRoleARN "arn:aws:iam::123456789012:role/MyRole" -CheckedServices "EC2,S3,RDS" -GroupId 123
 
 This example invokes a test for an AWS account with the specified parameters.
 
@@ -78,7 +72,7 @@ Function Invoke-LMAWSAccountTest {
 
             #Issue request
             $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-            Write-LMHost "All services have been tested successfully" -ForegroundColor Green
+            Write-Information "All services have been tested successfully" 
             Return
         }
         Catch [Exception] {

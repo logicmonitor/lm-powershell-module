@@ -30,6 +30,8 @@ Function Set-LMNetscan {
 
         [String]$CredentialGroupName,
 
+        [PSCustomObject]$Schedule,
+
         [String]$ChangeNameToken,
 
         [String]$PortList
@@ -86,8 +88,6 @@ Function Set-LMNetscan {
                 }
             }
 
-            $Schedule = $null
-
             Try {
                 $Data = @{
                     id                        = $Id
@@ -104,7 +104,7 @@ Function Set-LMNetscan {
                     ddr                       = $DDR
                     credentials               = $Creds
                     ports                     = $Ports
-                    schedule                  = $Schedule
+                    schedule                  = If($Schedule){$Schedule}Else{$null}
                 }
 
                 

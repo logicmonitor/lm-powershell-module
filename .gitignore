@@ -4,3 +4,4 @@ Dev.Logic.Monitor.psd1
 .DS_Store
 
 /.vscode
+Public/Test-LMDeviceRateLimit.ps1

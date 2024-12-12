@@ -17,6 +17,9 @@ The name of the dashboard to be copied. This parameter is mandatory when using t
 .PARAMETER Description
 An optional description for the new dashboard.
 
+.PARAMETER DashboardTokens
+A hashtable of tokens to be replaced in the dashboard. The key is the token name and the value is the new value. If not provided, the tokens from the source dashboard will be used.
+
 .PARAMETER ParentGroupId
 The ID of the parent group for the new dashboard. This parameter is mandatory when using the 'GroupId-Id' or 'GroupId-Name' parameter sets.
 
@@ -30,6 +33,10 @@ Copies the dashboard with ID 12345 to a new dashboard named "New Dashboard" in t
 .EXAMPLE
 Copy-LMDashboard -Name "New Dashboard" -DashboardName "Old Dashboard" -ParentGroupName "Group A"
 Copies the dashboard named "Old Dashboard" to a new dashboard named "New Dashboard" in the group named "Group A".
+
+.EXAMPLE
+Copy-LMDashboard -Name "New Dashboard" -DashboardName "Old Dashboard" -ParentGroupName "Group A" -DashboardTokens @{ "defaultResourceName" = "Value1"; "defaultResourceGroup" = "Value2" }
+Copies the dashboard named "Old Dashboard" to a new dashboard named "New Dashboard" in the group named "Group A", replacing the tokens "defaultResourceName" with "Value1" and "defaultResourceGroup" with "Value2".
 
 .NOTES
 Ensure that you are logged in before running any commands by using the Connect-LMAccount cmdlet.
@@ -50,6 +57,8 @@ Function Copy-LMDashboard {
         [String]$DashboardName,
 
         [String]$Description,
+
+        [Hashtable]$DashboardTokens,
 
         [Parameter(Mandatory, ParameterSetName = 'GroupId-Id')]
         [Parameter(Mandatory, ParameterSetName = 'GroupId-Name')]
@@ -86,6 +95,24 @@ Function Copy-LMDashboard {
 
         #Get existing dashboard config
         $SourceDashboard = Get-LMDashboard -Id $DashboardId
+
+        #Replace tokens
+        If ($DashboardTokens) {
+            $WidgetTokens = New-Object -TypeName System.Collections.ArrayList
+            
+            #Build widget tokens
+            $DashboardTokens.GetEnumerator() | ForEach-Object {
+                $WidgetTokens.Add( [PSCustomObject]@{
+                        type = "owned"
+                        name  = $_.Key
+                        value = $_.Value
+                        inheritList = @()
+                    }
+                ) | Out-Null
+            }
+            #Replace widget tokens
+            $SourceDashboard.widgetTokens = $WidgetTokens
+        }
         
         #Build header and uri
         $ResourcePath = "/dashboard/dashboards/$DashboardId/clone"
@@ -101,7 +128,7 @@ Function Copy-LMDashboard {
                 sharable      = $SourceDashboard.sharable
             }
 
-            $Data = ($Data | ConvertTo-Json)
+            $Data = ($Data | ConvertTo-Json -Depth 10)
 
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
             $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath

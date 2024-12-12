@@ -2,10 +2,12 @@ name: Test Current Build on PowerShell Core
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - '**'
     paths-ignore:
       - '**.md'
       - '**.yml'
+      - '**.xml'
 
   workflow_dispatch:
 

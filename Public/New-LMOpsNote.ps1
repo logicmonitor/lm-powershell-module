@@ -60,7 +60,7 @@ Function New-LMOpsNote {
         }
 
         $Scope = @()
-        If ($ResourceIds -or $WebsiteIds -or $DeviceGroupIds) {
+        If ($DeviceIds -or $WebsiteIds -or $DeviceGroupIds) {
             Foreach ($id in $DeviceIds) {
                 $Scope += [PSCustomObject]@{
                     type     = "device"
@@ -101,7 +101,7 @@ Function New-LMOpsNote {
             }
 
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
+            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "scopes" -and $_ -ne "tags") { $Data.Remove($_) } }
 
             $Data = ($Data | ConvertTo-Json)
 

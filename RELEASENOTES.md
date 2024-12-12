@@ -1,17 +1,62 @@
-## 6.0
+# Previous module release notes
+## 6.3
 ### New Cmdlets:
- - **Get-LMDeviceInstanceData**: This cmdlet retrieves data for LogicMonitor device instances based on the specified parameters. The cmdlet can only retrieve data within the last 24 hours. You can use `Get-LMDeviceInstanceList` to quickly get a list of instances for a particular device.
- - **New-LMAlertEscalation**: This cmdlet invokes an escalation for a LogicMonitor alert. It takes a *-Ids* parameter which is an array of alert ids to escalate.
+ - **Get-LMLogSource**: This cmdlet will retrieve data for specified LogSources.
+ - **Remove-LMLogSource**: This cmdlet will remove a specified LogSource.
+ - **Test-LMAppliesToQuery**: This cmdlet will retrieve the results for a specified AppliesToQuery string, similar to the Test AppliesTo button in the portal UI.
+
+
+### Updated Cmdlets:
+ - **Export-LMLogicModule**: Added support for LogSources.
+ - **Get-LMAlert**: Fixed incorrect type filter for EventSources. Issue #11
+ - **New-LMOpsNote**: Fixed bug causing device and website ID scopes to not be properly set. Issue #10
+ - **Set-LMDeviceDatasourceInstanceAlertSetting**: Fixed bug causing instance id lookup to fail when specifying instance name.
+ 
+## 6.2
+### New Cmdlets:
  - **Get-LMAccessGroup**: This cmdlet will retrieve data for specified LogicMonitor access groups. You can retrieve all access groups or limit the results using *-Id*, *-Name* or *-Filter* parameters. 
+ - **New-LMAccessGroup**: This cmdlet creates a new LogicMonitor access group. 
+ - **Set-LMAccessGroup**: This cmdlet updates an existing LogicMonitor access group. 
+ - **Remove-LMAccessGroup**: This cmdlet removes a new LogicMonitor access group. 
+ - **Get-LMDeviceDatasourceInstanceAlertRecipients**: Retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
+ - **Remove-LMDeviceDatasourceInstanceGroup**: Removes a LogicMonitor device datasource instance group.
+ - **Set-LMDeviceDatasourceInstance**: Updates a LogicMonitor device datasource instance.
  
  **Note**: Access Groups are not available in all portals and needs to be enabled before any access group commands can be utilized.
 
 
 ### Updated Cmdlets:
- - **Set-LMDeviceDatasourceInstanceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
- - **Set-LMDeviceGroupDatasourceAlertSetting**: AlertForNoData, AlertClearTransitionInterval and AlertTransitionInterval parameters are now mandatory as a result of endpoint changes for LM APIv3. These values can now be set at instance and group level overrides and as a result must be specified when modifying alert thresholds.
+ - **Get-LMDeviceDatasourceList**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Get-LMDeviceDatasourceInstance**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Get-LMDeviceDatasourceInstanceAlertSetting**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets. Also fixed bug causing an issue when trying to retrieve instances with special characters in the name.
+ - **Get-LMDeviceDatasourceInstanceGroup**: Added aliases *-DeviceId* and *-DeviceName* to the *-Id* and *-Name* parameters to make them inline with other cmdlets.
+ - **Remove-LMDeviceDatasourceInstance**: Fixed bug that would prevent a datasource instance from being delete due to missing instance id.
  
-# Previous module release notes
+## 6.1
+### New Cmdlets:
+ - **Get-LMAWSAccountId**: This cmdlet is used to retrieve the AWS Account ID associated with the LogicMonitor account.
+ - **Get-LMConfigsourceUpdateHistory**: This cmdlet retrieves the update history for a LogicMonitor configuration source. It can be used to get information about the updates made to a configuration source, such as the update reasons and the modules that were updated..
+ - **Invoke-LMAWSAccountTest**: This cmdlet will test for required permissions needed to add an AWS account to LogicMonitor. 
+    ```
+    Invoke-LMAWSAccountTest -ExternalId "123456" -AccountId "987654" -AccessId "AKI123" -AccessKey "abc123" -AssumedRoleARN "arn:aws:iam::123456789012:role/MyRole" -CheckedServices "EC2,S3,RDS" -GroupId 123
+    ```
+- **Invoke-LMAzureAccountTest**: This cmdlet will test for required permissions needed to add an Azure account to LogicMonitor. 
+  ```
+  Invoke-LMAzureAccountTest -ClientId "xxxxxxxx" -SecretKey "xxxxxxxx" -SubscriptionIds "xxxxxxxx"
+  ```
+- **Invoke-LMAzureSubscriptionDiscovery**: This cmdlet invokes the Azure subscription discovery process to return subscriptions for a specified client Id. 
+  ```
+    Invoke-LMAzureSubscriptionDiscovery -ClientId "xxxxxxxx" -SecretKey "xxxxxxxx" -TenantId "xxxxxxxx"
+  ```
+- **Invoke-LMGCPAccountTest**: This cmdlet will test for required permissions needed to add an GCP project to LogicMonitor. 
+  ```
+   Invoke-LMGCPAccountTest -ServiceAccountKey "service-account-key" -ProjectId "project-id"
+  ```
+
+### Updated Cmdlets:
+ - **Get-LMDatasourceUpdateHistory**: Added custom object return type *LogicMonitor.ModuleUpdateHistory*.
+ - **Set-LMDevice**: Added additional parameter `-AutoBalancedCollectorGroupId` to specify an auto balanced collector group.
+
 ## 6.0
 ### New Cmdlets:
  - **Get-LMDeviceInstanceData**: This cmdlet retrieves data for LogicMonitor device instances based on the specified parameters. The cmdlet can only retrieve data within the last 24 hours. You can use `Get-LMDeviceInstanceList` to quickly get a list of instances for a particular device.

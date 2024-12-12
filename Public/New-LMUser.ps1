@@ -119,7 +119,7 @@ Function New-LMUser {
                 $Roles += @{id = $RoleId }
             }
             Else {
-                Write-LMHost "[WARN]: Unable to locate user role named $Role, it will be skipped" -ForegroundColor Yellow
+                Write-Warning "[WARN]: Unable to locate user role named $Role, it will be skipped" 
             }
         }
 
@@ -218,8 +218,8 @@ Function New-LMUser {
                     $global:LMUserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
                 }
                 
-                Write-LMHost "[INFO]: Auto generated password assigned to $Username`: $Password" -ForegroundColor Yellow
-                Write-LMHost "[INFO]: Auto generated passwords are also stored in a reference variable called `$LMUserData" -ForegroundColor Yellow
+                Write-Information "[INFO]: Auto generated password assigned to $Username`: $Password" 
+                Write-Information "[INFO]: Auto generated passwords are also stored in a reference variable called `$LMUserData" 
             }
 
             Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )

@@ -1,7 +1,7 @@
 Describe 'OpsNotes Testing New/Get/Set/Remove' {
     BeforeAll {
         Import-Module $Module -Force
-        Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging
+        Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
     }
     
     Describe 'New-LMOpsNote' {
@@ -29,7 +29,7 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
             }
             ($OpsNote | Measure-Object).Count | Should -BeExactly 1
         }
-        It 'When given a name should return specified opsnote matching that tag value' {
+        It 'When given a tag should return specified opsnote matching that tag value' {
             $Retry = 0
             While (!$OpsNote -or $Retry -eq 5) {
                 $OpsNote = Get-LMOpsNote -Tag $Script:NewOpsNote.Tags.name -ErrorAction SilentlyContinue
@@ -37,7 +37,7 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
             }
             ($OpsNote | Measure-Object).Count | Should -BeExactly 1
         }
-        It 'When given a wildcard name should return all opsnotes matching that wildcard value' {
+        It 'When given a wildcard tag should return all opsnotes matching that wildcard value' {
             $Retry = 0
             While (!$OpsNote -or $Retry -eq 5) {
                 $OpsNote = Get-LMOpsNote -Tag "$(($Script:NewOpsNote.Tags.name.Split(".")[0]))*" -ErrorAction SilentlyContinue
