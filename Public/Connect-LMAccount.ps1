@@ -240,7 +240,7 @@ Function Connect-LMAccount {
         Valid       = $true
         Type        = $Type
     }
-    
+
     #Check for newer version of Logic.Monitor module
     Try {
         If ($AutoUpdateModuleVersion -and !$SkipVersionCheck) {

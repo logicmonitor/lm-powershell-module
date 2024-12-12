@@ -19,11 +19,10 @@ The description of the report.
 The ID of the parent group.
 
 .PARAMETER ReportObject
-The report object to be copied.
+The report object to be copied. This can be retrieved using Get-LMReport. Any changes to the report object will be reflected in the new report.
 
 .EXAMPLE
 Copy-LMReport -Name "Report1" -Description "This is a sample report" -ParentGroupId "12345" -ReportObject $reportObject
-
 This example copies the report specified by the ReportObject parameter and sets the name, description, and parent group ID.
 
 .NOTES
