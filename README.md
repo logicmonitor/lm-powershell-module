@@ -429,17 +429,16 @@ We appreciate your continued support and enthusiasm for the Logic.Monitor PowerS
 
 ## 6.5
 ### Module Updates/Changes
- - **Set-LMDeviceDatasourceInstance** Parameter -PropertiesMethod has been added to allow setting of property refresh behavior which brings it inline with similar cmdlets that deal with property modification. The default behavior is Replace like it is set for other cmdlets of similar function.
- - **Copy-LMDashboard**: Added additional parameter -DashboardTokens to allow for overriding the current dashboard tokens set by the cloned dashboard object. This parameter takes a hashtable of tokens and their values.
- - **Copy-Report**: Added the ability to specify a report object to use as a reference object to clone. This allows for customization of the report object before cloning if you need to modify any of the report parameters (such as properties, resource scope etc) before cloning.
-- **New-LMNetScan**: Add new parameter -Schedule that takes a PSCustomObject defining the desired schedule. If no schedule is provided the previous behavior of defaulting to manual is used.
-- **Set-LMNetScan**: Add new parameter -Schedule that takes a PSCustomObject defining the desired schedule. If no schedule is provided the previous behavior of defaulting to manual is used.
+ - **Set-LMDeviceDatasourceInstance**: Added `-PropertiesMethod` parameter to control property update behavior. Defaults to "Replace" to match other property-related cmdlets.
+ - **Copy-LMDashboard**: Added `-DashboardTokens` parameter (hashtable) to override tokens when cloning dashboards.
+ - **Copy-Report**: Now accepts a report object as a template for cloning. This enables customization of properties, resource scope, and other parameters before creating the copy.
+ - **New-LMNetScan** and **Set-LMNetScan**: Added `-Schedule` parameter that accepts a PSCustomObject to define scan scheduling. Maintains default manual scheduling when parameter is omitted.
    
-### New Cmdlets:
- - **Remove-LMDeviceGroupProperty**: This cmdlet will allow you to remove device properties assigned at a resource group level.
+### New Cmdlets
+ - **Remove-LMDeviceGroupProperty**: Enables removal of device properties at the resource group level.
 
- ### Bug Fixes:
- - **Set-LMCollectorConfig**: Fixed issue where multiple matches for a config line item could be updated if they contained a similar base path.
+### Bug Fixes
+ - **Set-LMCollectorConfig**: Resolved an issue where similar configuration paths could cause unintended multiple updates.
 
 
 [Previous Release Notes](RELEASENOTES.md)
