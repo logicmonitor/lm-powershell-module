@@ -427,25 +427,19 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.4.1
+## 6.5
 ### Module Updates/Changes
- - **Write-LMHost** has been removed entirely starting in this version and replaced with native Write-Information,Warning and Error cmdlets. If you would like to suppress the output of these cmdlets you can use the *\$InformationPreference*, *\$DebugPreference* and *\$WarningPreference* variables. Additionally you can use the *-DisableConsoleLogging* switch on Connect-LMAccount to suppress Write-Information output.
- - New/Updated Pester tests have been added to validate the module builds and ensure functionality for the following cmdlets:
-   - AccessGroup
-   - AppliesToFunction
-   - AppliesToSearch
-   - Device
-   - DeviceGroup
-   - NetScanGroup
-   - OpsNotes
-   - ReportGroup
-   - SDT
-   - Users/Roles
-   - Website
-   - WebsiteGroup
+ - **Set-LMDeviceDatasourceInstance** Parameter -PropertiesMethod has been added to allow setting of property refresh behavior which brings it inline with similar cmdlets that deal with property modification. The default behavior is Replace like it is set for other cmdlets of similar function.
+ - **Copy-LMDashboard**: Added additional parameter -DashboardTokens to allow for overriding the current dashboard tokens set by the cloned dashboard object. This parameter takes a hashtable of tokens and their values.
+ - **Copy-Report**: Added the ability to specify a report object to use as a reference object to clone. This allows for customization of the report object before cloning if you need to modify any of the report parameters (such as properties, resource scope etc) before cloning.
+- **New-LMNetScan**: Add new parameter -Schedule that takes a PSCustomObject defining the desired schedule. If no schedule is provided the previous behavior of defaulting to manual is used.
+- **Set-LMNetScan**: Add new parameter -Schedule that takes a PSCustomObject defining the desired schedule. If no schedule is provided the previous behavior of defaulting to manual is used.
    
 ### New Cmdlets:
- - **New-LMAccessGroupMapping**: This cmdlet will create a new access group mapping/unmapping based on specified module and accessgroups.
+ - **Remove-LMDeviceGroupProperty**: This cmdlet will allow you to remove device properties assigned at a resource group level.
+
+ ### Bug Fixes:
+ - **Set-LMCollectorConfig**: Fixed issue where multiple matches for a config line item could be updated if they contained a similar base path.
 
 
 [Previous Release Notes](RELEASENOTES.md)

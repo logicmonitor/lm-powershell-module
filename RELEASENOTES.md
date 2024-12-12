@@ -1,4 +1,24 @@
 # Previous module release notes
+## 6.4.1
+### Module Updates/Changes
+ - **Write-LMHost** has been removed entirely starting in this version and replaced with native Write-Information,Warning and Error cmdlets. If you would like to suppress the output of these cmdlets you can use the *\$InformationPreference*, *\$DebugPreference* and *\$WarningPreference* variables. Additionally you can use the *-DisableConsoleLogging* switch on Connect-LMAccount to suppress Write-Information output.
+ - New/Updated Pester tests have been added to validate the module builds and ensure functionality for the following cmdlets:
+   - AccessGroup
+   - AppliesToFunction
+   - AppliesToSearch
+   - Device
+   - DeviceGroup
+   - NetScanGroup
+   - OpsNotes
+   - ReportGroup
+   - SDT
+   - Users/Roles
+   - Website
+   - WebsiteGroup
+   
+### New Cmdlets:
+ - **New-LMAccessGroupMapping**: This cmdlet will create a new access group mapping/unmapping based on specified module and accessgroups.
+
 ## 6.3
 ### New Cmdlets:
  - **Get-LMLogSource**: This cmdlet will retrieve data for specified LogSources.
