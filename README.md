@@ -427,6 +427,11 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
+## 6.5.1
+### Bug Fixes
+ - Fixed a bug that caused Informational console logs from being displayed. Cmdlets that previously on output status messages to the console should once again produce output as informational stream data.
+
+
 ## 6.5
 ### Module Updates/Changes
  - **Set-LMDeviceDatasourceInstance**: Added `-PropertiesMethod` parameter to control property update behavior. Defaults to "Replace" to match other property-related cmdlets.
