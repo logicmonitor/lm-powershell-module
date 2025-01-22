@@ -1,4 +1,22 @@
 # Previous module release notes
+## 6.5.1
+### Bug Fixes
+ - Fixed a bug that caused Informational console logs from being displayed. Cmdlets that previously on output status messages to the console should once again produce output as informational stream data.
+
+
+## 6.5
+### Module Updates/Changes
+ - **Set-LMDeviceDatasourceInstance**: Added `-PropertiesMethod` parameter to control property update behavior. Defaults to "Replace" to match other property-related cmdlets.
+ - **Copy-LMDashboard**: Added `-DashboardTokens` parameter (hashtable) to override tokens when cloning dashboards.
+ - **Copy-Report**: Now accepts a report object as a template for cloning. This enables customization of properties, resource scope, and other parameters before creating the copy.
+ - **New-LMNetScan** and **Set-LMNetScan**: Added `-Schedule` parameter that accepts a PSCustomObject to define scan scheduling. Maintains default manual scheduling when parameter is omitted.
+   
+### New Cmdlets
+ - **Remove-LMDeviceGroupProperty**: Enables removal of device properties at the resource group level.
+
+### Bug Fixes
+ - **Set-LMCollectorConfig**: Resolved an issue where similar configuration paths could cause unintended multiple updates. 
+
 ## 6.4.1
 ### Module Updates/Changes
  - **Write-LMHost** has been removed entirely starting in this version and replaced with native Write-Information,Warning and Error cmdlets. If you would like to suppress the output of these cmdlets you can use the *\$InformationPreference*, *\$DebugPreference* and *\$WarningPreference* variables. Additionally you can use the *-DisableConsoleLogging* switch on Connect-LMAccount to suppress Write-Information output.

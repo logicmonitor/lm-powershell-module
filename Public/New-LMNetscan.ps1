@@ -159,7 +159,7 @@ Function New-LMNetScan {
                 #Remove empty keys so we dont overwrite them
                 @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_])) { $Data.Remove($_) } }
                 
-                $Data = ($Data | ConvertTo-Json)
+                $Data = ($Data | ConvertTo-Json -Depth 5)
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
