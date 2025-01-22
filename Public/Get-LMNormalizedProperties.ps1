@@ -1,3 +1,14 @@
+<#
+.SYNOPSIS
+    Gets normalized property mappings that allow standardizing property names across your LogicMonitor environment.
+
+.DESCRIPTION
+    The Get-LMNormalizedProperties cmdlet retrieves normalized properties from LogicMonitor. Currently only supports the v4 API.
+
+.EXAMPLE
+    PS C:\> Get-LMNormalizedProperties
+    Retrieves all normalized properties.
+#>
 Function Get-LMNormalizedProperties {
 
     [CmdletBinding()]
