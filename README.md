@@ -288,6 +288,8 @@ Get-LMWebsiteGroupSDTHistory\
 Get-LMWebsiteProperty\
 Get-LMWebsiteSDT\
 Get-LMWebsiteSDTHistory\
+Get-LMNormalizedProperties\
+Get-LMLogMessage\
 \
 Import-LMDashboard\
 Import-LMExchangeModule\
@@ -369,6 +371,7 @@ Remove-LMUnmonitoredDevice\
 Remove-LMUser\
 Remove-LMWebsite\
 Remove-LMWebsiteGroup\
+Remove-LMNormalizedProperties\
 \
 Send-LMLogMessage\
 Send-LMPushMetric\
@@ -404,6 +407,7 @@ Set-LMUser\
 Set-LMUserdata\
 Set-LMWebsite\
 Set-LMWebsiteGroup\
+Set-LMNormalizedProperties\
 \
 Test-LMAppliesToQuery\
 \
@@ -427,16 +431,14 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.5.2
+## 6.5.3
 ### Bug Fixes
- - Fixed a bug the prevented certain size json objects from being sent to the LM API due to the default depth of 2 being too small.
+ - Fixed a bug that prevented the Get-LMDeviceData cmdlet from working when no end date was provided. If no StartDate is provided it will default to 7 days ago. If no EndDate is provided it will default to the current date.
 
 ### New Cmdlets
- - **New-LMNormalizedProperties**: Added cmdlet to create normalized properties.
- - **Remove-LMNormalizedProperties**: Added cmdlet to remove normalized properties.
- - **Get-LMNormalizedProperties**: Added cmdlet to get normalized properties.
+ - **Get-LMLogMessage**: Added cmdlet to get log messages.
 
-**Note**: The normalized properties cmdlets are currently only supported for the v4 API and are not supported in the v3 API currently, they are being added to the module as a preview feature for select users until the v3 API is updated to support them in which case the cmdlets will be updated to support the v3 API and available to all users.
+**Note**: The Log Message cmdlets are currently only supported for the v4 API and are not supported in the v3 API currently, they are being added to the module as a preview feature for select users until the v3 API is updated to support them in which case the cmdlets will be updated to support the v3 API and available to all users.
 
 [Previous Release Notes](RELEASENOTES.md)
 

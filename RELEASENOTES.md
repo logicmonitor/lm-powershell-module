@@ -1,4 +1,15 @@
 # Previous module release notes
+## 6.5.2
+### Bug Fixes
+ - Fixed a bug the prevented certain size json objects from being sent to the LM API due to the default depth of 2 being too small.
+
+### New Cmdlets
+ - **New-LMNormalizedProperties**: Added cmdlet to create normalized properties.
+ - **Remove-LMNormalizedProperties**: Added cmdlet to remove normalized properties.
+ - **Get-LMNormalizedProperties**: Added cmdlet to get normalized properties.
+
+**Note**: The normalized properties cmdlets are currently only supported for the v4 API and are not supported in the v3 API currently, they are being added to the module as a preview feature for select users until the v3 API is updated to support them in which case the cmdlets will be updated to support the v3 API and available to all users.
+
 ## 6.5.1
 ### Bug Fixes
  - Fixed a bug that caused Informational console logs from being displayed. Cmdlets that previously on output status messages to the console should once again produce output as informational stream data.
