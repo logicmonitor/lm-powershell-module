@@ -52,17 +52,18 @@ Function Get-LMDeviceData {
     If ($Script:LMAuth.Valid) {
 
         #Convert to epoch, if not set use defaults
-        If ($StartDate) {
+        If ($StartDate) { #If start date is provided, convert to epoch
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
+        } Else { #If no start date is provided, use 7 days ago
+            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddDays(-7)).ToUnixTimeSeconds()
         }
 
-        If (!$EndDate -and $StartDate) {
+        If ($EndDate) { #If end date is provided, convert to epoch
+            [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
+        } Else { #If no end date is provided, use current date
             [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
         }
 
-        If ($EndDate -and $StartDate) {
-            [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
-        }
 
         #Lookup Device Id
         If ($DeviceName) {

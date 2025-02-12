@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
    <ViewDefinitions>
+      <!-- New View LogicMonitor.LMLogs-->
+      <View>
+         <Name>LogicMonitorLMLogs</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.LMLogs</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>time</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>message</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>device</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>_anomaly.type</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>metadata</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>time</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>message</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>device</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>_anomaly.type</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>metadata</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.Alert-->
       <View>
          <Name>LogicMonitorAlert</Name>
