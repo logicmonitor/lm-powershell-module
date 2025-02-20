@@ -431,7 +431,7 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.5.4
+## 6.5.5
 ### Bug Fixes
  - Fixed a bug that prevented the Get-LMAlerts cmdlet from respecting custom -Sort parameters.
  - Fixed a bug that prevented setting a prefered log collecor when using Set-LMDevice. Use *-EnableLogCollection* $true to enable log collection on the device while specifying a preferred log collector using *-LogCollectorId*.

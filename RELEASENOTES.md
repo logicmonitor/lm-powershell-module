@@ -1,5 +1,9 @@
 # Previous module release notes
-## 6.5.3
+## 6.5.5
+### Bug Fixes
+ - Bug fix with Get-LMLogMessage. Fixed issue with Async queries defaulting to 15minute time range.
+
+## 6.5.4
 ### New Cmdlets
  - **Get-LMLogMessage**: Added cmdlet to get log messages.
 
