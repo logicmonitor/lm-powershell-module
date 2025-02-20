@@ -431,14 +431,11 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.5.3
+## 6.5.4
 ### Bug Fixes
- - Fixed a bug that prevented the Get-LMDeviceData cmdlet from working when no end date was provided. If no StartDate is provided it will default to 7 days ago. If no EndDate is provided it will default to the current date.
+ - Fixed a bug that prevented the Get-LMAlerts cmdlet from respecting custom -Sort parameters.
+ - Fixed a bug that prevented setting a prefered log collecor when using Set-LMDevice. Use *-EnableLogCollection* $true to enable log collection on the device while specifying a preferred log collector using *-LogCollectorId*.
 
-### New Cmdlets
- - **Get-LMLogMessage**: Added cmdlet to get log messages.
-
-**Note**: The Log Message cmdlets are currently only supported for the v4 API and are not supported in the v3 API currently, they are being added to the module as a preview feature for select users until the v3 API is updated to support them in which case the cmdlets will be updated to support the v3 API and available to all users.
 
 [Previous Release Notes](RELEASENOTES.md)
 
