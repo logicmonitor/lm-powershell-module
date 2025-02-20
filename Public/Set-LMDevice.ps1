@@ -37,6 +37,8 @@ Function Set-LMDevice {
 
         [Nullable[Int]]$NetflowCollectorId,
 
+        [Nullable[boolean]]$EnableLogCollector,
+
         [Nullable[Int]]$LogCollectorGroupId,
 
         [Nullable[Int]]$LogCollectorId
@@ -90,6 +92,7 @@ Function Set-LMDevice {
                     link                         = $Link
                     netflowCollectorGroupId      = $NetflowCollectorGroupId
                     netflowCollectorId           = $NetflowCollectorId
+                    isPreferredLogCollectorConfigured = $EnableLogCollector
                     logCollectorGroupId          = $LogCollectorGroupId
                     logCollectorId               = $LogCollectorId
                     hostGroupIds                 = $HostGroupIds -join ","

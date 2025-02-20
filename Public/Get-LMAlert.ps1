@@ -76,7 +76,7 @@ Function Get-LMAlert {
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000,
 
-        [String]$Sort = "resourceId"
+        [String]$Sort = "+resourceId"
     )
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
@@ -130,7 +130,7 @@ Function Get-LMAlert {
                         }
                     }
                 }
-                "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=+resourceId" }
+                "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
                 "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
                 "Filter" {
                     #List of allowed filter props
