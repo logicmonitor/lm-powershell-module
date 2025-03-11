@@ -45,6 +45,9 @@ Function Get-LMNormalizedProperties {
                         pageOffsetCount = 0
                     }
                     sort = "alias, hostPropertyPriority"
+                    columns = @(
+                        @{ properties = "id, name, propertyType"}
+                    )
                 }
             } | ConvertTo-Json -Depth 10
 
@@ -56,6 +59,24 @@ Function Get-LMNormalizedProperties {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+
+                # Transform the response to return just the normalized property values
+                if ($Response.data.byId.normalizedProperties) {
+                    $normalizedProperties = $Response.data.byId.normalizedProperties
+                    $transformedProperties = @()
+                    
+                    # Get all property names and sort them numerically
+                    $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
+                    
+                    # Add each property's value to the array
+                    foreach ($propName in $propertyNames) {
+                        $transformedProperties += $normalizedProperties.$propName
+                    }
+                    
+                    Return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
+                }
+                
+                return $Response
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem
@@ -63,7 +84,6 @@ Function Get-LMNormalizedProperties {
                     Return
                 }
             }
-            Return $Response
         }
         Else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

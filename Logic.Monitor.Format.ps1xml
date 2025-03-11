@@ -54,6 +54,65 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.NormalizedProperties-->
+      <View>
+         <Name>LogicMonitorNormalizedProperties</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.NormalizedProperties</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>model</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>alias</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>hostProperty</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>hostPropertyPriority</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>isEditable</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>isDeletable</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>model</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>alias</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>hostProperty</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>hostPropertyPriority</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>isEditable</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>isDeletable</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.Alert-->
       <View>
          <Name>LogicMonitorAlert</Name>

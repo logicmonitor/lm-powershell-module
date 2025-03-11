@@ -431,10 +431,20 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.5.5
-### Bug Fixes
- - Fixed a bug that prevented the Get-LMAlerts cmdlet from respecting custom -Sort parameters.
- - Fixed a bug that prevented setting a prefered log collecor when using Set-LMDevice. Use *-EnableLogCollection* $true to enable log collection on the device while specifying a preferred log collector using *-LogCollectorId*.
+## 6.5.6
+### New Cmdlets:
+ - **Set-LMNormalizedProperties**: Allows updating of existing normalized properties.
+
+     ```
+    #Add new properties to an existing alias
+    Set-LMNormalizedProperties -Add -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
+
+    #Remove a property from existing alias
+    Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
+    ```
+
+### Updated Cmdlets:
+ - **Get-LMNormalizedProperties**: Updated the output object type to make the returned object easier to work with. Returned object now contains the following fields: id,model,alias,hostProperty,hostPropertyPriority,isEditable,isDeletable
 
 
 [Previous Release Notes](RELEASENOTES.md)

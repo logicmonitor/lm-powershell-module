@@ -1,6 +1,8 @@
 # Previous module release notes
 ## 6.5.5
 ### Bug Fixes
+ - Fixed a bug that prevented the Get-LMAlerts cmdlet from respecting custom -Sort parameters.
+ - Fixed a bug that prevented setting a prefered log collecor when using Set-LMDevice. Use *-EnableLogCollection* $true to enable log collection on the device while specifying a preferred log collector using *-LogCollectorId*.
  - Bug fix with Get-LMLogMessage. Fixed issue with Async queries defaulting to 15minute time range.
 
 ## 6.5.4
