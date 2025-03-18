@@ -61,7 +61,7 @@ Function New-LMNormalizedProperties {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
                 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
@@ -72,7 +72,22 @@ Function New-LMNormalizedProperties {
                     Return
                 }
             }
-            Return $Response
+
+            # Transform the response to return just the normalized property values
+            if ($Response.data.byId.normalizedProperties) {
+                $normalizedProperties = $Response.data.byId.normalizedProperties
+                $transformedProperties = @()
+                
+                # Get all property names and sort them numerically
+                $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
+                
+                # Add each property's value to the array
+                foreach ($propName in $propertyNames) {
+                    $transformedProperties += $normalizedProperties.$propName
+                }
+                
+                Return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
+            }
         }
         Else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

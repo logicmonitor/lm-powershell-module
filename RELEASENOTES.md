@@ -1,4 +1,19 @@
 # Previous module release notes
+## 6.5.6
+### New Cmdlets:
+ - **Set-LMNormalizedProperties**: Allows updating of existing normalized properties.
+
+     ```
+    #Add new properties to an existing alias
+    Set-LMNormalizedProperties -Add -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
+
+    #Remove a property from existing alias
+    Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
+    ```
+
+### Updated Cmdlets:
+ - **Get-LMNormalizedProperties**: Updated the output object type to make the returned object easier to work with. Returned object now contains the following fields: id,model,alias,hostProperty,hostPropertyPriority,isEditable,isDeletable
+
 ## 6.5.5
 ### Bug Fixes
  - Fixed a bug that prevented the Get-LMAlerts cmdlet from respecting custom -Sort parameters.

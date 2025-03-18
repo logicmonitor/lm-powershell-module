@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
    <ViewDefinitions>
+      <!-- New View LogicMonitor.SysOIDMap-->
+      <View>
+         <Name>LogicMonitorSysOIDMap</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.SysOIDMap</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>code</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>code</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.LMLogs-->
       <View>
          <Name>LogicMonitorLMLogs</Name>

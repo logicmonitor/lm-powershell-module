@@ -431,20 +431,12 @@ This change aims to enhance visibility within the community and to foster a more
 
 We appreciate your continued support and enthusiasm for the Logic.Monitor PowerShell module. Your contributions and feedback are vital to the success of this project, and we look forward to seeing how the module evolves with your participation.
 
-## 6.5.6
-### New Cmdlets:
- - **Set-LMNormalizedProperties**: Allows updating of existing normalized properties.
-
-     ```
-    #Add new properties to an existing alias
-    Set-LMNormalizedProperties -Add -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
-
-    #Remove a property from existing alias
-    Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
-    ```
-
+## 6.5.7
 ### Updated Cmdlets:
+ - **Get-LMSysOIDMap**: Added cmdlet to query and retrieve sysOIDMap details.
  - **Get-LMNormalizedProperties**: Updated the output object type to make the returned object easier to work with. Returned object now contains the following fields: id,model,alias,hostProperty,hostPropertyPriority,isEditable,isDeletable
+ - **New-LMNormalizedProperties**: Updated the output object type to make the returned object easier to work with. Returned object now contains the following fields: id,model,alias,hostProperty,hostPropertyPriority,isEditable,isDeletable
+ - **Set-LMNormalizedProperties**: Fixed bug that caused new properties to fail to create.
 
 
 [Previous Release Notes](RELEASENOTES.md)

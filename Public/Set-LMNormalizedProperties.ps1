@@ -115,11 +115,14 @@ Function Set-LMNormalizedProperties {
                         }
                     }
                     else {
-                        # For other aliases, only include id and model
-                        $Body.data.items += [PSCustomObject]@{
-                            id = $prop.id
-                            model = "normalizedProperties"
+                        if ($prop.isEditable) {
+                            # For other aliases, only include id and model
+                            $Body.data.items += [PSCustomObject]@{
+                                id = $prop.id
+                                model = "normalizedProperties"
+                            }
                         }
+
                     }
                 }
 
