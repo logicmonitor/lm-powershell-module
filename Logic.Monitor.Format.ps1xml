@@ -13,13 +13,10 @@
                   <Label>id</Label>
                </TableColumnHeader>
                <TableColumnHeader>
-                  <Label>name</Label>
+                  <Label>oid</Label>
                </TableColumnHeader>
                <TableColumnHeader>
-                  <Label>description</Label>
-               </TableColumnHeader>
-               <TableColumnHeader>
-                  <Label>code</Label>
+                  <Label>categories</Label>
                </TableColumnHeader>
             </TableHeaders>
             <TableRowEntries>
@@ -29,13 +26,10 @@
                         <PropertyName>id</PropertyName>
                      </TableColumnItem>
                      <TableColumnItem>
-                        <PropertyName>name</PropertyName>
+                        <PropertyName>oid</PropertyName>
                      </TableColumnItem>
                      <TableColumnItem>
-                        <PropertyName>description</PropertyName>
-                     </TableColumnItem>
-                     <TableColumnItem>
-                        <PropertyName>code</PropertyName>
+                        <PropertyName>categories</PropertyName>
                      </TableColumnItem>
                   </TableColumnItems>
                </TableRowEntry>

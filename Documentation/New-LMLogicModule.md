@@ -5,43 +5,70 @@ online version:
 schema: 2.0.0
 ---
 
-# Copy-LMReport
+# New-LMLogicModule
 
 ## SYNOPSIS
-Copies a LogicMonitor report.
+{{ Fill in the Synopsis }}
 
 ## SYNTAX
 
 ```
-Copy-LMReport [-Name] <String> [[-Description] <String>] [[-ParentGroupId] <String>] [-ReportObject] <Object>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+New-LMLogicModule [-LogicModule] <PSObject> [-Type] <String> [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Copy-LMReport function is used to copy a LogicMonitor report.
-It takes the following parameters:
-- Name: The name of the report.
-- Description: The description of the report.
-- ParentGroupId: The ID of the parent group.
-- ReportObject: The report object to be copied.
+{{ Fill in the Description }}
 
 ## EXAMPLES
 
-### EXAMPLE 1
+### Example 1
+```powershell
+PS C:\> {{ Add example code here }}
 ```
-Copy-LMReport -Name "Report1" -Description "This is a sample report" -ParentGroupId "12345" -ReportObject $reportObject
-This example copies the report specified by the ReportObject parameter and sets the name, description, and parent group ID.
-```
+
+{{ Add example description here }}
 
 ## PARAMETERS
 
-### -Name
-The name of the report.
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LogicModule
+{{ Fill LogicModule Description }}
+
+```yaml
+Type: PSObject
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Type
+{{ Fill Type Description }}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
+Accepted values: datasources, propertyrules, topologysources, eventsources, logsources, configsources
 
 Required: True
 Position: 1
@@ -50,48 +77,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Description
-The description of the report.
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
-Type: String
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases:
+Aliases: wi
 
 Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ParentGroupId
-The ID of the parent group.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ReportObject
-The report object to be copied.
-This can be retrieved using Get-LMReport.
-Any changes to the report object will be reflected in the new report.
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 4
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -117,10 +113,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None
 ## OUTPUTS
 
+### System.Object
 ## NOTES
-Please ensure you are logged in before running any commands.
-Use Connect-LMAccount to login and try again.
 
 ## RELATED LINKS

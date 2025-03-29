@@ -15,9 +15,9 @@ Creates a new network scan in LogicMonitor.
 ```
 New-LMNetScan [-CollectorId] <String> [-Name] <String> [[-Description] <String>]
  [[-ExcludeDuplicateType] <String>] [[-IgnoreSystemIpDuplicates] <Boolean>] [[-Method] <String>]
- [[-NextStart] <String>] [[-NextStartEpoch] <String>] [[-NetScanGroupId] <String>] [-SubnetRange] <String>
- [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>] [[-ChangeNameToken] <String>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-NextStart] <String>] [[-NextStartEpoch] <String>] [[-NetScanGroupId] <String>] [[-Schedule] <PSObject>]
+ [-SubnetRange] <String> [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>]
+ [[-ChangeNameToken] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -178,6 +178,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Schedule
+{{ Fill Schedule Description }}
+
+```yaml
+Type: PSObject
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 10
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -SubnetRange
 The subnet range to scan.
 This parameter is mandatory.
@@ -188,7 +203,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 10
+Position: 11
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -203,7 +218,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 11
+Position: 12
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -218,7 +233,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 12
+Position: 13
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -234,7 +249,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 13
+Position: 14
 Default value: ##REVERSEDNS##
 Accept pipeline input: False
 Accept wildcard characters: False

@@ -16,8 +16,8 @@ schema: 2.0.0
 Set-LMNetscan [[-CollectorId] <String>] [[-Name] <String>] [-Id] <String> [[-Description] <String>]
  [[-ExcludeDuplicateType] <String>] [[-IgnoreSystemIpDuplpicates] <Boolean>] [[-Method] <String>]
  [[-NextStart] <String>] [[-NextStartEpoch] <String>] [[-NetScanGroupId] <String>] [[-SubnetRange] <String>]
- [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>] [[-ChangeNameToken] <String>]
- [[-PortList] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>] [[-Schedule] <PSObject>]
+ [[-ChangeNameToken] <String>] [[-PortList] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -43,7 +43,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 13
+Position: 14
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -238,7 +238,22 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 14
+Position: 15
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Schedule
+{{ Fill Schedule Description }}
+
+```yaml
+Type: PSObject
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 13
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

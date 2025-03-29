@@ -12,14 +12,14 @@ Specifies the path of the file containing the LogicModule to import. This parame
 Specifies the file data of the LogicModule to import. This parameter is mandatory when using the 'File' parameter set.
 
 .PARAMETER Type
-Specifies the type of the LogicModule to import. The valid values are 'datasource', 'propertyrules', 'eventsource', 'topologysource', or 'configsource'. The default value is 'datasource'.
+Specifies the type of the LogicModule to import. The valid values are 'datasource', 'propertyrules', 'eventsource', 'topologysource', 'configsource', 'logsource', 'functions', 'oids'. The default value is 'datasource'.
 
 .PARAMETER ForceOverwrite
 Indicates whether to overwrite an existing LogicModule with the same name. If set to $true, the existing LogicModule will be overwritten. If set to $false, an error will be thrown if a LogicModule with the same name already exists. The default value is $false.
 
 .EXAMPLE
 Import-LMLogicModule -FilePath "C:\LogicModules\datasource.xml" -Type "datasource" -ForceOverwrite $true
-Imports a datasource LogicModule from the file 'datasource.xml' located in the 'C:\LogicModules' directory. If a LogicModule with the same name already exists, it will be overwritten.
+Imports a datasource LogicModule from the file 'datasource.xml' located in the 'C:\LogicModules' directory. If a LogicModule with the same name already exists, it will be overwritten. This only works for datasource, propertyrules, eventsource, topologysource, configsource, logsource.
 
 .EXAMPLE
 Import-LMLogicModule -File $fileData -Type "propertyrules"
@@ -37,10 +37,10 @@ Function Import-LMLogicModule {
         [Parameter(Mandatory, ParameterSetName = 'File')]
         [Object]$File,
         
-        [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource","logsource")]
+        [ValidateSet("datasource", "propertyrules", "eventsource", "topologysource", "configsource","logsource","functions","oids")]
         [String]$Type = "datasource",
 
-        [Boolean]$ForceOverwrite = $false
+        [Boolean]$ForceOverwrite = $false #Only used for datasource, propertyrules, eventsource, topologysource, configsource, logsource
     )
 
     #Check if we are logged in and have valid api creds
@@ -65,23 +65,55 @@ Function Import-LMLogicModule {
                 $File = Get-Content $FilePath -Raw
             }
             
-            #Build query params
-            $QueryParams = "?type=$Type&forceOverwrite=$ForceOverwrite"
-
             #Build header and uri
-            $ResourcePath = "/setting/logicmodules/importfile"
+            Switch ($Type) {
+                "oids" {
+                    $ResourcePath = "/setting/oids"
+                    $QueryParams = ""
+
+                    $JsonFile = $File | ConvertFrom-Json
+                    
+                    $File = @{
+                        oid = $JsonFile.oid
+                        categories = $JsonFile.categories
+                    } | ConvertTo-Json -Depth 10
+
+                }
+                "functions" {
+                    $ResourcePath = "/setting/functions"
+                    $QueryParams = ""
+                    
+                    $JsonFile = $File | ConvertFrom-Json
+
+                    $File = @{
+                        name = $JsonFile.name
+                        description = $JsonFile.description
+                        code = $JsonFile.code
+                    } | ConvertTo-Json -Depth 10
+
+                }
+                default {
+                    $ResourcePath = "/setting/logicmodules/importfile"
+                    $QueryParams = "?type=$Type&forceOverwrite=$ForceOverwrite"
+                }
+            }
 
             Try {
-
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $FilePath
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $File
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = $File }
+                If ($Type -eq "oids" -or $Type -eq "functions") {
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $File
+                    Return "Successfully imported LogicModule of type: $($Type)"
+                }
+                Else {
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = $File }
+                    Return "Successfully imported LogicModule of type: $($Response.items.type)"
+                }
 
-                Return "Successfully imported LogicModule of type: $($Response.items.type)"
 
             }
             Catch [Exception] {

@@ -15,33 +15,33 @@ Sets the properties of a LogicMonitor device datasource instance.
 ### Name-dsName
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
- [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -Name <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Description <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>] [-StopMonitoring <Boolean>]
+ [-DisableAlerting <Boolean>] [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String>
+ -Name <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
- [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String> -Id <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Description <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>] [-StopMonitoring <Boolean>]
+ [-DisableAlerting <Boolean>] [-InstanceGroupId <String>] -InstanceId <String> -DatasourceName <String>
+ -Id <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
- [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -Name <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Description <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>] [-StopMonitoring <Boolean>]
+ [-DisableAlerting <Boolean>] [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String>
+ -Name <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
 Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-WildValue2 <String>]
- [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String> -Id <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Description <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>] [-StopMonitoring <Boolean>]
+ [-DisableAlerting <Boolean>] [-InstanceGroupId <String>] -InstanceId <String> -DatasourceId <String>
+ -Id <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -137,6 +137,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PropertiesMethod
+Specifies the method to use when updating the properties.
+Valid values are "Add", "Replace", or "Refresh".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Replace
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

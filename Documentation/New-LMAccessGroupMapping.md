@@ -5,41 +5,38 @@ online version:
 schema: 2.0.0
 ---
 
-# Copy-LMReport
+# New-LMAccessGroupMapping
 
 ## SYNOPSIS
-Copies a LogicMonitor report.
+Creates a new LogicMonitor access group mapping between an access group and an logicmodule.
 
 ## SYNTAX
 
 ```
-Copy-LMReport [-Name] <String> [[-Description] <String>] [[-ParentGroupId] <String>] [-ReportObject] <Object>
+New-LMAccessGroupMapping [-AccessGroupIds] <String[]> [-LogicModuleType] <String> [-LogicModuleId] <Int32>
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Copy-LMReport function is used to copy a LogicMonitor report.
-It takes the following parameters:
-- Name: The name of the report.
-- Description: The description of the report.
-- ParentGroupId: The ID of the parent group.
-- ReportObject: The report object to be copied.
+The New-LMAccessGroupMapping function is used to create a new access group mapping in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Copy-LMReport -Name "Report1" -Description "This is a sample report" -ParentGroupId "12345" -ReportObject $reportObject
-This example copies the report specified by the ReportObject parameter and sets the name, description, and parent group ID.
+New-LMAccessGroupMapping -AccessGroupIds "12345" -LogicModuleType "DATASOURCE" -LogicModuleId "67890"
 ```
+
+This example creates a new access group mapping for the access group with ID "12345" and the logic module with ID "67890".
 
 ## PARAMETERS
 
-### -Name
-The name of the report.
+### -AccessGroupIds
+The IDs of the access group.
+This parameter is mandatory.
 
 ```yaml
-Type: String
+Type: String[]
 Parameter Sets: (All)
 Aliases:
 
@@ -50,49 +47,34 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Description
-The description of the report.
+### -LogicModuleType
+The type of logic module.
+This parameter is mandatory.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentGroupId
-The ID of the parent group.
+### -LogicModuleId
+The ID of the logic module.
+This parameter is mandatory.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ReportObject
-The report object to be copied.
-This can be retrieved using Get-LMReport.
-Any changes to the report object will be reflected in the new report.
-
-```yaml
-Type: Object
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 4
-Default value: None
+Position: 3
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -120,7 +102,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-Please ensure you are logged in before running any commands.
-Use Connect-LMAccount to login and try again.
+For this function to work, you need to be logged in and have valid API credentials.
+Use the Connect-LMAccount function to log in before running any commands.
 
 ## RELATED LINKS

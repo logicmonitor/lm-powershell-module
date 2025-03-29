@@ -47,7 +47,7 @@ Function Export-LMLogicModule {
         [String]$LogicModuleName,
 
         [Parameter(Mandatory)]
-        [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources","logsources")]
+        [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources","logsources", "functions", "oids")]
         [String]$Type,
 
         [String]$DownloadPath = (Get-Location).Path
@@ -96,6 +96,17 @@ Function Export-LMLogicModule {
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
                         $QueryParams = "?format=xml&v=3"
                     }
+                    "functions" {
+                        $LogicModuleInfo = Get-LMAppliesToFunction -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file&v=3"
+                    }
+                    "oids" {
+                        $LogicModuleInfo = Get-LMSysOIDMap -Name $LogicModuleName
+                        $FileName = $LogicModuleInfo.categories -replace ',', '_' -replace ' ', ''
+                        $ExportPath = $DownloadPath + "\$FileName.json"
+                        $QueryParams = "?format=file&v=3"
+                    }
                 }
                 #Verify our query only returned one result
                 If (Test-LookupResult -Result $LogicModuleInfo.Id -LookupString $LogicModuleName) {
@@ -135,6 +146,17 @@ Function Export-LMLogicModule {
                         $LogicModuleInfo = Get-LMLogSource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
                         $QueryParams = "?format=xml&v=3"
+                    }
+                    "functions" {
+                        $LogicModuleInfo = Get-LMAppliesToFunction -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file&v=3"
+                    }
+                    "oids" {
+                        $LogicModuleInfo = Get-LMSysOIDMap -Id $LogicModuleId
+                        $FileName = $LogicModuleInfo.categories -replace ',', '_' -replace ' ', ''
+                        $ExportPath = $DownloadPath + "\$FileName.json"
+                        $QueryParams = "?format=file&v=3"
                     }
                 }
             }

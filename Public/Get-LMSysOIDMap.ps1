@@ -1,3 +1,47 @@
+<#
+.SYNOPSIS
+Gets LogicMonitor system OID mappings.
+
+.DESCRIPTION
+The Get-LMSysOIDMap function retrieves system OID mappings from LogicMonitor. It can retrieve all mappings, a specific mapping by ID or name, or filter the results.
+
+.PARAMETER Id
+Specifies the ID of a specific OID mapping to retrieve.
+
+.PARAMETER Name 
+Specifies the name of a specific OID mapping to retrieve.
+
+.PARAMETER Filter
+Specifies a filter to apply to the results.
+
+.PARAMETER BatchSize
+Specifies the number of records to retrieve per API request. Valid values are 1-1000. Default is 1000.
+
+.EXAMPLE
+Get-LMSysOIDMap
+
+Gets all system OID mappings.
+
+.EXAMPLE
+Get-LMSysOIDMap -Id 123
+
+Gets the system OID mapping with ID 123.
+
+.EXAMPLE
+Get-LMSysOIDMap -Name "\.1\.3\.6\.1\.4\.1\.318\.1\.1\.32"
+
+Gets system OID mapping for "\.1\.3\.6\.1\.4\.1\.318\.1\.1\.32".
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.LINK
+Module repo: https://github.com/logicmonitor/lm-powershell-module
+
+.LINK
+PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+#>
+
 Function Get-LMSysOIDMap {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -18,7 +62,7 @@ Function Get-LMSysOIDMap {
     If ($Script:LMAuth.Valid) {
         
         #Build header and uri
-        $ResourcePath = "/setting/functions"
+        $ResourcePath = "/setting/oids"
 
         #Initalize vars
         $QueryParams = ""

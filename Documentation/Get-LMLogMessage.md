@@ -5,25 +5,35 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-LMPropertysource
+# Get-LMLogMessage
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
 
 ## SYNTAX
 
-### Id
+### Range-Async (Default)
 ```
-Set-LMPropertysource -Id <String> [-NewName <String>] [-Description <String>] [-appliesTo <String>]
- [-TechNotes <String>] [-Tags <String[]>] [-TagsMethod <String>] [-Group <String>] [-ScriptType <String>]
- [-Script <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMLogMessage [-Query <String>] [-Range <String>] [-BatchSize <Int32>] [-MaxPages <Int32>] [-Async]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### Name
+### Date-Async
 ```
-Set-LMPropertysource -Name <String> [-NewName <String>] [-Description <String>] [-appliesTo <String>]
- [-TechNotes <String>] [-Tags <String[]>] [-TagsMethod <String>] [-Group <String>] [-ScriptType <String>]
- [-Script <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMLogMessage -StartDate <DateTime> -EndDate <DateTime> [-Query <String>] [-BatchSize <Int32>]
+ [-MaxPages <Int32>] [-Async] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+### Date-Sync
+```
+Get-LMLogMessage -StartDate <DateTime> -EndDate <DateTime> [-Query <String>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+### Range-Sync
+```
+Get-LMLogMessage [-Query <String>] [-Range <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,11 +50,26 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -Description
-{{ Fill Description Description }}
+### -Async
+{{ Fill Async Description }}
 
 ```yaml
-Type: String
+Type: SwitchParameter
+Parameter Sets: Range-Async, Date-Async
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+{{ Fill BatchSize Description }}
+
+```yaml
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -55,42 +80,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Group
-{{ Fill Group Description }}
+### -EndDate
+{{ Fill EndDate Description }}
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
+Type: DateTime
+Parameter Sets: Date-Async, Date-Sync
 Aliases:
 
 Required: True
@@ -100,8 +95,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NewName
-{{ Fill NewName Description }}
+### -MaxPages
+{{ Fill MaxPages Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: Range-Async, Date-Async
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Query
+{{ Fill Query Description }}
 
 ```yaml
 Type: String
@@ -115,13 +125,14 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Script
-{{ Fill Script Description }}
+### -Range
+{{ Fill Range Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Range-Async, Range-Sync
 Aliases:
+Accepted values: 15min, 30min, 1hour, 3hour, 6hour, 12hour, 24hour, 3day, 7day, 1month
 
 Required: False
 Position: Named
@@ -130,77 +141,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ScriptType
-{{ Fill ScriptType Description }}
+### -StartDate
+{{ Fill StartDate Description }}
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: embed, powerShell
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Tags
-{{ Fill Tags Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
+Type: DateTime
+Parameter Sets: Date-Async, Date-Sync
 Aliases:
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TagsMethod
-{{ Fill TagsMethod Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: Add, Refresh
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TechNotes
-{{ Fill TechNotes Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -appliesTo
-{{ Fill appliesTo Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -227,7 +176,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### None
 ## OUTPUTS
 
 ### System.Object

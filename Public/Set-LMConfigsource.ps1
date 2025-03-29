@@ -18,6 +18,11 @@ Function Set-LMConfigsource {
 
         [String]$TechNotes,
 
+        [String[]]$Tags,
+
+        [ValidateSet("Add", "Refresh")] # Add will append to existing prop, Refresh will replace existing props with new
+        [String]$TagsMethod = "Refresh",
+
         [ValidateSet("3600", "14400", "28800", "86400")]
         [String]$PollingIntervalInSeconds, #In Seconds
 
@@ -36,6 +41,11 @@ Function Set-LMConfigsource {
                     return
                 }
                 $Id = $LookupResult
+            }
+
+            #Get existing tags if we are adding tags
+            If ($Tags -and $TagsMethod -eq "Add") {
+                $Tags = [String[]](Get-LMConfigSource -Id $Id).tags + $Tags
             }
                     
             #Build header and uri
@@ -58,6 +68,7 @@ Function Set-LMConfigsource {
                     description     = $Description
                     appliesTo       = $appliesTo
                     technology      = $TechNotes
+                    tags            = $Tags -join ","
                     collectInterval = $PollingIntervalInSeconds
                     configChecks    = $ConfigChecks
                 }

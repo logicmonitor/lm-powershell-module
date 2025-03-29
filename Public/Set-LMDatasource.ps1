@@ -14,6 +14,11 @@ Function Set-LMDatasource {
 
         [String]$Description,
 
+        [String[]]$Tags,
+
+        [ValidateSet("Add", "Refresh")] # Add will append to existing prop, Refresh will replace existing props with new
+        [String]$TagsMethod = "Refresh",
+
         [String]$appliesTo,
 
         [String]$TechNotes,
@@ -36,6 +41,12 @@ Function Set-LMDatasource {
                 }
                 $Id = $LookupResult
             }
+            
+            #Get existing tags if we are adding tags
+            If ($Tags -and $TagsMethod -eq "Add") {
+                $Tags = [String[]](Get-LMDatasource -Id $Id).tags + $Tags
+            }
+            
                     
             #Build header and uri
             $ResourcePath = "/setting/datasources/$Id"
@@ -57,6 +68,7 @@ Function Set-LMDatasource {
                     description     = $Description
                     appliesTo       = $appliesTo
                     technology      = $TechNotes
+                    tags            = $Tags -join ","
                     collectInterval = $PollingIntervalInSeconds
                     dataPoints      = $Datapoints
                 }

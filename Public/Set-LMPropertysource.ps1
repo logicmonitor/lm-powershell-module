@@ -16,6 +16,11 @@ Function Set-LMPropertysource {
 
         [String]$TechNotes,
 
+        [String[]]$Tags,
+
+        [ValidateSet("Add", "Refresh")] # Add will append to existing prop, Refresh will replace existing props with new
+        [String]$TagsMethod = "Refresh",
+
         [String]$Group,
 
         [ValidateSet("embed", "powerShell")]
@@ -37,6 +42,11 @@ Function Set-LMPropertysource {
                 }
                 $Id = $LookupResult
             }
+
+            #Get existing tags if we are adding tags
+            If ($Tags -and $TagsMethod -eq "Add") {
+                $Tags = [String[]](Get-LMPropertysource -Id $Id).tags + $Tags
+            }
                     
             #Build header and uri
             $ResourcePath = "/setting/propertyrules/$Id"
@@ -48,6 +58,7 @@ Function Set-LMPropertysource {
                     appliesTo    = $appliesTo
                     technology   = $TechNotes
                     group        = $Group
+                    tags         = $Tags -join ","
                     groovyScript = $Script
                     scriptType   = $ScriptType
                 }

@@ -18,8 +18,8 @@ Set-LMDevice -Id <String> [-NewName <String>] [-DisplayName <String>] [-Descript
  [-PreferredCollectorId <Int32>] [-PreferredCollectorGroupId <Int32>] [-AutoBalancedCollectorGroupId <Int32>]
  [-Properties <Hashtable>] [-HostGroupIds <String[]>] [-PropertiesMethod <String>] [-Link <String>]
  [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-NetflowCollectorGroupId <Int32>]
- [-NetflowCollectorId <Int32>] [-LogCollectorGroupId <Int32>] [-LogCollectorId <Int32>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-NetflowCollectorId <Int32>] [-EnableLogCollector <Boolean>] [-LogCollectorGroupId <Int32>]
+ [-LogCollectorId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
@@ -28,8 +28,8 @@ Set-LMDevice -Name <String> [-NewName <String>] [-DisplayName <String>] [-Descri
  [-PreferredCollectorId <Int32>] [-PreferredCollectorGroupId <Int32>] [-AutoBalancedCollectorGroupId <Int32>]
  [-Properties <Hashtable>] [-HostGroupIds <String[]>] [-PropertiesMethod <String>] [-Link <String>]
  [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-NetflowCollectorGroupId <Int32>]
- [-NetflowCollectorId <Int32>] [-LogCollectorGroupId <Int32>] [-LogCollectorId <Int32>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-NetflowCollectorId <Int32>] [-EnableLogCollector <Boolean>] [-LogCollectorGroupId <Int32>]
+ [-LogCollectorId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -111,6 +111,21 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableLogCollector
+{{ Fill EnableLogCollector Description }}
+
+```yaml
+Type: Boolean
 Parameter Sets: (All)
 Aliases:
 

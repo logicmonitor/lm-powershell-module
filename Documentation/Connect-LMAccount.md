@@ -171,7 +171,7 @@ Accept wildcard characters: False
 ```
 
 ### -DisableConsoleLogging
-Disables on stdout messages from displaying for any subsequent commands are run.
+Disables on info messages from displaying for any subsequent commands are run.
 Useful when building scripted logicmodules and you want to suppress unwanted output.
 Console logging is enabled by default.
 

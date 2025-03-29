@@ -14,26 +14,26 @@ Copies a LogicMonitor dashboard to a new dashboard.
 
 ### GroupName-Id
 ```
-Copy-LMDashboard -Name <String> -DashboardId <String> [-Description <String>] -ParentGroupName <String>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Copy-LMDashboard -Name <String> -DashboardId <String> [-Description <String>] [-DashboardTokens <Hashtable>]
+ -ParentGroupName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### GroupId-Id
 ```
-Copy-LMDashboard -Name <String> -DashboardId <String> [-Description <String>] -ParentGroupId <Int32>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Copy-LMDashboard -Name <String> -DashboardId <String> [-Description <String>] [-DashboardTokens <Hashtable>]
+ -ParentGroupId <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### GroupName-Name
 ```
-Copy-LMDashboard -Name <String> -DashboardName <String> [-Description <String>] -ParentGroupName <String>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Copy-LMDashboard -Name <String> -DashboardName <String> [-Description <String>] [-DashboardTokens <Hashtable>]
+ -ParentGroupName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### GroupId-Name
 ```
-Copy-LMDashboard -Name <String> -DashboardName <String> [-Description <String>] -ParentGroupId <Int32>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Copy-LMDashboard -Name <String> -DashboardName <String> [-Description <String>] [-DashboardTokens <Hashtable>]
+ -ParentGroupId <Int32> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -53,6 +53,12 @@ Copies the dashboard with ID 12345 to a new dashboard named "New Dashboard" in t
 ```
 Copy-LMDashboard -Name "New Dashboard" -DashboardName "Old Dashboard" -ParentGroupName "Group A"
 Copies the dashboard named "Old Dashboard" to a new dashboard named "New Dashboard" in the group named "Group A".
+```
+
+### EXAMPLE 3
+```
+Copy-LMDashboard -Name "New Dashboard" -DashboardName "Old Dashboard" -ParentGroupName "Group A" -DashboardTokens @{ "defaultResourceName" = "Value1"; "defaultResourceGroup" = "Value2" }
+Copies the dashboard named "Old Dashboard" to a new dashboard named "New Dashboard" in the group named "Group A", replacing the tokens "defaultResourceName" with "Value1" and "defaultResourceGroup" with "Value2".
 ```
 
 ## PARAMETERS
@@ -109,6 +115,23 @@ An optional description for the new dashboard.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DashboardTokens
+A hashtable of tokens to be replaced in the dashboard.
+The key is the token name and the value is the new value.
+If not provided, the tokens from the source dashboard will be used.
+
+```yaml
+Type: Hashtable
 Parameter Sets: (All)
 Aliases:
 

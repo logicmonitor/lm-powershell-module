@@ -15,15 +15,17 @@ schema: 2.0.0
 ### Id
 ```
 Set-LMDatasource -Id <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
- [-appliesTo <String>] [-TechNotes <String>] [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Tags <String[]>] [-TagsMethod <String>] [-appliesTo <String>] [-TechNotes <String>]
+ [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMDatasource -Name <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
- [-appliesTo <String>] [-TechNotes <String>] [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-Tags <String[]>] [-TagsMethod <String>] [-appliesTo <String>] [-TechNotes <String>]
+ [-PollingIntervalInSeconds <String>] [-Datapoints <PSObject>] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -152,6 +154,37 @@ Accept wildcard characters: False
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Tags
+{{ Fill Tags Description }}
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TagsMethod
+{{ Fill TagsMethod Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+Accepted values: Add, Refresh
 
 Required: False
 Position: Named

@@ -27,7 +27,7 @@ The function returns the response from the API.
 
 ### EXAMPLE 1
 ```
-Invoke-LMAWSAccountTest -ExternalId "123456" -AccountId "987654" -AccessId "AKI123" -AccessKey "abc123" -AssumedRoleARN "arn:aws:iam::123456789012:role/MyRole" -CheckedServices "EC2,S3,RDS" -GroupId 123
+Invoke-LMAWSAccountTest -ExternalId "123456" -AccountId "987654" -AssumedRoleARN "arn:aws:iam::123456789012:role/MyRole" -CheckedServices "EC2,S3,RDS" -GroupId 123
 ```
 
 This example invokes a test for an AWS account with the specified parameters.

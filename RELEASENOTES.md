@@ -1,4 +1,10 @@
 # Previous module release notes
+## 6.5.7
+### Updated Cmdlets:
+ - **Get-LMNormalizedProperties**: Updated the output object type to make the returned object easier to work with. Returned object now contains the following fields: id,model,alias,hostProperty,hostPropertyPriority,isEditable,isDeletable
+ - **New-LMNormalizedProperties**: Updated the output object type to make the returned object easier to work with. Returned object now contains the following fields: id,model,alias,hostProperty,hostPropertyPriority,isEditable,isDeletable
+ - **Set-LMNormalizedProperties**: Fixed bug that caused new properties to fail to create.
+
 ## 6.5.6
 ### New Cmdlets:
  - **Set-LMNormalizedProperties**: Allows updating of existing normalized properties.

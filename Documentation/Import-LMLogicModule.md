@@ -34,7 +34,7 @@ The LogicModule can be of different types such as datasource, propertyrules, eve
 ### EXAMPLE 1
 ```
 Import-LMLogicModule -FilePath "C:\LogicModules\datasource.xml" -Type "datasource" -ForceOverwrite $true
-Imports a datasource LogicModule from the file 'datasource.xml' located in the 'C:\LogicModules' directory. If a LogicModule with the same name already exists, it will be overwritten.
+Imports a datasource LogicModule from the file 'datasource.xml' located in the 'C:\LogicModules' directory. If a LogicModule with the same name already exists, it will be overwritten. This only works for datasource, propertyrules, eventsource, topologysource, configsource, logsource.
 ```
 
 ### EXAMPLE 2
@@ -79,7 +79,7 @@ Accept wildcard characters: False
 
 ### -Type
 Specifies the type of the LogicModule to import.
-The valid values are 'datasource', 'propertyrules', 'eventsource', 'topologysource', or 'configsource'.
+The valid values are 'datasource', 'propertyrules', 'eventsource', 'topologysource', 'configsource', 'logsource', 'functions', 'oids'.
 The default value is 'datasource'.
 
 ```yaml
