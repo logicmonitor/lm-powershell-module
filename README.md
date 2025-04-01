@@ -9,11 +9,13 @@ PowerShell module for accessing the LogicMonitor REST API.
 This project is also published in the PowerShell Gallery at https://www.powershellgallery.com/packages/Logic.Monitor/.
 
 
-**Disclaimer**: This PowerShell module is developed as an open-source project and is not officially supported by LogicMonitor. It is maintained by a community of users who are passionate about enhancing its capabilities and functionality. While LogicMonitor recognizes the effort and ingenuity behind this module, please note that it is provided "as is" without any official support or warranty from LogicMonitor.
+**Community Contribution Notice**: This PowerShell module is an open-source project created and maintained by LogicMonitor users. While not an official LogicMonitor product, it's designed by people who use and understand the platform.
 
-We encourage contributions and feedback from all users. If you encounter issues or have suggestions for improvements, please feel free to open an issue or submit a pull request. Your involvement is invaluable in making this module better for everyone!
+The module is freely available for everyone to use, modify, and improve. We welcome your feedback and contributions! If you have ideas or encounter any issues, please share them through GitHub issues or pull requests.
 
-Use of this module is at your own risk; however, it has been developed with care and is used by our community. We look forward to seeing how it can be improved and how it can help solve your problems!
+Many community members rely on this module in their daily operations. Though we can't offer formal support guarantees, our collaborative community strives to address questions and continuously enhance functionality.
+
+We hope you find this tool valuable for your LogicMonitor workflows!
 
 # Installation
 
