@@ -1,3 +1,62 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor role configuration.
+
+.DESCRIPTION
+The Set-LMRole function modifies an existing role in LogicMonitor, including its permissions and privileges.
+
+.PARAMETER Id
+Specifies the ID of the role to modify.
+
+.PARAMETER Name
+Specifies the current name of the role.
+
+.PARAMETER NewName
+Specifies the new name for the role.
+
+.PARAMETER CustomHelpLabel
+Specifies the custom help label for the role.
+
+.PARAMETER CustomHelpURL
+Specifies the custom help URL for the role.
+
+.PARAMETER Description
+Specifies the description for the role.
+
+.PARAMETER RequireEULA
+Indicates whether to require EULA acceptance.
+
+.PARAMETER TwoFARequired
+Indicates whether to require two-factor authentication.
+
+.PARAMETER RoleGroupId
+Specifies the role group ID.
+
+.PARAMETER CustomPrivilegesObject
+Specifies custom privileges for the role.
+
+.PARAMETER DashboardsPermission
+Specifies dashboard permissions. Valid values: "view", "manage", "none".
+
+.PARAMETER ResourcePermission
+Specifies resource permissions. Valid values: "view", "manage", "none".
+
+.PARAMETER SettingsPermission
+Specifies settings permissions. Valid values: "view", "manage", "none", "manage-collectors", "view-collectors".
+
+.EXAMPLE
+Set-LMRole -Id 123 -NewName "Updated Role" -Description "New description" -DashboardsPermission "view"
+Updates the role with new name, description, and dashboard permissions.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.Role object containing the updated role configuration.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
 Function Set-LMRole {
 
     [CmdletBinding(DefaultParameterSetName = 'Default')]

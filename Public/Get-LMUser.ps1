@@ -1,3 +1,41 @@
+<#
+.SYNOPSIS
+Retrieves LogicMonitor users based on specified parameters.
+
+.DESCRIPTION
+The Get-LMUser function retrieves LogicMonitor users based on the specified parameters. It supports filtering by ID, username, or custom filter. The function uses the LogicMonitor REST API to make the requests.
+
+.PARAMETER Id
+Specifies the ID of the user to retrieve. This parameter is mutually exclusive with the Name and Filter parameters.
+
+.PARAMETER Name
+Specifies the username of the user to retrieve. This parameter is mutually exclusive with the Id and Filter parameters.
+
+.PARAMETER Filter
+Specifies a custom filter to retrieve users based on specific criteria. This parameter is mutually exclusive with the Id and Name parameters.
+
+.PARAMETER FilterWizard
+Specifies the use of the FilterWizard to assist in building a valid filter. This parameter is mutually exclusive with the Id, Name, and Filter parameters.
+
+.PARAMETER BatchSize
+Specifies the number of users to retrieve in each batch. The default value is 1000.
+
+.EXAMPLE
+Get-LMUser -Id 123
+Retrieves the user with the specified ID.
+
+.EXAMPLE
+Get-LMUser -Name "username"
+Retrieves the user with the specified username.
+
+.EXAMPLE
+Get-LMUser -Filter @{Property = "Value"}
+Retrieves users based on the specified custom filter.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this command.
+#>
+
 Function Get-LMUser {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -10,6 +48,9 @@ Function Get-LMUser {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
+
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -36,6 +77,12 @@ Function Get-LMUser {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }

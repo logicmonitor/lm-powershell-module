@@ -15,12 +15,18 @@ Indicates that all cached accounts should be removed. This parameter is used wit
 Remove-LMCachedAccount -CachedAccountName "JohnDoe"
 Removes the cached account with the name "JohnDoe" from the Logic.Monitor vault.
 
-.INPUTS
-You can pipe objects to this function.
-
 .EXAMPLE
 Remove-LMCachedAccount -RemoveAllEntries
 Removes all cached accounts from the Logic.Monitor vault.
+
+.NOTES
+This function operates on the local credential vault and does not require API authentication.
+
+.INPUTS
+You can pipe objects to this function.
+
+.OUTPUTS
+This function does not generate any output.
 #>
 
 Function Remove-LMCachedAccount {

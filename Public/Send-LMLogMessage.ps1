@@ -21,15 +21,15 @@ Specifies additional metadata to include with the log message. This parameter is
 Specifies an array of log messages to send. This parameter is mandatory when using the 'MessageList' parameter set.
 
 .EXAMPLE
-Send-LMLogMessage -Message "This is a test log message" -resourceMapping @{ 'system.deviceId' = '12345' } -Metadata @{ 'key1' = 'value1'; 'key2' = 'value2' }
-
+Send-LMLogMessage -Message "This is a test log message" -resourceMapping @{ 'system.deviceId' = '12345' } -Metadata @{ 'key1' = 'value1' }
 Sends a single log message with the specified message, resource mapping, and metadata.
 
 .EXAMPLE
 Send-LMLogMessage -MessageArray $MessageObjectsArray
-
 Sends an array of log message objects.
 
+.OUTPUTS
+Outputs a success message if the log message was accepted successfully, or an error message if the operation failed.
 #>
 Function Send-LMLogMessage {
 

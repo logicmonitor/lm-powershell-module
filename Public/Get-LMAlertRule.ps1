@@ -1,32 +1,42 @@
 <#
 .SYNOPSIS
-Retrieves LogicMonitor alert rules based on specified parameters.
+Retrieves alert rules from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMAlertRule function retrieves LogicMonitor alert rules based on the specified parameters. It supports retrieving alert rules by ID, name, or using a filter. The function uses the LogicMonitor REST API to make the requests.
+The Get-LMAlertRule function retrieves alert rules from LogicMonitor based on specified criteria. It can return a single rule by ID or name, or multiple rules using filters.
 
 .PARAMETER Id
-Specifies the ID of the alert rule to retrieve. This parameter is mutually exclusive with the Name and Filter parameters.
+The ID of the alert rule to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Name
-Specifies the name of the alert rule to retrieve. This parameter is mutually exclusive with the Id and Filter parameters.
+The name of the alert rule to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-Specifies a filter object to retrieve alert rules based on specific criteria. This parameter is mutually exclusive with the Id and Name parameters.
+A filter object to apply when retrieving alert rules. Part of a mutually exclusive parameter set.
 
 .PARAMETER BatchSize
-Specifies the number of alert rules to retrieve in each request. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
+#Retrieve an alert rule by ID
 Get-LMAlertRule -Id 123
-Retrieves the alert rule with the specified ID.
 
 .EXAMPLE
+#Retrieve an alert rule by name
 Get-LMAlertRule -Name "High CPU Usage"
-Retrieves the alert rule with the specified name.
+
+.EXAMPLE
+#Retrieve alert rules using a filter
+Get-LMAlertRule -Filter $filterObject
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this function.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.AlertRule objects.
 #>
 Function Get-LMAlertRule {
 

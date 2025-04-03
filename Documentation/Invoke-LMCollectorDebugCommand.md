@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-LMCollectorDebugCommand
 
 ## SYNOPSIS
-Invokes a debug command on a LogicMonitor collector.
+Executes debug commands on a LogicMonitor collector.
 
 ## SYNTAX
 
@@ -49,35 +49,27 @@ Invoke-LMCollectorDebugCommand -Name <String> -DebugCommand <String> [-CommandHo
 ```
 
 ## DESCRIPTION
-The Invoke-LMCollectorDebugCommand function is used to send a debug command to a LogicMonitor collector.
-It supports different parameter sets based on the type of command and the identification method used (ID or name).
-The function checks if the user is logged in and has valid API credentials before executing the command.
+The Invoke-LMCollectorDebugCommand function allows execution of debug, PowerShell, or Groovy commands on a specified LogicMonitor collector.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-LMCollectorDebugCommand -Id 1234 -DebugCommand "!account" -IncludeResult
-Invokes a debug command on the collector with ID 1234 and includes the result.
+#Execute a debug command
+Invoke-LMCollectorDebugCommand -Id 123 -DebugCommand "!account" -IncludeResult
 ```
 
 ### EXAMPLE 2
 ```
-Invoke-LMCollectorDebugCommand -Name "CollectorName" -PoshCommand "Write-Host 'Hello, World!'" -IncludeResult
-Invokes a PowerShell command on the collector with the name "CollectorName" and includes the result.
-```
-
-### EXAMPLE 3
-```
-Invoke-LMCollectorDebugCommand -Id 5678 -GroovyCommand "println 'Hello, World!'" -CommandHostName "Host123"
-Invokes a Groovy command on the collector with ID 5678 and specifies the host name as "Host123".
+#Execute a PowerShell command
+Invoke-LMCollectorDebugCommand -Name "Collector1" -PoshCommand "Get-Process"
 ```
 
 ## PARAMETERS
 
 ### -Id
-Specifies the ID of the collector.
-This parameter is mandatory for the 'Id-Debug', 'Id-Posh', and 'Id-Groovy' parameter sets.
+The ID of the collector.
+Required for Id parameter sets.
 
 ```yaml
 Type: Int32
@@ -92,8 +84,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the collector.
-This parameter is mandatory for the 'Name-Debug', 'Name-Posh', and 'Name-Groovy' parameter sets.
+The name of the collector.
+Required for Name parameter sets.
 
 ```yaml
 Type: String
@@ -108,8 +100,8 @@ Accept wildcard characters: False
 ```
 
 ### -DebugCommand
-Specifies the debug command to be executed.
-This parameter is mandatory for the 'Id-Debug' and 'Name-Debug' parameter sets.
+The debug command to execute.
+Required for Debug parameter sets.
 
 ```yaml
 Type: String
@@ -124,8 +116,8 @@ Accept wildcard characters: False
 ```
 
 ### -PoshCommand
-Specifies the PowerShell command to be executed.
-This parameter is mandatory for the 'Id-Posh' and 'Name-Posh' parameter sets.
+The PowerShell command to execute.
+Required for Posh parameter sets.
 
 ```yaml
 Type: String
@@ -140,8 +132,8 @@ Accept wildcard characters: False
 ```
 
 ### -GroovyCommand
-Specifies the Groovy command to be executed.
-This parameter is mandatory for the 'Id-Groovy' and 'Name-Groovy' parameter sets.
+The Groovy command to execute.
+Required for Groovy parameter sets.
 
 ```yaml
 Type: String
@@ -156,8 +148,7 @@ Accept wildcard characters: False
 ```
 
 ### -CommandHostName
-Specifies the host name for the command.
-This parameter is optional.
+The hostname context for the command execution.
 
 ```yaml
 Type: String
@@ -172,8 +163,7 @@ Accept wildcard characters: False
 ```
 
 ### -CommandWildValue
-Specifies the wild value for the command.
-This parameter is optional.
+The wild value context for the command execution.
 
 ```yaml
 Type: String
@@ -188,8 +178,7 @@ Accept wildcard characters: False
 ```
 
 ### -IncludeResult
-Indicates whether to include the result of the debug command.
-This parameter is a switch parameter.
+Switch to wait for and include command execution results.
 
 ```yaml
 Type: SwitchParameter
@@ -223,10 +212,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns command execution results if IncludeResult is specified.
 ## NOTES
-LogicMonitor API credentials must be set before running this command.
-Use the Connect-LMAccount cmdlet to log in and set the credentials.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

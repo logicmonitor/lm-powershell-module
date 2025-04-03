@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMIntegrationLogs
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves integration audit logs from LogicMonitor.
 
 ## SYNTAX
 
@@ -31,66 +31,27 @@ Get-LMIntegrationLogs [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMIntegrationLogs function retrieves integration audit logs from LogicMonitor.
+It supports retrieving logs by ID, date range, search string, or filter criteria.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve logs for the last 30 days
+Get-LMIntegrationLogs
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve logs with a specific search string and date range
+Get-LMIntegrationLogs -SearchString "error" -StartDate (Get-Date).AddDays(-7)
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-{{ Fill EndDate Description }}
-
-```yaml
-Type: DateTime
-Parameter Sets: Range
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Object
-Parameter Sets: Filter
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+The specific integration log ID to retrieve.
 
 ```yaml
 Type: String
@@ -105,7 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -SearchString
-{{ Fill SearchString Description }}
+A string to search for within the integration logs.
 
 ```yaml
 Type: String
@@ -120,7 +81,8 @@ Accept wildcard characters: False
 ```
 
 ### -StartDate
-{{ Fill StartDate Description }}
+The start date for retrieving logs.
+Defaults to 30 days ago if not specified.
 
 ```yaml
 Type: DateTime
@@ -130,6 +92,54 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndDate
+The end date for retrieving logs.
+Defaults to current time if not specified.
+
+```yaml
+Type: DateTime
+Parameter Sets: Range
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+A filter object to apply when retrieving logs.
+
+```yaml
+Type: Object
+Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -154,10 +164,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.IntegrationLog objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
+There is a 10,000 record query limitation for this endpoint.
 
 ## RELATED LINKS

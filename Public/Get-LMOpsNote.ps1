@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves operations notes from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMOpsNote function retrieves operations notes from LogicMonitor. It can retrieve all notes, a specific note by ID, notes by tag, or filter the results.
+
+.PARAMETER Id
+The ID of the specific operations note to retrieve.
+
+.PARAMETER Tag
+The tag to filter operations notes by.
+
+.PARAMETER Filter
+A filter object to apply when retrieving operations notes.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all operations notes
+Get-LMOpsNote
+
+.EXAMPLE
+#Retrieve operations notes by tag
+Get-LMOpsNote -Tag "Maintenance"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns operations note objects.
+#>
+
 Function Get-LMOpsNote {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

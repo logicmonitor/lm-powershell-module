@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves metadata for a LogicMonitor datasource.
+
+.DESCRIPTION
+The Get-LMDatasourceMetadata function retrieves metadata information for a specified LogicMonitor datasource. The datasource can be identified by ID, name, or display name.
+
+.PARAMETER Id
+The ID of the datasource to retrieve metadata for. Part of a mutually exclusive parameter set.
+
+.PARAMETER Name
+The name of the datasource to retrieve metadata for. Part of a mutually exclusive parameter set.
+
+.PARAMETER DisplayName
+The display name of the datasource to retrieve metadata for. Part of a mutually exclusive parameter set.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve metadata by datasource ID
+Get-LMDatasourceMetadata -Id 123
+
+.EXAMPLE
+#Retrieve metadata by datasource name
+Get-LMDatasourceMetadata -Name "CPU"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns metadata information for the specified datasource.
+#>
+
 Function Get-LMDatasourceMetadata {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

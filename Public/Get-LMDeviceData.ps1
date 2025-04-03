@@ -1,3 +1,57 @@
+<#
+.SYNOPSIS
+Retrieves monitoring data for a LogicMonitor device.
+
+.DESCRIPTION
+The Get-LMDeviceData function retrieves monitoring data from a specific device's datasource instance in LogicMonitor. It supports various combinations of identifying the device, datasource, and instance, and allows for time range filtering of the data.
+
+.PARAMETER DatasourceName
+The name of the datasource to retrieve data from. Required for certain parameter sets.
+
+.PARAMETER DatasourceId
+The ID of the datasource to retrieve data from. Required for certain parameter sets.
+
+.PARAMETER DeviceId
+The ID of the device to retrieve data from. Required for certain parameter sets.
+
+.PARAMETER DeviceName
+The name of the device to retrieve data from. Required for certain parameter sets.
+
+.PARAMETER InstanceId
+The ID of the datasource instance to retrieve data from. Required for certain parameter sets.
+
+.PARAMETER InstanceName
+The name of the datasource instance to retrieve data from. Required for certain parameter sets.
+
+.PARAMETER StartDate
+The start date and time for data collection. Defaults to 7 days ago if not specified.
+
+.PARAMETER EndDate
+The end date and time for data collection. Defaults to current time if not specified.
+
+.PARAMETER Filter
+A filter object to apply when retrieving data. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve data using IDs
+Get-LMDeviceData -DeviceId 123 -DatasourceId 456 -InstanceId 789
+
+.EXAMPLE
+#Retrieve data using names with time range
+Get-LMDeviceData -DeviceName "Production-Server" -DatasourceName "CPU" -InstanceName "Total" -StartDate (Get-Date).AddDays(-1)
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns formatted monitoring data with timestamps and values.
+#>
 Function Get-LMDeviceData {
 
     [CmdletBinding()]

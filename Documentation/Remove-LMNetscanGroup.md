@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -130,10 +130,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### You can pipe objects to this function.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject
-### Returns an object with the following properties:
-### - Id: The ID of the removed NetScan group.
-### - Message: A message indicating the success of the removal operation.
+### Returns a PSCustomObject containing the ID of the removed NetScan group and a message indicating the success of the removal operation.
 ## NOTES
 This function requires valid API credentials to be logged in.
 Use the Connect-LMAccount function to log in before running any commands.

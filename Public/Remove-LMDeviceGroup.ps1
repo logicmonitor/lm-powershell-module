@@ -25,6 +25,12 @@ Removes the device group with the specified ID.
 Remove-LMDeviceGroup -Name "MyDeviceGroup"
 Removes the device group with the specified name.
 
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a PSCustomObject containing the ID of the removed device group and a message confirming the successful removal.
+
 .NOTES
 This function requires valid API credentials to be logged in. Use the Connect-LMAccount function to log in before running any commands.
 #>

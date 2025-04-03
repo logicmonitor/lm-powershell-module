@@ -1,3 +1,43 @@
+<#
+.SYNOPSIS
+Retrieves devices belonging to a LogicMonitor device group.
+
+.DESCRIPTION
+The Get-LMDeviceGroupDevices function retrieves all devices that belong to a specific device group. It supports retrieving devices from subgroups and can filter the results.
+
+.PARAMETER Id
+The ID of the device group. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device group. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving devices. This parameter is optional.
+
+.PARAMETER IncludeSubGroups
+When set to true, includes devices from all subgroups of the specified group. Defaults to false.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve devices from a group by ID
+Get-LMDeviceGroupDevices -Id 123
+
+.EXAMPLE
+#Retrieve devices including subgroups
+Get-LMDeviceGroupDevices -Name "Production Servers" -IncludeSubGroups $true
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Device objects.
+#>
+
 Function Get-LMDeviceGroupDevices {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

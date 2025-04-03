@@ -1,3 +1,24 @@
+<#
+.SYNOPSIS
+Removes unmonitored devices from LogicMonitor.
+
+.DESCRIPTION
+The Remove-LMUnmonitoredDevice function removes one or more unmonitored devices from LogicMonitor using their IDs.
+
+.PARAMETER Ids
+Specifies an array of IDs for the unmonitored devices to remove.
+
+.EXAMPLE
+Remove-LMUnmonitoredDevice -Ids "123","456"
+Removes the unmonitored devices with IDs "123" and "456".
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.UnmonitoredDevice object containing information about the removed devices.
+#>
+
 Function Remove-LMUnmonitoredDevice {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]

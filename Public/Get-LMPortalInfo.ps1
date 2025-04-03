@@ -1,3 +1,26 @@
+<#
+.SYNOPSIS
+Retrieves portal information from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMPortalInfo function retrieves company settings and portal information from your LogicMonitor instance.
+
+.PARAMETER None
+This cmdlet has no parameters.
+
+.EXAMPLE
+#Retrieve portal information
+Get-LMPortalInfo
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns portal information object containing company settings.
+#>
 Function Get-LMPortalInfo {
     [CmdletBinding()]
     Param ()

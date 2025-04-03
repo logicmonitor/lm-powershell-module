@@ -23,12 +23,10 @@ Removes the dashboard with the name "My Dashboard".
 You can pipe input to this function.
 
 .OUTPUTS
-System.Management.Automation.PSCustomObject. The function returns an object with the following properties:
-- Id: The ID of the removed dashboard.
-- Message: A message indicating the success of the removal operation.
+Returns a PSCustomObject containing the ID of the removed dashboard and a message indicating the success of the removal operation.
 
 .NOTES
-- This function requires a valid LogicMonitor API authentication. Make sure you are logged in before running this command.
+This function requires a valid LogicMonitor API authentication. Make sure you are logged in before running this command.
 #>
 Function Remove-LMDashboard {
 

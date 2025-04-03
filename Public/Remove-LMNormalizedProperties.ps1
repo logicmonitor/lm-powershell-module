@@ -1,16 +1,25 @@
 <#
 .SYNOPSIS
-    Removes normalized properties from LogicMonitor.
+Removes normalized properties from LogicMonitor.
 
 .DESCRIPTION
-    The Remove-LMNormalizedProperties cmdlet removes normalized properties from LogicMonitor.
+The Remove-LMNormalizedProperties cmdlet removes normalized properties from LogicMonitor.
 
 .PARAMETER Alias
-    The alias name of the normalized property to remove.
+The alias name of the normalized property to remove.
 
 .EXAMPLE
-    PS C:\> Remove-LMNormalizedProperties -Alias "location"
-    Removes the normalized property with alias "location".
+Remove-LMNormalizedProperties -Alias "location"
+Removes the normalized property with alias "location".
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns the response from the API after removing the normalized property.
+
+.NOTES
+This function requires valid API credentials to be logged in. Use Connect-LMAccount to log in before running this command.
 #>
 Function Remove-LMNormalizedProperties {
 

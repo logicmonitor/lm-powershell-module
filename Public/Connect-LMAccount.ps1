@@ -30,13 +30,16 @@ Name of cached account you wish to connect to. This parameter is optional and ca
 Use session sync capability instead of api key
 
 .EXAMPLE
+#Connecting to an Account using an Access ID and Access Key
 Connect-LMAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
 
 .EXAMPLE
+#Connecting to an Account using a Bearer Token
 Connect-LMAccount -BearerToken xxxxxx -AccountName subdomain
 
 .EXAMPLE
-Connect-LMAccount -UseCachedCredential
+#Connecting to an Account using a Cached Credential
+Connect-LMAccount -UseCachedCredential -CachedAccountName "CachedAccountName"
 
 .NOTES
 You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
@@ -44,11 +47,8 @@ You must run this command before you will be able to execute other commands incl
 .INPUTS
 None. You cannot pipe objects to this command.
 
-.LINK
-Module repo: https://github.com/logicmonitor/lm-powershell-module
-
-.LINK
-PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+.OUTPUTS
+None. This command does not return any output.
 #>
 Function Connect-LMAccount {
 

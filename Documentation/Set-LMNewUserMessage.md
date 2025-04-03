@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMNewUserMessage
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates the new user message template in LogicMonitor.
 
 ## SYNTAX
 
@@ -18,36 +18,20 @@ Set-LMNewUserMessage [-MessageBody] <String> [-MessageSubject] <String> [-Progre
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMNewUserMessage function modifies the message template that is sent to new users in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMNewUserMessage -MessageBody "Welcome to our monitoring system" -MessageSubject "Welcome to LogicMonitor"
+Updates the new user message template with the specified subject and body.
+```
 
 ## PARAMETERS
 
 ### -MessageBody
-{{ Fill MessageBody Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -MessageSubject
-{{ Fill MessageSubject Description }}
+Specifies the body content of the message template.
 
 ```yaml
 Type: String
@@ -56,6 +40,21 @@ Aliases:
 
 Required: True
 Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MessageSubject
+Specifies the subject line of the message template.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -81,10 +80,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns the response from the API indicating the success of the update.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -26,7 +26,6 @@ Remove-LMConfigsource -Name <String> [-ProgressAction <ActionPreference>] [-What
 
 ## DESCRIPTION
 The Remove-LMConfigsource function removes a LogicMonitor configsource based on the specified Id or Name.
-It requires valid API credentials and the user must be logged in before running any commands.
 
 ## EXAMPLES
 
@@ -127,13 +126,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### You can pipe input to this function.
+### You can pipe objects to this function.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject
-### Returns an object with the following properties:
-### - Id: The Id of the removed configsource.
-### - Message: A message indicating the success of the removal operation.
+### Returns a PSCustomObject containing the ID of the removed configsource and a success message confirming the removal.
 ## NOTES
 Please ensure you are logged in before running any commands.
 Use Connect-LMAccount to login and try again.

@@ -1,3 +1,24 @@
+<#
+.SYNOPSIS
+Removes a Scheduled Down Time (SDT) entry from LogicMonitor.
+
+.DESCRIPTION
+The Remove-LMSDT function removes a specified SDT entry from LogicMonitor using its ID.
+
+.PARAMETER Id
+Specifies the ID of the SDT entry to remove. This parameter is mandatory.
+
+.EXAMPLE
+Remove-LMSDT -Id "12345"
+Removes the SDT entry with ID "12345".
+
+.INPUTS
+You can pipe objects to this function.
+
+.OUTPUTS
+Returns a PSCustomObject containing the ID of the removed SDT entry and a success message confirming the removal.
+#>
+
 Function Remove-LMSDT {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]

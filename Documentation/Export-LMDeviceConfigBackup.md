@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Export-LMDeviceConfigBackup
 
 ## SYNOPSIS
-Exports the latest version of a device config for a select set of devices
+Exports the latest version of device configurations from LogicMonitor.
 
 ## SYNTAX
 
@@ -25,24 +25,28 @@ Export-LMDeviceConfigBackup -DeviceGroupId <Int32> [-InstanceNameFilter <Regex>]
 ```
 
 ## DESCRIPTION
-Exports the latest version of a device config for a select set of devices
+The Export-LMDeviceConfigBackup function exports the latest version of device configurations for specified devices.
+It can export configs from either a single device or all devices in a device group.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Export-LMDeviceConfigBackup -DeviceGroupId 2 -Path export-report.csv
+#Export configurations from a device group
+Export-LMDeviceConfigBackup -DeviceGroupId 2 -Path "export-report.csv"
 ```
 
 ### EXAMPLE 2
 ```
-Export-LMDeviceConfigBackup -DeviceId 1 -Path export-report.csv
+#Export configurations from a single device
+Export-LMDeviceConfigBackup -DeviceId 1 -Path "export-report.csv"
 ```
 
 ## PARAMETERS
 
 ### -DeviceGroupId
-Device group id for the group to use as the source of running the report.
+The ID of the device group to export configurations from.
+This parameter is mandatory when using the DeviceGroup parameter set.
 
 ```yaml
 Type: Int32
@@ -57,7 +61,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceId
-Device id to use as the source of running the report, defaults to Devices by Type/Network folder if not specified
+The ID of the device to export configurations from.
+This parameter is mandatory when using the Device parameter set.
 
 ```yaml
 Type: Int32
@@ -72,7 +77,8 @@ Accept wildcard characters: False
 ```
 
 ### -InstanceNameFilter
-Regex filter to use to filter out Instance names used for discovery, defaults to "running|current|PaloAlto".
+A regex filter to use for filtering Instance names.
+Defaults to "running|current|PaloAlto".
 
 ```yaml
 Type: Regex
@@ -87,7 +93,8 @@ Accept wildcard characters: False
 ```
 
 ### -ConfigSourceNameFilter
-Regex filter to use to filter out ConfigSource names used for discovery, defaults to ".*"
+A regex filter to use for filtering ConfigSource names.
+Defaults to ".*".
 
 ```yaml
 Type: Regex
@@ -102,7 +109,7 @@ Accept wildcard characters: False
 ```
 
 ### -Path
-Path to export the csv backup to
+The file path where the CSV backup will be exported to.
 
 ```yaml
 Type: String
@@ -139,11 +146,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns an array of device configuration objects if successful.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
-
-[Module repo: https://github.com/logicmonitor/lm-powershell-module]()
-
-[PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
-

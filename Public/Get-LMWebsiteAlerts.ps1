@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves alerts for a specific website from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMWebsiteAlerts function retrieves alert information for a specified website in LogicMonitor. The website can be identified by either ID or name.
+
+.PARAMETER Id
+The ID of the website to retrieve alerts from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the website to retrieve alerts from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving alerts.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve alerts by website ID
+Get-LMWebsiteAlerts -Id 123
+
+.EXAMPLE
+#Retrieve alerts for a specific website
+Get-LMWebsiteAlerts -Name "www.example.com"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns website alert objects.
+#>
+
 Function Get-LMWebsiteAlerts {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

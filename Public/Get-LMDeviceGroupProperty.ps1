@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves properties of a LogicMonitor device group.
+
+.DESCRIPTION
+The Get-LMDeviceGroupProperty function retrieves all properties associated with a specified device group in LogicMonitor. The device group can be identified by either ID or name, and the results can be filtered.
+
+.PARAMETER Id
+The ID of the device group to retrieve properties from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device group to retrieve properties from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving properties. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve properties by group ID
+Get-LMDeviceGroupProperty -Id 123
+
+.EXAMPLE
+#Retrieve filtered properties by group name
+Get-LMDeviceGroupProperty -Name "Production" -Filter $filterObject
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns property objects for the specified device group.
+#>
+
 Function Get-LMDeviceGroupProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

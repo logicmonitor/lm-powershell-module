@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMWebsite
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor website monitoring configuration.
 
 ## SYNTAX
 
@@ -35,21 +35,65 @@ Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Descriptio
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMWebsite function modifies an existing website monitoring configuration in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMWebsite -Id 123 -Name "Updated Site" -Description "New description" -DisableAlerting $false
+Updates the website with new name, description, and enables alerting.
+```
 
 ## PARAMETERS
 
+### -Id
+Specifies the ID of the website to modify.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Name
+Specifies the name for the website.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IsInternal
+Indicates whether the website is internal.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Description
-{{ Fill Description Description }}
+Specifies the description for the website.
 
 ```yaml
 Type: String
@@ -64,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -DisableAlerting
-{{ Fill DisableAlerting Description }}
+Indicates whether to disable alerting for the website.
 
 ```yaml
 Type: Boolean
@@ -78,14 +122,73 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -FailedCount
-{{ Fill FailedCount Description }}
+### -StopMonitoring
+Indicates whether to stop monitoring the website.
 
 ```yaml
-Type: Int32
+Type: Boolean
 Parameter Sets: (All)
 Aliases:
-Accepted values: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30, 60
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseDefaultAlertSetting
+Indicates whether to use default alert settings.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UseDefaultLocationSetting
+Indicates whether to use default location settings.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TriggerSSLStatusAlert
+Indicates whether to trigger SSL status alerts.
+
+```yaml
+Type: Boolean
+Parameter Sets: Website
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TriggerSSLExpirationAlert
+Indicates whether to trigger SSL expiration alerts.
+
+```yaml
+Type: Boolean
+Parameter Sets: Website
+Aliases:
 
 Required: False
 Position: Named
@@ -95,119 +198,11 @@ Accept wildcard characters: False
 ```
 
 ### -GroupId
-{{ Fill GroupId Description }}
+Specifies the group ID for the website.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HttpType
-{{ Fill HttpType Description }}
-
-```yaml
-Type: String
-Parameter Sets: Website
-Aliases:
-Accepted values: http, https
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -IndividualAlertLevel
-{{ Fill IndividualAlertLevel Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: warn, error, critical
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IsInternal
-{{ Fill IsInternal Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -OverallAlertLevel
-{{ Fill OverallAlertLevel Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: warn, error, critical
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PageLoadAlertTimeInMS
-{{ Fill PageLoadAlertTimeInMS Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Website
 Aliases:
 
 Required: False
@@ -232,92 +227,28 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PingCount
-{{ Fill PingCount Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Ping
-Aliases:
-Accepted values: 5, 10, 15, 20, 30, 60
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PingPercentNotReceived
-{{ Fill PingPercentNotReceived Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Ping
-Aliases:
-Accepted values: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PingTimeout
-{{ Fill PingTimeout Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Ping
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PollingInterval
-{{ Fill PollingInterval Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-Accepted values: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Properties
-{{ Fill Properties Description }}
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PropertiesMethod
-{{ Fill PropertiesMethod Description }}
+### -WebsiteDomain
+{{ Fill WebsiteDomain Description }}
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Website
 Aliases:
-Accepted values: Add, Replace, Refresh
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HttpType
+{{ Fill HttpType Description }}
+
+```yaml
+Type: String
+Parameter Sets: Website
+Aliases:
 
 Required: False
 Position: Named
@@ -341,12 +272,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -StopMonitoring
-{{ Fill StopMonitoring Description }}
+### -PingCount
+{{ Fill PingCount Description }}
 
 ```yaml
-Type: Boolean
-Parameter Sets: (All)
+Type: Int32
+Parameter Sets: Ping
 Aliases:
 
 Required: False
@@ -356,11 +287,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TriggerSSLExpirationAlert
-{{ Fill TriggerSSLExpirationAlert Description }}
+### -PingTimeout
+{{ Fill PingTimeout Description }}
 
 ```yaml
-Type: Boolean
+Type: Int32
+Parameter Sets: Ping
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PageLoadAlertTimeInMS
+{{ Fill PageLoadAlertTimeInMS Description }}
+
+```yaml
+Type: Int32
 Parameter Sets: Website
 Aliases:
 
@@ -371,12 +317,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TriggerSSLStatusAlert
-{{ Fill TriggerSSLStatusAlert Description }}
+### -PingPercentNotReceived
+{{ Fill PingPercentNotReceived Description }}
 
 ```yaml
-Type: Boolean
-Parameter Sets: Website
+Type: Int32
+Parameter Sets: Ping
 Aliases:
 
 Required: False
@@ -386,11 +332,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UseDefaultAlertSetting
-{{ Fill UseDefaultAlertSetting Description }}
+### -FailedCount
+{{ Fill FailedCount Description }}
 
 ```yaml
-Type: Boolean
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
@@ -401,27 +347,74 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UseDefaultLocationSetting
-{{ Fill UseDefaultLocationSetting Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WebsiteDomain
-{{ Fill WebsiteDomain Description }}
+### -OverallAlertLevel
+{{ Fill OverallAlertLevel Description }}
 
 ```yaml
 Type: String
-Parameter Sets: Website
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IndividualAlertLevel
+{{ Fill IndividualAlertLevel Description }}
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Properties
+Specifies a hashtable of custom properties for the website.
+
+```yaml
+Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PropertiesMethod
+Specifies how to handle properties.
+Valid values: "Add", "Replace", "Refresh".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Replace
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PollingInterval
+Specifies the polling interval.
+Valid values: 1-10, 30, 60.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -466,10 +459,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.Website object containing the updated configuration.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

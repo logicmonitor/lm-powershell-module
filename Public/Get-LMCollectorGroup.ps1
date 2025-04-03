@@ -14,6 +14,9 @@ Specifies the name of the collector group to retrieve. This parameter is mutuall
 .PARAMETER Filter
 Specifies a filter object to retrieve collector groups based on specific criteria. This parameter is mutually exclusive with the Id and Name parameters.
 
+.PARAMETER FilterWizard
+Specifies the use of the FilterWizard to assist in building a valid filter. This parameter is mutually exclusive with the Id, Name, and Filter parameters.
+
 .PARAMETER BatchSize
 Specifies the number of collector groups to retrieve per request. The default value is 1000.
 
@@ -43,6 +46,9 @@ Function Get-LMCollectorGroup {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
+
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
@@ -68,6 +74,12 @@ Function Get-LMCollectorGroup {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }

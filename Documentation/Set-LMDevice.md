@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMDevice
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor device configuration.
 
 ## SYNTAX
 
@@ -33,141 +33,21 @@ Set-LMDevice -Name <String> [-NewName <String>] [-DisplayName <String>] [-Descri
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMDevice function modifies an existing device in LogicMonitor, allowing updates to its name, display name, description, collector settings, and various other properties.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMDevice -Id 123 -NewName "UpdatedDevice" -Description "New description"
+Updates the device with ID 123 with a new name and description.
+```
 
 ## PARAMETERS
 
-### -AutoBalancedCollectorGroupId
-{{ Fill AutoBalancedCollectorGroupId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableAlerting
-{{ Fill DisableAlerting Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-{{ Fill DisplayName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableLogCollector
-{{ Fill EnableLogCollector Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableNetFlow
-{{ Fill EnableNetFlow Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HostGroupIds
-{{ Fill HostGroupIds Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the device to modify.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: String
@@ -181,53 +61,9 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
-### -Link
-{{ Fill Link Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -LogCollectorGroupId
-{{ Fill LogCollectorGroupId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -LogCollectorId
-{{ Fill LogCollectorId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Name
-{{ Fill Name Description }}
+Specifies the current name of the device.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -241,38 +77,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NetflowCollectorGroupId
-{{ Fill NetflowCollectorGroupId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NetflowCollectorId
-{{ Fill NetflowCollectorId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the device.
 
 ```yaml
 Type: String
@@ -286,8 +92,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PreferredCollectorGroupId
-{{ Fill PreferredCollectorGroupId Description }}
+### -DisplayName
+Specifies the new display name for the device.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the new description for the device.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PreferredCollectorId
+Specifies the ID of the preferred collector for the device.
 
 ```yaml
 Type: Int32
@@ -301,8 +137,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PreferredCollectorId
-{{ Fill PreferredCollectorId Description }}
+### -PreferredCollectorGroupId
+Specifies the ID of the preferred collector group for the device.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AutoBalancedCollectorGroupId
+Specifies the ID of the auto-balanced collector group for the device.
 
 ```yaml
 Type: Int32
@@ -317,7 +168,7 @@ Accept wildcard characters: False
 ```
 
 ### -Properties
-{{ Fill Properties Description }}
+Specifies a hashtable of custom properties for the device.
 
 ```yaml
 Type: Hashtable
@@ -331,14 +182,150 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -HostGroupIds
+Specifies an array of host group IDs to associate with the device.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -PropertiesMethod
-{{ Fill PropertiesMethod Description }}
+Specifies how to handle existing properties.
+Valid values are "Add", "Replace", or "Refresh".
+Default is "Replace".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: Add, Replace, Refresh
+
+Required: False
+Position: Named
+Default value: Replace
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Link
+Specifies the URL link associated with the device.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableAlerting
+Specifies whether to disable alerting for the device.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableNetFlow
+Specifies whether to enable NetFlow for the device.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NetflowCollectorGroupId
+Specifies the ID of the NetFlow collector group.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NetflowCollectorId
+Specifies the ID of the NetFlow collector.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableLogCollector
+Specifies whether to enable log collection for the device.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LogCollectorGroupId
+Specifies the ID of the log collector group.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LogCollectorId
+Specifies the ID of the log collector.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
@@ -355,6 +342,21 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -383,10 +385,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### You can pipe objects containing Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.Device object containing the updated device information.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -25,27 +25,27 @@ New-LMDatasourceGraph -RawObject <Object> -DatasourceName <Object> [-ProgressAct
 ```
 
 ## DESCRIPTION
-The New-LMDatasourceGraph function is used to create a new datasource graph in LogicMonitor.
-It requires the user to be logged in and have valid API credentials.
+The New-LMDatasourceGraph function creates a new graph for a specified datasource in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Create graph using datasource ID
 New-LMDatasourceGraph -RawObject $graphConfig -DatasourceId 123
 ```
 
 ### EXAMPLE 2
 ```
-New-LMDatasourceGraph -RawObject $graphConfig -DatasourceName "My Datasource"
+#Create graph using datasource name
+New-LMDatasourceGraph -RawObject $graphConfig -DatasourceName "MyDatasource"
 ```
 
 ## PARAMETERS
 
 ### -RawObject
-Specifies the raw object representing the graph configuration.
-This object will be converted to JSON format before sending the request to LogicMonitor.
-Use Get-LMDatasourceGraph to get the raw object representing a graph configuration.
+The raw object representing the graph configuration.
+Use Get-LMDatasourceGraph to see the expected format.
 
 ```yaml
 Type: Object
@@ -60,8 +60,8 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceId
-Specifies the ID of the datasource to which the graph will be associated.
-This parameter is mandatory when using the 'dsId' parameter set.
+The ID of the datasource to which the graph will be added.
+Required for dsId parameter set.
 
 ```yaml
 Type: Object
@@ -76,8 +76,8 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceName
-Specifies the name of the datasource to which the graph will be associated.
-This parameter is mandatory when using the 'dsName' parameter set.
+The name of the datasource to which the graph will be added.
+Required for dsName parameter set.
 
 ```yaml
 Type: Object
@@ -111,8 +111,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.DatasourceGraph object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

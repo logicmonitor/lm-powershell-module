@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDatasourceOverviewGraph
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves overview graphs for a LogicMonitor datasource.
 
 ## SYNTAX
 
@@ -61,51 +61,44 @@ Get-LMDatasourceOverviewGraph -DataSourceId <String> [-BatchSize <Int32>] [-Prog
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDatasourceOverviewGraph function retrieves overview graph information from LogicMonitor datasources.
+It can retrieve graphs by ID, name, or by their associated datasource using either datasource ID or name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve an overview graph by ID from a specific datasource
+Get-LMDatasourceOverviewGraph -Id 123 -DataSourceId 456
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve overview graphs by name from a datasource
+Get-LMDatasourceOverviewGraph -Name "System Overview" -DataSourceName "CPU"
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+The ID of the overview graph to retrieve.
+This parameter is mandatory when using the Id-dsId or Id-dsName parameter sets.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DataSourceId
-{{ Fill DataSourceId Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-dsId, Filter-dsId, Name-dsId, dsId
+Parameter Sets: Id-dsName, Id-dsId
 Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -DataSourceName
-{{ Fill DataSourceName Description }}
+The name of the datasource to retrieve overview graphs from.
+This parameter is mandatory for dsName, Id-dsName, Name-dsName, and Filter-dsName parameter sets.
 
 ```yaml
 Type: String
@@ -119,8 +112,41 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DataSourceId
+The ID of the datasource to retrieve overview graphs from.
+This parameter is mandatory for dsId, Id-dsId, Name-dsId, and Filter-dsId parameter sets.
+
+```yaml
+Type: String
+Parameter Sets: Id-dsId, Filter-dsId, Name-dsId, dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the overview graph to retrieve.
+This parameter is mandatory for Name-dsId and Name-dsName parameter sets.
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Name-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving overview graphs.
+This parameter is mandatory for Filter-dsId and Filter-dsName parameter sets.
 
 ```yaml
 Type: Object
@@ -134,32 +160,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id-dsName, Id-dsId
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -184,10 +197,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.DatasourceGraph objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

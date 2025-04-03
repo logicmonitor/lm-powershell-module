@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMNetscanExecutionDevices
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves devices discovered during a Netscan execution.
 
 ## SYNTAX
 
@@ -25,51 +25,28 @@ Get-LMNetscanExecutionDevices -NspName <String> [-Filter <Object>] [-BatchSize <
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMNetscanExecutionDevices function retrieves devices discovered during a specific Netscan execution in LogicMonitor.
+The Netscan can be identified by either ID or name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve devices from a specific execution
+Get-LMNetscanExecutionDevices -Id 456 -NspId 123
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve devices using Netscan name
+Get-LMNetscanExecutionDevices -Id 456 -NspName "Network-Discovery"
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+The ID of the execution to retrieve devices from.
+Required for Id parameter set.
 
 ```yaml
 Type: Int32
@@ -78,13 +55,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -NspId
-{{ Fill NspId Description }}
+The ID of the Netscan.
+Required when using Id parameter set.
 
 ```yaml
 Type: String
@@ -99,7 +77,8 @@ Accept wildcard characters: False
 ```
 
 ### -NspName
-{{ Fill NspName Description }}
+The name of the Netscan.
+Required for Name parameter set.
 
 ```yaml
 Type: String
@@ -109,6 +88,38 @@ Aliases:
 Required: True
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+A filter object to apply when retrieving devices.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -133,10 +144,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.NetScanExecutionDevice objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

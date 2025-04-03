@@ -30,15 +30,15 @@ Specifies the display name of the datasource. This parameter is optional and def
 Specifies the group of the datasource. This parameter is optional and defaults to "PushModules" if not specified.
 
 .PARAMETER Instances
-Specifies the instances of the resources to be updated. This parameter is mandatory. The instances should be the results of the New-LMPushMetricInstance function.
+Specifies the instances of the resources to be updated. This parameter is mandatory and should contain results from the New-LMPushMetricInstance function.
 
 .EXAMPLE
-Send-LMPushMetric -NewResourceHostName "NewResource" -NewResourceDescription "New Resource Description" -ResourceIds @{"system.deviceId"="12345"} -ResourceProperties @{"Property1"="Value1"; "Property2"="Value2"} -DatasourceId "123" -Instances $Instances
-
-This example sends a push metric to LogicMonitor by creating a new resource with the specified hostname and description. It updates the resource properties and associates it with the specified datasource ID. The metric data is sent for the specified instances.
+Send-LMPushMetric -NewResourceHostName "NewResource" -NewResourceDescription "New Resource Description" -ResourceIds @{"system.deviceId"="12345"} -ResourceProperties @{"Property1"="Value1"} -DatasourceId "123" -Instances $Instances
+Creates a new resource and sends metric data for the specified instances.
 
 .NOTES
 This function requires a valid API authentication. Make sure you are logged in before running any commands using Connect-LMAccount.
+
 #>
 Function Send-LMPushMetric {
     

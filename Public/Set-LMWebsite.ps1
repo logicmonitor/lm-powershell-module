@@ -1,3 +1,66 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor website monitoring configuration.
+
+.DESCRIPTION
+The Set-LMWebsite function modifies an existing website monitoring configuration in LogicMonitor.
+
+.PARAMETER Id
+Specifies the ID of the website to modify.
+
+.PARAMETER Name
+Specifies the name for the website.
+
+.PARAMETER IsInternal
+Indicates whether the website is internal.
+
+.PARAMETER Description
+Specifies the description for the website.
+
+.PARAMETER DisableAlerting
+Indicates whether to disable alerting for the website.
+
+.PARAMETER StopMonitoring
+Indicates whether to stop monitoring the website.
+
+.PARAMETER UseDefaultAlertSetting
+Indicates whether to use default alert settings.
+
+.PARAMETER UseDefaultLocationSetting
+Indicates whether to use default location settings.
+
+.PARAMETER TriggerSSLStatusAlert
+Indicates whether to trigger SSL status alerts.
+
+.PARAMETER TriggerSSLExpirationAlert
+Indicates whether to trigger SSL expiration alerts.
+
+.PARAMETER GroupId
+Specifies the group ID for the website.
+
+.PARAMETER Properties
+Specifies a hashtable of custom properties for the website.
+
+.PARAMETER PropertiesMethod
+Specifies how to handle properties. Valid values: "Add", "Replace", "Refresh".
+
+.PARAMETER PollingInterval
+Specifies the polling interval. Valid values: 1-10, 30, 60.
+
+.EXAMPLE
+Set-LMWebsite -Id 123 -Name "Updated Site" -Description "New description" -DisableAlerting $false
+Updates the website with new name, description, and enables alerting.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.Website object containing the updated configuration.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMWebsite {
 
     [CmdletBinding(DefaultParameterSetName = "Website")]

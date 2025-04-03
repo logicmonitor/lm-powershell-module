@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -125,10 +125,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None.
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject
+### Returns a PSCustomObject containing the ID of the removed access group and a success message confirming the removal.
 ## NOTES
 This function requires a valid LogicMonitor API authentication.
 Make sure to log in using Connect-LMAccount before running this command.

@@ -1,3 +1,54 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor topology source configuration.
+
+.DESCRIPTION
+The Set-LMTopologysource function modifies an existing topology source in LogicMonitor.
+
+.PARAMETER Id
+Specifies the ID of the topology source to modify.
+
+.PARAMETER Name
+Specifies the current name of the topology source.
+
+.PARAMETER NewName
+Specifies the new name for the topology source.
+
+.PARAMETER Description
+Specifies the description for the topology source.
+
+.PARAMETER appliesTo
+Specifies the applies to expression for the topology source.
+
+.PARAMETER TechNotes
+Specifies technical notes for the topology source.
+
+.PARAMETER PollingIntervalInSeconds
+Specifies the polling interval in seconds. Valid values: 1800, 3600, 7200, 21600.
+
+.PARAMETER Group
+Specifies the group for the topology source.
+
+.PARAMETER ScriptType
+Specifies the script type. Valid values: "embed", "powerShell".
+
+.PARAMETER Script
+Specifies the script content.
+
+.EXAMPLE
+Set-LMTopologysource -Id 123 -NewName "UpdatedSource" -Description "New description"
+Updates the topology source with new name and description.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.Topologysource object containing the updated configuration.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMTopologysource {
 
     [CmdletBinding()]

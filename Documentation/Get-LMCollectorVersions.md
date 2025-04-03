@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMCollectorVersions
 
 ## SYNOPSIS
-Retrieves the versions of LogicMonitor collectors available for download.
+Retrieves available LogicMonitor collector versions.
 
 ## SYNTAX
 
@@ -30,37 +30,28 @@ Get-LMCollectorVersions [-TopVersions] [-BatchSize <Int32>] [-ProgressAction <Ac
 ```
 
 ## DESCRIPTION
-The Get-LMCollectorVersions function retrieves the versions of LogicMonitor collectors based on the specified parameters.
-It requires a valid API authentication and authorization.
+The Get-LMCollectorVersions function retrieves information about available LogicMonitor collector versions.
+It can return all versions, top versions only, or versions filtered by specific criteria.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LMCollectorVersions -Filter "name=Collector1"
+#Retrieve all collector versions
+Get-LMCollectorVersions
 ```
-
-This example retrieves the collector versions that have the name "Collector1".
 
 ### EXAMPLE 2
 ```
+#Retrieve only top versions
 Get-LMCollectorVersions -TopVersions
 ```
-
-This example retrieves only the top versions of collector versions.
-
-### EXAMPLE 3
-```
-Get-LMCollectorVersions -BatchSize 500
-```
-
-This example retrieves the collector versions in batches of 500.
 
 ## PARAMETERS
 
 ### -Filter
-Specifies the filter to apply when retrieving collector versions.
-Only collector versions that match the specified filter will be returned.
+A filter object to apply when retrieving collector versions.
+This parameter is part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
@@ -75,7 +66,8 @@ Accept wildcard characters: False
 ```
 
 ### -TopVersions
-Indicates whether to retrieve only the top versions of collector versions.
+Switch to retrieve only the top versions of collectors.
+This parameter is part of a mutually exclusive parameter set.
 
 ```yaml
 Type: SwitchParameter
@@ -90,8 +82,9 @@ Accept wildcard characters: False
 ```
 
 ### -BatchSize
-Specifies the number of collector versions to retrieve in each batch.
-The default value is 1000.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -125,11 +118,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to Get-LMCollectorVersions.
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
-### Returns an object that contains the retrieved collector versions.
+### Returns an array of collector version objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

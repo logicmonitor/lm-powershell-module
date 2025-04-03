@@ -29,16 +29,14 @@ Removes the API token with ID 5678 associated with the user with name "john.doe"
 Remove-LMAPIToken -AccessId "abcd1234"
 Removes the API token with the specified access ID.
 
-.INPUTS
-You can pipe api token objects to this function.
-
-.OUTPUTS
-A custom object with the following properties:
-- Id: The ID of the removed API token.
-- Message: A message indicating the success of the removal operation.
-
 .NOTES
 This function requires a valid API authentication. Make sure to log in using Connect-LMAccount before running this command.
+
+.INPUTS
+You can pipe API token objects to this function.
+
+.OUTPUTS
+Returns a PSCustomObject containing the ID of the removed API token and a success message confirming the removal.
 #>
 Function Remove-LMAPIToken {
 

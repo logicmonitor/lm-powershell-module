@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -189,9 +189,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to this function.
+### None.
 ## OUTPUTS
 
+### Returns a PSCustomObject containing the instance ID and a message confirming the successful removal of the instance group.
 ## NOTES
 
 ## RELATED LINKS

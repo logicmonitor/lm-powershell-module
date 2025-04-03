@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMNetscanGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor NetScan group configuration.
 
 ## SYNTAX
 
@@ -25,36 +25,20 @@ Set-LMNetscanGroup [-Name <String>] [-NewName <String>] [-Description <String>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMNetscanGroup function modifies an existing NetScan group in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMNetscanGroup -Id 123 -NewName "Updated Group" -Description "New description"
+Updates the NetScan group with ID 123 with a new name and description.
+```
 
 ## PARAMETERS
 
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the NetScan group to modify.
 
 ```yaml
 Type: Int32
@@ -63,13 +47,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the current name of the NetScan group.
 
 ```yaml
 Type: String
@@ -84,7 +68,22 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the NetScan group.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the new description for the NetScan group.
 
 ```yaml
 Type: String
@@ -118,10 +117,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
+### You can pipe objects containing Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.NetScanGroup object containing the updated group information.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

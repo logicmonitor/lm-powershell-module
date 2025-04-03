@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMPushModuleInstanceProperty
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates an instance property using the LogicMonitor Push Module.
 
 ## SYNTAX
 
@@ -25,36 +25,20 @@ Set-LMPushModuleInstanceProperty -DeviceName <String> -DataSourceName <String> -
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMPushModuleInstanceProperty function modifies a property value for a datasource instance using the LogicMonitor Push Module API.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMPushModuleInstanceProperty -DeviceId 123 -DataSourceName "CPU" -InstanceName "Total" -PropertyName "threshold" -PropertyValue "90"
+Updates the threshold property for the CPU Total instance on device ID 123.
+```
 
 ## PARAMETERS
 
-### -DataSourceName
-{{ Fill DataSourceName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DeviceId
-{{ Fill DeviceId Description }}
+Specifies the ID of the device.
 
 ```yaml
 Type: Int32
@@ -63,13 +47,13 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -DeviceName
-{{ Fill DeviceName Description }}
+Specifies the name of the device.
 
 ```yaml
 Type: String
@@ -83,8 +67,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DataSourceName
+Specifies the name of the datasource.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -InstanceName
-{{ Fill InstanceName Description }}
+Specifies the name of the instance.
 
 ```yaml
 Type: String
@@ -99,7 +98,7 @@ Accept wildcard characters: False
 ```
 
 ### -PropertyName
-{{ Fill PropertyName Description }}
+Specifies the name of the property to update.
 
 ```yaml
 Type: String
@@ -114,7 +113,7 @@ Accept wildcard characters: False
 ```
 
 ### -PropertyValue
-{{ Fill PropertyValue Description }}
+Specifies the new value for the property.
 
 ```yaml
 Type: String
@@ -148,10 +147,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns the response from the API indicating the success of the property update.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

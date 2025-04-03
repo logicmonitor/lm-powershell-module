@@ -23,9 +23,7 @@ Removes the Netscan with the name "MyNetscan".
 You can pipe input to this function.
 
 .OUTPUTS
-System.Management.Automation.PSCustomObject. The function returns an object with the following properties:
-- Id: The Id of the removed Netscan.
-- Message: A message indicating the success of the removal operation.
+Returns a PSCustomObject containing the ID of the removed Netscan and a message indicating the success of the removal operation.
 #>
 Function Remove-LMNetscan {
 

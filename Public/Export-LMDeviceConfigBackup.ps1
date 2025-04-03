@@ -1,40 +1,41 @@
 <#
 .SYNOPSIS
-Exports the latest version of a device config for a select set of devices
+Exports the latest version of device configurations from LogicMonitor.
 
 .DESCRIPTION
-Exports the latest version of a device config for a select set of devices
+The Export-LMDeviceConfigBackup function exports the latest version of device configurations for specified devices. It can export configs from either a single device or all devices in a device group.
 
 .PARAMETER DeviceGroupId
-Device group id for the group to use as the source of running the report.
+The ID of the device group to export configurations from. This parameter is mandatory when using the DeviceGroup parameter set.
 
 .PARAMETER DeviceId
-Device id to use as the source of running the report, defaults to Devices by Type/Network folder if not specified
-
-.PARAMETER Path
-Path to export the csv backup to
+The ID of the device to export configurations from. This parameter is mandatory when using the Device parameter set.
 
 .PARAMETER InstanceNameFilter
-Regex filter to use to filter out Instance names used for discovery, defaults to "running|current|PaloAlto".
+A regex filter to use for filtering Instance names. Defaults to "running|current|PaloAlto".
 
 .PARAMETER ConfigSourceNameFilter
-Regex filter to use to filter out ConfigSource names used for discovery, defaults to ".*"
+A regex filter to use for filtering ConfigSource names. Defaults to ".*".
+
+.PARAMETER Path
+The file path where the CSV backup will be exported to.
 
 .EXAMPLE
-Export-LMDeviceConfigBackup -DeviceGroupId 2 -Path export-report.csv
+#Export configurations from a device group
+Export-LMDeviceConfigBackup -DeviceGroupId 2 -Path "export-report.csv"
 
 .EXAMPLE
-Export-LMDeviceConfigBackup -DeviceId 1 -Path export-report.csv
+#Export configurations from a single device
+Export-LMDeviceConfigBackup -DeviceId 1 -Path "export-report.csv"
 
+.NOTES
+You must run Connect-LMAccount before running this command.
 
 .INPUTS
 None. You cannot pipe objects to this command.
 
-.LINK
-Module repo: https://github.com/logicmonitor/lm-powershell-module
-
-.LINK
-PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+.OUTPUTS
+Returns an array of device configuration objects if successful.
 #>
 
 Function Export-LMDeviceConfigBackup {

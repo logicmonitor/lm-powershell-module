@@ -1,3 +1,54 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor website group configuration.
+
+.DESCRIPTION
+The Set-LMWebsiteGroup function modifies an existing website group in LogicMonitor.
+
+.PARAMETER Id
+Specifies the ID of the website group to modify.
+
+.PARAMETER Name
+Specifies the current name of the website group.
+
+.PARAMETER NewName
+Specifies the new name for the website group.
+
+.PARAMETER Description
+Specifies the description for the website group.
+
+.PARAMETER Properties
+Specifies a hashtable of custom properties for the website group.
+
+.PARAMETER PropertiesMethod
+Specifies how to handle properties. Valid values: "Add", "Replace", "Refresh".
+
+.PARAMETER DisableAlerting
+Indicates whether to disable alerting for the website group.
+
+.PARAMETER StopMonitoring
+Indicates whether to stop monitoring the website group.
+
+.PARAMETER ParentGroupId
+Specifies the ID of the parent group.
+
+.PARAMETER ParentGroupName
+Specifies the name of the parent group.
+
+.EXAMPLE
+Set-LMWebsiteGroup -Id 123 -NewName "Updated Group" -Description "New description" -ParentGroupId 456
+Updates the website group with new name, description, and parent group.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.WebsiteGroup object containing the updated configuration.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMWebsiteGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'Id-ParentGroupId')]

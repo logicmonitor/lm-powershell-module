@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-LMWebsiteGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes a website group from LogicMonitor.
 
 ## SYNTAX
 
@@ -25,51 +25,27 @@ Remove-LMWebsiteGroup -Name <String> [-DeleteHostsandChildren <Boolean>] [-Progr
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMWebsiteGroup function removes a website group from LogicMonitor using either its ID or name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Remove-LMWebsiteGroup -Id 123
+Removes the website group with ID 123.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Remove-LMWebsiteGroup -Name "MyGroup" -DeleteHostsandChildren $true
+Removes the website group named "MyGroup" and all its child items.
+```
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeleteHostsandChildren
-{{ Fill DeleteHostsandChildren Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the website group to remove.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: Int32
@@ -78,13 +54,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the name of the website group to remove.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -98,6 +75,22 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DeleteHostsandChildren
+Specifies whether to delete the hosts and their children within the website group.
+Default value is $false.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -WhatIf
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
@@ -106,6 +99,21 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -134,10 +142,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
+### You can pipe objects to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a PSCustomObject containing the ID of the removed website group and a success message confirming the removal.
 ## NOTES
 
 ## RELATED LINKS

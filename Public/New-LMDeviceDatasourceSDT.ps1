@@ -20,6 +20,24 @@ The start hour for the SDT. This parameter is mandatory when using the 'Daily', 
 .PARAMETER StartMinute
 The start minute for the SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. Must be a value between 0 and 59.
 
+.PARAMETER EndHour
+The end hour for the SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. Must be a value between 0 and 23.
+
+.PARAMETER EndMinute
+The end minute for the SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. Must be a value between 0 and 59.
+
+.PARAMETER WeekDay
+The day of the week for the SDT. This parameter is mandatory when using the 'Weekly' or 'MonthlyByWeek' parameter sets.
+
+.PARAMETER WeekOfMonth
+The week of the month for the SDT. This parameter is mandatory when using the 'MonthlyByWeek' parameter set.
+
+.PARAMETER DayOfMonth
+The day of the month for the SDT. This parameter is mandatory when using the 'Monthly' parameter set.
+
+.PARAMETER DeviceDataSourceId
+The ID of the device datasource for which to create the SDT.
+
 .EXAMPLE
 New-LMDeviceDatasourceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00" -EndDate "2022-01-01 06:00" -StartHour 2 -StartMinute 30 -DeviceDataSourceId 123
 Creates a new one-time device datasource SDT with a comment "Maintenance window" starting on January 1, 2022, at 00:00 and ending on the same day at 06:00.
@@ -35,6 +53,15 @@ Creates a new monthly device datasource SDT with a comment "Monthly maintenance"
 .EXAMPLE
 New-LMDeviceDatasourceSDT -Comment "Weekly maintenance" -StartHour 10 -StartMinute 0 -ParameterSet Weekly -DeviceDataSourceId 123
 Creates a new weekly device datasource SDT with a comment "Weekly maintenance" starting every Monday at 10:00.
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.SDT object.
 #>
 Function New-LMDeviceDatasourceSDT {
     [CmdletBinding()]

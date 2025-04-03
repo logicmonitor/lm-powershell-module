@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -55,31 +55,7 @@ It allows you to specify various parameters such as comment, start date, end dat
 ### EXAMPLE 1
 ```
 New-LMDeviceDatasourceInstanceSDT -Comment "Test SDT Instance" -StartDate (Get-Date) -EndDate (Get-Date).AddDays(7) -StartHour 8 -StartMinute 30 -DeviceDataSourceInstanceId 1234
-Creates a new one-time instance with a comment, start date, end date, start hour, and start minute.
-```
-
-### EXAMPLE 2
-```
-New-LMDeviceDatasourceInstanceSDT -Comment "Daily SDT Instance" -StartHour 9 -StartMinute 0 -ParameterSet Daily -DeviceDataSourceInstanceId 1234
-Creates a new daily instance with a comment, start hour, and start minute.
-```
-
-### EXAMPLE 3
-```
-New-LMDeviceDatasourceInstanceSDT -Comment "Monthly SDT Instance" -StartHour 10 -StartMinute 15 -ParameterSet Monthly -DeviceDataSourceInstanceId 1234
-Creates a new monthly instance with a comment, start hour, and start minute.
-```
-
-### EXAMPLE 4
-```
-New-LMDeviceDatasourceInstanceSDT -Comment "Monthly By Week SDT Instance" -StartHour 11 -StartMinute 30 -ParameterSet MonthlyByWeek -DeviceDataSourceInstanceId 1234
-Creates a new monthly instance with a specific week, comment, start hour, and start minute.
-```
-
-### EXAMPLE 5
-```
-New-LMDeviceDatasourceInstanceSDT -Comment "Weekly  SDT Instance" -StartHour 12 -StartMinute 45 -ParameterSet Weekly -DeviceDataSourceInstanceId 1234
-Creates a new weekly instance with a comment, start hour, and start minute.
+Creates a new one-time instance SDT with a comment, start date, end date, start hour, and start minute.
 ```
 
 ## PARAMETERS
@@ -166,7 +142,9 @@ Accept wildcard characters: False
 ```
 
 ### -EndHour
-{{ Fill EndHour Description }}
+Specifies the end hour for the new instance SDT.
+This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets.
+The value must be between 0 and 23.
 
 ```yaml
 Type: Int32
@@ -181,7 +159,9 @@ Accept wildcard characters: False
 ```
 
 ### -EndMinute
-{{ Fill EndMinute Description }}
+Specifies the end minute for the new instance SDT.
+This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets.
+The value must be between 0 and 59.
 
 ```yaml
 Type: Int32
@@ -196,7 +176,8 @@ Accept wildcard characters: False
 ```
 
 ### -WeekDay
-{{ Fill WeekDay Description }}
+Specifies the day of the week for the new instance SDT.
+This parameter is mandatory when using the 'Weekly' or 'MonthlyByWeek' parameter sets.
 
 ```yaml
 Type: String
@@ -211,7 +192,8 @@ Accept wildcard characters: False
 ```
 
 ### -WeekOfMonth
-{{ Fill WeekOfMonth Description }}
+Specifies the week of the month for the new instance SDT.
+This parameter is mandatory when using the 'MonthlyByWeek' parameter set.
 
 ```yaml
 Type: String
@@ -226,7 +208,8 @@ Accept wildcard characters: False
 ```
 
 ### -DayOfMonth
-{{ Fill DayOfMonth Description }}
+Specifies the day of the month for the new instance SDT.
+This parameter is mandatory when using the 'Monthly' parameter set.
 
 ```yaml
 Type: Int32
@@ -241,7 +224,7 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceDataSourceInstanceId
-{{ Fill DeviceDataSourceInstanceId Description }}
+Specifies the ID of the device datasource instance for which to create the SDT.
 
 ```yaml
 Type: String
@@ -275,8 +258,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.SDT object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

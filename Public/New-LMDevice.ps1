@@ -3,7 +3,7 @@
 Creates a new LogicMonitor device.
 
 .DESCRIPTION
-The New-LMDevice function creates a new LogicMonitor device with the specified parameters. It sends a POST request to the LogicMonitor API to create the device.
+The New-LMDevice function creates a new device in LogicMonitor with specified configuration settings.
 
 .PARAMETER Name
 The name of the device. This parameter is mandatory.
@@ -15,7 +15,7 @@ The display name of the device. This parameter is mandatory.
 The description of the device.
 
 .PARAMETER PreferredCollectorId
-The ID of the preferred collector for the device.
+The ID of the preferred collector for the device. This parameter is mandatory.
 
 .PARAMETER PreferredCollectorGroupId
 The ID of the preferred collector group for the device.
@@ -24,42 +24,47 @@ The ID of the preferred collector group for the device.
 The ID of the auto-balanced collector group for the device.
 
 .PARAMETER DeviceType
-The type of the device. Default value is 0.
+The type of the device. Defaults to 0.
 
 .PARAMETER Properties
 A hashtable of custom properties for the device.
 
 .PARAMETER HostGroupIds
-An array of host group IDs for the device. Dynamic group IDs will be ignored, and the operation will replace all existing groups.
+An array of host group IDs. Dynamic group IDs will be ignored.
 
 .PARAMETER Link
 The link associated with the device.
 
 .PARAMETER DisableAlerting
-Specifies whether alerting is disabled for the device.
+Whether to disable alerting for the device.
 
 .PARAMETER EnableNetFlow
-Specifies whether NetFlow is enabled for the device.
+Whether to enable NetFlow for the device.
 
 .PARAMETER NetflowCollectorGroupId
-The ID of the NetFlow collector group for the device.
+The ID of the NetFlow collector group.
 
 .PARAMETER NetflowCollectorId
-The ID of the NetFlow collector for the device.
+The ID of the NetFlow collector.
 
 .PARAMETER LogCollectorGroupId
-The ID of the log collector group for the device.
+The ID of the log collector group.
 
 .PARAMETER LogCollectorId
-The ID of the log collector for the device.
+The ID of the log collector.
 
 .EXAMPLE
-New-LMDevice -Name "Server001" -DisplayName "Server 001" -Description "Web server" -PreferredCollectorId 1234 -HostGroupIds @("Group1", "Group2")
-
-This example creates a new LogicMonitor device with the name "Server001", display name "Server 001", description "Web server", and preferred collector ID 1234. It assigns the device to host groups "Group1" and "Group2".
+#Create a new device
+New-LMDevice -Name "server1" -DisplayName "Server 1" -PreferredCollectorId 123 -Properties @{"location"="datacenter1"}
 
 .NOTES
-This function requires a valid API authentication. Make sure you are logged in before running any commands using Connect-LMAccount.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Device object.
 #>
 Function New-LMDevice {
 

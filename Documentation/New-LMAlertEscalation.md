@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -17,21 +17,21 @@ New-LMAlertEscalation [-Id] <String> [-ProgressAction <ActionPreference>] [<Comm
 ```
 
 ## DESCRIPTION
-The New-LMAlertEscalation function creates a new escalation for a LogicMonitor alert.
-It checks if the user is logged in and has valid API credentials before making the API request to create the escalation.
+The New-LMAlertEscalation function creates a new escalation for a specified alert in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Escalate an alert
 New-LMAlertEscalation -Id "DS12345"
-Creates a new escalation for the alert with ID "12345".
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the alert for which the escalation needs to be created.
+The ID of the alert to escalate.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -65,8 +65,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns a success message if the escalation is created successfully.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

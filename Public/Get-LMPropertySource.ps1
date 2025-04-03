@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves property sources from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMPropertySource function retrieves property source configurations from LogicMonitor. It can retrieve all property sources, a specific source by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific property source to retrieve.
+
+.PARAMETER Name
+The name of the specific property source to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving property sources.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all property sources
+Get-LMPropertySource
+
+.EXAMPLE
+#Retrieve a specific property source by name
+Get-LMPropertySource -Name "Windows-Properties"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.PropertySource objects.
+#>
+
 Function Get-LMPropertySource {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

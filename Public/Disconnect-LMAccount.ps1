@@ -1,24 +1,24 @@
 <#
 .SYNOPSIS
-Disconnect from a previously connected LM portal
+Disconnects from a previously connected LM portal.
 
 .DESCRIPTION
-Clears stored API credentials for a previously connected LM portal. Useful for switching between LM portals or clearing credentials after a script runs
+The Disconnect-LMAccount function clears stored API credentials for a previously connected LM portal. It's useful for switching between LM portals or clearing credentials after a script runs.
 
 .EXAMPLE
+#Disconnect from the current LM portal
 Disconnect-LMAccount
 
 .NOTES
-Once disconnect you will need to reconnect to a portal before you will be allowed to run commands again.
+Once disconnected you will need to reconnect to a portal before you will be allowed to run commands again.
 
 .INPUTS
 None. You cannot pipe objects to this command.
 
-.LINK
-Module repo: https://github.com/logicmonitor/lm-powershell-module
+.OUTPUTS
+None. This command does not generate any output.
 
-.LINK
-PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+
 #>
 Function Disconnect-LMAccount {
     #Clear credential object from environment

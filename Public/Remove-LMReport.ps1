@@ -23,7 +23,7 @@ Removes the report with the name "MyReport".
 You can pipe input to this function.
 
 .OUTPUTS
-System.Management.Automation.PSCustomObject. Returns an object with the removed report ID and a success message.
+Returns a PSCustomObject containing the ID of the removed report and a message indicating the success of the removal operation.
 
 .NOTES
 This function requires a valid API authentication and authorization. Use Connect-LMAccount to log in before running this command.

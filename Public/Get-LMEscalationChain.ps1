@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves escalation chains from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMEscalationChain function retrieves escalation chain configurations from LogicMonitor. It can retrieve all chains, a specific chain by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific escalation chain to retrieve.
+
+.PARAMETER Name
+The name of the specific escalation chain to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving escalation chains.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all escalation chains
+Get-LMEscalationChain
+
+.EXAMPLE
+#Retrieve a specific escalation chain by name
+Get-LMEscalationChain -Name "Critical-Alerts"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns escalation chain objects from LogicMonitor.
+#>
+
 Function Get-LMEscalationChain {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

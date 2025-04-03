@@ -5,41 +5,51 @@ online version:
 schema: 2.0.0
 ---
 
-# Invoke-LMUserLogoff
+# Build-LMFilter
 
 ## SYNOPSIS
-Forces user logoff in LogicMonitor.
+Builds a filter expression for Logic Monitor API queries.
 
 ## SYNTAX
 
 ```
-Invoke-LMUserLogoff [-Usernames] <String[]> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Build-LMFilter [-PassThru] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Invoke-LMUserLogoff function forces one or more users to be logged out of their LogicMonitor sessions.
+The Build-LMFilter function creates a filter expression by interactively prompting for conditions and operators.
+It supports basic filtering for single fields and advanced filtering for property-based queries.
+Multiple conditions can be combined using AND/OR operators.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Log off multiple users
-Invoke-LMUserLogoff -Usernames "user1", "user2"
+#Build a basic filter expression
+Build-LMFilter
+This example launches the interactive filter builder wizard.
+```
+
+### EXAMPLE 2
+```
+#Build a filter and return the expression
+Build-LMFilter -PassThru
+This example builds a filter and returns the expression as a string.
 ```
 
 ## PARAMETERS
 
-### -Usernames
-An array of usernames to log off.
+### -PassThru
+When specified, returns the filter expression as a string instead of displaying it in a panel.
 
 ```yaml
-Type: String[]
+Type: SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 1
-Default value: None
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -67,8 +77,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns a success message if the logoff is completed successfully.
+### [String] Returns a PowerShell filter expression when using -PassThru.
 ## NOTES
-You must run Connect-LMAccount before running this command.
+The filter expression is saved to the global $LMFilter variable.
 
 ## RELATED LINKS

@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves Netscan configurations from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMNetscan function retrieves Netscan configurations from LogicMonitor. It can retrieve all Netscans, a specific Netscan by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific Netscan to retrieve.
+
+.PARAMETER Name
+The name of the specific Netscan to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving Netscans.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all Netscans
+Get-LMNetscan
+
+.EXAMPLE
+#Retrieve a specific Netscan by name
+Get-LMNetscan -Name "Network-Discovery"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.NetScan objects.
+#>
+
 Function Get-LMNetscan {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

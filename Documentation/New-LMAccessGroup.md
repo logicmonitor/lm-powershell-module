@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -18,17 +18,16 @@ New-LMAccessGroup [-Name] <String> [[-Description] <String>] [[-Tenant] <String>
 ```
 
 ## DESCRIPTION
-The New-LMAccessGroup function is used to create a new access group in LogicMonitor.
-An access group is a collection of users with similar permissions and access rights for managing modules in the LM exchange and my module toolbox.
+The New-LMAccessGroup function creates a new access group in LogicMonitor.
+Access groups control user permissions and access rights for managing modules in the LM exchange and module toolbox.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Create a new access group
 New-LMAccessGroup -Name "Group1" -Description "Access group for administrators" -Tenant "12345"
 ```
-
-This example creates a new access group named "Group1" with the description "Access group for administrators" and assigns it to the tenant with ID "12345".
 
 ## PARAMETERS
 
@@ -98,10 +97,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.AccessGroup object.
 ## NOTES
-For this function to work, you need to be logged in and have valid API credentials.
-Use the Connect-LMAccount function to log in before running any commands.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

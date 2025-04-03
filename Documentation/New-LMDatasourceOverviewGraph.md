@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -25,27 +25,27 @@ New-LMDatasourceOverviewGraph -RawObject <Object> -DatasourceName <Object> [-Pro
 ```
 
 ## DESCRIPTION
-The New-LMDatasourceOverviewGraph function creates a new datasource overview graph in LogicMonitor.
-It requires the user to be logged in and have valid API credentials.
+The New-LMDatasourceOverviewGraph function creates a new overview graph for a specified datasource in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-LMDatasourceOverviewGraph -RawObject $graphConfig -DatasourceId 12345
+#Create overview graph using datasource ID
+New-LMDatasourceOverviewGraph -RawObject $graphConfig -DatasourceId 123
 ```
 
 ### EXAMPLE 2
 ```
-New-LMDatasourceOverviewGraph -RawObject $graphConfig -DatasourceName "My Datasource"
+#Create overview graph using datasource name
+New-LMDatasourceOverviewGraph -RawObject $graphConfig -DatasourceName "MyDatasource"
 ```
 
 ## PARAMETERS
 
 ### -RawObject
 The raw object representing the graph configuration.
-This object will be converted to JSON and sent as the request body.
-Use Get-LMDatasourceOverviewGraph to get the raw object representing a graph configuration.
+Use Get-LMDatasourceOverviewGraph to see the expected format.
 
 ```yaml
 Type: Object
@@ -60,8 +60,8 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceId
-The ID of the datasource for which the overview graph is being created.
-This parameter is mandatory when using the 'dsId' parameter set.
+The ID of the datasource for which to create the overview graph.
+Required for dsId parameter set.
 
 ```yaml
 Type: Object
@@ -76,8 +76,8 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceName
-The name of the datasource for which the overview graph is being created.
-This parameter is mandatory when using the 'dsName' parameter set.
+The name of the datasource for which to create the overview graph.
+Required for dsName parameter set.
 
 ```yaml
 Type: Object
@@ -111,8 +111,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.DatasourceGraph object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

@@ -31,6 +31,14 @@ Creates a new instance group named "Group1" with the description "Instance group
 New-LMDeviceDatasourceInstanceGroup -InstanceGroupName "Group2" -Description "Instance group for Device2" -DatasourceId 123 -Id 456
 Creates a new instance group named "Group2" with the description "Instance group for Device2" for the device with ID 456 and the datasource with ID 123.
 
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DeviceDatasourceInstanceGroup object.
 #>
 Function New-LMDeviceDatasourceInstanceGroup {
 

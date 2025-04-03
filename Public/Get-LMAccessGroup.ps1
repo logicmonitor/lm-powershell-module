@@ -1,36 +1,42 @@
 <#
 .SYNOPSIS
-Retrieves LogicMonitor access groups based on specified parameters.
+Retrieves access groups from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMAccessGroup function retrieves LogicMonitor access groups based on the specified parameters. It supports retrieving access groups by ID, name, or using a filter. The function uses the LogicMonitor REST API to make the requests.
+The Get-LMAccessGroup function retrieves access group information from LogicMonitor. It can return a single access group by ID or name, or multiple groups based on filter criteria.
 
 .PARAMETER Id
-Specifies the ID of the access group to retrieve. This parameter is mutually exclusive with the Name and Filter parameters.
+The ID of the access group to retrieve. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER Name
-Specifies the name of the access group to retrieve. This parameter is mutually exclusive with the Id and Filter parameters.
+The name of the access group to retrieve. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-Specifies a filter object to retrieve access groups based on custom filter criteria. This parameter is mutually exclusive with the Id and Name parameters.
+A filter object to apply when retrieving access groups. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER BatchSize
-Specifies the number of access groups to retrieve per request. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Default is 1000.
 
 .EXAMPLE
+#Retrieve an access group by ID
 Get-LMAccessGroup -Id 123
-Retrieves the access group with the specified ID.
 
 .EXAMPLE
-Get-LMAccessGroup -Name "MyAccessGroup"
-Retrieves the access group with the specified name.
+#Retrieve an access group by name
+Get-LMAccessGroup -Name "Admin Group"
 
 .EXAMPLE
-Get-LMAccessGroup -Filter "tenantId -eq 'Value'"
-Retrieves access groups based on the specified filter criteria.
+#Retrieve access groups using a filter
+Get-LMAccessGroup -Filter "name -like 'Dev*'"
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this function.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.AccessGroup objects.
 #>
 Function Get-LMAccessGroup {
 

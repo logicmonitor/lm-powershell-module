@@ -1,39 +1,38 @@
 <#
 .SYNOPSIS
-Exports a specified logicmodule
+Exports LogicMonitor LogicModules for backup or transfer.
 
 .DESCRIPTION
-Exports logic module for backup/import into another portal
+The Export-LMLogicModule function exports LogicModules from LogicMonitor. It supports exporting various types of modules including datasources, property rules, event sources, and more.
 
 .PARAMETER LogicModuleId
-Id of the logic module you are looking to export
+The ID of the LogicModule to export. This parameter is mandatory when using the Id parameter set.
 
 .PARAMETER LogicModuleName
-Name of the logic module you are looking to export, used as an alternative to LogicModuleId
+The name of the LogicModule to export. This parameter is mandatory when using the Name parameter set.
 
 .PARAMETER Type
-Type of logic module to export
+The type of LogicModule to export. Valid values are: "datasources", "propertyrules", "eventsources", "topologysources", "configsources", "logsources", "functions", "oids".
 
 .PARAMETER DownloadPath
-Path to export the logic module to, defaults to current directory if not specified
+The path where the exported LogicModule will be saved. Defaults to current directory.
 
 .EXAMPLE
+#Export a LogicModule by ID
 Export-LMLogicModule -LogicModuleId 1907 -Type "eventsources"
 
 .EXAMPLE
+#Export a LogicModule by name
 Export-LMLogicModule -LogicModuleName "SNMP_Network_Interfaces" -Type "datasources"
 
 .NOTES
-You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
+You must run Connect-LMAccount before running this command.
 
 .INPUTS
 None. You cannot pipe objects to this command.
 
-.LINK
-Module repo: https://github.com/logicmonitor/lm-powershell-module
-
-.LINK
-PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+.OUTPUTS
+Returns a success message if the export is completed successfully.
 #>
 Function Export-LMLogicModule {
 

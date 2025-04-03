@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMTopologysource
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor topology source configuration.
 
 ## SYNTAX
 
@@ -27,51 +27,20 @@ Set-LMTopologysource -Name <String> [-NewName <String>] [-Description <String>] 
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMTopologysource function modifies an existing topology source in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMTopologysource -Id 123 -NewName "UpdatedSource" -Description "New description"
+Updates the topology source with new name and description.
+```
 
 ## PARAMETERS
 
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Group
-{{ Fill Group Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the topology source to modify.
 
 ```yaml
 Type: String
@@ -86,7 +55,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the current name of the topology source.
 
 ```yaml
 Type: String
@@ -101,7 +70,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the topology source.
 
 ```yaml
 Type: String
@@ -115,55 +84,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PollingIntervalInSeconds
-{{ Fill PollingIntervalInSeconds Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-Accepted values: 1800, 3600, 7200, 21600
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Script
-{{ Fill Script Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ScriptType
-{{ Fill ScriptType Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: embed, powerShell
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TechNotes
-{{ Fill TechNotes Description }}
+### -Description
+Specifies the description for the topology source.
 
 ```yaml
 Type: String
@@ -178,7 +100,84 @@ Accept wildcard characters: False
 ```
 
 ### -appliesTo
-{{ Fill appliesTo Description }}
+Specifies the applies to expression for the topology source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TechNotes
+Specifies technical notes for the topology source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PollingIntervalInSeconds
+Specifies the polling interval in seconds.
+Valid values: 1800, 3600, 7200, 21600.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Group
+Specifies the group for the topology source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ScriptType
+Specifies the script type.
+Valid values: "embed", "powerShell".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Script
+Specifies the script content.
 
 ```yaml
 Type: String
@@ -212,10 +211,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.Topologysource object containing the updated configuration.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

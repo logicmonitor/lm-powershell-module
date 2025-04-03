@@ -1,41 +1,47 @@
 <#
 .SYNOPSIS
-Retrieves the alert settings for a specific LogicMonitor device datasource instance.
+Retrieves alert settings for a LogicMonitor device datasource instance.
 
 .DESCRIPTION
-The Get-LMDeviceDatasourceInstanceAlertSetting function retrieves the alert settings for a specific LogicMonitor device datasource instance. It requires the device name or ID, datasource name or ID, and instance name as input parameters. Optionally, you can also provide a filter to narrow down the results. The function returns an array of alert settings for the specified instance.
+The Get-LMDeviceDatasourceInstanceAlertSetting function retrieves the alert configuration settings for a specific device datasource instance. It supports identifying the device and datasource by either ID or name, and allows filtering of the results.
 
 .PARAMETER DatasourceName
-Specifies the name of the datasource. This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter set.
+The name of the datasource. Required for Id-dsName and Name-dsName parameter sets.
 
 .PARAMETER DatasourceId
-Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter set.
+The ID of the datasource. Required for Id-dsId and Name-dsId parameter sets.
 
 .PARAMETER Id
-Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter set. This parameter can also be specified using the 'DeviceId' alias.
+The ID of the device. Can be specified using the DeviceId alias. Required for Id-dsId and Id-dsName parameter sets.
 
 .PARAMETER Name
-Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter set. This parameter can also be specified using the 'DeviceName' alias.
+The name of the device. Can be specified using the DeviceName alias. Required for Name-dsName and Name-dsId parameter sets.
 
 .PARAMETER InstanceName
-Specifies the name of the instance for which to retrieve the alert settings. This parameter is mandatory.
+The name of the instance to retrieve alert settings for. This parameter is mandatory.
 
 .PARAMETER Filter
-Specifies a filter to narrow down the results. This parameter is optional.
+A filter object to apply when retrieving alert settings. This parameter is optional.
 
 .PARAMETER BatchSize
-Specifies the number of results to retrieve per batch. The default value is 1000. This parameter is optional.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
+#Retrieve alert settings using names
 Get-LMDeviceDatasourceInstanceAlertSetting -Name "MyDevice" -DatasourceName "MyDatasource" -InstanceName "MyInstance"
-Retrieves the alert settings for the instance named "MyInstance" of the datasource "MyDatasource" on the device named "MyDevice".
 
 .EXAMPLE
-Get-LMDeviceDatasourceInstanceAlertSetting -Id 123 -DatasourceId 456 -InstanceName "MyInstance" -Filter "Property -eq 'value'"
-Retrieves the alert settings for the instance named "MyInstance" of the datasource with ID 456 on the device with ID 123, applying the specified filter.
+#Retrieve alert settings using IDs with filter
+Get-LMDeviceDatasourceInstanceAlertSetting -Id 123 -DatasourceId 456 -InstanceName "MyInstance" -Filter $filterObject
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Make sure you are logged in before running any commands by using the Connect-LMAccount function.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.AlertSetting objects.
 #>
 
 Function Get-LMDeviceDatasourceInstanceAlertSetting {

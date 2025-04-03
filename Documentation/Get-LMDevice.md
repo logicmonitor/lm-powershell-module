@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDevice
 
 ## SYNOPSIS
-Get device info from a connected LM portal
+Retrieves device information from LogicMonitor.
 
 ## SYNTAX
 
@@ -40,38 +40,41 @@ Get-LMDevice [-Filter <Object>] [-Delta] [-BatchSize <Int32>] [-ProgressAction <
  [<CommonParameters>]
 ```
 
+### FilterWizard
+```
+Get-LMDevice [-FilterWizard] [-Delta] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
+```
+
 ### Delta
 ```
 Get-LMDevice [-DeltaId <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Get device info from a connected LM portal
+The Get-LMDevice function retrieves device information from LogicMonitor based on specified parameters.
+It can return a single device by ID or multiple devices based on name, display name, filter, or filter wizard.
+It also supports delta tracking for monitoring changes.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get all devices:
-    Get-LMDevice
+#Retrieve a device by ID
+Get-LMDevice -Id 123
 ```
 
-Get specific device:
-    Get-LMDevice -Id 1
-    Get-LMDevice -DisplayName "device.example.com"
-    Get-LMDevice -Name "10.10.10.10"
-
-Get multiple devices using wildcards:
-    Get-LMDevice -DisplayName "*.example.com"
-    Get-LMDevice -Name "10.10.*"
-
-Get device/s using a custom filter:
-    Get-LMDevice -Filter "displayName -eq 'corp-*' -and preferredCollectorId -eq '1'"
+### EXAMPLE 2
+```
+#Retrieve devices with delta tracking
+Get-LMDevice -Delta
+```
 
 ## PARAMETERS
 
 ### -Id
-The device id for a device in LM.
+The ID of the device to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Int32
@@ -86,8 +89,8 @@ Accept wildcard characters: False
 ```
 
 ### -DisplayName
-The display name value for a device in LM.
-This value can include wildcard input such as "*.example.com"
+The display name of the device to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -102,9 +105,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name value for a device in LM.
-This is the fqdn/ip used when adding a device into LM.
-This value accepts wildcard input such as "10.10.*"
+The name of the device to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -119,12 +121,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A hashtable of additional filter properties to include with request.
-All properties are treated as if using the equals ":" operator.
-When using multiple filters they are combined as AND conditions.
-
-An example Filter to get devices with alerting enabled and where the display name contains equal.com:
-    @{displayName="*.example.com";disableAlerting=$false}
+A filter object to apply when retrieving devices.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
@@ -138,12 +136,28 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Delta
-Switch used to return a deltaId along with the requested data to use for delta change tracking.
+### -FilterWizard
+Switch to use the filter wizard interface for building the filter.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: All, DisplayName, Name, Filter
+Parameter Sets: FilterWizard
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Delta
+Switch to return a deltaId along with the requested data for change tracking.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: All, DisplayName, Name, Filter, FilterWizard
 Aliases:
 
 Required: False
@@ -154,7 +168,7 @@ Accept wildcard characters: False
 ```
 
 ### -DeltaId
-The deltaId string for a delta query you want to see changes for.
+The deltaId string for retrieving changes since a previous query.
 
 ```yaml
 Type: String
@@ -169,8 +183,9 @@ Accept wildcard characters: False
 ```
 
 ### -BatchSize
-The return size for each request, this value if not specified defaults to 1000.
-If a result would return 1001 and items, two requests would be made to return the full set.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -204,9 +219,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.Device objects.
 ## NOTES
-Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

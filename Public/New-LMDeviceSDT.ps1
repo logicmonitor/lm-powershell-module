@@ -14,20 +14,45 @@ Specifies the start date and time for the SDT. This parameter is mandatory when 
 .PARAMETER EndDate
 Specifies the end date and time for the SDT. This parameter is mandatory when using the 'OneTime-DeviceId' or 'OneTime-DeviceName' parameter sets.
 
+.PARAMETER StartHour
+Specifies the start hour for recurring SDTs. This parameter is mandatory when using recurring parameter sets. Must be between 0 and 23.
+
+.PARAMETER StartMinute
+Specifies the start minute for recurring SDTs. This parameter is mandatory when using recurring parameter sets. Must be between 0 and 59.
+
+.PARAMETER EndHour
+Specifies the end hour for recurring SDTs. This parameter is mandatory when using recurring parameter sets. Must be between 0 and 23.
+
+.PARAMETER EndMinute
+Specifies the end minute for recurring SDTs. This parameter is mandatory when using recurring parameter sets. Must be between 0 and 59.
+
+.PARAMETER WeekDay
+Specifies the day of the week for weekly or monthly by week SDTs.
+
+.PARAMETER WeekOfMonth
+Specifies which week of the month for monthly by week SDTs.
+
+.PARAMETER DayOfMonth
+Specifies the day of the month for monthly SDTs.
+
 .PARAMETER DeviceId
-Specifies the ID of the device for which the SDT is being created. This parameter is mandatory when using the 'OneTime-DeviceId', 'Daily-DeviceId', 'Monthly-DeviceId', 'MonthlyByWeek-DeviceId', or 'Weekly-DeviceId' parameter sets.
+Specifies the ID of the device. This parameter is mandatory when using ID-based parameter sets.
 
 .PARAMETER DeviceName
-Specifies the name of the device for which the SDT is being created. This parameter is mandatory when using the 'OneTime-DeviceName', 'Daily-DeviceName', 'Monthly-DeviceName', 'MonthlyByWeek-DeviceName', or 'Weekly-DeviceName' parameter sets.
+Specifies the name of the device. This parameter is mandatory when using name-based parameter sets.
 
 .EXAMPLE
 New-LMDeviceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceId "12345"
-Creates a one-time SDT for the device with ID "12345" starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00 with the comment "Maintenance window".
+Creates a one-time SDT for the device with ID "12345".
 
-.EXAMPLE
-New-LMDeviceSDT -Comment "Daily maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceName "Server01"
-Creates a daily recurring SDT for the device with name "Server01" starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00 with the comment "Daily maintenance window".
+.NOTES
+You must run Connect-LMAccount before running this command.
 
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.SDT object.
 #>
 Function New-LMDeviceSDT {
 

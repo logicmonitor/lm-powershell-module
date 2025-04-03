@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves roles from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMRole function retrieves role configurations from LogicMonitor. It can retrieve all roles, a specific role by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific role to retrieve.
+
+.PARAMETER Name
+The name of the specific role to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving roles.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all roles
+Get-LMRole
+
+.EXAMPLE
+#Retrieve a specific role by name
+Get-LMRole -Name "Administrator"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Role objects.
+#>
+
 Function Get-LMRole {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

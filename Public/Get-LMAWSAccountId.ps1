@@ -1,16 +1,22 @@
 <#
 .SYNOPSIS
-Retrieves the AWS Account ID associated with the LogicMonitor account.
+Retrieves the AWS External Account ID associated with the LogicMonitor account.
 
 .DESCRIPTION
-The Get-LMAWSAccountId function is used to retrieve the AWS Account ID associated with the LogicMonitor account. It checks if the user is logged in and has valid API credentials. If the user is logged in, it builds the necessary headers and URI, and then sends a GET request to the LogicMonitor API to retrieve the AWS Account ID. The function returns the response containing the AWS Account ID.
-
-.PARAMETER None
-This function does not have any parameters.
+The Get-LMAWSAccountId function retrieves the AWS External Account ID that is associated with the current LogicMonitor account. This ID is used for AWS integration purposes and helps identify the AWS account linked to your LogicMonitor instance.
 
 .EXAMPLE
+#Retrieve the AWS External Account ID
 Get-LMAWSAccountId
-Retrieves the AWS Account ID associated with the LogicMonitor account.
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns a string containing the AWS Account ID.
 #>
 
 Function Get-LMAWSAccountId {

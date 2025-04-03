@@ -1,3 +1,43 @@
+<#
+.SYNOPSIS
+Retrieves report groups from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMReportGroup function retrieves report group configurations from LogicMonitor. It can retrieve all groups, a specific group by ID or name, or filter the results using either a filter object or the filter wizard.
+
+.PARAMETER Id
+The ID of the specific report group to retrieve.
+
+.PARAMETER Name
+The name of the specific report group to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving report groups.
+
+.PARAMETER FilterWizard
+Switch to enable the filter wizard for building a custom filter interactively.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all report groups
+Get-LMReportGroup
+
+.EXAMPLE
+#Retrieve a specific report group by name
+Get-LMReportGroup -Name "Monthly Reports"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns report group objects.
+#>
+
 Function Get-LMReportGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -10,6 +50,9 @@ Function Get-LMReportGroup {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
+
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -36,6 +79,12 @@ Function Get-LMReportGroup {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }

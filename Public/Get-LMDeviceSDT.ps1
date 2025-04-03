@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves Scheduled Down Time (SDT) entries for a LogicMonitor device.
+
+.DESCRIPTION
+The Get-LMDeviceSDT function retrieves current SDT entries for a specified device in LogicMonitor. The device can be identified by either ID or name, and the results can be filtered.
+
+.PARAMETER Id
+The ID of the device to retrieve SDT entries from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device to retrieve SDT entries from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving SDT entries. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve SDT entries by device ID
+Get-LMDeviceSDT -Id 123
+
+.EXAMPLE
+#Retrieve SDT entries for a specific device
+Get-LMDeviceSDT -Name "Production-Server"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.SDT objects representing the device's SDT entries.
+#>
+
 Function Get-LMDeviceSDT {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

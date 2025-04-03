@@ -1,3 +1,57 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor property source configuration.
+
+.DESCRIPTION
+The Set-LMPropertysource function modifies an existing property source in LogicMonitor.
+
+.PARAMETER Id
+Specifies the ID of the property source to modify.
+
+.PARAMETER Name
+Specifies the current name of the property source.
+
+.PARAMETER NewName
+Specifies the new name for the property source.
+
+.PARAMETER Description
+Specifies the description for the property source.
+
+.PARAMETER appliesTo
+Specifies the applies to expression for the property source.
+
+.PARAMETER TechNotes
+Specifies technical notes for the property source.
+
+.PARAMETER Tags
+Specifies an array of tags to associate with the property source.
+
+.PARAMETER TagsMethod
+Specifies how to handle tags. Valid values: "Add" (append to existing), "Refresh" (replace existing).
+
+.PARAMETER Group
+Specifies the group for the property source.
+
+.PARAMETER ScriptType
+Specifies the script type. Valid values: "embed", "powerShell".
+
+.PARAMETER Script
+Specifies the script content.
+
+.EXAMPLE
+Set-LMPropertysource -Id 123 -NewName "UpdatedSource" -Description "New description" -Tags @("prod", "windows")
+Updates the property source with new name, description, and tags.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.Propertysource object containing the updated configuration.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMPropertysource {
 
     [CmdletBinding()]

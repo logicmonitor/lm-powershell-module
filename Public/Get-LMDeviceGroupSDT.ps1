@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves Scheduled Downtime (SDT) entries for a LogicMonitor device group.
+
+.DESCRIPTION
+The Get-LMDeviceGroupSDT function retrieves all active Scheduled Downtime entries for a specified device group in LogicMonitor. The device group can be identified by either ID or name, and the results can be filtered.
+
+.PARAMETER Id
+The ID of the device group to retrieve SDT entries from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device group to retrieve SDT entries from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving SDT entries. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve SDT entries by group ID
+Get-LMDeviceGroupSDT -Id 123
+
+.EXAMPLE
+#Retrieve filtered SDT entries by group name
+Get-LMDeviceGroupSDT -Name "Production" -Filter $filterObject
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.SDT objects.
+#>
+
 Function Get-LMDeviceGroupSDT {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

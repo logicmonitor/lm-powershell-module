@@ -1,3 +1,56 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor config source configuration.
+
+.DESCRIPTION
+The Set-LMConfigsource function modifies an existing config source in LogicMonitor, allowing updates to its name, display name, description, applies to settings, and other properties.
+
+.PARAMETER Id
+Specifies the ID of the config source to modify. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the current name of the config source. This parameter is mandatory when using the 'Name' parameter set.
+
+.PARAMETER NewName
+Specifies the new name for the config source.
+
+.PARAMETER DisplayName
+Specifies the new display name for the config source.
+
+.PARAMETER Description
+Specifies the new description for the config source.
+
+.PARAMETER AppliesTo
+Specifies the new applies to expression for the config source.
+
+.PARAMETER TechNotes
+Specifies the new technical notes for the config source.
+
+.PARAMETER Tags
+Specifies an array of tags to associate with the config source.
+
+.PARAMETER TagsMethod
+Specifies how to handle existing tags. Valid values are "Add" or "Refresh". Default is "Refresh".
+
+.PARAMETER PollingIntervalInSeconds
+Specifies the polling interval in seconds. Valid values are "3600", "14400", "28800", "86400".
+
+.PARAMETER ConfigChecks
+Specifies the configuration checks object for the config source.
+
+.EXAMPLE
+Set-LMConfigsource -Id 123 -NewName "UpdatedSource" -Description "New description"
+Updates the config source with ID 123 with a new name and description.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns a LogicMonitor.Datasource object containing the updated config source information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
 Function Set-LMConfigsource {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]

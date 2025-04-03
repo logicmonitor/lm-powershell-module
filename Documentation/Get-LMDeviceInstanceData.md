@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -18,21 +18,28 @@ Get-LMDeviceInstanceData [[-StartDate] <DateTime>] [[-EndDate] <DateTime>] [-Ids
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceInstanceData function retrieves data for LogicMonitor device instances based on the specified parameters.
+The Get-LMDeviceInstanceData function retrieves monitoring data for specified device instances in LogicMonitor.
+It supports data aggregation and time range filtering, with a maximum timeframe of 24 hours.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LMDeviceInstanceData -StartDate (Get-Date).AddHours(-7) -EndDate (Get-Date) -Ids "12345", "67890" -AggregationType "average" -Period 1
-Retrieves data for the device instances with IDs "12345" and "67890" for the past 7 hours, using an average aggregation and a period of 1 day.
+#Retrieve data for multiple instances with aggregation
+Get-LMDeviceInstanceData -Ids "12345","67890" -AggregationType "average" -StartDate (Get-Date).AddHours(-12)
+```
+
+### EXAMPLE 2
+```
+#Retrieve raw data for a single instance
+Get-LMDeviceInstanceData -Id "12345" -AggregationType "none"
 ```
 
 ## PARAMETERS
 
 ### -StartDate
 The start date for the data retrieval.
-If not specified, the function uses the default value of 24 hours ago which is the max timeframe for this endpoint.
+Defaults to 24 hours ago if not specified.
 
 ```yaml
 Type: DateTime
@@ -48,7 +55,7 @@ Accept wildcard characters: False
 
 ### -EndDate
 The end date for the data retrieval.
-If not specified, the function uses the current date and time.
+Defaults to current time if not specified.
 
 ```yaml
 Type: DateTime
@@ -63,8 +70,8 @@ Accept wildcard characters: False
 ```
 
 ### -Ids
-The array of device instance IDs for which to retrieve data.
-This parameter is mandatory.
+An array of device instance IDs for which to retrieve data.
+This parameter is mandatory and can be specified using the Id alias.
 
 ```yaml
 Type: String[]
@@ -79,9 +86,9 @@ Accept wildcard characters: False
 ```
 
 ### -AggregationType
-The type of aggregation to apply to the retrieved data.
-Valid values are "first", "last", "min", "max", "sum", "average", and "none".
-The default value is "none".
+The type of aggregation to apply to the data.
+Valid values are "first", "last", "min", "max", "sum", "average", "none".
+Defaults to "none".
 
 ```yaml
 Type: String
@@ -96,8 +103,8 @@ Accept wildcard characters: False
 ```
 
 ### -Period
-The period for the data retrieval.
-The default value is 1.
+The period for data aggregation.
+Defaults to 1 as this appears to be the only supported value.
 
 ```yaml
 Type: Double
@@ -131,10 +138,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns an array of data points for the specified device instances.
 ## NOTES
-This function requires a valid LogicMonitor API authentication.
-Make sure to log in using Connect-LMAccount before running this command.
+You must run Connect-LMAccount before running this command.
+Maximum time range for data retrieval is 24 hours.
 
 ## RELATED LINKS

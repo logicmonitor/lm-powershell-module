@@ -1,3 +1,46 @@
+<#
+.SYNOPSIS
+Retrieves properties for a LogicMonitor device.
+
+.DESCRIPTION
+The Get-LMDeviceProperty function retrieves properties for a specified device in LogicMonitor. The device can be identified by ID, name, or display name, and you can retrieve either all properties or a specific property.
+
+.PARAMETER Id
+The ID of the device to retrieve properties from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device to retrieve properties from. Required for Name parameter set.
+
+.PARAMETER DisplayName
+The display name of the device to retrieve properties from. Required for DisplayName parameter set.
+
+.PARAMETER PropertyName
+The name of a specific property to retrieve. If not specified, retrieves all properties.
+
+.PARAMETER Filter
+A filter object to apply when retrieving properties. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all properties for a device
+Get-LMDeviceProperty -Id 123
+
+.EXAMPLE
+#Retrieve a specific property by name
+Get-LMDeviceProperty -Name "Production-Server" -PropertyName "location"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns device property objects.
+#>
+
 Function Get-LMDeviceProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

@@ -1,3 +1,46 @@
+<#
+.SYNOPSIS
+Retrieves integration audit logs from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMIntegrationLogs function retrieves integration audit logs from LogicMonitor. It supports retrieving logs by ID, date range, search string, or filter criteria.
+
+.PARAMETER Id
+The specific integration log ID to retrieve.
+
+.PARAMETER SearchString
+A string to search for within the integration logs.
+
+.PARAMETER StartDate
+The start date for retrieving logs. Defaults to 30 days ago if not specified.
+
+.PARAMETER EndDate
+The end date for retrieving logs. Defaults to current time if not specified.
+
+.PARAMETER Filter
+A filter object to apply when retrieving logs.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve logs for the last 30 days
+Get-LMIntegrationLogs
+
+.EXAMPLE
+#Retrieve logs with a specific search string and date range
+Get-LMIntegrationLogs -SearchString "error" -StartDate (Get-Date).AddDays(-7)
+
+.NOTES
+You must run Connect-LMAccount before running this command. There is a 10,000 record query limitation for this endpoint.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.IntegrationLog objects.
+#>
+
 Function Get-LMIntegrationLogs {
 
     [CmdletBinding(DefaultParameterSetName = 'Range')]

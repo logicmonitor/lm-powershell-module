@@ -1,3 +1,46 @@
+<#
+.SYNOPSIS
+Retrieves Netflow flow data for a LogicMonitor device.
+
+.DESCRIPTION
+The Get-LMDeviceNetflowFlows function retrieves Netflow flow information for a specified device. It supports time range filtering and can identify the device by either ID or name.
+
+.PARAMETER Id
+The ID of the device to retrieve Netflow flows from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device to retrieve Netflow flows from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving flows. This parameter is optional.
+
+.PARAMETER StartDate
+The start date for retrieving Netflow data. Defaults to 24 hours ago if not specified.
+
+.PARAMETER EndDate
+The end date for retrieving Netflow data. Defaults to current time if not specified.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve Netflow flows by device ID
+Get-LMDeviceNetflowFlows -Id 123
+
+.EXAMPLE
+#Retrieve Netflow flows with date range
+Get-LMDeviceNetflowFlows -Name "Router1" -StartDate (Get-Date).AddDays(-7)
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns Netflow flow objects.
+#>
+
 Function Get-LMDeviceNetflowFlows {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

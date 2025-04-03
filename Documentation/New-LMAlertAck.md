@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -17,23 +17,21 @@ New-LMAlertAck [-Ids] <String[]> [-Note] <String> [-ProgressAction <ActionPrefer
 ```
 
 ## DESCRIPTION
-The New-LMAlertAck function is used to create a new alert acknowledgment in LogicMonitor.
-It sends a POST request to the LogicMonitor API to acknowledge one or more alerts.
+The New-LMAlertAck function acknowledges one or more alerts in LogicMonitor and adds a note to the acknowledgment.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Acknowledge multiple alerts
 New-LMAlertAck -Ids @("12345","67890") -Note "Acknowledging alerts"
 ```
-
-This example acknowledges the alerts with the IDs "12345" and "67890" and adds the note "Acknowledging alerts" to the acknowledgment.
 
 ## PARAMETERS
 
 ### -Ids
-Specifies the alert IDs to be acknowledged.
-This parameter is mandatory and accepts an array of strings.
+The alert IDs to be acknowledged.
+This parameter is mandatory.
 
 ```yaml
 Type: String[]
@@ -48,8 +46,8 @@ Accept wildcard characters: False
 ```
 
 ### -Note
-Specifies the note to be added to the acknowledgment.
-This parameter is mandatory and accepts a string.
+The note to be added to the acknowledgment.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -83,10 +81,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns a success message if the acknowledgment is created successfully.
 ## NOTES
-This function requires a valid API authentication.
-Make sure you are logged in before running any commands by using the Connect-LMAccount function.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

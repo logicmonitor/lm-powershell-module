@@ -1,3 +1,48 @@
+<#
+.SYNOPSIS
+Updates an operations note in LogicMonitor.
+
+.DESCRIPTION
+The Set-LMOpsNote function modifies an existing operations note in LogicMonitor.
+
+.PARAMETER Id
+Specifies the ID of the operations note to modify.
+
+.PARAMETER Note
+Specifies the new content for the note.
+
+.PARAMETER NoteDate
+Specifies the date and time for the note.
+
+.PARAMETER Tags
+Specifies an array of tags to associate with the note.
+
+.PARAMETER ClearTags
+Indicates whether to clear all existing tags.
+
+.PARAMETER DeviceGroupIds
+Specifies an array of device group IDs to associate with the note.
+
+.PARAMETER WebsiteIds
+Specifies an array of website IDs to associate with the note.
+
+.PARAMETER DeviceIds
+Specifies an array of device IDs to associate with the note.
+
+.EXAMPLE
+Set-LMOpsNote -Id 123 -Note "Updated information" -Tags @("maintenance", "planned")
+Updates the operations note with ID 123 with new content and tags.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns the response from the API containing the updated operations note information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMOpsNote {
 
     [CmdletBinding()]

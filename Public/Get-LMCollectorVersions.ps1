@@ -1,40 +1,35 @@
 <#
 .SYNOPSIS
-Retrieves the versions of LogicMonitor collectors available for download.
+Retrieves available LogicMonitor collector versions.
 
 .DESCRIPTION
-The Get-LMCollectorVersions function retrieves the versions of LogicMonitor collectors based on the specified parameters. It requires a valid API authentication and authorization.
+The Get-LMCollectorVersions function retrieves information about available LogicMonitor collector versions. It can return all versions, top versions only, or versions filtered by specific criteria.
 
 .PARAMETER Filter
-Specifies the filter to apply when retrieving collector versions. Only collector versions that match the specified filter will be returned.
+A filter object to apply when retrieving collector versions. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER TopVersions
-Indicates whether to retrieve only the top versions of collector versions.
+Switch to retrieve only the top versions of collectors. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER BatchSize
-Specifies the number of collector versions to retrieve in each batch. The default value is 1000.
-
-.INPUTS
-None. You cannot pipe objects to Get-LMCollectorVersions.
-
-.OUTPUTS
-System.Object
-Returns an object that contains the retrieved collector versions.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-Get-LMCollectorVersions -Filter "name=Collector1"
-
-This example retrieves the collector versions that have the name "Collector1".
+#Retrieve all collector versions
+Get-LMCollectorVersions
 
 .EXAMPLE
+#Retrieve only top versions
 Get-LMCollectorVersions -TopVersions
 
-This example retrieves only the top versions of collector versions.
+.NOTES
+You must run Connect-LMAccount before running this command.
 
-.EXAMPLE
-Get-LMCollectorVersions -BatchSize 500
+.INPUTS
+None. You cannot pipe objects to this command.
 
-This example retrieves the collector versions in batches of 500.
+.OUTPUTS
+Returns an array of collector version objects.
 #>
 Function Get-LMCollectorVersions {
 

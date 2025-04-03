@@ -1,3 +1,57 @@
+<#
+.SYNOPSIS
+Updates a Scheduled Down Time (SDT) entry in LogicMonitor.
+
+.DESCRIPTION
+The Set-LMSDT function modifies an existing SDT entry in LogicMonitor, allowing updates to both one-time and recurring schedules.
+
+.PARAMETER Id
+Specifies the ID of the SDT entry to modify.
+
+.PARAMETER Comment
+Specifies a comment for the SDT entry.
+
+.PARAMETER StartDate
+Specifies the start date and time for one-time SDT.
+
+.PARAMETER EndDate
+Specifies the end date and time for one-time SDT.
+
+.PARAMETER StartHour
+Specifies the start hour (0-23) for recurring SDT.
+
+.PARAMETER StartMinute
+Specifies the start minute (0-59) for recurring SDT.
+
+.PARAMETER EndHour
+Specifies the end hour (0-23) for recurring SDT.
+
+.PARAMETER EndMinute
+Specifies the end minute (0-59) for recurring SDT.
+
+.PARAMETER WeekDay
+Specifies the day of the week for recurring SDT.
+
+.PARAMETER WeekOfMonth
+Specifies which week of the month for recurring SDT. Valid values: "First", "Second", "Third", "Fourth", "Last".
+
+.PARAMETER DayOfMonth
+Specifies the day of the month (1-31) for recurring SDT.
+
+.EXAMPLE
+Set-LMSDT -Id 123 -StartDate "2024-01-01 00:00" -EndDate "2024-01-02 00:00" -Comment "Extended maintenance"
+Updates a one-time SDT entry with new dates and comment.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns the response from the API containing the updated SDT configuration.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMSDT {
 
     [CmdletBinding(DefaultParameterSetName = "OneTime")]
