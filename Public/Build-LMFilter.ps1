@@ -41,8 +41,6 @@ function Build-LMFilter {
         $Caller = $CallStack[1].FunctionName
     }
 
-    Write-Host "Called by: $Caller"
-
     $conditions = @()
     $operators = @(
         @{ Name = "Equals"; Value = "-eq" },
@@ -72,16 +70,16 @@ function Build-LMFilter {
 
     Write-SpectreHost -Message "Welcome to the [bold yellow]Logic Monitor[/] API Filter Builder! Use this wizard to build a filter expression for the [bold]Get-LM*[/] cmdlets."
 
+    #Explain the different types of filters
+    Write-SpectreHost -Message ""
+    Write-SpectreHost -Message "There are two types of filters: [bold yellow]Basic[/] and [bold yellow]Advanced[/]:"
+    Write-SpectreHost -Message "   - Basic filters are used to filter based on a single field and a value such as displayName."
+    Write-SpectreHost -Message "   - Advanced filters are used to filter based on a property and a value that is within that property. Applies to auto, system, inherited and custom properties."
+    Write-SpectreHost -Message ""
+    Write-SpectreHost -Message "[bold yellow]Note:[/] You can combine basic/advanced filters within the same filter equation using the [bold yellow]AND[/] or [bold yellow]OR[/] logical operators."
+    Write-SpectreHost -Message "[bold yellow]Note:[/] Currently, only devices, device groups, and alerts support advanced property filtering."
+    Write-SpectreHost -Message ""
     while ($true) {
-        #Explain the different types of filters
-        Write-SpectreHost -Message ""
-        Write-SpectreHost -Message "There are two types of filters: [bold yellow]Basic[/] and [bold yellow]Advanced[/]:"
-        Write-SpectreHost -Message "   - Basic filters are used to filter based on a single field and a value such as displayName."
-        Write-SpectreHost -Message "   - Advanced filters are used to filter based on a property and a value that is within that property. Applies to auto, system, inherited and custom properties."
-        Write-SpectreHost -Message ""
-        Write-SpectreHost -Message "[bold yellow]Note:[/] You can combine basic/advanced filters within the same filter equation using the [bold yellow]AND[/] or [bold yellow]OR[/] logical operators."
-        Write-SpectreHost -Message "[bold yellow]Note:[/] Currently, only devices, device groups, and alerts support advanced property filtering."
-        Write-SpectreHost -Message ""
         # Get value type first
         $selectedValueType = Read-SpectreSelection `
             -Message "Select filter type:" `
