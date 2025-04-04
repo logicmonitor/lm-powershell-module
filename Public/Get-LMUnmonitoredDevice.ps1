@@ -1,3 +1,34 @@
+<#
+.SYNOPSIS
+Retrieves unmonitored devices from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMUnmonitoredDevice function retrieves information about devices that are discovered but not currently being monitored in LogicMonitor.
+
+.PARAMETER Filter
+A filter object to apply when retrieving unmonitored devices.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all unmonitored devices
+Get-LMUnmonitoredDevice
+
+.EXAMPLE
+#Retrieve unmonitored devices using a filter
+Get-LMUnmonitoredDevice -Filter $filterObject
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.UnmonitoredDevice objects.
+#>
+
 Function Get-LMUnmonitoredDevice {
 
     [CmdletBinding()]

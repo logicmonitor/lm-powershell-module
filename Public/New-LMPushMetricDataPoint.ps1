@@ -37,7 +37,13 @@ New-LMPushMetricDataPoint -DataPoints $datapoints -DataPointType "gauge" -DataPo
 This example creates two data points for CPU usage and memory usage, and sets the data point type to "gauge" and the aggregation type to "avg".
 
 .NOTES
-LogicMonitor API credentials must be set before using this function. Use the Connect-LMAccount function to log in and set the credentials.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DataPoint object.
 #>
 Function New-LMPushMetricDataPoint {
     [CmdletBinding()]

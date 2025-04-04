@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -24,9 +24,8 @@ The Test-LMAppliesToQuery function is used to test the applies to query against 
 ### EXAMPLE 1
 ```
 Test-LMAppliesToQuery -Query "system.hostname == 'server01'"
-```
-
 This example tests the applies to query "system.hostname == 'server01'" against the LogicMonitor API and returns a list of matching devices.
+```
 
 ## PARAMETERS
 
@@ -65,8 +64,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### The Query parameter accepts string input that specifies the applies to query to test.
 ## OUTPUTS
 
+### Returns an array of objects containing the devices that match the specified query criteria.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
+The query syntax must follow LogicMonitor's applies to query format.
 
 ## RELATED LINKS

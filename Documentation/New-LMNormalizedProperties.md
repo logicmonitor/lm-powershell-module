@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -25,8 +25,8 @@ Normalized properties allow you to map multiple host properties to a single alia
 
 ### EXAMPLE 1
 ```
+#Creates a normalized property with alias "location" mapped to multiple source properties.
 New-LMNormalizedProperties -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
-Creates a normalized property with alias "location" mapped to multiple source properties.
 ```
 
 ## PARAMETERS
@@ -81,10 +81,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.NormalizedProperties object.
 ## NOTES
-Requires valid LogicMonitor API credentials set via Connect-LMAccount.
-This cmdlet uses LogicMonitor API v4.
+You must run Connect-LMAccount before running this command.
+Reserved for internal use.
 
 ## RELATED LINKS

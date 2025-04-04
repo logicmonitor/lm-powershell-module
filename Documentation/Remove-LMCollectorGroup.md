@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -26,7 +26,6 @@ Remove-LMCollectorGroup -Name <String> [-ProgressAction <ActionPreference>] [-Wh
 
 ## DESCRIPTION
 The Remove-LMCollectorGroup function removes a LogicMonitor Collector Group based on the provided Id or Name.
-It requires valid API credentials to be logged in.
 
 ## EXAMPLES
 
@@ -130,7 +129,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### You can pipe objects to this function.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject. The function returns an object with the Id and a success message.
+### Returns a PSCustomObject containing the ID of the removed collector group and a success message confirming the removal.
 ## NOTES
 This function requires valid API credentials to be logged in.
 Use Connect-LMAccount to log in before running this command.

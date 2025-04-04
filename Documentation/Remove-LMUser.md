@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-LMUser
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes a user from LogicMonitor.
 
 ## SYNTAX
 
@@ -23,36 +23,27 @@ Remove-LMUser -Name <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Co
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMUser function removes a user from LogicMonitor using either their ID or name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Remove-LMUser -Id 123
+Removes the user with ID 123.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Remove-LMUser -Name "JohnDoe"
+Removes the user with the name "JohnDoe".
+```
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the user to remove.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: Int32
@@ -61,13 +52,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the name of the user to remove.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -97,6 +89,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
 
@@ -117,10 +124,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
+### You can pipe objects to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a PSCustomObject containing the ID of the removed user and a success message confirming the removal.
 ## NOTES
 
 ## RELATED LINKS

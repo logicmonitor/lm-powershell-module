@@ -1,3 +1,68 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor user configuration.
+
+.DESCRIPTION
+The Set-LMUser function modifies an existing user in LogicMonitor, including their roles, permissions, and settings.
+
+.PARAMETER Id
+Specifies the ID of the user to modify.
+
+.PARAMETER Username
+Specifies the current username.
+
+.PARAMETER NewUsername
+Specifies the new username.
+
+.PARAMETER Email
+Specifies the email address for the user.
+
+.PARAMETER UserGroups
+Specifies an array of user group names to assign to the user.
+
+.PARAMETER AcceptEULA
+Indicates whether the user has accepted the EULA.
+
+.PARAMETER Password
+Specifies the new password for the user.
+
+.PARAMETER FirstName
+Specifies the user's first name.
+
+.PARAMETER LastName
+Specifies the user's last name.
+
+.PARAMETER ForcePasswordChange
+Indicates whether to force the user to change their password at next login.
+
+.PARAMETER Phone
+Specifies the user's phone number.
+
+.PARAMETER Note
+Specifies a note for the user.
+
+.PARAMETER RoleNames
+Specifies an array of role names to assign to the user.
+
+.PARAMETER Status
+Specifies the user's status. Valid values: "active", "suspended".
+
+.PARAMETER Views
+Specifies the views the user has access to. Valid values: "Alerts", "Dashboards", "Logs", "Maps", "Reports", "Resources", "Settings", "Websites", "All".
+
+.EXAMPLE
+Set-LMUser -Id 123 -NewUsername "newuser" -Email "user@domain.com" -Status "active"
+Updates the user with new username, email, and status.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.User object containing the updated user configuration.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
 Function Set-LMUser {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

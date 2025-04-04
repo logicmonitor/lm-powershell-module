@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceGroupDatasourceAlertSetting
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves datasource alert settings for a LogicMonitor device group.
 
 ## SYNTAX
 
@@ -43,51 +43,28 @@ Get-LMDeviceGroupDatasourceAlertSetting -DatasourceId <Int32> -Id <Int32> [-Filt
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDeviceGroupDatasourceAlertSetting function retrieves the alert settings for a specific datasource within a device group.
+It supports identifying both the group and datasource by either ID or name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve alert settings using names
+Get-LMDeviceGroupDatasourceAlertSetting -Name "Production Servers" -DatasourceName "CPU"
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve alert settings using IDs
+Get-LMDeviceGroupDatasourceAlertSetting -Id 123 -DatasourceId 456
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatasourceId
-{{ Fill DatasourceId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Name-dsId, Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DatasourceName
-{{ Fill DatasourceName Description }}
+The name of the datasource.
+Required for Id-dsName and Name-dsName parameter sets.
 
 ```yaml
 Type: String
@@ -101,8 +78,57 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DatasourceId
+The ID of the datasource.
+Required for Id-dsId and Name-dsId parameter sets.
+
+```yaml
+Type: Int32
+Parameter Sets: Name-dsId, Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+The ID of the device group.
+Required for Id-dsId and Id-dsName parameter sets.
+
+```yaml
+Type: Int32
+Parameter Sets: Id-dsName, Id-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the device group.
+Required for Name-dsName and Name-dsId parameter sets.
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Name-dsId
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving alert settings.
+This parameter is optional.
 
 ```yaml
 Type: Object
@@ -116,32 +142,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id-dsName, Id-dsId
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -166,10 +179,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.DeviceGroupDatasourceAlertSetting objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

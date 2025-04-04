@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMSDT
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves Scheduled Down Time (SDT) entries from LogicMonitor.
 
 ## SYNTAX
 
@@ -33,51 +33,27 @@ Get-LMSDT [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPrefer
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMSDT function retrieves SDT entries from LogicMonitor.
+It can retrieve all SDT entries, a specific entry by ID or name, or filter the results.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve all SDT entries
+Get-LMSDT
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve a specific SDT entry by name
+Get-LMSDT -Name "Maintenance Window"
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Object
-Parameter Sets: Filter
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+The ID of the specific SDT entry to retrieve.
 
 ```yaml
 Type: String
@@ -92,7 +68,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+The name of the specific SDT entry to retrieve.
 
 ```yaml
 Type: String
@@ -102,6 +78,38 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+A filter object to apply when retrieving SDT entries.
+
+```yaml
+Type: Object
+Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -126,10 +134,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.SDT objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

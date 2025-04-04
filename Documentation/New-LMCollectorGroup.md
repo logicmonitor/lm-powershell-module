@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -19,17 +19,15 @@ New-LMCollectorGroup [-Name] <String> [[-Description] <String>] [[-Properties] <
 ```
 
 ## DESCRIPTION
-The New-LMCollectorGroup function creates a new collector group in LogicMonitor.
-It requires a name parameter and supports additional parameters such as description, properties, autoBalance, and autoBalanceInstanceCountThreshold.
+The New-LMCollectorGroup function creates a new collector group in LogicMonitor with specified configuration settings.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-LMCollectorGroup -Name "MyCollectorGroup" -Description "This is a new collector group" -Properties @{ "Property1" = "Value1"; "Property2" = "Value2" }
+#Create a new collector group with properties
+New-LMCollectorGroup -Name "MyCollectorGroup" -Description "Production collectors" -Properties @{"location"="datacenter1"}
 ```
-
-This example creates a new collector group named "MyCollectorGroup" with a description and custom properties.
 
 ## PARAMETERS
 
@@ -81,7 +79,7 @@ Accept wildcard characters: False
 
 ### -AutoBalance
 Specifies whether to enable auto-balancing for the collector group.
-The default value is $false.
+Defaults to $false.
 
 ```yaml
 Type: Boolean
@@ -97,7 +95,7 @@ Accept wildcard characters: False
 
 ### -AutoBalanceInstanceCountThreshold
 The threshold for auto-balancing the collector group.
-The default value is 10000.
+Defaults to 10000.
 
 ```yaml
 Type: Int32
@@ -131,10 +129,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.CollectorGroup object.
 ## NOTES
-For this function to work, you need to be logged in with valid API credentials.
-Use the Connect-LMAccount function to log in before running this command.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

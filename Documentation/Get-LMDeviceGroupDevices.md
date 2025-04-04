@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceGroupDevices
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves devices belonging to a LogicMonitor device group.
 
 ## SYNTAX
 
@@ -25,25 +25,48 @@ Get-LMDeviceGroupDevices [-Name <String>] [-Filter <Object>] [-IncludeSubGroups 
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDeviceGroupDevices function retrieves all devices that belong to a specific device group.
+It supports retrieving devices from subgroups and can filter the results.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve devices from a group by ID
+Get-LMDeviceGroupDevices -Id 123
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve devices including subgroups
+Get-LMDeviceGroupDevices -Name "Production Servers" -IncludeSubGroups $true
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+The ID of the device group.
+Required for Id parameter set.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Id
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the device group.
+Required for Name parameter set.
+
+```yaml
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False
@@ -54,7 +77,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving devices.
+This parameter is optional.
 
 ```yaml
 Type: Object
@@ -68,23 +92,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -IncludeSubGroups
-{{ Fill IncludeSubGroups Description }}
+When set to true, includes devices from all subgroups of the specified group.
+Defaults to false.
 
 ```yaml
 Type: Boolean
@@ -93,22 +103,24 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-{{ Fill Name Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
-Type: String
-Parameter Sets: Name
+Type: Int32
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -133,10 +145,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.Device objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

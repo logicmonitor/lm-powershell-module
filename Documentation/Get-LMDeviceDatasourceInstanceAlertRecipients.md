@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceDatasourceInstanceAlertRecipients
 
 ## SYNOPSIS
-Retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
+Retrieves alert recipients for a specific data point in a LogicMonitor device datasource instance.
 
 ## SYNTAX
 
@@ -37,30 +37,28 @@ Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId <Int32> -Id <Int32> 
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceDatasourceInstanceAlertRecipients function retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
-It requires valid API credentials and a logged-in session.
+The Get-LMDeviceDatasourceInstanceAlertRecipients function retrieves the alert recipients configured for a specific data point within a device's datasource instance.
+It supports identifying the device and datasource by either ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName "Ping-" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
+#Retrieve alert recipients using names
+Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName "Ping" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
 ```
-
-Retrieves the alert recipients for the "PingLossPercent" data point in the "CPU" datasource instance of the "Server01" device.
 
 ### EXAMPLE 2
 ```
+#Retrieve alert recipients using IDs
 Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId 123 -Id 456 -InstanceName "Instance01" -DataPointName "PingLossPercent"
 ```
-
-Retrieves the alert recipients for the "PingLossPercent" data point in the datasource instance with ID 123 of the device with ID 456.
 
 ## PARAMETERS
 
 ### -DatasourceName
-Specifies the name of the datasource.
-This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+The name of the datasource.
+Required for Id-dsName and Name-dsName parameter sets.
 
 ```yaml
 Type: String
@@ -75,8 +73,8 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceId
-Specifies the ID of the datasource.
-This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+The ID of the datasource.
+Required for Id-dsId and Name-dsId parameter sets.
 
 ```yaml
 Type: Int32
@@ -91,9 +89,9 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Specifies the ID of the device.
-This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
-It can also be specified using the 'DeviceId' alias.
+The ID of the device.
+Can be specified using the DeviceId alias.
+Required for Id-dsId and Id-dsName parameter sets.
 
 ```yaml
 Type: Int32
@@ -108,9 +106,9 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the device.
-This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
-It can also be specified using the 'DeviceName' alias.
+The name of the device.
+Can be specified using the DeviceName alias.
+Required for Name-dsName and Name-dsId parameter sets.
 
 ```yaml
 Type: String
@@ -125,7 +123,7 @@ Accept wildcard characters: False
 ```
 
 ### -InstanceName
-Specifies the name of the datasource instance.
+The name of the datasource instance.
 This parameter is mandatory.
 
 ```yaml
@@ -141,7 +139,7 @@ Accept wildcard characters: False
 ```
 
 ### -DataPointName
-Specifies the name of the data point.
+The name of the data point to retrieve alert recipients for.
 This parameter is mandatory.
 
 ```yaml
@@ -176,8 +174,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns alert recipient configuration objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

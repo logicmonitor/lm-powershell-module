@@ -1,3 +1,32 @@
+<#
+.SYNOPSIS
+Creates a new LogicMonitor datasource.
+
+.DESCRIPTION
+The New-LMDatasource function creates a new datasource in LogicMonitor using a provided datasource configuration object.
+
+.PARAMETER Datasource
+A PSCustomObject containing the datasource configuration. Must follow the schema model defined in LogicMonitor's API documentation.
+
+.EXAMPLE
+#Create a new datasource
+$config = @{
+    name = "MyDatasource"
+    # Additional configuration properties
+}
+New-LMDatasource -Datasource $config
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+For datasource schema details, see: https://www.logicmonitor.com/swagger-ui-master/api-v3/dist/#/Datasources/addDatasourceById
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Datasource object.
+#>
+
 Function New-LMDatasource {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]

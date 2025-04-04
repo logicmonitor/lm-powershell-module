@@ -1,3 +1,39 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor API token's properties.
+
+.DESCRIPTION
+The Set-LMAPIToken function modifies the properties of an existing API token in LogicMonitor, including its note and status.
+
+.PARAMETER AdminId
+Specifies the ID of the admin user who owns the token. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER AdminName
+Specifies the name of the admin user who owns the token. This parameter is mandatory when using the 'Name' parameter set.
+
+.PARAMETER Id
+Specifies the ID of the API token to modify.
+
+.PARAMETER Note
+Specifies a new note for the API token.
+
+.PARAMETER Status
+Specifies the new status for the API token. Valid values are "active" or "suspended".
+
+.EXAMPLE
+Set-LMAPIToken -AdminId 123 -Id 456 -Note "Updated token" -Status "suspended"
+Updates the API token with ID 456 owned by admin 123 with a new note and status.
+
+.INPUTS
+You can pipe objects containing AdminId and Id properties to this function.
+
+.OUTPUTS
+Returns a LogicMonitor.APIToken object containing the updated token information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMAPIToken {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]

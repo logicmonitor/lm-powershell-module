@@ -3,22 +3,33 @@
 Creates a new datasource graph in LogicMonitor.
 
 .DESCRIPTION
-The New-LMDatasourceGraph function is used to create a new datasource graph in LogicMonitor. It requires the user to be logged in and have valid API credentials.
+The New-LMDatasourceGraph function creates a new graph for a specified datasource in LogicMonitor.
 
 .PARAMETER RawObject
-Specifies the raw object representing the graph configuration. This object will be converted to JSON format before sending the request to LogicMonitor. Use Get-LMDatasourceGraph to get the raw object representing a graph configuration.
+The raw object representing the graph configuration. Use Get-LMDatasourceGraph to see the expected format.
 
 .PARAMETER DatasourceId
-Specifies the ID of the datasource to which the graph will be associated. This parameter is mandatory when using the 'dsId' parameter set.
+The ID of the datasource to which the graph will be added. Required for dsId parameter set.
 
 .PARAMETER DatasourceName
-Specifies the name of the datasource to which the graph will be associated. This parameter is mandatory when using the 'dsName' parameter set.
+The name of the datasource to which the graph will be added. Required for dsName parameter set.
 
 .EXAMPLE
+#Create graph using datasource ID
 New-LMDatasourceGraph -RawObject $graphConfig -DatasourceId 123
 
 .EXAMPLE
-New-LMDatasourceGraph -RawObject $graphConfig -DatasourceName "My Datasource"
+#Create graph using datasource name
+New-LMDatasourceGraph -RawObject $graphConfig -DatasourceName "MyDatasource"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DatasourceGraph object.
 #>
 
 Function New-LMDatasourceGraph {

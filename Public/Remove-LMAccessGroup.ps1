@@ -19,14 +19,14 @@ Removes the access group with the ID 123.
 Remove-LMAccessGroup -Name "MyAccessGroup"
 Removes the access group with the name "MyAccessGroup".
 
-.INPUTS
-None.
-
-.OUTPUTS
-System.Management.Automation.PSCustomObject
-
 .NOTES
 This function requires a valid LogicMonitor API authentication. Make sure to log in using Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns a PSCustomObject containing the ID of the removed access group and a success message confirming the removal.
 #>
 Function Remove-LMAccessGroup {
 

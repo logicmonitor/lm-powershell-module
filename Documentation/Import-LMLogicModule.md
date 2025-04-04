@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -25,29 +25,27 @@ Import-LMLogicModule -File <Object> [-Type <String>] [-ForceOverwrite <Boolean>]
 ```
 
 ## DESCRIPTION
-The Import-LMLogicModule function imports a LogicModule into LogicMonitor.
-It can import the LogicModule from a file path or directly from file data.
-The LogicModule can be of different types such as datasource, propertyrules, eventsource, topologysource, or configsource.
+The Import-LMLogicModule function imports a LogicModule from a file path or file data.
+Supports various module types including datasource, propertyrules, eventsource, topologysource, configsource, logsource, functions, and oids.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Import a datasource module
 Import-LMLogicModule -FilePath "C:\LogicModules\datasource.xml" -Type "datasource" -ForceOverwrite $true
-Imports a datasource LogicModule from the file 'datasource.xml' located in the 'C:\LogicModules' directory. If a LogicModule with the same name already exists, it will be overwritten. This only works for datasource, propertyrules, eventsource, topologysource, configsource, logsource.
 ```
 
 ### EXAMPLE 2
 ```
+#Import a property rules module
 Import-LMLogicModule -File $fileData -Type "propertyrules"
-Imports a propertyrules LogicModule using the file data provided in the $fileData variable. If a LogicModule with the same name already exists, an error will be thrown.
 ```
 
 ## PARAMETERS
 
 ### -FilePath
-Specifies the path of the file containing the LogicModule to import.
-This parameter is mandatory when using the 'FilePath' parameter set.
+The path to the file containing the LogicModule to import.
 
 ```yaml
 Type: String
@@ -62,8 +60,7 @@ Accept wildcard characters: False
 ```
 
 ### -File
-Specifies the file data of the LogicModule to import.
-This parameter is mandatory when using the 'File' parameter set.
+The file data of the LogicModule to import.
 
 ```yaml
 Type: Object
@@ -78,9 +75,9 @@ Accept wildcard characters: False
 ```
 
 ### -Type
-Specifies the type of the LogicModule to import.
-The valid values are 'datasource', 'propertyrules', 'eventsource', 'topologysource', 'configsource', 'logsource', 'functions', 'oids'.
-The default value is 'datasource'.
+The type of LogicModule.
+Valid values are "datasource", "propertyrules", "eventsource", "topologysource", "configsource", "logsource", "functions", "oids".
+Defaults to "datasource".
 
 ```yaml
 Type: String
@@ -95,10 +92,8 @@ Accept wildcard characters: False
 ```
 
 ### -ForceOverwrite
-Indicates whether to overwrite an existing LogicModule with the same name.
-If set to $true, the existing LogicModule will be overwritten.
-If set to $false, an error will be thrown if a LogicModule with the same name already exists.
-The default value is $false.
+Whether to overwrite an existing LogicModule with the same name.
+Defaults to $false.
 
 ```yaml
 Type: Boolean
@@ -132,9 +127,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns a success message if the import is successful.
 ## NOTES
-This function requires PowerShell version 6.1 or higher to run.
+You must run Connect-LMAccount before running this command.
+Requires PowerShell version 6.1 or higher.
 
 ## RELATED LINKS

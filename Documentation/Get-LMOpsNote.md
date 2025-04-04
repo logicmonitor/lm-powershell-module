@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMOpsNote
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves operations notes from LogicMonitor.
 
 ## SYNTAX
 
@@ -33,51 +33,27 @@ Get-LMOpsNote [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPr
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMOpsNote function retrieves operations notes from LogicMonitor.
+It can retrieve all notes, a specific note by ID, notes by tag, or filter the results.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve all operations notes
+Get-LMOpsNote
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve operations notes by tag
+Get-LMOpsNote -Tag "Maintenance"
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Object
-Parameter Sets: Filter
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+The ID of the specific operations note to retrieve.
 
 ```yaml
 Type: String
@@ -92,7 +68,7 @@ Accept wildcard characters: False
 ```
 
 ### -Tag
-{{ Fill Tag Description }}
+The tag to filter operations notes by.
 
 ```yaml
 Type: String
@@ -102,6 +78,38 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+A filter object to apply when retrieving operations notes.
+
+```yaml
+Type: Object
+Parameter Sets: Filter
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -126,10 +134,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns operations note objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

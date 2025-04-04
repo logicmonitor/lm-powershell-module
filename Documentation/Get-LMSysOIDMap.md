@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -41,24 +41,15 @@ It can retrieve all mappings, a specific mapping by ID or name, or filter the re
 
 ### EXAMPLE 1
 ```
+#Retrieve all system OID mappings
 Get-LMSysOIDMap
 ```
 
-Gets all system OID mappings.
-
 ### EXAMPLE 2
 ```
-Get-LMSysOIDMap -Id 123
-```
-
-Gets the system OID mapping with ID 123.
-
-### EXAMPLE 3
-```
+#Retrieve a specific OID mapping by name
 Get-LMSysOIDMap -Name "\.1\.3\.6\.1\.4\.1\.318\.1\.1\.32"
 ```
-
-Gets system OID mapping for "\.1\.3\.6\.1\.4\.1\.318\.1\.1\.32".
 
 ## PARAMETERS
 
@@ -147,11 +138,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.SysOIDMap objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
-
-[Module repo: https://github.com/logicmonitor/lm-powershell-module]()
-
-[PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
-

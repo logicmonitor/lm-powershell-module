@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMNormalizedProperties
 
 ## SYNOPSIS
-Gets normalized property mappings that allow standardizing property names across your LogicMonitor environment.
+Gets normalized property mappings from LogicMonitor.
 
 ## SYNTAX
 
@@ -17,15 +17,15 @@ Get-LMNormalizedProperties [-ProgressAction <ActionPreference>] [<CommonParamete
 ```
 
 ## DESCRIPTION
-The Get-LMNormalizedProperties cmdlet retrieves normalized properties from LogicMonitor.
-Currently only supports the v4 API.
+The Get-LMNormalizedProperties function retrieves normalized property mappings that allow standardizing property names across your LogicMonitor environment.
+This function only supports the v4 API.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Retrieve all normalized properties
 Get-LMNormalizedProperties
-Retrieves all normalized properties.
 ```
 
 ## PARAMETERS
@@ -50,8 +50,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.NormalizedProperties objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
+This command is reserver for internal use only.
 
 ## RELATED LINKS

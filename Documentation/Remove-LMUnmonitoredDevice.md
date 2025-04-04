@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-LMUnmonitoredDevice
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes unmonitored devices from LogicMonitor.
 
 ## SYNTAX
 
@@ -18,36 +18,20 @@ Remove-LMUnmonitoredDevice -Ids <String[]> [-ProgressAction <ActionPreference>] 
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMUnmonitoredDevice function removes one or more unmonitored devices from LogicMonitor using their IDs.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Remove-LMUnmonitoredDevice -Ids "123","456"
+Removes the unmonitored devices with IDs "123" and "456".
+```
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Ids
-{{ Fill Ids Description }}
+Specifies an array of IDs for the unmonitored devices to remove.
 
 ```yaml
 Type: String[]
@@ -77,6 +61,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
 
@@ -97,10 +96,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.UnmonitoredDevice object containing information about the removed devices.
 ## NOTES
 
 ## RELATED LINKS

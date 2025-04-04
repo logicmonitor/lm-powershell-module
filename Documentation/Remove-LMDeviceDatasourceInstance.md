@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -226,9 +226,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None.
 ## OUTPUTS
 
-### A custom object with the following properties:
-### - InstanceId: The ID of the removed instance.
-### - Message: A message indicating the success of the removal.
+### Returns a PSCustomObject containing the instance ID and a message confirming the successful removal of the datasource instance.
 ## NOTES
 
 ## RELATED LINKS

@@ -1,35 +1,29 @@
 <#
 .SYNOPSIS
-Retrieves information about cached accounts from the Logic.Monitor vault.
+Retrieves information about cached LogicMonitor account credentials.
 
 .DESCRIPTION
-The Get-LMCachedAccount function retrieves information about cached accounts from the Logic.Monitor vault. It returns an array of custom objects containing details such as the cached account name, portal, ID, modified date, and type.
+The Get-LMCachedAccount function retrieves information about cached LogicMonitor account credentials stored in the Logic.Monitor vault. It can return information for a specific cached account or all cached accounts.
 
 .PARAMETER CachedAccountName
-Specifies the name of a specific cached account to retrieve information for. If not provided, information for all cached accounts will be returned.
+The name of the specific cached account to retrieve information for. If not specified, returns information for all cached accounts.
 
 .EXAMPLE
-Get-LMCachedAccount -CachedAccountName "Account1"
-Retrieves information for the cached account named "Account1" from the Logic.Monitor vault.
-
-.EXAMPLE
+#Retrieve all cached accounts
 Get-LMCachedAccount
-Retrieves information for all cached accounts from the Logic.Monitor vault.
 
-.INPUTS
-None. You cannot pipe objects to this function.
-
-.OUTPUTS
-System.Object[]
-An array of custom objects representing the cached accounts. Each object contains the following properties:
-- CachedAccountName: The name of the cached account.
-- Portal: The portal associated with the cached account.
-- Id: The ID of the cached account. If not available, "N/A" is displayed.
-- Modified: The modified date of the cached account.
-- Type: The type of the cached account. If not available, "LMv1" is displayed.
+.EXAMPLE
+#Retrieve a specific cached account
+Get-LMCachedAccount -CachedAccountName "MyAccount"
 
 .NOTES
-This function requires the Get-SecretInfo function from the Logic.Monitor vault.
+This function requires access to the Logic.Monitor vault where credentials are stored.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns an array of custom objects containing cached account information including CachedAccountName, Portal, Id, Modified date, and Type.
 
 .LINK
 Get-SecretInfo

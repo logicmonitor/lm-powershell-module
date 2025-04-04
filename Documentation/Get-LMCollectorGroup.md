@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -32,6 +32,12 @@ Get-LMCollectorGroup [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <Act
 ### Filter
 ```
 Get-LMCollectorGroup [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
+```
+
+### FilterWizard
+```
+Get-LMCollectorGroup [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
@@ -106,6 +112,22 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FilterWizard
+Specifies the use of the FilterWizard to assist in building a valid filter.
+This parameter is mutually exclusive with the Id, Name, and Filter parameters.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: FilterWizard
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -1,3 +1,36 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor NetScan group configuration.
+
+.DESCRIPTION
+The Set-LMNetscanGroup function modifies an existing NetScan group in LogicMonitor.
+
+.PARAMETER Id
+Specifies the ID of the NetScan group to modify.
+
+.PARAMETER Name
+Specifies the current name of the NetScan group.
+
+.PARAMETER NewName
+Specifies the new name for the NetScan group.
+
+.PARAMETER Description
+Specifies the new description for the NetScan group.
+
+.EXAMPLE
+Set-LMNetscanGroup -Id 123 -NewName "Updated Group" -Description "New description"
+Updates the NetScan group with ID 123 with a new name and description.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns a LogicMonitor.NetScanGroup object containing the updated group information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMNetscanGroup {
 
     [CmdletBinding()]

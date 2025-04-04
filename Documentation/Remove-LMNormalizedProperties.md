@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -64,8 +64,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None.
 ## OUTPUTS
 
+### Returns the response from the API after removing the normalized property.
 ## NOTES
+This function requires valid API credentials to be logged in.
+Use Connect-LMAccount to log in before running this command.
 
 ## RELATED LINKS

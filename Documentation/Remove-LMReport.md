@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -128,7 +128,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### You can pipe input to this function.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject. Returns an object with the removed report ID and a success message.
+### Returns a PSCustomObject containing the ID of the removed report and a message indicating the success of the removal operation.
 ## NOTES
 This function requires a valid API authentication and authorization.
 Use Connect-LMAccount to log in before running this command.

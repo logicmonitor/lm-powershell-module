@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,8 +8,7 @@ schema: 2.0.0
 # Set-LMUserdata
 
 ## SYNOPSIS
-Sets userdata for a LogicMonitor user.
-Currently only setting the default dashboard is supported.
+Sets userdata for a LogicMonitor user, currently only setting the default dashboard is supported.
 
 ## SYNTAX
 
@@ -147,7 +146,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None.
 ## OUTPUTS
 
-### System.Object
 ### Returns the response from the LogicMonitor API.
 ## NOTES
 This function requires a valid API authentication.

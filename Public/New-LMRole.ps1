@@ -85,6 +85,15 @@
 
     This example creates a new Logic Monitor role named "MyRole" with a description and limited permissions for dashboards and resources.
 
+.NOTES
+    You must run Connect-LMAccount before running this command.
+
+.INPUTS
+    None. You cannot pipe objects to this command.
+
+.OUTPUTS
+    Returns LogicMonitor.Role object.
+
 #>
 Function New-LMRole {
 

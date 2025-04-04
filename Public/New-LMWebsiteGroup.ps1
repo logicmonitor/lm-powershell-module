@@ -36,6 +36,14 @@ New-LMWebsiteGroup -Name "MyWebsiteGroup" -Description "This is my website group
 
 This example creates a new website group with the name "MyWebsiteGroup", description "This is my website group", and parent group name "ParentGroup".
 
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.WebsiteGroup object.
 #>
 Function New-LMWebsiteGroup {
 

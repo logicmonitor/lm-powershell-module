@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -21,22 +21,21 @@ New-LMCollector [-Description] <String> [[-BackupAgentId] <Int32>] [[-CollectorG
 ```
 
 ## DESCRIPTION
-The New-LMCollector function is used to create a new collector in LogicMonitor.
-It requires a description for the collector and supports various optional parameters such as BackupAgentId, CollectorGroupId, Properties, EnableFailBack, EnableFailOverOnCollectorDevice, EscalatingChainId, AutoCreateCollectorDevice, SuppressAlertClear, ResendAlertInterval, and SpecifiedCollectorDeviceGroupId.
+The New-LMCollector function creates a new collector in LogicMonitor with specified configuration settings.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-LMCollector -Description "My Collector" -BackupAgentId 123 -CollectorGroupId 456 -Properties @{ "Key1" = "Value1"; "Key2" = "Value2" }
+#Create a new collector
+New-LMCollector -Description "Production Collector" -CollectorGroupId 123 -Properties @{"location"="datacenter1"}
 ```
-
-This example creates a new collector with the specified description, backup agent ID, collector group ID, and custom properties.
 
 ## PARAMETERS
 
 ### -Description
 The description of the collector.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -51,7 +50,7 @@ Accept wildcard characters: False
 ```
 
 ### -BackupAgentId
-The ID of the backup agent.
+The ID of the backup collector.
 
 ```yaml
 Type: Int32
@@ -66,7 +65,7 @@ Accept wildcard characters: False
 ```
 
 ### -CollectorGroupId
-The ID of the collector group.
+The ID of the collector group to assign the collector to.
 
 ```yaml
 Type: Int32
@@ -96,7 +95,7 @@ Accept wildcard characters: False
 ```
 
 ### -EnableFailBack
-Specifies whether failback is enabled for the collector.
+Whether to enable failback for the collector.
 
 ```yaml
 Type: Boolean
@@ -111,7 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -EnableFailOverOnCollectorDevice
-Specifies whether failover is enabled on the collector device.
+Whether to enable failover on the collector device.
 
 ```yaml
 Type: Boolean
@@ -126,7 +125,7 @@ Accept wildcard characters: False
 ```
 
 ### -EscalatingChainId
-The ID of the escalation chain.
+The ID of the escalation chain to use.
 
 ```yaml
 Type: Int32
@@ -141,7 +140,7 @@ Accept wildcard characters: False
 ```
 
 ### -AutoCreateCollectorDevice
-Specifies whether to automatically create a collector device.
+Whether to automatically create a device for the collector.
 
 ```yaml
 Type: Boolean
@@ -156,7 +155,7 @@ Accept wildcard characters: False
 ```
 
 ### -SuppressAlertClear
-Specifies whether to suppress alert clear.
+Whether to suppress alert clear notifications.
 
 ```yaml
 Type: Boolean
@@ -186,7 +185,7 @@ Accept wildcard characters: False
 ```
 
 ### -SpecifiedCollectorDeviceGroupId
-The ID of the specified collector device group.
+The ID of the device group for the collector device.
 
 ```yaml
 Type: Int32
@@ -220,8 +219,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.Collector object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

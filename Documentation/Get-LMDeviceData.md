@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceData
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves monitoring data for a LogicMonitor device.
 
 ## SYNTAX
 
@@ -69,51 +69,28 @@ Get-LMDeviceData -DatasourceId <Int32> -DeviceId <Int32> -InstanceId <Int32> [-S
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDeviceData function retrieves monitoring data from a specific device's datasource instance in LogicMonitor.
+It supports various combinations of identifying the device, datasource, and instance, and allows for time range filtering of the data.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve data using IDs
+Get-LMDeviceData -DeviceId 123 -DatasourceId 456 -InstanceId 789
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve data using names with time range
+Get-LMDeviceData -DeviceName "Production-Server" -DatasourceName "CPU" -InstanceName "Total" -StartDate (Get-Date).AddDays(-1)
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatasourceId
-{{ Fill DatasourceId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: dsId-deviceName-instanceId, dsId-deviceName-instanceName, dsId-deviceId-instanceName, dsId-deviceId-instanceId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DatasourceName
-{{ Fill DatasourceName Description }}
+The name of the datasource to retrieve data from.
+Required for certain parameter sets.
 
 ```yaml
 Type: String
@@ -127,8 +104,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DatasourceId
+The ID of the datasource to retrieve data from.
+Required for certain parameter sets.
+
+```yaml
+Type: Int32
+Parameter Sets: dsId-deviceName-instanceId, dsId-deviceName-instanceName, dsId-deviceId-instanceName, dsId-deviceId-instanceId
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DeviceId
-{{ Fill DeviceId Description }}
+The ID of the device to retrieve data from.
+Required for certain parameter sets.
 
 ```yaml
 Type: Int32
@@ -137,13 +131,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -DeviceName
-{{ Fill DeviceName Description }}
+The name of the device to retrieve data from.
+Required for certain parameter sets.
 
 ```yaml
 Type: String
@@ -157,38 +152,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -EndDate
-{{ Fill EndDate Description }}
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-{{ Fill Filter Description }}
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -InstanceId
-{{ Fill InstanceId Description }}
+The ID of the datasource instance to retrieve data from.
+Required for certain parameter sets.
 
 ```yaml
 Type: Int32
@@ -197,13 +163,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -InstanceName
-{{ Fill InstanceName Description }}
+The name of the datasource instance to retrieve data from.
+Required for certain parameter sets.
 
 ```yaml
 Type: String
@@ -218,7 +185,8 @@ Accept wildcard characters: False
 ```
 
 ### -StartDate
-{{ Fill StartDate Description }}
+The start date and time for data collection.
+Defaults to 7 days ago if not specified.
 
 ```yaml
 Type: DateTime
@@ -228,6 +196,55 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndDate
+The end date and time for data collection.
+Defaults to current time if not specified.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Filter
+A filter object to apply when retrieving data.
+This parameter is optional.
+
+```yaml
+Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -252,10 +269,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns formatted monitoring data with timestamps and values.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMOpsNote
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates an operations note in LogicMonitor.
 
 ## SYNTAX
 
@@ -19,36 +19,65 @@ Set-LMOpsNote [-Id] <String> [[-Note] <String>] [[-NoteDate] <DateTime>] [[-Tags
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMOpsNote function modifies an existing operations note in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMOpsNote -Id 123 -Note "Updated information" -Tags @("maintenance", "planned")
+Updates the operations note with ID 123 with new content and tags.
+```
 
 ## PARAMETERS
 
-### -ClearTags
-{{ Fill ClearTags Description }}
+### -Id
+Specifies the ID of the operations note to modify.
 
 ```yaml
-Type: SwitchParameter
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Note
+Specifies the new content for the note.
+
+```yaml
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: Named
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DeviceGroupIds
-{{ Fill DeviceGroupIds Description }}
+### -NoteDate
+Specifies the date and time for the note.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 3
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Tags
+Specifies an array of tags to associate with the note.
 
 ```yaml
 Type: String[]
@@ -62,8 +91,38 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DeviceIds
-{{ Fill DeviceIds Description }}
+### -ClearTags
+Indicates whether to clear all existing tags.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DeviceGroupIds
+Specifies an array of device group IDs to associate with the note.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WebsiteIds
+Specifies an array of website IDs to associate with the note.
 
 ```yaml
 Type: String[]
@@ -77,53 +136,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 0
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Note
-{{ Fill Note Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NoteDate
-{{ Fill NoteDate Description }}
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Tags
-{{ Fill Tags Description }}
+### -DeviceIds
+Specifies an array of device IDs to associate with the note.
 
 ```yaml
 Type: String[]
@@ -131,22 +145,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WebsiteIds
-{{ Fill WebsiteIds Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
+Position: 7
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -172,10 +171,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### You can pipe objects containing Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns the response from the API containing the updated operations note information.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -132,6 +132,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### You can pipe objects to this function.
 ## OUTPUTS
 
+### This function does not generate any output.
 ## NOTES
+This function operates on the local credential vault and does not require API authentication.
 
 ## RELATED LINKS

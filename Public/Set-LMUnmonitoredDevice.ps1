@@ -1,3 +1,37 @@
+<#
+.SYNOPSIS
+Updates unmonitored devices in LogicMonitor.
+
+.DESCRIPTION
+The Set-LMUnmonitoredDevice function modifies unmonitored devices in LogicMonitor by assigning them to a device group.
+
+.PARAMETER Ids
+Specifies an array of unmonitored device IDs to update.
+
+.PARAMETER DeviceGroupId
+Specifies the ID of the device group to assign the devices to.
+
+.PARAMETER Description
+Specifies a description for the devices.
+
+.PARAMETER CollectorId
+Specifies the ID of the collector to assign to the devices. Default is 0.
+
+.EXAMPLE
+#Assigns the specified unmonitored devices to the device group and sets their description.
+Set-LMUnmonitoredDevice -Ids @("123", "456") -DeviceGroupId 789 -Description "New devices"
+
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.Device object containing the updated device information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMUnmonitoredDevice {
 
     [CmdletBinding()]

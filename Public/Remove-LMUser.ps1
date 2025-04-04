@@ -1,3 +1,31 @@
+<#
+.SYNOPSIS
+Removes a user from LogicMonitor.
+
+.DESCRIPTION
+The Remove-LMUser function removes a user from LogicMonitor using either their ID or name.
+
+.PARAMETER Id
+Specifies the ID of the user to remove. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the name of the user to remove. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMUser -Id 123
+Removes the user with ID 123.
+
+.EXAMPLE
+Remove-LMUser -Name "JohnDoe"
+Removes the user with the name "JohnDoe".
+
+.INPUTS
+You can pipe objects to this function.
+
+.OUTPUTS
+Returns a PSCustomObject containing the ID of the removed user and a success message confirming the removal.
+#>
+
 Function Remove-LMUser {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]

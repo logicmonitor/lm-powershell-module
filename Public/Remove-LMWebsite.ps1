@@ -1,3 +1,31 @@
+<#
+.SYNOPSIS
+Removes a website from LogicMonitor.
+
+.DESCRIPTION
+The Remove-LMWebsite function removes a website from LogicMonitor using either its ID or name.
+
+.PARAMETER Id
+Specifies the ID of the website to remove. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the name of the website to remove. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMWebsite -Id 123
+Removes the website with ID 123.
+
+.EXAMPLE
+Remove-LMWebsite -Name "MyWebsite"
+Removes the website with the name "MyWebsite".
+
+.INPUTS
+You can pipe objects to this function.
+
+.OUTPUTS
+Returns a PSCustomObject containing the ID of the removed website and a success message confirming the removal.
+#>
+
 Function Remove-LMWebsite {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]

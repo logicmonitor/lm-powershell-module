@@ -28,6 +28,9 @@ If (!(Get-Module Microsoft.PowerShell.SecretManagement -ListAvailable)) {
 If (!(Get-Module Microsoft.PowerShell.SecretStore -ListAvailable)) {
     Install-Module Microsoft.PowerShell.SecretStore -Force -Confirm:$false
 }
+If (!(Get-Module PwshSpectreConsole -ListAvailable)) {
+    Install-Module PwshSpectreConsole -Force -Confirm:$false
+}
 
 $manifestContent = (Get-Content -Path $manifestPath -Raw) -replace '<ModuleVersion>', $buildVersion
 

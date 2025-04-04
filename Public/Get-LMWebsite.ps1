@@ -1,44 +1,44 @@
 <#
 .SYNOPSIS
-Get website info from a connected LM portal
+Retrieves website monitoring information from LogicMonitor.
 
 .DESCRIPTION
-Get website info from a connected LM portal
+The Get-LMWebsite function retrieves website monitoring configurations from LogicMonitor. It can retrieve all websites, a specific website by ID or name, filter by type, or use custom filters.
 
 .PARAMETER Id
-The website id for a website in LM.
+The ID of the specific website to retrieve.
 
 .PARAMETER Name
-The name value for a website in LM. This value accepts wildcard input such as "ServiceNow - *"
+The name of the specific website to retrieve.
 
 .PARAMETER Type
-The type of websites to return. Possible values are: Webcheck or PingCheck
+The type of website to filter by. Valid values are "Webcheck" or "PingCheck".
 
 .PARAMETER Filter
-A hashtable of additional filter properties to include with request. All properties are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
+A filter object to apply when retrieving websites.
 
-An example Filter to get websites with type Webcheck that are internal:
-    @{type="webcheck";isInternal=$true}
+.PARAMETER FilterWizard
+Switch to enable the filter wizard for building a custom filter interactively.
 
 .PARAMETER BatchSize
-The return size for each request, this value if not specified defaults to 1000. If a result would return 1001 and items, two requests would be made to return the full set.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-Get all websites:
-    Get-LMWebsite
+#Retrieve all websites
+Get-LMWebsite
 
-Get specific website:
-    Get-LMWebsite -Id 1
-    Get-LMWebsite -Name "LogicMonitor"
-
-Get multiple websites using wildcards:
-    Get-LMWebsite -Name "ServiceNow - *"
-
-Get websites using a custom filter:
-    Get-LMWebsite -Filter @{type="webcheck";isInternal=$true}
+.EXAMPLE
+#Retrieve websites of a specific type
+Get-LMWebsite -Type "Webcheck"
 
 .NOTES
-Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Website objects.
 #>
 Function Get-LMWebsite {
 
@@ -56,6 +56,9 @@ Function Get-LMWebsite {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
+
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -83,6 +86,12 @@ Function Get-LMWebsite {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }

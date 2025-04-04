@@ -1,50 +1,59 @@
 <#
 .SYNOPSIS
-Retrieves LogicMonitor alerts based on specified parameters.
+Retrieves alerts from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMAlert function retrieves LogicMonitor alerts based on the specified parameters. It supports filtering alerts by start and end dates, severity, type, cleared status, and custom columns. The function makes API requests to the LogicMonitor platform and returns the retrieved alerts.
+The Get-LMAlert function retrieves alerts from LogicMonitor based on specified criteria. It supports filtering by date range, severity, type, and cleared status.
 
 .PARAMETER StartDate
-Specifies the start date for filtering alerts. Only alerts that occurred after this date will be retrieved.
+The start date for retrieving alerts. Defaults to 0 (beginning of time).
 
 .PARAMETER EndDate
-Specifies the end date for filtering alerts. Only alerts that occurred before this date will be retrieved.
+The end date for retrieving alerts. Defaults to current time.
 
 .PARAMETER Id
-Specifies the ID of a specific alert to retrieve.
+The specific alert ID to retrieve. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER Severity
-Specifies the severity level of alerts to retrieve. Valid values are "*", "Warning", "Error", and "Critical". The default value is "*".
+The severity level to filter alerts by. Valid values are "*", "Warning", "Error", "Critical". Defaults to "*".
 
 .PARAMETER Type
-Specifies the type of alerts to retrieve. Valid values are "*", "websiteAlert", "dataSourceAlert", "eventSourceAlert", and "logAlert". The default value is "*".
+The type of alerts to retrieve. Valid values are "*", "websiteAlert", "dataSourceAlert", "eventAlert", "logAlert". Defaults to "*".
 
 .PARAMETER ClearedAlerts
-Specifies whether to retrieve cleared alerts. If set to $true, cleared alerts will be included in the results. If set to $false, only active alerts will be included. The default value is $false.
+Whether to include cleared alerts. Defaults to $false.
 
 .PARAMETER Filter
-Specifies a custom filter object to further refine the alerts to retrieve.
+A filter object to apply when retrieving alerts. Part of a mutually exclusive parameter set.
+
+.PARAMETER FilterWizard
+Switch to use the filter wizard interface. Part of a mutually exclusive parameter set.
 
 .PARAMETER CustomColumns
-Specifies an array of custom columns to include in the retrieved alerts.
+Array of custom column names to include in the results.
 
 .PARAMETER BatchSize
-Specifies the number of alerts to retrieve per API request. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .PARAMETER Sort
-Specifies the sorting order of the retrieved alerts. The default value is "resourceId".
+The field to sort results by. Defaults to "+resourceId".
 
 .EXAMPLE
-Get-LMAlert -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) -Severity "Error" -Type "websiteAlert" -ClearedAlerts $false
-Retrieves all alerts that occurred within the last 7 days, have a severity level of "Error", are of type "websiteAlert", and are not cleared.
+#Retrieve alerts from the last 7 days
+Get-LMAlert -StartDate (Get-Date).AddDays(-7) -Severity "Error"
 
 .EXAMPLE
-Get-LMAlert -Id "12345" -CustomColumns "Column1", "Column2"
-Retrieves a specific alert with the ID "12345" and includes the custom columns "Column1" and "Column2" in the result.
+#Retrieve a specific alert with custom columns
+Get-LMAlert -Id 12345 -CustomColumns "Column1","Column2"
 
 .NOTES
-This function requires a valid API authentication session. Use the Connect-LMAccount function to log in before running this command.
+You must run Connect-LMAccount before running this command. Maximum of 10000 alerts can be retrieved in a single query.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Alert objects.
 #>
 Function Get-LMAlert {
 
@@ -69,6 +78,9 @@ Function Get-LMAlert {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
+
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
 
         [Parameter(ParameterSetName = 'Id')]
         [String[]]$CustomColumns,
@@ -135,6 +147,12 @@ Function Get-LMAlert {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=$Sort"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=$Sort"
                 }

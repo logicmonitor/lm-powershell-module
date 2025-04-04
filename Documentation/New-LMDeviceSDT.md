@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -83,13 +83,7 @@ It allows you to specify the comment, start date, end date, timezone, and device
 ### EXAMPLE 1
 ```
 New-LMDeviceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceId "12345"
-Creates a one-time SDT for the device with ID "12345" starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00 with the comment "Maintenance window".
-```
-
-### EXAMPLE 2
-```
-New-LMDeviceSDT -Comment "Daily maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceName "Server01"
-Creates a daily recurring SDT for the device with name "Server01" starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00 with the comment "Daily maintenance window".
+Creates a one-time SDT for the device with ID "12345".
 ```
 
 ## PARAMETERS
@@ -142,8 +136,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceId
-Specifies the ID of the device for which the SDT is being created.
-This parameter is mandatory when using the 'OneTime-DeviceId', 'Daily-DeviceId', 'Monthly-DeviceId', 'MonthlyByWeek-DeviceId', or 'Weekly-DeviceId' parameter sets.
+Specifies the ID of the device.
+This parameter is mandatory when using ID-based parameter sets.
 
 ```yaml
 Type: String
@@ -158,8 +152,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceName
-Specifies the name of the device for which the SDT is being created.
-This parameter is mandatory when using the 'OneTime-DeviceName', 'Daily-DeviceName', 'Monthly-DeviceName', 'MonthlyByWeek-DeviceName', or 'Weekly-DeviceName' parameter sets.
+Specifies the name of the device.
+This parameter is mandatory when using name-based parameter sets.
 
 ```yaml
 Type: String
@@ -174,7 +168,9 @@ Accept wildcard characters: False
 ```
 
 ### -StartHour
-{{ Fill StartHour Description }}
+Specifies the start hour for recurring SDTs.
+This parameter is mandatory when using recurring parameter sets.
+Must be between 0 and 23.
 
 ```yaml
 Type: Int32
@@ -189,7 +185,9 @@ Accept wildcard characters: False
 ```
 
 ### -StartMinute
-{{ Fill StartMinute Description }}
+Specifies the start minute for recurring SDTs.
+This parameter is mandatory when using recurring parameter sets.
+Must be between 0 and 59.
 
 ```yaml
 Type: Int32
@@ -204,7 +202,9 @@ Accept wildcard characters: False
 ```
 
 ### -EndHour
-{{ Fill EndHour Description }}
+Specifies the end hour for recurring SDTs.
+This parameter is mandatory when using recurring parameter sets.
+Must be between 0 and 23.
 
 ```yaml
 Type: Int32
@@ -219,7 +219,9 @@ Accept wildcard characters: False
 ```
 
 ### -EndMinute
-{{ Fill EndMinute Description }}
+Specifies the end minute for recurring SDTs.
+This parameter is mandatory when using recurring parameter sets.
+Must be between 0 and 59.
 
 ```yaml
 Type: Int32
@@ -234,7 +236,7 @@ Accept wildcard characters: False
 ```
 
 ### -WeekDay
-{{ Fill WeekDay Description }}
+Specifies the day of the week for weekly or monthly by week SDTs.
 
 ```yaml
 Type: String
@@ -249,7 +251,7 @@ Accept wildcard characters: False
 ```
 
 ### -WeekOfMonth
-{{ Fill WeekOfMonth Description }}
+Specifies which week of the month for monthly by week SDTs.
 
 ```yaml
 Type: String
@@ -264,7 +266,7 @@ Accept wildcard characters: False
 ```
 
 ### -DayOfMonth
-{{ Fill DayOfMonth Description }}
+Specifies the day of the month for monthly SDTs.
 
 ```yaml
 Type: Int32
@@ -298,8 +300,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.SDT object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

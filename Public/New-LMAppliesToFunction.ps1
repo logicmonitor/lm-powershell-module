@@ -3,21 +3,29 @@
 Creates a new LogicMonitor Applies To function.
 
 .DESCRIPTION
-The New-LMAppliesToFunction function is used to create a new LogicMonitor Applies To function. It requires the name and applies to parameters, and optionally accepts a description parameter. The function checks if the user is logged in and has valid API credentials before making the API call to create the function.
+The New-LMAppliesToFunction function creates a new Applies To function that can be used in LogicMonitor for targeting resources.
 
 .PARAMETER Name
-The name of the LogicMonitor Applies To function. This parameter is mandatory.
+The name of the function. This parameter is mandatory.
 
 .PARAMETER Description
-The description of the LogicMonitor Applies To function. This parameter is optional.
+A description of the function's purpose.
 
 .PARAMETER AppliesTo
-The code that defines the LogicMonitor Applies To function. This parameter is mandatory.
+The function code that defines the targeting logic. This parameter is mandatory.
 
 .EXAMPLE
-New-LMAppliesToFunction -Name "MyFunction" -AppliesTo "isWindows() && isLinux()"
+#Create a new Applies To function
+New-LMAppliesToFunction -Name "WindowsServers" -AppliesTo "isWindows() && hasCategory('server')" -Description "Targets Windows servers"
 
-This example creates a new LogicMonitor Applies To function with the name "MyFunction" and the code "return true".
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns the created function object.
 #>
 Function New-LMAppliesToFunction {
 

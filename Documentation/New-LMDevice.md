@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -22,18 +22,15 @@ New-LMDevice [-Name] <String> [-DisplayName] <String> [[-Description] <String>] 
 ```
 
 ## DESCRIPTION
-The New-LMDevice function creates a new LogicMonitor device with the specified parameters.
-It sends a POST request to the LogicMonitor API to create the device.
+The New-LMDevice function creates a new device in LogicMonitor with specified configuration settings.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-LMDevice -Name "Server001" -DisplayName "Server 001" -Description "Web server" -PreferredCollectorId 1234 -HostGroupIds @("Group1", "Group2")
+#Create a new device
+New-LMDevice -Name "server1" -DisplayName "Server 1" -PreferredCollectorId 123 -Properties @{"location"="datacenter1"}
 ```
-
-This example creates a new LogicMonitor device with the name "Server001", display name "Server 001", description "Web server", and preferred collector ID 1234.
-It assigns the device to host groups "Group1" and "Group2".
 
 ## PARAMETERS
 
@@ -86,6 +83,7 @@ Accept wildcard characters: False
 
 ### -PreferredCollectorId
 The ID of the preferred collector for the device.
+This parameter is mandatory.
 
 ```yaml
 Type: Int32
@@ -131,7 +129,7 @@ Accept wildcard characters: False
 
 ### -DeviceType
 The type of the device.
-Default value is 0.
+Defaults to 0.
 
 ```yaml
 Type: Int32
@@ -161,8 +159,8 @@ Accept wildcard characters: False
 ```
 
 ### -HostGroupIds
-An array of host group IDs for the device.
-Dynamic group IDs will be ignored, and the operation will replace all existing groups.
+An array of host group IDs.
+Dynamic group IDs will be ignored.
 
 ```yaml
 Type: String[]
@@ -192,7 +190,7 @@ Accept wildcard characters: False
 ```
 
 ### -DisableAlerting
-Specifies whether alerting is disabled for the device.
+Whether to disable alerting for the device.
 
 ```yaml
 Type: Boolean
@@ -207,7 +205,7 @@ Accept wildcard characters: False
 ```
 
 ### -EnableNetFlow
-Specifies whether NetFlow is enabled for the device.
+Whether to enable NetFlow for the device.
 
 ```yaml
 Type: Boolean
@@ -222,7 +220,7 @@ Accept wildcard characters: False
 ```
 
 ### -NetflowCollectorGroupId
-The ID of the NetFlow collector group for the device.
+The ID of the NetFlow collector group.
 
 ```yaml
 Type: Int32
@@ -237,7 +235,7 @@ Accept wildcard characters: False
 ```
 
 ### -NetflowCollectorId
-The ID of the NetFlow collector for the device.
+The ID of the NetFlow collector.
 
 ```yaml
 Type: Int32
@@ -252,7 +250,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogCollectorGroupId
-The ID of the log collector group for the device.
+The ID of the log collector group.
 
 ```yaml
 Type: Int32
@@ -267,7 +265,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogCollectorId
-The ID of the log collector for the device.
+The ID of the log collector.
 
 ```yaml
 Type: Int32
@@ -301,10 +299,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.Device object.
 ## NOTES
-This function requires a valid API authentication.
-Make sure you are logged in before running any commands using Connect-LMAccount.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

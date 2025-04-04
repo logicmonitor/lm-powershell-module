@@ -3,32 +3,36 @@
 Retrieves a list of device data sources from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMDeviceDatasourceList function retrieves a list of device data sources from LogicMonitor based on the specified parameters. It supports filtering by device ID or device name, and allows customization of the batch size for pagination.
+The Get-LMDeviceDatasourceList function retrieves all data sources associated with a specific device. The device can be identified by either ID or name, and the results can be filtered.
 
 .PARAMETER Id
-Specifies the ID of the device for which to retrieve the data sources. This parameter is mandatory when using the 'Id' parameter set.
+The ID of the device. Can be specified using the DeviceId alias. Required for Id parameter set.
 
 .PARAMETER Name
-Specifies the name of the device for which to retrieve the data sources. This parameter is mandatory when using the 'Name' parameter set.
+The name of the device. Can be specified using the DeviceName alias. Required for Name parameter set.
 
 .PARAMETER Filter
-Specifies additional filters to apply to the data sources. This parameter accepts an object representing the filter criteria.
+A filter object to apply when retrieving data sources. This parameter is optional.
 
 .PARAMETER BatchSize
-Specifies the number of data sources to retrieve per batch. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
+#Retrieve data sources by device ID
 Get-LMDeviceDatasourceList -Id 1234
-Retrieves the data sources for the device with ID 1234.
 
 .EXAMPLE
-Get-LMDeviceDatasourceList -Name "MyDevice"
-Retrieves the data sources for the device with the name "MyDevice".
+#Retrieve data sources by device name with filter
+Get-LMDeviceDatasourceList -Name "MyDevice" -Filter $filterObject
 
-.EXAMPLE
-Get-LMDeviceDatasourceList -Filter "Property -eq 'Value'"
-Retrieves the data sources that match the specified filter criteria.
+.NOTES
+You must run Connect-LMAccount before running this command.
 
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DeviceDatasourceList objects.
 #>
 Function Get-LMDeviceDatasourceList {
     [CmdletBinding(DefaultParameterSetName = 'Id')]

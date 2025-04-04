@@ -23,7 +23,7 @@ Removes the LogicMonitor role with the Name "Admin".
 None. You cannot pipe objects to this function.
 
 .OUTPUTS
-System.Management.Automation.PSCustomObject. Returns an object with the Id and a success message if the role is successfully removed.
+Returns a PSCustomObject containing the ID of the removed role and a success message confirming the removal.
 
 .NOTES
 This function requires a valid API authentication and authorization. Use Connect-LMAccount to log in before running this command.

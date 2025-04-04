@@ -3,15 +3,23 @@
 Creates a new escalation for a LogicMonitor alert.
 
 .DESCRIPTION
-The New-LMAlertEscalation function creates a new escalation for a LogicMonitor alert. It checks if the user is logged in and has valid API credentials before making the API request to create the escalation.
+The New-LMAlertEscalation function creates a new escalation for a specified alert in LogicMonitor.
 
 .PARAMETER Id
-The ID of the alert for which the escalation needs to be created.
+The ID of the alert to escalate. This parameter is mandatory.
 
 .EXAMPLE
+#Escalate an alert
 New-LMAlertEscalation -Id "DS12345"
-Creates a new escalation for the alert with ID "12345".
 
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns a success message if the escalation is created successfully.
 #>
 
 Function New-LMAlertEscalation {

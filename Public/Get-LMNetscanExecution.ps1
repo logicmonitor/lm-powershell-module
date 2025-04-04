@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves Netscan execution history from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMNetscanExecution function retrieves execution history for a specified Netscan in LogicMonitor. The Netscan can be identified by either ID or name.
+
+.PARAMETER Id
+The ID of the Netscan to retrieve execution history from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the Netscan to retrieve execution history from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving execution history.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve execution history by Netscan ID
+Get-LMNetscanExecution -Id 123
+
+.EXAMPLE
+#Retrieve execution history for a specific Netscan
+Get-LMNetscanExecution -Name "Network-Discovery"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.NetScanExecution objects.
+#>
+
 Function Get-LMNetscanExecution {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

@@ -1,3 +1,43 @@
+<#
+.SYNOPSIS
+Retrieves monitoring data for a specific website from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMWebsiteData function retrieves monitoring data for a specified website and checkpoint in LogicMonitor. The website can be identified by either ID or name.
+
+.PARAMETER Id
+The ID of the website to retrieve data from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the website to retrieve data from. Required for Name parameter set.
+
+.PARAMETER StartDate
+The start date for retrieving website data. Defaults to 60 minutes ago if not specified.
+
+.PARAMETER EndDate
+The end date for retrieving website data. Defaults to current time if not specified.
+
+.PARAMETER CheckpointId
+The ID of the specific checkpoint to retrieve data from. Defaults to 0.
+
+.EXAMPLE
+#Retrieve website data by ID
+Get-LMWebsiteData -Id 123
+
+.EXAMPLE
+#Retrieve website data with custom date range
+Get-LMWebsiteData -Name "www.example.com" -StartDate (Get-Date).AddDays(-1)
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns website monitoring data objects.
+#>
+
 Function Get-LMWebsiteData {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

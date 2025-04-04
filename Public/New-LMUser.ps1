@@ -62,7 +62,13 @@ New-LMUser -Username "john.doe" -Email "john.doe@example.com" -Password "P@ssw0r
 This example creates a new LogicMonitor user with the username "john.doe", email "john.doe@example.com", password "P@ssw0rd", role "admin", and access to the "Dashboards" and "Reports" views.
 
 .NOTES
-This function requires valid API credentials and a logged-in session in LogicMonitor.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.User object.
 #>
 Function New-LMUser {
 

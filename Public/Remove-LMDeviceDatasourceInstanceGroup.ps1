@@ -29,7 +29,10 @@ Remove-LMDeviceDatasourceInstanceGroup -DatasourceId 123 -Id 456 -InstanceGroupN
 Removes the instance group named "Group2" associated with the datasource ID 123 on the device ID 456.
 
 .INPUTS
-None. You cannot pipe objects to this function.
+None.
+
+.OUTPUTS
+Returns a PSCustomObject containing the instance ID and a message confirming the successful removal of the instance group.
 #>
 
 Function Remove-LMDeviceDatasourceInstanceGroup {

@@ -1,3 +1,36 @@
+<#
+.SYNOPSIS
+Updates a property value for a LogicMonitor device.
+
+.DESCRIPTION
+The Set-LMDeviceProperty function modifies the value of a specific property for a device in LogicMonitor.
+
+.PARAMETER Id
+Specifies the ID of the device. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the name of the device. This parameter is mandatory when using the 'Name' parameter set.
+
+.PARAMETER PropertyName
+Specifies the name of the property to update.
+
+.PARAMETER PropertyValue
+Specifies the new value for the property.
+
+.EXAMPLE
+Set-LMDeviceProperty -Id 123 -PropertyName "Location" -PropertyValue "New York"
+Updates the "Location" property to "New York" for the device with ID 123.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns the response from the API indicating the success of the property update.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMDeviceProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

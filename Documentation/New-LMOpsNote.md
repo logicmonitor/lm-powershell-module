@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -145,10 +145,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.OpsNote object.
 ## NOTES
-LogicMonitor API credentials must be set before using this function.
-Use the Connect-LMAccount function to log in and set the credentials.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

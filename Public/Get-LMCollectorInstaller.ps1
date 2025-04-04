@@ -1,38 +1,44 @@
 <#
 .SYNOPSIS
-Downloads the LogicMonitor Collector installer based on the specified parameters.
+Downloads the LogicMonitor Collector installer.
 
 .DESCRIPTION
-The Get-LMCollectorInstaller function downloads the LogicMonitor Collector installer based on the specified parameters. It requires a valid API authentication and can be used to download the installer for a specific collector by its ID or name. The function supports different operating systems and architectures, as well as collector sizes.
+The Get-LMCollectorInstaller function downloads the LogicMonitor Collector installer based on the specified parameters. It supports different operating systems, architectures, and collector sizes, and can download either standard or Early Access (EA) versions.
 
 .PARAMETER Id
-The ID of the collector for which to download the installer. This parameter is mandatory when using the 'Id' parameter set.
+The ID of the collector to download the installer for. This parameter is mandatory when using the Id parameter set.
 
 .PARAMETER Name
-The name of the collector for which to download the installer. This parameter is mandatory when using the 'Name' parameter set.
+The name of the collector to download the installer for. This parameter is mandatory when using the Name parameter set.
 
 .PARAMETER Size
-The size of the collector. Valid values are 'nano', 'small', 'medium', 'large', 'extra_large', and 'double_extra_large'. The default value is 'medium'.
+The size of the collector to install. Valid values are 'nano', 'small', 'medium', 'large', 'extra_large', 'double_extra_large'. Defaults to 'medium'.
 
 .PARAMETER OSandArch
-The operating system and architecture of the collector. Valid values are 'Win64' and 'Linux64'. The default value is 'Win64'.
+The operating system and architecture for the installer. Valid values are 'Win64', 'Linux64'. Defaults to 'Win64'.
 
 .PARAMETER UseEA
-Specifies whether to use the Early Access (EA) version of the collector. By default, this parameter is set to $false.
+Switch to use the Early Access version of the collector. Defaults to $false.
 
 .PARAMETER DownloadPath
-The path where the downloaded installer file will be saved. By default, it is set to the current location.
+The path where the installer file will be saved. Defaults to the current directory.
 
 .EXAMPLE
-PS> Get-LMCollectorInstaller -Id 1234 -Size medium -OSandArch Win64 -DownloadPath "C:\Downloads"
-
-Downloads the LogicMonitor Collector installer for the collector with ID 1234, using the 'medium' size and 'Win64' operating system and architecture. The installer file will be saved in the "C:\Downloads" directory.
+#Download a Windows collector installer
+Get-LMCollectorInstaller -Id 123 -Size medium -OSandArch Win64 -DownloadPath "C:\Downloads"
 
 .EXAMPLE
-PS> Get-LMCollectorInstaller -Name "MyCollector" -Size large -OSandArch Linux64
+#Download a Linux collector installer with Early Access
+Get-LMCollectorInstaller -Name "Collector1" -OSandArch Linux64 -UseEA $true
 
-Downloads the LogicMonitor Collector installer for the collector with the name "MyCollector", using the 'large' size and 'Linux64' operating system and architecture. The installer file will be saved in the current location.
+.NOTES
+You must run Connect-LMAccount before running this command.
 
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns the path to the downloaded installer file.
 #>
 Function Get-LMCollectorInstaller {
     [CmdletBinding(DefaultParameterSetName = 'Id')]

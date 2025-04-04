@@ -1,3 +1,46 @@
+<#
+.SYNOPSIS
+Retrieves dashboard widgets from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMDashboardWidget function retrieves widget information from LogicMonitor dashboards. It can return widgets by ID, name, or by their associated dashboard.
+
+.PARAMETER Id
+The ID of the widget to retrieve. Part of a mutually exclusive parameter set.
+
+.PARAMETER Name
+The name of the widget to retrieve. Part of a mutually exclusive parameter set.
+
+.PARAMETER DashboardId
+The ID of the dashboard to retrieve widgets from. Part of a mutually exclusive parameter set.
+
+.PARAMETER DashboardName
+The name of the dashboard to retrieve widgets from. Part of a mutually exclusive parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving widgets. Part of a mutually exclusive parameter set.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve a widget by ID
+Get-LMDashboardWidget -Id 123
+
+.EXAMPLE
+#Retrieve widgets from a specific dashboard
+Get-LMDashboardWidget -DashboardName "Production Overview"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DashboardWidget objects.
+#>
+
 Function Get-LMDashboardWidget {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

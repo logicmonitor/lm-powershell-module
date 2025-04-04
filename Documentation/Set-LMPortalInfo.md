@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMPortalInfo
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates LogicMonitor portal settings.
 
 ## SYNTAX
 
@@ -20,21 +20,35 @@ Set-LMPortalInfo [[-Whitelist] <String>] [-ClearWhitelist] [[-RequireTwoFA] <Boo
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMPortalInfo function modifies various portal-wide settings in LogicMonitor, including whitelisting, two-factor authentication, alert totals, and session timeouts.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMPortalInfo -RequireTwoFA $true -UserSessionTimeoutInMin 60 -CompanyDisplayName "My Company"
+Updates the portal settings to require 2FA, set session timeout to 60 minutes, and update company display name.
+```
 
 ## PARAMETERS
 
+### -Whitelist
+Specifies IP addresses/ranges to whitelist for portal access.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 1
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ClearWhitelist
-{{ Fill ClearWhitelist Description }}
+Indicates whether to clear the existing whitelist.
 
 ```yaml
 Type: SwitchParameter
@@ -43,43 +57,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CompanyDisplayName
-{{ Fill CompanyDisplayName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableRemoteSession
-{{ Fill EnableRemoteSession Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -IncludeACKinAlertTotals
-{{ Fill IncludeACKinAlertTotals Description }}
+### -RequireTwoFA
+Specifies whether to require two-factor authentication for all users.
 
 ```yaml
 Type: Boolean
@@ -93,8 +77,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -IncludeSDTinAlertTotals
-{{ Fill IncludeSDTinAlertTotals Description }}
+### -IncludeACKinAlertTotals
+Specifies whether to include acknowledged alerts in alert totals.
 
 ```yaml
 Type: Boolean
@@ -108,8 +92,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -RequireTwoFA
-{{ Fill RequireTwoFA Description }}
+### -IncludeSDTinAlertTotals
+Specifies whether to include alerts in SDT in alert totals.
 
 ```yaml
 Type: Boolean
@@ -117,20 +101,34 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 1
+Position: 4
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -UserSessionTimeoutInMin
-{{ Fill UserSessionTimeoutInMin Description }}
+### -EnableRemoteSession
+Specifies whether to enable remote session functionality.
 
 ```yaml
-Type: Int32
+Type: Boolean
 Parameter Sets: (All)
 Aliases:
-Accepted values: 30, 60, 120, 240, 480, 1440, 10080, 43200
+
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CompanyDisplayName
+Specifies the company name to display in the portal.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: 6
@@ -139,16 +137,17 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Whitelist
-{{ Fill Whitelist Description }}
+### -UserSessionTimeoutInMin
+Specifies the session timeout in minutes.
+Valid values: 30, 60, 120, 240, 480, 1440, 10080, 43200.
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: 7
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -174,10 +173,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns the response from the API containing the updated portal settings.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

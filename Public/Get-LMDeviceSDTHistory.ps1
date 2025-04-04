@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves historical Scheduled Down Time (SDT) entries for a LogicMonitor device.
+
+.DESCRIPTION
+The Get-LMDeviceSDTHistory function retrieves historical SDT entries for a specified device in LogicMonitor. The device can be identified by either ID or name, and the results can be filtered.
+
+.PARAMETER Id
+The ID of the device to retrieve SDT history from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device to retrieve SDT history from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving SDT history. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve SDT history by device ID
+Get-LMDeviceSDTHistory -Id 123
+
+.EXAMPLE
+#Retrieve SDT history for a specific device
+Get-LMDeviceSDTHistory -Name "Production-Server"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns historical SDT entry objects for the specified device.
+#>
+
 Function Get-LMDeviceSDTHistory {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

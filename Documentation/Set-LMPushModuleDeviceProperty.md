@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMPushModuleDeviceProperty
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a device property using the LogicMonitor Push Module.
 
 ## SYNTAX
 
@@ -25,21 +25,20 @@ Set-LMPushModuleDeviceProperty -Name <String> -PropertyName <String> -PropertyVa
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMPushModuleDeviceProperty function modifies a property value for a device using the LogicMonitor Push Module API.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMPushModuleDeviceProperty -Id 123 -PropertyName "location" -PropertyValue "New York"
+Updates the location property for device ID 123.
+```
 
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the device.
 
 ```yaml
 Type: Int32
@@ -48,13 +47,13 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the name of the device.
 
 ```yaml
 Type: String
@@ -69,7 +68,7 @@ Accept wildcard characters: False
 ```
 
 ### -PropertyName
-{{ Fill PropertyName Description }}
+Specifies the name of the property to update.
 
 ```yaml
 Type: String
@@ -84,7 +83,7 @@ Accept wildcard characters: False
 ```
 
 ### -PropertyValue
-{{ Fill PropertyValue Description }}
+Specifies the new value for the property.
 
 ```yaml
 Type: String
@@ -118,10 +117,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns the response from the API indicating the success of the property update.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

@@ -1,24 +1,34 @@
 <#
 .SYNOPSIS
-    Invokes the Azure subscription discovery process to return subscriptions for a specified client Id.
+Discovers Azure subscriptions for a given tenant.
 
 .DESCRIPTION
-    The Invoke-LMAzureSubscriptionDiscovery function is used to discover Azure subscriptions by making API requests to the LogicMonitor platform.
+The Invoke-LMAzureSubscriptionDiscovery function discovers available Azure subscriptions for a specified Azure tenant using provided credentials.
 
 .PARAMETER ClientId
-    The client ID of the Azure Active Directory application.
+The Azure Active Directory application client ID.
 
 .PARAMETER SecretKey
-    The secret key of the Azure Active Directory application.
+The Azure Active Directory application secret key.
 
 .PARAMETER TenantId
-    The tenant ID of the Azure Active Directory application.
+The Azure Active Directory tenant ID.
 
 .PARAMETER IsChinaAccount
-    Specifies whether the Azure account is a China account. Default value is $false.
+Indicates if this is an Azure China account. Defaults to $false.
 
 .EXAMPLE
-    Invoke-LMAzureSubscriptionDiscovery -ClientId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -SecretKey "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -TenantId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+#Discover Azure subscriptions
+Invoke-LMAzureSubscriptionDiscovery -ClientId "client-id" -SecretKey "secret-key" -TenantId "tenant-id"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns a list of discovered Azure subscriptions.
 #>
 Function Invoke-LMAzureSubscriptionDiscovery {
 

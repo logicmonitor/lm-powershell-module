@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceConfigSourceData
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves configuration source data for a LogicMonitor device.
 
 ## SYNTAX
 
@@ -31,52 +31,44 @@ Get-LMDeviceConfigSourceData -Id <Int32> -HdsId <String> -HdsInsId <String> [-La
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDeviceConfigSourceData function retrieves configuration data from a specific device's configuration source in LogicMonitor.
+It supports retrieving full configurations or delta changes, and can return either all configs or just the latest one.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve latest configuration for a device
+Get-LMDeviceConfigSourceData -Id 123 -HdsId 456 -HdsInsId 789 -LatestConfigOnly
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve full configuration history
+Get-LMDeviceConfigSourceData -Id 123 -HdsId 456 -HdsInsId 789 -ConfigType Full
+```
 
 ## PARAMETERS
 
-### -ConfigId
-{{ Fill ConfigId Description }}
+### -Id
+The ID of the device to retrieve configuration data for.
+This parameter is mandatory.
 
 ```yaml
-Type: String
-Parameter Sets: ConfigId
+Type: Int32
+Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ConfigType
-{{ Fill ConfigType Description }}
-
-```yaml
-Type: String
-Parameter Sets: ListConfigs
-Aliases:
-Accepted values: Delta, Full
-
-Required: False
-Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -HdsId
-{{ Fill HdsId Description }}
+The ID of the host datasource.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -91,7 +83,8 @@ Accept wildcard characters: False
 ```
 
 ### -HdsInsId
-{{ Fill HdsInsId Description }}
+The ID of the host datasource instance.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -105,15 +98,16 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -ConfigId
+The specific configuration ID to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
+Type: String
+Parameter Sets: ConfigId
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -121,7 +115,8 @@ Accept wildcard characters: False
 ```
 
 ### -LatestConfigOnly
-{{ Fill LatestConfigOnly Description }}
+Switch to retrieve only the most recent configuration.
+Part of the ListConfigs parameter set.
 
 ```yaml
 Type: SwitchParameter
@@ -130,7 +125,24 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ConfigType
+The type of configuration to retrieve.
+Valid values are "Delta" or "Full".
+Defaults to "Delta".
+
+```yaml
+Type: String
+Parameter Sets: ListConfigs
+Aliases:
+
+Required: False
+Position: Named
+Default value: Delta
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -155,10 +167,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns configuration data objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

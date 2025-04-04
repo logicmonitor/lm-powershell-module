@@ -1,36 +1,41 @@
 <#
 .SYNOPSIS
-Retrieves LogicMonitor collectors based on various parameters.
+Retrieves LogicMonitor collectors.
 
 .DESCRIPTION
-The Get-LMCollector function retrieves LogicMonitor collectors based on the specified parameters. It supports filtering by collector ID, collector name, or custom filter. The function uses the LogicMonitor REST API to make the requests.
+The Get-LMCollector function retrieves collector information from LogicMonitor. It can return a single collector by ID or name, or multiple collectors using filters or the filter wizard.
 
 .PARAMETER Id
-Specifies the ID of the collector to retrieve. This parameter is mutually exclusive with the Name and Filter parameters.
+The ID of the collector to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Name
-Specifies the name of the collector to retrieve. This parameter is mutually exclusive with the Id and Filter parameters.
+The name of the collector to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-Specifies a custom filter to retrieve collectors based on specific criteria. This parameter is mutually exclusive with the Id and Name parameters.
+A filter object to apply when retrieving collectors. Part of a mutually exclusive parameter set.
+
+.PARAMETER FilterWizard
+Switch to use the filter wizard interface for building the filter. Part of a mutually exclusive parameter set.
 
 .PARAMETER BatchSize
-Specifies the number of collectors to retrieve in each batch. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
+#Retrieve a collector by ID
 Get-LMCollector -Id 123
-Retrieves the collector with the specified ID.
 
 .EXAMPLE
-Get-LMCollector -Name "Collector1"
-Retrieves the collector with the specified name.
-
-.EXAMPLE
-Get-LMCollector -Filter @{Property = "Value"}
-Retrieves collectors based on the specified custom filter.
+#Retrieve collectors using the filter wizard
+Get-LMCollector -FilterWizard
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this command.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Collector objects.
 #>
 Function Get-LMCollector {
 
@@ -44,6 +49,9 @@ Function Get-LMCollector {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
+
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -70,6 +78,12 @@ Function Get-LMCollector {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }

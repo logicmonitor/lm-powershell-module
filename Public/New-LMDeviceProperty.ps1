@@ -28,9 +28,13 @@ New-LMDeviceProperty -Name "Server01" -PropertyName "Environment" -PropertyValue
 Creates a new device property with the name "Environment" and value "Production" for the device with the name "Server01".
 
 .NOTES
-- You must be logged in and have valid API credentials to use this function. Use Connect-LMAccount to log in.
-- Wildcard values are not supported for the device name.
-- If the device name is not found, an error will be displayed.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DeviceProperty object.
 #>
 Function New-LMDeviceProperty {
 

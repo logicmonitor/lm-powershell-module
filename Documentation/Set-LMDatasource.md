@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMDatasource
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor datasource configuration.
 
 ## SYNTAX
 
@@ -29,81 +29,21 @@ Set-LMDatasource -Name <String> [-NewName <String>] [-DisplayName <String>] [-De
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMDatasource function modifies an existing datasource in LogicMonitor, allowing updates to its name, display name, description, applies to settings, and other properties.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMDatasource -Id 123 -NewName "UpdatedSource" -Description "New description"
+Updates the datasource with ID 123 with a new name and description.
+```
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Datapoints
-{{ Fill Datapoints Description }}
-
-```yaml
-Type: PSObject
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-{{ Fill DisplayName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the datasource to modify.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: String
@@ -118,7 +58,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the current name of the datasource.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -133,7 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the datasource.
 
 ```yaml
 Type: String
@@ -147,8 +88,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PollingIntervalInSeconds
-{{ Fill PollingIntervalInSeconds Description }}
+### -DisplayName
+Specifies the new display name for the datasource.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the new description for the datasource.
 
 ```yaml
 Type: String
@@ -163,7 +119,7 @@ Accept wildcard characters: False
 ```
 
 ### -Tags
-{{ Fill Tags Description }}
+Specifies an array of tags to associate with the datasource.
 
 ```yaml
 Type: String[]
@@ -178,13 +134,29 @@ Accept wildcard characters: False
 ```
 
 ### -TagsMethod
-{{ Fill TagsMethod Description }}
+Specifies how to handle existing tags.
+Valid values are "Add" or "Refresh".
+Default is "Refresh".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: Add, Refresh
+
+Required: False
+Position: Named
+Default value: Refresh
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -appliesTo
+Specifies the new applies to expression for the datasource.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
@@ -194,10 +166,40 @@ Accept wildcard characters: False
 ```
 
 ### -TechNotes
-{{ Fill TechNotes Description }}
+Specifies the new technical notes for the datasource.
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PollingIntervalInSeconds
+Specifies the polling interval in seconds.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Datapoints
+Specifies the datapoints configuration object for the datasource.
+
+```yaml
+Type: PSObject
 Parameter Sets: (All)
 Aliases:
 
@@ -224,13 +226,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -appliesTo
-{{ Fill appliesTo Description }}
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: String
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases:
+Aliases: cf
 
 Required: False
 Position: Named
@@ -259,10 +261,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### You can pipe objects containing Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.Datasource object containing the updated datasource information.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

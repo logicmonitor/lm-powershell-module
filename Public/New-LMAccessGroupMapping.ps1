@@ -1,26 +1,31 @@
 <#
 .SYNOPSIS
-Creates a new LogicMonitor access group mapping between an access group and an logicmodule.
+Creates a new LogicMonitor access group mapping.
 
 .DESCRIPTION
-The New-LMAccessGroupMapping function is used to create a new access group mapping in LogicMonitor. 
+The New-LMAccessGroupMapping function creates a mapping between an access group and a logic module in LogicMonitor.
 
 .PARAMETER AccessGroupIds
-The IDs of the access group. This parameter is mandatory.
+The IDs of the access groups to map. This parameter is mandatory.
 
 .PARAMETER LogicModuleType
-The type of logic module. This parameter is mandatory.
+The type of logic module. Valid values are "DATASOURCE", "EVENTSOURCE", "BATCHJOB", "JOBMONITOR", "LOGSOURCE", "TOPOLOGYSOURCE", "PROPERTYSOURCE", "APPLIESTO_FUNCTION", "SNMP_SYSOID_MAP".
 
 .PARAMETER LogicModuleId
-The ID of the logic module. This parameter is mandatory.
+The ID of the logic module to map. This parameter is mandatory.
 
 .EXAMPLE
+#Create a new access group mapping
 New-LMAccessGroupMapping -AccessGroupIds "12345" -LogicModuleType "DATASOURCE" -LogicModuleId "67890"
 
-This example creates a new access group mapping for the access group with ID "12345" and the logic module with ID "67890".
-
 .NOTES
-For this function to work, you need to be logged in and have valid API credentials. Use the Connect-LMAccount function to log in before running any commands.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns mapping details object.
 #>
 Function New-LMAccessGroupMapping {
 

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -31,17 +31,15 @@ It supports sending a single message or an array of messages.
 
 ### EXAMPLE 1
 ```
-Send-LMLogMessage -Message "This is a test log message" -resourceMapping @{ 'system.deviceId' = '12345' } -Metadata @{ 'key1' = 'value1'; 'key2' = 'value2' }
-```
-
+Send-LMLogMessage -Message "This is a test log message" -resourceMapping @{ 'system.deviceId' = '12345' } -Metadata @{ 'key1' = 'value1' }
 Sends a single log message with the specified message, resource mapping, and metadata.
+```
 
 ### EXAMPLE 2
 ```
 Send-LMLogMessage -MessageArray $MessageObjectsArray
-```
-
 Sends an array of log message objects.
+```
 
 ## PARAMETERS
 
@@ -148,6 +146,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
+### Outputs a success message if the log message was accepted successfully, or an error message if the operation failed.
 ## NOTES
 
 ## RELATED LINKS

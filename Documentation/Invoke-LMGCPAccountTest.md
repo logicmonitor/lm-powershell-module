@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-LMGCPAccountTest
 
 ## SYNOPSIS
-Invokes a test for a GCP (Google Cloud Platform) account.
+Tests GCP account connectivity in LogicMonitor.
 
 ## SYNTAX
 
@@ -18,24 +18,20 @@ Invoke-LMGCPAccountTest [-ServiceAccountKey] <String> [-ProjectId] <String> [[-C
 ```
 
 ## DESCRIPTION
-The Invoke-LMGCPAccountTest function is used to invoke a test for a GCP account.
-It checks if the user is logged in and has valid API credentials.
-If the user is logged in, it builds the necessary headers and URI, prepares the data, and sends a POST request to the LogicMonitor API to perform the test.
-The function returns the response from the API.
+The Invoke-LMGCPAccountTest function tests the connection and permissions for a Google Cloud Platform account in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-LMGCPAccountTest -ServiceAccountKey "service-account-key" -ProjectId "project-id"
+#Test GCP account connectivity
+Invoke-LMGCPAccountTest -ServiceAccountKey "key-json" -ProjectId "project-id"
 ```
-
-This example invokes a test for a GCP account using the specified service account key and project ID.
 
 ## PARAMETERS
 
 ### -ServiceAccountKey
-The service account key for the GCP account.
+The GCP service account key JSON.
 
 ```yaml
 Type: String
@@ -50,7 +46,7 @@ Accept wildcard characters: False
 ```
 
 ### -ProjectId
-The ID of the GCP project.
+The GCP project ID.
 
 ```yaml
 Type: String
@@ -65,8 +61,8 @@ Accept wildcard characters: False
 ```
 
 ### -CheckedServices
-(Optional) A comma-separated list of GCP services to be checked.
-The default value is a list of all LM supported GCP services.
+The list of GCP services to test.
+Defaults to all supported services.
 
 ```yaml
 Type: String
@@ -81,8 +77,8 @@ Accept wildcard characters: False
 ```
 
 ### -GroupId
-(Optional) The ID of the group to which the GCP account belongs.
-The default value is -1, indicating no group.
+The LogicMonitor group ID to associate with the GCP account.
+Defaults to -1.
 
 ```yaml
 Type: String
@@ -116,10 +112,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns test results for each GCP service.
 ## NOTES
-This function requires the user to be logged in before running any commands.
-Use the Connect-LMAccount function to log in before invoking this function.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

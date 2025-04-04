@@ -3,30 +3,35 @@
 Creates a new LogicMonitor API user.
 
 .DESCRIPTION
-The New-LMAPIUser function is used to create a new LogicMonitor API user. It requires a username and supports optional parameters such as user groups, a note, role names, and status.
+The New-LMAPIUser function creates a new API-only user in LogicMonitor with specified roles and group memberships.
 
 .PARAMETER Username
-Specifies the username for the new API user. This parameter is mandatory.
+The username for the new API user. This parameter is mandatory.
 
 .PARAMETER UserGroups
-Specifies an array of user groups to which the new API user should be added. This parameter is optional.
+The user groups to add the new user to.
 
 .PARAMETER Note
-Specifies a note for the new API user. This parameter is optional.
+A note describing the purpose of the API user.
 
 .PARAMETER RoleNames
-Specifies an array of role names for the new API user. The default value is "readonly". This parameter is optional.
+The roles to assign to the user. Defaults to "readonly".
 
 .PARAMETER Status
-Specifies the status of the new API user. Valid values are "active" and "suspended". The default value is "active". This parameter is optional.
+The status of the user. Valid values are "active" and "suspended". Defaults to "active".
 
 .EXAMPLE
-New-LMAPIUser -Username "john.doe" -UserGroups @("Group1","Group2") -Note "Test user" -RoleNames "admin" -Status "active"
-
-This example creates a new API user with the username "john.doe", adds the user to "Group1" and "Group2" user groups, adds a note "Test user", assigns the "admin" role, and sets the status to "active".
+#Create a new API user
+New-LMAPIUser -Username "api.user" -UserGroups @("Group1","Group2") -RoleNames @("admin") -Note "API user for automation"
 
 .NOTES
-This function requires a valid API session. Make sure to log in using the Connect-LMAccount function before running this command.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns the created user object.
 #>
 Function New-LMAPIUser {
 

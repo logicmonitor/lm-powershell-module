@@ -1,44 +1,48 @@
 <#
 .SYNOPSIS
-Retrieves the instance groups associated with a LogicMonitor device datasource.
+Retrieves instance groups for a LogicMonitor device datasource.
 
 .DESCRIPTION
-The Get-LMDeviceDatasourceInstanceGroup function retrieves the instance groups associated with a LogicMonitor device datasource. It requires valid API credentials and a logged-in session.
+The Get-LMDeviceDatasourceInstanceGroup function retrieves all instance groups associated with a device datasource. It supports identifying the device and datasource by either ID or name, and allows filtering of the results.
 
 .PARAMETER DatasourceName
-Specifies the name of the datasource. This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+The name of the datasource. Required for Id-dsName and Name-dsName parameter sets.
 
 .PARAMETER DatasourceId
-Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+The ID of the datasource. Required for Id-dsId and Name-dsId parameter sets.
 
 .PARAMETER Id
-Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId', 'Id-dsName', or 'Id-HdsId' parameter sets. This parameter is also aliased as 'DeviceId'.
+The ID of the device. Can be specified using the DeviceId alias. Required for Id-dsId, Id-dsName, and Id-HdsId parameter sets.
 
 .PARAMETER Name
-Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName', 'Name-dsId', or 'Name-HdsId' parameter sets. This parameter is also aliased as 'DeviceName'.
+The name of the device. Can be specified using the DeviceName alias. Required for Name-dsName, Name-dsId, and Name-HdsId parameter sets.
 
 .PARAMETER HdsId
-Specifies the ID of the device datasource. This parameter is mandatory when using the 'Id-HdsId' or 'Name-HdsId' parameter sets.
+The ID of the device datasource. Required for Id-HdsId and Name-HdsId parameter sets.
 
 .PARAMETER Filter
-Specifies an optional filter to apply to the results.
+A filter object to apply when retrieving instance groups. This parameter is optional.
 
 .PARAMETER BatchSize
-Specifies the number of results to retrieve per batch. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
+#Retrieve instance groups using names
 Get-LMDeviceDatasourceInstanceGroup -DatasourceName "CPU" -Name "Server01"
-Retrieves the instance groups associated with the "CPU" datasource on the device named "Server01".
 
 .EXAMPLE
+#Retrieve instance groups using IDs
 Get-LMDeviceDatasourceInstanceGroup -DatasourceId 123 -Id 456
-Retrieves the instance groups associated with the datasource with ID 123 on the device with ID 456.
 
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns instance group objects.
 #>
-
-Function Get-LMDeviceDatasourceInstanceGroup {
-    ...
-}
 
 Function Get-LMDeviceDatasourceInstanceGroup {
 

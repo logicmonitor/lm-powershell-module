@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves topology maps from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMTopologyMap function retrieves topology map configurations from LogicMonitor. It can retrieve all maps, a specific map by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific topology map to retrieve.
+
+.PARAMETER Name
+The name of the specific topology map to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving topology maps.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all topology maps
+Get-LMTopologyMap
+
+.EXAMPLE
+#Retrieve a specific topology map by name
+Get-LMTopologyMap -Name "Network-Topology"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.TopologyMap objects.
+#>
+
 Function Get-LMTopologyMap {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

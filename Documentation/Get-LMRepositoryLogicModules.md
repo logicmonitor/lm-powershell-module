@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMRepositoryLogicModules
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves LogicModules from the LogicMonitor repository.
 
 ## SYNTAX
 
@@ -17,31 +17,38 @@ Get-LMRepositoryLogicModules [[-Type] <String>] [-ProgressAction <ActionPreferen
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMRepositoryLogicModules function retrieves LogicModules from the LogicMonitor repository.
+It supports retrieving different types of modules including datasources, property rules, event sources, topology sources, and config sources.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve all datasource modules
+Get-LMRepositoryLogicModules
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve all event source modules
+Get-LMRepositoryLogicModules -Type "eventsource"
+```
 
 ## PARAMETERS
 
 ### -Type
-{{ Fill Type Description }}
+The type of LogicModule to retrieve.
+Valid values are "datasource", "propertyrules", "eventsource", "topologysource", "configsource".
+Defaults to "datasource".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: datasource, propertyrules, eventsource, topologysource, configsource
 
 Required: False
-Position: 0
-Default value: None
+Position: 1
+Default value: Datasource
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -66,10 +73,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.RepositoryLogicModules objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

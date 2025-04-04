@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves recipient groups from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMRecipientGroup function retrieves recipient group configurations from LogicMonitor. It can retrieve all groups, a specific group by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific recipient group to retrieve.
+
+.PARAMETER Name
+The name of the specific recipient group to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving recipient groups.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all recipient groups
+Get-LMRecipientGroup
+
+.EXAMPLE
+#Retrieve a specific recipient group by name
+Get-LMRecipientGroup -Name "Emergency-Contacts"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns recipient group objects.
+#>
+
 Function Get-LMRecipientGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

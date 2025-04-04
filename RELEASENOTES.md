@@ -1,4 +1,23 @@
 # Previous module release notes
+## 6.6
+### Updated Cmdlets:
+ - **Get-LMSysOIDMap**: Added cmdlet to query and retrieve sysOIDMap details.
+ - **Export-LMLogicModule**: Updated to support the export of appliesToFunctions(functions) and SysOIDMaps(oids).
+ - **Import-LMLogicModule**: Updated to support the import of appliesToFunctions(functions) and SysOIDMaps(oids) exported using *Export-LMLogicModule*.
+
+ - **Set-LMPropertySource**: Updated to support tag modification. Use -Tags as an array of tags when updating a propertysource. There is also a -TagsMethod property that allows you to control the behavior when setting tags. **Add** will add specified tags to the existing list of tags on the module, and **Refresh** will replace the existing tags with the ones specified in the command. The default behavior is **Refresh**.
+ - **Set-LMDataSource**: Updated to support tag modification. Use -Tags as an array of tags when updating a datasource. There is also a -TagsMethod property that allows you to control the behavior when setting tags. **Add** will add specified tags to the existing list of tags on the module, and **Refresh** will replace the existing tags with the ones specified in the command. The default behavior is **Refresh**.
+ - **Set-LMConfigSource**: Updated to support tag modification. Use -Tags as an array of tags when updating a configsource. There is also a -TagsMethod property that allows you to control the behavior when setting tags. **Add** will add specified tags to the existing list of tags on the module, and **Refresh** will replace the existing tags with the ones specified in the command. The default behavior is **Refresh**.
+
+ ```
+ #Replace all existing tags with tag1 and tag2
+ Set-LMDatasource -Id 123 -Tags @("tag1","tag2") -TagsMethod Refresh
+
+ #Add tag1 and tag2 to the existing setting of tags
+ Set-LMDatasource -Id 123 -Tags @("tag1","tag2") -TagsMethod Add
+ ```
+
+
 ## 6.5.7
 ### Updated Cmdlets:
  - **Get-LMNormalizedProperties**: Updated the output object type to make the returned object easier to work with. Returned object now contains the following fields: id,model,alias,hostProperty,hostPropertyPriority,isEditable,isDeletable

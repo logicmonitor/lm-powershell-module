@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Export-LMLogicModule
 
 ## SYNOPSIS
-Exports a specified logicmodule
+Exports LogicMonitor LogicModules for backup or transfer.
 
 ## SYNTAX
 
@@ -25,24 +25,28 @@ Export-LMLogicModule -LogicModuleName <String> -Type <String> [-DownloadPath <St
 ```
 
 ## DESCRIPTION
-Exports logic module for backup/import into another portal
+The Export-LMLogicModule function exports LogicModules from LogicMonitor.
+It supports exporting various types of modules including datasources, property rules, event sources, and more.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Export a LogicModule by ID
 Export-LMLogicModule -LogicModuleId 1907 -Type "eventsources"
 ```
 
 ### EXAMPLE 2
 ```
+#Export a LogicModule by name
 Export-LMLogicModule -LogicModuleName "SNMP_Network_Interfaces" -Type "datasources"
 ```
 
 ## PARAMETERS
 
 ### -LogicModuleId
-Id of the logic module you are looking to export
+The ID of the LogicModule to export.
+This parameter is mandatory when using the Id parameter set.
 
 ```yaml
 Type: Int32
@@ -57,7 +61,8 @@ Accept wildcard characters: False
 ```
 
 ### -LogicModuleName
-Name of the logic module you are looking to export, used as an alternative to LogicModuleId
+The name of the LogicModule to export.
+This parameter is mandatory when using the Name parameter set.
 
 ```yaml
 Type: String
@@ -72,7 +77,8 @@ Accept wildcard characters: False
 ```
 
 ### -Type
-Type of logic module to export
+The type of LogicModule to export.
+Valid values are: "datasources", "propertyrules", "eventsources", "topologysources", "configsources", "logsources", "functions", "oids".
 
 ```yaml
 Type: String
@@ -87,7 +93,8 @@ Accept wildcard characters: False
 ```
 
 ### -DownloadPath
-Path to export the logic module to, defaults to current directory if not specified
+The path where the exported LogicModule will be saved.
+Defaults to current directory.
 
 ```yaml
 Type: String
@@ -124,12 +131,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns a success message if the export is completed successfully.
 ## NOTES
-You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
-
-[Module repo: https://github.com/logicmonitor/lm-powershell-module]()
-
-[PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
-

@@ -1,3 +1,71 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor NetScan configuration.
+
+.DESCRIPTION
+The Set-LMNetscan function modifies an existing NetScan configuration in LogicMonitor.
+
+.PARAMETER CollectorId
+Specifies the ID of the collector to use for the NetScan.
+
+.PARAMETER Name
+Specifies the name of the NetScan.
+
+.PARAMETER Id
+Specifies the ID of the NetScan to modify.
+
+.PARAMETER Description
+Specifies the description for the NetScan.
+
+.PARAMETER ExcludeDuplicateType
+Specifies the type of duplicates to exclude.
+
+.PARAMETER IgnoreSystemIpDuplpicates
+Specifies whether to ignore system IP duplicates.
+
+.PARAMETER Method
+Specifies the scanning method to use.
+
+.PARAMETER NextStart
+Specifies when the next scan should start.
+
+.PARAMETER NextStartEpoch
+Specifies when the next scan should start in epoch time.
+
+.PARAMETER NetScanGroupId
+Specifies the ID of the NetScan group.
+
+.PARAMETER SubnetRange
+Specifies the subnet range to scan.
+
+.PARAMETER CredentialGroupId
+Specifies the ID of the credential group.
+
+.PARAMETER CredentialGroupName
+Specifies the name of the credential group.
+
+.PARAMETER Schedule
+Specifies the scanning schedule configuration.
+
+.PARAMETER ChangeNameToken
+Specifies the token for changing names.
+
+.PARAMETER PortList
+Specifies the list of ports to scan.
+
+.EXAMPLE
+Set-LMNetscan -Id 123 -Name "UpdatedScan" -Description "New description"
+Updates the NetScan with ID 123 with a new name and description.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns a LogicMonitor.NetScan object containing the updated scan configuration.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
 Function Set-LMNetscan {
 
     [CmdletBinding()]

@@ -1,3 +1,53 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor collector's configuration settings.
+
+.DESCRIPTION
+The Set-LMCollectorConfig function modifies detailed configuration settings for a collector, including SNMP settings, script settings, and various other parameters. This operation will restart the collector.
+
+.PARAMETER Id
+Specifies the ID of the collector to configure.
+
+.PARAMETER Name
+Specifies the name of the collector to configure.
+
+.PARAMETER CollectorSize
+Specifies the size of the collector. Valid values are "nano", "small", "medium", "large", "extra_large", "double_extra_large".
+
+.PARAMETER CollectorConf
+Specifies the collector configuration file content.
+
+.PARAMETER SbproxyConf
+Specifies the sbproxy configuration file content.
+
+.PARAMETER WatchdogConf
+Specifies the watchdog configuration file content.
+
+.PARAMETER WebsiteConf
+Specifies the website configuration file content.
+
+.PARAMETER WrapperConf
+Specifies the wrapper configuration file content.
+
+.PARAMETER WaitForRestart
+Indicates whether to wait for the collector restart to complete.
+
+[Additional parameters for snippet configuration omitted for brevity]
+
+.EXAMPLE
+Set-LMCollectorConfig -Id 123 -CollectorSize "medium" -WaitForRestart
+Updates the collector size and waits for the restart to complete.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns a string indicating the status of the configuration update and restart operation.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication and will restart the collector.
+#>
+
 Function Set-LMCollectorConfig {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]

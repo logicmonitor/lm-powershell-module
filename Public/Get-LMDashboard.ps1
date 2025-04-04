@@ -1,57 +1,50 @@
 <#
 .SYNOPSIS
-Retrieves LogicMonitor dashboards based on specified parameters.
+Retrieves dashboards from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMDashboard function retrieves LogicMonitor dashboards based on the specified parameters. It supports filtering by ID, name, group ID, group name, subgroups, and custom filters. The function uses the LogicMonitor REST API to make the requests.
+The Get-LMDashboard function retrieves dashboard information from LogicMonitor based on specified parameters. It supports filtering by ID, name, group information, and custom filters.
 
 .PARAMETER Id
-Specifies the ID of the dashboard to retrieve.
+The ID of the dashboard to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Name
-Specifies the name of the dashboard to retrieve.
+The name of the dashboard to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER GroupId
-Specifies the ID of the group to filter the dashboards by.
+The ID of the group to filter dashboards by. Part of a mutually exclusive parameter set.
 
 .PARAMETER GroupName
-Specifies the name of the group to filter the dashboards by.
+The name of the group to filter dashboards by. Part of a mutually exclusive parameter set.
 
 .PARAMETER GroupPathSearchString
-Specifies a search string to filter the dashboards by group path.
+A search string to filter dashboards by group path. Part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-Specifies a custom filter to apply to the dashboards. The filter should be an object that contains the filter properties.
+A filter object to apply when retrieving dashboards. Part of a mutually exclusive parameter set.
+
+.PARAMETER FilterWizard
+Switch to use the filter wizard interface for building the filter. Part of a mutually exclusive parameter set.
 
 .PARAMETER BatchSize
-Specifies the number of dashboards to retrieve in each request. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
+#Retrieve a dashboard by ID
 Get-LMDashboard -Id 123
-Retrieves the dashboard with the specified ID.
 
 .EXAMPLE
-Get-LMDashboard -Name "My Dashboard"
-Retrieves the dashboard with the specified name.
-
-.EXAMPLE
-Get-LMDashboard -GroupId 456
-Retrieves the dashboards that belong to the group with the specified ID.
-
-.EXAMPLE
-Get-LMDashboard -GroupName "My Group"
-Retrieves the dashboards that belong to the group with the specified name.
-
-.EXAMPLE
-Get-LMDashboard -GroupPathSearchString "Subgroup"
-Retrieves the dashboards that belong to subgroups matching the specified search string.
-
-.EXAMPLE
-Get-LMDashboard -Filter @{Property1 = "Value1"; Property2 = "Value2"}
-Retrieves the dashboards that match the specified custom filter.
+#Retrieve dashboards by group name
+Get-LMDashboard -GroupName "Production"
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this function.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Dashboard objects.
 #>
 Function Get-LMDashboard {
 
@@ -74,6 +67,9 @@ Function Get-LMDashboard {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
+
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -104,6 +100,12 @@ Function Get-LMDashboard {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }

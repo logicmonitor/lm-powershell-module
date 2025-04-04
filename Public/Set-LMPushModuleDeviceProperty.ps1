@@ -1,3 +1,36 @@
+<#
+.SYNOPSIS
+Updates a device property using the LogicMonitor Push Module.
+
+.DESCRIPTION
+The Set-LMPushModuleDeviceProperty function modifies a property value for a device using the LogicMonitor Push Module API.
+
+.PARAMETER Id
+Specifies the ID of the device.
+
+.PARAMETER Name
+Specifies the name of the device.
+
+.PARAMETER PropertyName
+Specifies the name of the property to update.
+
+.PARAMETER PropertyValue
+Specifies the new value for the property.
+
+.EXAMPLE
+Set-LMPushModuleDeviceProperty -Id 123 -PropertyName "location" -PropertyValue "New York"
+Updates the location property for device ID 123.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns the response from the API indicating the success of the property update.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMPushModuleDeviceProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

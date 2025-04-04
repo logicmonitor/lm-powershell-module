@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDatasourceUpdateHistory
 
 ## SYNOPSIS
-Retrieves the update history of a LogicMonitor datasource.
+Retrieves update history for a LogicMonitor datasource.
 
 ## SYNTAX
 
@@ -31,34 +31,28 @@ Get-LMDatasourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-Batch
 ```
 
 ## DESCRIPTION
-The Get-LMDatasourceUpdateHistory function retrieves the update history of a LogicMonitor datasource.
-It can be used to get information about the updates made to a datasource, such as the reasons for the updates.
+The Get-LMDatasourceUpdateHistory function retrieves the update history for a specified datasource.
+It can identify the datasource by ID, name, or display name and supports filtering the results.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LMDatasourceUpdateHistory -Id 1234
-Retrieves the update history of the datasource with ID 1234.
+#Retrieve update history by datasource ID
+Get-LMDatasourceUpdateHistory -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-Get-LMDatasourceUpdateHistory -Name "MyDatasource"
-Retrieves the update history of the datasource with the name "MyDatasource".
-```
-
-### EXAMPLE 3
-```
-Get-LMDatasourceUpdateHistory -DisplayName "My Datasource"
-Retrieves the update history of the datasource with the display name "My Datasource".
+#Retrieve filtered update history by datasource name
+Get-LMDatasourceUpdateHistory -Name "CPU" -Filter $filterObject
 ```
 
 ## PARAMETERS
 
 ### -Id
 The ID of the datasource.
-This parameter is mandatory when using the 'Id' parameter set.
+This parameter is mandatory when using the Id parameter set.
 
 ```yaml
 Type: Int32
@@ -74,9 +68,7 @@ Accept wildcard characters: False
 
 ### -Name
 The name of the datasource.
-This parameter is used to look up the ID of the datasource.
-If the name is provided, the function will automatically retrieve the ID of the datasource.
-This parameter is used in the 'Name' parameter set.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -92,9 +84,7 @@ Accept wildcard characters: False
 
 ### -DisplayName
 The display name of the datasource.
-This parameter is used to look up the ID of the datasource.
-If the display name is provided, the function will automatically retrieve the ID of the datasource.
-This parameter is used in the 'DisplayName' parameter set.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -109,9 +99,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object that can be used to filter the results.
-The filter object should contain properties that match the properties of the datasource.
-Only datasources that match the filter will be included in the results.
+A filter object to apply when retrieving update history.
+This parameter is optional.
 
 ```yaml
 Type: Object
@@ -126,8 +115,9 @@ Accept wildcard characters: False
 ```
 
 ### -BatchSize
-The number of results to retrieve in each batch.
-The default value is 1000.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -161,8 +151,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.ModuleUpdateHistory objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

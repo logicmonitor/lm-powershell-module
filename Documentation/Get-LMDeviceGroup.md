@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceGroup
 
 ## SYNOPSIS
-Get device group info from a connected LM portal
+Retrieves device group information from LogicMonitor.
 
 ## SYNTAX
 
@@ -34,31 +34,41 @@ Get-LMDeviceGroup [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <Acti
  [<CommonParameters>]
 ```
 
+### FilterWizard
+```
+Get-LMDeviceGroup [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
+```
+
 ## DESCRIPTION
-Get device group info from a connected LM portal
+The Get-LMDeviceGroup function retrieves device group information from a connected LogicMonitor portal.
+It supports retrieving groups by ID, name (including wildcards), or using custom filters.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get all device groups:
-    Get-LMDeviceGroup
+#Retrieve all device groups
+Get-LMDeviceGroup
 ```
 
-Get specific device group:
-    Get-LMDeviceGroup -Id 1
-    Get-LMDeviceGroup -Name "Locations"
+### EXAMPLE 2
+```
+#Retrieve a specific device group by name with wildcard
+Get-LMDeviceGroup -Name "* - Servers"
+```
 
-Get multiple device groups using wildcards:
-    Get-LMDeviceGroup -Name "* - Servers"
-
-Get device groups using a custom filter:
-    Get-LMDeviceGroup -Filter "parentId -eq '1' -and disableAlerting -eq '$false'"
+### EXAMPLE 3
+```
+#Retrieve device groups using a filter
+Get-LMDeviceGroup -Filter @{parentId=1;disableAlerting=$false}
+```
 
 ## PARAMETERS
 
 ### -Id
-The device group id for a device group in LM.
+The ID of the device group to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Int32
@@ -73,8 +83,9 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name value for a device group in LM.
-This value accepts wildcard input such as "* - Servers"
+The name of the device group to retrieve.
+Supports wildcard input such as "* - Servers".
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -89,12 +100,9 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A hashtable of additional filter properties to include with request.
-All properties are treated as if using the equals ":" operator.
-When using multiple filters they are combined as AND conditions.
-
-An example Filter to get devices with alerting enabled and where the parent group id equals 1:
-    @{parentId=1;disableAlerting=$false}
+A filter object to apply when retrieving device groups.
+Can include multiple conditions combined as AND operations.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
@@ -108,9 +116,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -FilterWizard
+Switch to use the filter wizard interface for building the filter.
+Part of a mutually exclusive parameter set.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: FilterWizard
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -BatchSize
-The return size for each request, this value if not specified defaults to 1000.
-If a result would return 1001 and items, two requests would be made to return the full set.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -144,9 +169,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### System.Int32. The device group ID can be piped to this function.
 ## OUTPUTS
 
+### Returns LogicMonitor.DeviceGroup objects.
 ## NOTES
-Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
+You must run Connect-LMAccount before running this command.
+When using filters, consult the LM API docs for allowed filter fields.
 
 ## RELATED LINKS

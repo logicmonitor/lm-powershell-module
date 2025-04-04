@@ -1,32 +1,37 @@
 <#
 .SYNOPSIS
-Invokes a test for an AWS account in LogicMonitor.
+Tests AWS account connectivity in LogicMonitor.
 
 .DESCRIPTION
-The Invoke-LMAWSAccountTest function is used to invoke a test for an AWS account in LogicMonitor. It checks if the user is logged in and has valid API credentials. If the user is logged in, it builds the necessary headers and URI, prepares the data, and sends a POST request to the LogicMonitor API to perform the test. The function returns the response from the API.
+The Invoke-LMAWSAccountTest function tests the connection and permissions for an AWS account in LogicMonitor. It verifies access to specified AWS services.
 
 .PARAMETER ExternalId
-The external ID of the AWS account.
+The external ID for AWS cross-account access.
 
 .PARAMETER AccountId
-The account ID of the AWS account.
+The AWS account ID.
 
 .PARAMETER AssumedRoleARN
-The assumed role ARN of the AWS account.
+The ARN of the IAM role to be assumed.
 
 .PARAMETER CheckedServices
-The list of services to be checked during the test. Default value is a comma-separated string of service names supported by LogicMonitor.
+The list of AWS services to test. Defaults to all supported services.
 
 .PARAMETER GroupId
-The device group ID to which the AWS account belongs. Default value is -1 for no group.
+The LogicMonitor group ID to associate with the AWS account. Defaults to -1.
 
 .EXAMPLE
-Invoke-LMAWSAccountTest -ExternalId "123456" -AccountId "987654" -AssumedRoleARN "arn:aws:iam::123456789012:role/MyRole" -CheckedServices "EC2,S3,RDS" -GroupId 123
-
-This example invokes a test for an AWS account with the specified parameters.
+#Test AWS account connectivity
+Invoke-LMAWSAccountTest -ExternalId "123456" -AccountId "987654" -AssumedRoleARN "arn:aws:iam::123456789012:role/MyRole"
 
 .NOTES
-This function requires the user to be logged in before running any commands. Use the Connect-LMAccount function to log in before invoking this function.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns test results for each AWS service.
 #>
 Function Invoke-LMAWSAccountTest {
     [CmdletBinding()]

@@ -1,3 +1,48 @@
+<#
+.SYNOPSIS
+Updates LogicMonitor portal settings.
+
+.DESCRIPTION
+The Set-LMPortalInfo function modifies various portal-wide settings in LogicMonitor, including whitelisting, two-factor authentication, alert totals, and session timeouts.
+
+.PARAMETER Whitelist
+Specifies IP addresses/ranges to whitelist for portal access.
+
+.PARAMETER ClearWhitelist
+Indicates whether to clear the existing whitelist.
+
+.PARAMETER RequireTwoFA
+Specifies whether to require two-factor authentication for all users.
+
+.PARAMETER IncludeACKinAlertTotals
+Specifies whether to include acknowledged alerts in alert totals.
+
+.PARAMETER IncludeSDTinAlertTotals
+Specifies whether to include alerts in SDT in alert totals.
+
+.PARAMETER EnableRemoteSession
+Specifies whether to enable remote session functionality.
+
+.PARAMETER CompanyDisplayName
+Specifies the company name to display in the portal.
+
+.PARAMETER UserSessionTimeoutInMin
+Specifies the session timeout in minutes. Valid values: 30, 60, 120, 240, 480, 1440, 10080, 43200.
+
+.EXAMPLE
+Set-LMPortalInfo -RequireTwoFA $true -UserSessionTimeoutInMin 60 -CompanyDisplayName "My Company"
+Updates the portal settings to require 2FA, set session timeout to 60 minutes, and update company display name.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns the response from the API containing the updated portal settings.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMPortalInfo {
 
     [CmdletBinding()]

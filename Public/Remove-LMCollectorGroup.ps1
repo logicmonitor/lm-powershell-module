@@ -3,7 +3,7 @@
 Removes a LogicMonitor Collector Group.
 
 .DESCRIPTION
-The Remove-LMCollectorGroup function removes a LogicMonitor Collector Group based on the provided Id or Name. It requires valid API credentials to be logged in.
+The Remove-LMCollectorGroup function removes a LogicMonitor Collector Group based on the provided Id or Name.
 
 .PARAMETER Id
 Specifies the Id of the Collector Group to remove. This parameter is mandatory when using the 'Id' parameter set.
@@ -19,14 +19,14 @@ Removes the Collector Group with Id 123.
 Remove-LMCollectorGroup -Name "Group1"
 Removes the Collector Group with Name "Group1".
 
+.NOTES
+This function requires valid API credentials to be logged in. Use Connect-LMAccount to log in before running this command.
+
 .INPUTS
 You can pipe objects to this function.
 
 .OUTPUTS
-System.Management.Automation.PSCustomObject. The function returns an object with the Id and a success message.
-
-.NOTES
-This function requires valid API credentials to be logged in. Use Connect-LMAccount to log in before running this command.
+Returns a PSCustomObject containing the ID of the removed collector group and a success message confirming the removal.
 #>
 Function Remove-LMCollectorGroup {
 

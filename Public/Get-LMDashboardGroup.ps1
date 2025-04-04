@@ -1,3 +1,49 @@
+<#
+.SYNOPSIS
+Retrieves dashboard groups from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMDashboardGroup function retrieves dashboard group information from LogicMonitor based on specified parameters. It can return a single dashboard group by ID or multiple groups based on name, parent group, or using filters.
+
+.PARAMETER Id
+The ID of the dashboard group to retrieve. Part of a mutually exclusive parameter set.
+
+.PARAMETER Name
+The name of the dashboard group to retrieve. Part of a mutually exclusive parameter set.
+
+.PARAMETER ParentGroupId
+The ID of the parent group to filter results by. Part of a mutually exclusive parameter set.
+
+.PARAMETER ParentGroupName
+The name of the parent group to filter results by. Part of a mutually exclusive parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving dashboard groups. Part of a mutually exclusive parameter set.
+
+.PARAMETER FilterWizard
+Switch to use the filter wizard interface for building the filter. Part of a mutually exclusive parameter set.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve a dashboard group by ID
+Get-LMDashboardGroup -Id 123
+
+.EXAMPLE
+#Retrieve dashboard groups by parent group
+Get-LMDashboardGroup -ParentGroupName "Production"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DashboardGroup objects.
+#>
+
 Function Get-LMDashboardGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -16,6 +62,9 @@ Function Get-LMDashboardGroup {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
+
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -52,6 +101,12 @@ Function Get-LMDashboardGroup {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }

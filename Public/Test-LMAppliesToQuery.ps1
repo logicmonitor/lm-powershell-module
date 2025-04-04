@@ -10,8 +10,16 @@ The applies to query to be tested.
 
 .EXAMPLE
 Test-LMAppliesToQuery -Query "system.hostname == 'server01'"
-
 This example tests the applies to query "system.hostname == 'server01'" against the LogicMonitor API and returns a list of matching devices.
+
+.INPUTS
+The Query parameter accepts string input that specifies the applies to query to test.
+
+.OUTPUTS
+Returns an array of objects containing the devices that match the specified query criteria.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication. The query syntax must follow LogicMonitor's applies to query format.
 #>
 Function Test-LMAppliesToQuery {
 

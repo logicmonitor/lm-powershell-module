@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Sets userdata for a LogicMonitor user. Currently only setting the default dashboard is supported.
+Sets userdata for a LogicMonitor user, currently only setting the default dashboard is supported.
 
 .DESCRIPTION
 The Set-LMUserdata function is used to set the user data for a LogicMonitor user. It allows you to specify the user by either their Id or Name, and the dashboard Id for which the user data should be set.
@@ -26,7 +26,6 @@ Sets the user data for the user with Name "JohnDoe" for the dashboard with Id "6
 None.
 
 .OUTPUTS
-System.Object
 Returns the response from the LogicMonitor API.
 
 .NOTES

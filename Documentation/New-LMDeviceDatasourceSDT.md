@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -160,7 +160,9 @@ Accept wildcard characters: False
 ```
 
 ### -EndHour
-{{ Fill EndHour Description }}
+The end hour for the SDT.
+This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets.
+Must be a value between 0 and 23.
 
 ```yaml
 Type: Int32
@@ -175,7 +177,9 @@ Accept wildcard characters: False
 ```
 
 ### -EndMinute
-{{ Fill EndMinute Description }}
+The end minute for the SDT.
+This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets.
+Must be a value between 0 and 59.
 
 ```yaml
 Type: Int32
@@ -190,7 +194,8 @@ Accept wildcard characters: False
 ```
 
 ### -WeekDay
-{{ Fill WeekDay Description }}
+The day of the week for the SDT.
+This parameter is mandatory when using the 'Weekly' or 'MonthlyByWeek' parameter sets.
 
 ```yaml
 Type: String
@@ -205,7 +210,8 @@ Accept wildcard characters: False
 ```
 
 ### -WeekOfMonth
-{{ Fill WeekOfMonth Description }}
+The week of the month for the SDT.
+This parameter is mandatory when using the 'MonthlyByWeek' parameter set.
 
 ```yaml
 Type: String
@@ -220,7 +226,8 @@ Accept wildcard characters: False
 ```
 
 ### -DayOfMonth
-{{ Fill DayOfMonth Description }}
+The day of the month for the SDT.
+This parameter is mandatory when using the 'Monthly' parameter set.
 
 ```yaml
 Type: Int32
@@ -235,7 +242,7 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceDataSourceId
-{{ Fill DeviceDataSourceId Description }}
+The ID of the device datasource for which to create the SDT.
 
 ```yaml
 Type: String
@@ -269,8 +276,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.SDT object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

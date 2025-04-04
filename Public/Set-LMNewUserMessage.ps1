@@ -1,3 +1,30 @@
+<#
+.SYNOPSIS
+Updates the new user message template in LogicMonitor.
+
+.DESCRIPTION
+The Set-LMNewUserMessage function modifies the message template that is sent to new users in LogicMonitor.
+
+.PARAMETER MessageBody
+Specifies the body content of the message template.
+
+.PARAMETER MessageSubject
+Specifies the subject line of the message template.
+
+.EXAMPLE
+Set-LMNewUserMessage -MessageBody "Welcome to our monitoring system" -MessageSubject "Welcome to LogicMonitor"
+Updates the new user message template with the specified subject and body.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns the response from the API indicating the success of the update.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMNewUserMessage {
 
     [CmdletBinding()]

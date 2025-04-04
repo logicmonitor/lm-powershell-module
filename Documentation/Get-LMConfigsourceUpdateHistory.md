@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMConfigsourceUpdateHistory
 
 ## SYNOPSIS
-Retrieves the update history for a LogicMonitor configuration source.
+Retrieves update history for LogicMonitor configuration sources.
 
 ## SYNTAX
 
@@ -31,34 +31,28 @@ Get-LMConfigsourceUpdateHistory [-DisplayName <String>] [-Filter <Object>] [-Bat
 ```
 
 ## DESCRIPTION
-The Get-LMConfigsourceUpdateHistory function retrieves the update history for a LogicMonitor configuration source.
-It can be used to get information about the updates made to a configuration source, such as the update reasons and the modules that were updated.
+The Get-LMConfigsourceUpdateHistory function retrieves the update history for specified configuration sources.
+It can retrieve history by configuration source ID, name, or display name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LMConfigsourceUpdateHistory -Id 1234
-Retrieves the update history for the configuration source with the ID 1234.
+#Retrieve update history by ID
+Get-LMConfigsourceUpdateHistory -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-Get-LMConfigsourceUpdateHistory -Name "MyConfigSource"
-Retrieves the update history for the configuration source with the name "MyConfigSource".
-```
-
-### EXAMPLE 3
-```
-Get-LMConfigsourceUpdateHistory -DisplayName "My Config Source"
-Retrieves the update history for the configuration source with the display name "My Config Source".
+#Retrieve update history by name
+Get-LMConfigsourceUpdateHistory -Name "Cisco Config"
 ```
 
 ## PARAMETERS
 
 ### -Id
 The ID of the configuration source.
-This parameter is mandatory when using the 'Id' parameter set.
+This parameter is mandatory when using the Id parameter set.
 
 ```yaml
 Type: Int32
@@ -74,8 +68,7 @@ Accept wildcard characters: False
 
 ### -Name
 The name of the configuration source.
-This parameter is used to look up the ID of the configuration source.
-This parameter is used when using the 'Name' parameter set.
+This parameter is part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -91,8 +84,7 @@ Accept wildcard characters: False
 
 ### -DisplayName
 The display name of the configuration source.
-This parameter is used to look up the ID of the configuration source.
-This parameter is used when using the 'DisplayName' parameter set.
+This parameter is part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -107,7 +99,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object that specifies additional filtering criteria for the update history.
+A filter object to apply when retrieving update history.
 This parameter is optional.
 
 ```yaml
@@ -123,9 +115,9 @@ Accept wildcard characters: False
 ```
 
 ### -BatchSize
-The number of results to retrieve per request.
-The default value is 1000.
-This parameter is optional.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -159,8 +151,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.ModuleUpdateHistory objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

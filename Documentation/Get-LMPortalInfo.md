@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMPortalInfo
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves portal information from LogicMonitor.
 
 ## SYNTAX
 
@@ -17,16 +17,15 @@ Get-LMPortalInfo [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMPortalInfo function retrieves company settings and portal information from your LogicMonitor instance.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+#Retrieve portal information
+Get-LMPortalInfo
+```
 
 ## PARAMETERS
 
@@ -50,10 +49,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns portal information object containing company settings.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

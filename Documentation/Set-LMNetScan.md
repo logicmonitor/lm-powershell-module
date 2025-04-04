@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMNetscan
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor NetScan configuration.
 
 ## SYNTAX
 
@@ -21,156 +21,20 @@ Set-LMNetscan [[-CollectorId] <String>] [[-Name] <String>] [-Id] <String> [[-Des
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMNetscan function modifies an existing NetScan configuration in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMNetscan -Id 123 -Name "UpdatedScan" -Description "New description"
+Updates the NetScan with ID 123 with a new name and description.
+```
 
 ## PARAMETERS
 
-### -ChangeNameToken
-{{ Fill ChangeNameToken Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 14
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -CollectorId
-{{ Fill CollectorId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 0
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CredentialGroupId
-{{ Fill CredentialGroupId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 11
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CredentialGroupName
-{{ Fill CredentialGroupName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 12
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 3
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ExcludeDuplicateType
-{{ Fill ExcludeDuplicateType Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 4
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -IgnoreSystemIpDuplpicates
-{{ Fill IgnoreSystemIpDuplpicates Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Method
-{{ Fill Method Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 6
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
+Specifies the ID of the collector to use for the NetScan.
 
 ```yaml
 Type: String
@@ -184,8 +48,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NetScanGroupId
-{{ Fill NetScanGroupId Description }}
+### -Name
+Specifies the name of the NetScan.
 
 ```yaml
 Type: String
@@ -193,14 +57,74 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 9
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NextStart
-{{ Fill NextStart Description }}
+### -Id
+Specifies the ID of the NetScan to modify.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: 3
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the description for the NetScan.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 4
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ExcludeDuplicateType
+Specifies the type of duplicates to exclude.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 5
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -IgnoreSystemIpDuplpicates
+Specifies whether to ignore system IP duplicates.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 6
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Method
+Specifies the scanning method to use.
 
 ```yaml
 Type: String
@@ -214,8 +138,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NextStartEpoch
-{{ Fill NextStartEpoch Description }}
+### -NextStart
+Specifies when the next scan should start.
 
 ```yaml
 Type: String
@@ -229,8 +153,98 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PortList
-{{ Fill PortList Description }}
+### -NextStartEpoch
+Specifies when the next scan should start in epoch time.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 9
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NetScanGroupId
+Specifies the ID of the NetScan group.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 10
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SubnetRange
+Specifies the subnet range to scan.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 11
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CredentialGroupId
+Specifies the ID of the credential group.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 12
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CredentialGroupName
+Specifies the name of the credential group.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 13
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Schedule
+Specifies the scanning schedule configuration.
+
+```yaml
+Type: PSObject
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: 14
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ChangeNameToken
+Specifies the token for changing names.
 
 ```yaml
 Type: String
@@ -244,23 +258,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Schedule
-{{ Fill Schedule Description }}
-
-```yaml
-Type: PSObject
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 13
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SubnetRange
-{{ Fill SubnetRange Description }}
+### -PortList
+Specifies the list of ports to scan.
 
 ```yaml
 Type: String
@@ -268,7 +267,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 10
+Position: 16
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -294,10 +293,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### You can pipe objects containing Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.NetScan object containing the updated scan configuration.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

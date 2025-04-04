@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves alerts for a LogicMonitor device group.
+
+.DESCRIPTION
+The Get-LMDeviceGroupAlerts function retrieves all alerts associated with a specific device group in LogicMonitor. The device group can be identified by either ID or name, and the results can be filtered.
+
+.PARAMETER Id
+The ID of the device group to retrieve alerts for. This parameter is mandatory when using the Id parameter set and can accept pipeline input.
+
+.PARAMETER Name
+The name of the device group to retrieve alerts for. Part of a mutually exclusive parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving alerts. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve alerts for a device group by ID
+Get-LMDeviceGroupAlerts -Id 123
+
+.EXAMPLE
+#Retrieve alerts for a device group by name with filter
+Get-LMDeviceGroupAlerts -Name "Production Servers" -Filter $filterObject
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+System.Int32. The device group ID can be piped to this function.
+
+.OUTPUTS
+Returns alert objects for the specified device group.
+#>
+
 Function Get-LMDeviceGroupAlerts {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

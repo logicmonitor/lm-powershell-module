@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMConfigsource
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor config source configuration.
 
 ## SYNTAX
 
@@ -29,81 +29,21 @@ Set-LMConfigsource -Name <String> [-NewName <String>] [-DisplayName <String>] [-
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMConfigsource function modifies an existing config source in LogicMonitor, allowing updates to its name, display name, description, applies to settings, and other properties.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMConfigsource -Id 123 -NewName "UpdatedSource" -Description "New description"
+Updates the config source with ID 123 with a new name and description.
+```
 
 ## PARAMETERS
 
-### -ConfigChecks
-{{ Fill ConfigChecks Description }}
-
-```yaml
-Type: PSObject
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-{{ Fill DisplayName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the config source to modify.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: String
@@ -118,7 +58,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the current name of the config source.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -133,7 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the config source.
 
 ```yaml
 Type: String
@@ -147,14 +88,58 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -PollingIntervalInSeconds
-{{ Fill PollingIntervalInSeconds Description }}
+### -DisplayName
+Specifies the new display name for the config source.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: 3600, 14400, 28800, 86400
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the new description for the config source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -appliesTo
+Specifies the new applies to expression for the config source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TechNotes
+Specifies the new technical notes for the config source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
@@ -164,7 +149,7 @@ Accept wildcard characters: False
 ```
 
 ### -Tags
-{{ Fill Tags Description }}
+Specifies an array of tags to associate with the config source.
 
 ```yaml
 Type: String[]
@@ -179,13 +164,30 @@ Accept wildcard characters: False
 ```
 
 ### -TagsMethod
-{{ Fill TagsMethod Description }}
+Specifies how to handle existing tags.
+Valid values are "Add" or "Refresh".
+Default is "Refresh".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: Add, Refresh
+
+Required: False
+Position: Named
+Default value: Refresh
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PollingIntervalInSeconds
+Specifies the polling interval in seconds.
+Valid values are "3600", "14400", "28800", "86400".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
@@ -194,11 +196,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -TechNotes
-{{ Fill TechNotes Description }}
+### -ConfigChecks
+Specifies the configuration checks object for the config source.
 
 ```yaml
-Type: String
+Type: PSObject
 Parameter Sets: (All)
 Aliases:
 
@@ -225,13 +227,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -appliesTo
-{{ Fill appliesTo Description }}
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: String
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases:
+Aliases: cf
 
 Required: False
 Position: Named
@@ -260,10 +262,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### You can pipe objects containing Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.Datasource object containing the updated config source information.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

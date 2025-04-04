@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves properties for a specific website from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMWebsiteProperty function retrieves property information for a specified website in LogicMonitor. The website can be identified by either ID or name.
+
+.PARAMETER Id
+The ID of the website to retrieve properties from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the website to retrieve properties from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving properties.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve properties by website ID
+Get-LMWebsiteProperty -Id 123
+
+.EXAMPLE
+#Retrieve properties for a specific website
+Get-LMWebsiteProperty -Name "www.example.com"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns website property objects.
+#>
+
 Function Get-LMWebsiteProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

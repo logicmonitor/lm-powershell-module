@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMAPIToken
 
 ## SYNOPSIS
-Retrieves LogicMonitor API tokens based on specified parameters.
+Retrieves API tokens from LogicMonitor.
 
 ## SYNTAX
 
@@ -42,47 +42,34 @@ Get-LMAPIToken [-Filter <Object>] [-Type <String>] [-BatchSize <Int32>] [-Progre
 ```
 
 ## DESCRIPTION
-The Get-LMAPIToken function retrieves LogicMonitor API tokens based on the specified parameters.
-It supports various parameter sets to filter the tokens based on different criteria such as AdminId, Id, AccessId, and Filter.
-The function also allows specifying the token type and batch size for pagination.
+The Get-LMAPIToken function retrieves API tokens from LogicMonitor based on specified criteria.
+It can return tokens by admin ID, token ID, access ID, or using filters.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Retrieve tokens for a specific admin
 Get-LMAPIToken -AdminId 1234
-Retrieves all API tokens associated with the admin ID 1234.
 ```
 
 ### EXAMPLE 2
 ```
+#Retrieve a specific token by ID
 Get-LMAPIToken -Id 5678
-Retrieves the API token with the ID 5678.
 ```
 
 ### EXAMPLE 3
 ```
-Get-LMAPIToken -AccessId "abc123"
-Retrieves the API token with the access ID "abc123".
-```
-
-### EXAMPLE 4
-```
-Get-LMAPIToken -Filter @{ Property1 = "Value1"; Property2 = "Value2" }
-Retrieves API tokens based on the specified custom filter object.
-```
-
-### EXAMPLE 5
-```
-Get-LMAPIToken -Type "Bearer" -BatchSize 500
-Retrieves API tokens of type 'Bearer' with a batch size of 500.
+#Retrieve bearer tokens only
+Get-LMAPIToken -Type "Bearer"
 ```
 
 ## PARAMETERS
 
 ### -AdminId
-Specifies the ID of the admin for which to retrieve API tokens.
-This parameter is only applicable when using the 'AdminId' parameter set.
+The ID of the admin to retrieve tokens for.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Int32
@@ -97,8 +84,8 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Specifies the ID of the API token to retrieve.
-This parameter is only applicable when using the 'Id' parameter set.
+The ID of the specific API token to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Int32
@@ -113,8 +100,8 @@ Accept wildcard characters: False
 ```
 
 ### -AccessId
-Specifies the access ID of the API token to retrieve.
-This parameter is only applicable when using the 'AccessId' parameter set.
+The access ID of the specific API token to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -129,8 +116,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-Specifies a custom filter object to retrieve API tokens based on specific criteria.
-This parameter is only applicable when using the 'Filter' parameter set.
+A filter object to apply when retrieving tokens.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
@@ -145,9 +132,9 @@ Accept wildcard characters: False
 ```
 
 ### -Type
-Specifies the type of API token to retrieve.
-Valid values are 'LMv1', 'Bearer', or '*'.
-The default value is '*'.
+The type of token to retrieve.
+Valid values are "LMv1", "Bearer", "*".
+Defaults to "*".
 
 ```yaml
 Type: String
@@ -162,8 +149,9 @@ Accept wildcard characters: False
 ```
 
 ### -BatchSize
-Specifies the number of API tokens to retrieve per batch.
-The default value is 1000.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -197,10 +185,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.APIToken objects.
 ## NOTES
-This function requires a valid LogicMonitor authentication session.
-Make sure to log in using the Connect-LMAccount function before running this command.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

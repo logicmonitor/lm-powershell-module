@@ -3,46 +3,53 @@
 Creates a new LogicMonitor collector.
 
 .DESCRIPTION
-The New-LMCollector function is used to create a new collector in LogicMonitor. It requires a description for the collector and supports various optional parameters such as BackupAgentId, CollectorGroupId, Properties, EnableFailBack, EnableFailOverOnCollectorDevice, EscalatingChainId, AutoCreateCollectorDevice, SuppressAlertClear, ResendAlertInterval, and SpecifiedCollectorDeviceGroupId.
+The New-LMCollector function creates a new collector in LogicMonitor with specified configuration settings.
 
 .PARAMETER Description
-The description of the collector.
+The description of the collector. This parameter is mandatory.
 
 .PARAMETER BackupAgentId
-The ID of the backup agent.
+The ID of the backup collector.
 
 .PARAMETER CollectorGroupId
-The ID of the collector group.
+The ID of the collector group to assign the collector to.
 
 .PARAMETER Properties
 A hashtable of custom properties for the collector.
 
 .PARAMETER EnableFailBack
-Specifies whether failback is enabled for the collector.
+Whether to enable failback for the collector.
 
 .PARAMETER EnableFailOverOnCollectorDevice
-Specifies whether failover is enabled on the collector device.
+Whether to enable failover on the collector device.
 
 .PARAMETER EscalatingChainId
-The ID of the escalation chain.
+The ID of the escalation chain to use.
 
 .PARAMETER AutoCreateCollectorDevice
-Specifies whether to automatically create a collector device.
+Whether to automatically create a device for the collector.
 
 .PARAMETER SuppressAlertClear
-Specifies whether to suppress alert clear.
+Whether to suppress alert clear notifications.
 
 .PARAMETER ResendAlertInterval
 The interval for resending alerts.
 
 .PARAMETER SpecifiedCollectorDeviceGroupId
-The ID of the specified collector device group.
+The ID of the device group for the collector device.
 
 .EXAMPLE
-New-LMCollector -Description "My Collector" -BackupAgentId 123 -CollectorGroupId 456 -Properties @{ "Key1" = "Value1"; "Key2" = "Value2" }
+#Create a new collector
+New-LMCollector -Description "Production Collector" -CollectorGroupId 123 -Properties @{"location"="datacenter1"}
 
-This example creates a new collector with the specified description, backup agent ID, collector group ID, and custom properties.
+.NOTES
+You must run Connect-LMAccount before running this command.
 
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Collector object.
 #>
 Function New-LMCollector {
 

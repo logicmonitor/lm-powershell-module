@@ -1,32 +1,38 @@
 <#
 .SYNOPSIS
-Copies a LogicMonitor report.
+Creates a copy of a LogicMonitor report.
 
 .DESCRIPTION
-The Copy-LMReport function is used to copy a LogicMonitor report. It takes the following parameters:
-- Name: The name of the report.
-- Description: The description of the report.
-- ParentGroupId: The ID of the parent group.
-- ReportObject: The report object to be copied.
+The Copy-LMReport function creates a new report based on an existing report's configuration. It allows you to specify a new name, description, and parent group while maintaining other settings from the source report.
 
 .PARAMETER Name
-The name of the report.
+The name for the new report. This parameter is mandatory.
 
 .PARAMETER Description
-The description of the report.
+An optional description for the new report.
 
 .PARAMETER ParentGroupId
-The ID of the parent group.
+The ID of the parent group for the new report.
 
 .PARAMETER ReportObject
-The report object to be copied. This can be retrieved using Get-LMReport. Any changes to the report object will be reflected in the new report.
+The source report object to copy settings from. This parameter is mandatory.
 
 .EXAMPLE
-Copy-LMReport -Name "Report1" -Description "This is a sample report" -ParentGroupId "12345" -ReportObject $reportObject
-This example copies the report specified by the ReportObject parameter and sets the name, description, and parent group ID.
+#Copy a report with basic settings
+Copy-LMReport -Name "New Report" -ReportObject $reportObject
+
+.EXAMPLE
+#Copy a report with all optional parameters
+Copy-LMReport -Name "New Report" -Description "New report description" -ParentGroupId 12345 -ReportObject $reportObject
 
 .NOTES
-Please ensure you are logged in before running any commands. Use Connect-LMAccount to login and try again.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns the newly created report object.
 #>
 Function Copy-LMReport {
 

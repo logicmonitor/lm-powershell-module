@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMRole
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves roles from LogicMonitor.
 
 ## SYNTAX
 
@@ -33,25 +33,46 @@ Get-LMRole [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPrefe
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMRole function retrieves role configurations from LogicMonitor.
+It can retrieve all roles, a specific role by ID or name, or filter the results.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve all roles
+Get-LMRole
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve a specific role by name
+Get-LMRole -Name "Administrator"
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+The ID of the specific role to retrieve.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Id
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the specific role to retrieve.
+
+```yaml
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False
@@ -62,7 +83,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving roles.
 
 ```yaml
 Type: Object
@@ -76,32 +97,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -126,10 +134,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.Role objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

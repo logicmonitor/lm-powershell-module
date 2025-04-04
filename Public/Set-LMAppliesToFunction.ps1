@@ -1,3 +1,38 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor AppliesTo function.
+
+.DESCRIPTION
+The Set-LMAppliesToFunction function modifies an existing AppliesTo function in LogicMonitor, allowing updates to its name, description, and AppliesTo code.
+
+.PARAMETER Name
+Specifies the current name of the AppliesTo function. This parameter is mandatory when using the 'Name' parameter set.
+
+.PARAMETER NewName
+Specifies the new name for the AppliesTo function.
+
+.PARAMETER Id
+Specifies the ID of the AppliesTo function to modify.
+
+.PARAMETER Description
+Specifies a new description for the AppliesTo function.
+
+.PARAMETER AppliesTo
+Specifies the new AppliesTo code for the function.
+
+.EXAMPLE
+Set-LMAppliesToFunction -Id 123 -NewName "UpdatedFunction" -Description "New description"
+Updates the AppliesTo function with ID 123 with a new name and description.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns a LogicMonitor.AppliesToFunction object containing the updated function information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
 Function Set-LMAppliesToFunction {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]

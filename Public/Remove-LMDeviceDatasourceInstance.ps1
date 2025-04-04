@@ -32,9 +32,7 @@ Removes the device datasource instance with the specified device ID, datasource 
 None.
 
 .OUTPUTS
-A custom object with the following properties:
-- InstanceId: The ID of the removed instance.
-- Message: A message indicating the success of the removal.
+Returns a PSCustomObject containing the instance ID and a message confirming the successful removal of the datasource instance.
 #>
 Function Remove-LMDeviceDatasourceInstance {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]

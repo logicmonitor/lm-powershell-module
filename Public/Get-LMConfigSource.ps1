@@ -1,36 +1,38 @@
 <#
 .SYNOPSIS
-Retrieves LogicMonitor configuration sources based on specified parameters.
+Retrieves configuration sources from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMConfigSource function retrieves LogicMonitor configuration sources based on the specified parameters. It supports retrieving configuration sources by ID, name, or using a filter. The function uses the LogicMonitor REST API to make the requests.
+The Get-LMConfigSource function retrieves configuration sources from LogicMonitor based on specified parameters. It can return a single configuration source by ID or name, or multiple sources using filters.
 
 .PARAMETER Id
-Specifies the ID of the configuration source to retrieve. This parameter is mutually exclusive with the Name and Filter parameters.
+The ID of the configuration source to retrieve. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER Name
-Specifies the name of the configuration source to retrieve. This parameter is mutually exclusive with the Id and Filter parameters.
+The name of the configuration source to retrieve. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-Specifies a filter object to retrieve configuration sources based on specific criteria. This parameter is mutually exclusive with the Id and Name parameters.
+A filter object to apply when retrieving configuration sources. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER BatchSize
-Specifies the number of configuration sources to retrieve in each batch. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
+#Retrieve a configuration source by ID
 Get-LMConfigSource -Id 123
-Retrieves the configuration source with the ID 123.
 
 .EXAMPLE
-Get-LMConfigSource -Name "MyConfigSource"
-Retrieves the configuration source with the name "MyConfigSource".
-
-.EXAMPLE
-Get-LMConfigSource -Filter @{ Property = "Value" }
-Retrieves configuration sources based on the specified filter criteria.
+#Retrieve a configuration source by name
+Get-LMConfigSource -Name "Cisco Config"
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this function.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Datasource objects.
 #>
 Function Get-LMConfigSource {
 

@@ -1,26 +1,38 @@
 <#
 .SYNOPSIS
-    Updates normalized properties in LogicMonitor.
+Updates normalized properties in LogicMonitor.
 
 .DESCRIPTION
-    The Set-LMNormalizedProperties cmdlet updates normalized properties in LogicMonitor. Normalized properties allow you to map multiple host properties to a single alias that can be used across your environment.
+The Set-LMNormalizedProperties cmdlet updates normalized properties in LogicMonitor. Normalized properties allow you to map multiple host properties to a single alias that can be used across your environment.
 
 .PARAMETER Alias
-    The alias name for the normalized property.
+The alias name for the normalized property.
+
+.PARAMETER Add
+Indicates that properties should be added to the existing normalized property.
+
+.PARAMETER Remove
+Indicates that properties should be removed from the existing normalized property.
 
 .PARAMETER Properties
-    An array of host property names to map to the alias.
+An array of host property names to map to the alias.
 
 .EXAMPLE
-    PS C:\> Set-LMNormalizedProperties -Add -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
-    Updates a normalized property with alias "location" to include the new properties.
+Set-LMNormalizedProperties -Add -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
+Updates a normalized property with alias "location" to include the new properties.
 
-    PS C:\> Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
-    Removes the "auto.meraki.location" property from the "location" alias.
+.EXAMPLE
+Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
+Removes the "auto.meraki.location" property from the "location" alias.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a message indicating the success of the operation.
 
 .NOTES
-    Requires valid LogicMonitor API credentials set via Connect-LMAccount.
-    This cmdlet uses LogicMonitor API v4.
+This function requires a valid LogicMonitor API authentication and uses API v4.
 #>
 
 Function Set-LMNormalizedProperties {

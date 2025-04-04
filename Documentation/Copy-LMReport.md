@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Copy-LMReport
 
 ## SYNOPSIS
-Copies a LogicMonitor report.
+Creates a copy of a LogicMonitor report.
 
 ## SYNTAX
 
@@ -18,25 +18,28 @@ Copy-LMReport [-Name] <String> [[-Description] <String>] [[-ParentGroupId] <Stri
 ```
 
 ## DESCRIPTION
-The Copy-LMReport function is used to copy a LogicMonitor report.
-It takes the following parameters:
-- Name: The name of the report.
-- Description: The description of the report.
-- ParentGroupId: The ID of the parent group.
-- ReportObject: The report object to be copied.
+The Copy-LMReport function creates a new report based on an existing report's configuration.
+It allows you to specify a new name, description, and parent group while maintaining other settings from the source report.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Copy-LMReport -Name "Report1" -Description "This is a sample report" -ParentGroupId "12345" -ReportObject $reportObject
-This example copies the report specified by the ReportObject parameter and sets the name, description, and parent group ID.
+#Copy a report with basic settings
+Copy-LMReport -Name "New Report" -ReportObject $reportObject
+```
+
+### EXAMPLE 2
+```
+#Copy a report with all optional parameters
+Copy-LMReport -Name "New Report" -Description "New report description" -ParentGroupId 12345 -ReportObject $reportObject
 ```
 
 ## PARAMETERS
 
 ### -Name
-The name of the report.
+The name for the new report.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -51,7 +54,7 @@ Accept wildcard characters: False
 ```
 
 ### -Description
-The description of the report.
+An optional description for the new report.
 
 ```yaml
 Type: String
@@ -66,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -ParentGroupId
-The ID of the parent group.
+The ID of the parent group for the new report.
 
 ```yaml
 Type: String
@@ -81,9 +84,8 @@ Accept wildcard characters: False
 ```
 
 ### -ReportObject
-The report object to be copied.
-This can be retrieved using Get-LMReport.
-Any changes to the report object will be reflected in the new report.
+The source report object to copy settings from.
+This parameter is mandatory.
 
 ```yaml
 Type: Object
@@ -117,10 +119,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns the newly created report object.
 ## NOTES
-Please ensure you are logged in before running any commands.
-Use Connect-LMAccount to login and try again.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMWebsite
 
 ## SYNOPSIS
-Get website info from a connected LM portal
+Retrieves website monitoring information from LogicMonitor.
 
 ## SYNTAX
 
@@ -37,31 +37,33 @@ Get-LMWebsite [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPref
 Get-LMWebsite [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
+### FilterWizard
+```
+Get-LMWebsite [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
-Get website info from a connected LM portal
+The Get-LMWebsite function retrieves website monitoring configurations from LogicMonitor.
+It can retrieve all websites, a specific website by ID or name, filter by type, or use custom filters.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get all websites:
-    Get-LMWebsite
+#Retrieve all websites
+Get-LMWebsite
 ```
 
-Get specific website:
-    Get-LMWebsite -Id 1
-    Get-LMWebsite -Name "LogicMonitor"
-
-Get multiple websites using wildcards:
-    Get-LMWebsite -Name "ServiceNow - *"
-
-Get websites using a custom filter:
-    Get-LMWebsite -Filter @{type="webcheck";isInternal=$true}
+### EXAMPLE 2
+```
+#Retrieve websites of a specific type
+Get-LMWebsite -Type "Webcheck"
+```
 
 ## PARAMETERS
 
 ### -Id
-The website id for a website in LM.
+The ID of the specific website to retrieve.
 
 ```yaml
 Type: Int32
@@ -76,8 +78,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name value for a website in LM.
-This value accepts wildcard input such as "ServiceNow - *"
+The name of the specific website to retrieve.
 
 ```yaml
 Type: String
@@ -92,8 +93,8 @@ Accept wildcard characters: False
 ```
 
 ### -Type
-The type of websites to return.
-Possible values are: Webcheck or PingCheck
+The type of website to filter by.
+Valid values are "Webcheck" or "PingCheck".
 
 ```yaml
 Type: String
@@ -108,12 +109,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A hashtable of additional filter properties to include with request.
-All properties are treated as if using the equals ":" operator.
-When using multiple filters they are combined as AND conditions.
-
-An example Filter to get websites with type Webcheck that are internal:
-    @{type="webcheck";isInternal=$true}
+A filter object to apply when retrieving websites.
 
 ```yaml
 Type: Object
@@ -127,9 +123,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -FilterWizard
+Switch to enable the filter wizard for building a custom filter interactively.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: FilterWizard
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -BatchSize
-The return size for each request, this value if not specified defaults to 1000.
-If a result would return 1001 and items, two requests would be made to return the full set.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -163,9 +175,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.Website objects.
 ## NOTES
-Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

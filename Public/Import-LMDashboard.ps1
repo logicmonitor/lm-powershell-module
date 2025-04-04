@@ -3,10 +3,10 @@
 Imports LogicMonitor dashboards from various sources.
 
 .DESCRIPTION
-The `Import-LMDashboard` function allows you to import LogicMonitor dashboards from different sources, such as local files, GitHub repositories, or LogicMonitor dashboard groups. It supports importing dashboards in JSON format.
+The Import-LMDashboard function allows you to import LogicMonitor dashboards from different sources, such as local files, GitHub repositories, or LogicMonitor dashboard groups. It supports importing dashboards in JSON format.
 
 .PARAMETER FilePath
-Specifies the path to a local file or directory containing the JSON dashboard files to import. If a directory is specified, all JSON files within the directory (and its subdirectories) will be imported.
+Specifies the path to a local file or directory containing the JSON dashboard files to import.
 
 .PARAMETER File
 Specifies a single JSON dashboard file to import.
@@ -15,30 +15,39 @@ Specifies a single JSON dashboard file to import.
 Specifies the GitHub repository (in the format "username/repo") from which to import JSON dashboard files.
 
 .PARAMETER GithubAccessToken
-Specifies the GitHub access token to use for authenticated requests. This is required for large repositories, as the GitHub API has rate limits for unauthenticated requests.
+Specifies the GitHub access token for authenticated requests. Required for large repositories due to API rate limits.
 
 .PARAMETER ParentGroupId
-Specifies the ID of the parent dashboard group under which the imported dashboards will be placed. This parameter is mandatory when importing from a file or GitHub repository.
+The ID of the parent dashboard group where imported dashboards will be placed.
 
 .PARAMETER ParentGroupName
-Specifies the name of the parent dashboard group under which the imported dashboards will be placed. This parameter is mandatory when importing from a file or GitHub repository.
+The name of the parent dashboard group where imported dashboards will be placed.
 
 .PARAMETER ReplaceAPITokensOnImport
-Indicates whether to replace API tokens in the imported dashboards with a dynamically generated API token. This is useful for managing API access to the dashboards.
+Switch to replace API tokens in imported dashboards with a dynamically generated token.
 
 .PARAMETER APIToken
-Specifies the API token to use for replacing API tokens in the imported dashboards. This parameter is required when `ReplaceAPITokensOnImport` is set to `$true`.
+The API token to use when replacing tokens in imported dashboards.
 
 .PARAMETER PrivateUserName
-Specifies the username of dashboard owner when creating dashboard as private.
+The username of dashboard owner when creating dashboard as private.
 
 .EXAMPLE
+#Import dashboards from a directory
 Import-LMDashboard -FilePath "C:\Dashboards" -ParentGroupId 12345 -ReplaceAPITokensOnImport -APIToken $apiToken
-Imports all JSON dashboard files from the "C:\Dashboards" directory and its subdirectories. The imported dashboards will be placed under the dashboard group with ID 12345. API tokens in the imported dashboards will be replaced with the specified API token.
 
 .EXAMPLE
+#Import dashboards from GitHub
 Import-LMDashboard -GithubUserRepo "username/repo" -ParentGroupName "MyDashboards" -ReplaceAPITokensOnImport -APIToken $apiToken
-Imports JSON dashboard files from the specified GitHub repository. The imported dashboards will be placed under the dashboard group with the name "MyDashboards". API tokens in the imported dashboards will be replaced with the specified API token.
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns imported dashboard objects.
 #>
 Function Import-LMDashboard {
     [CmdletBinding()]

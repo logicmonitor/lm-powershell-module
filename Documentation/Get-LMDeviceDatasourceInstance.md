@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceDatasourceInstance
 
 ## SYNOPSIS
-Retrieves instances of a LogicMonitor device datasource.
+Retrieves datasource instances for a LogicMonitor device.
 
 ## SYNTAX
 
@@ -37,28 +37,28 @@ Get-LMDeviceDatasourceInstance -DatasourceId <Int32> -Id <Int32> [-Filter <Objec
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceDatasourceInstance function retrieves instances of a LogicMonitor device datasource based on the specified parameters.
-It requires a valid API authentication and authorization.
+The Get-LMDeviceDatasourceInstance function retrieves instances of a datasource from a specific device in LogicMonitor.
+The device and datasource can be identified by either ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Get-LMDeviceDatasourceInstance -DatasourceName "CPU" -Name "Server01" -BatchSize 500
-Retrieves instances of the "CPU" datasource for the device named "Server01" with a batch size of 500.
+#Retrieve instances by device and datasource name
+Get-LMDeviceDatasourceInstance -DatasourceName "CPU" -Name "Production-Server"
 ```
 
 ### EXAMPLE 2
 ```
-Get-LMDeviceDatasourceInstance -DatasourceId 1234 -Id 5678
-Retrieves instances of the datasource with ID 1234 for the device with ID 5678.
+#Retrieve instances by IDs
+Get-LMDeviceDatasourceInstance -DatasourceId 123 -Id 456
 ```
 
 ## PARAMETERS
 
 ### -DatasourceName
-Specifies the name of the datasource.
-This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+The name of the datasource to retrieve instances from.
+Required for certain parameter sets.
 
 ```yaml
 Type: String
@@ -73,8 +73,8 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceId
-Specifies the ID of the datasource.
-This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+The ID of the datasource to retrieve instances from.
+Required for certain parameter sets.
 
 ```yaml
 Type: Int32
@@ -89,9 +89,9 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Specifies the ID of the device.
-This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
-It can also be specified using the 'DeviceId' alias.
+The ID of the device.
+Can be specified using the DeviceId alias.
+Required for certain parameter sets.
 
 ```yaml
 Type: Int32
@@ -106,9 +106,9 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the device.
-This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
-It can also be specified using the 'DeviceName' alias.
+The name of the device.
+Can be specified using the DeviceName alias.
+Required for certain parameter sets.
 
 ```yaml
 Type: String
@@ -123,8 +123,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-Specifies additional filters to apply to the instances.
-This parameter accepts an object representing the filter criteria.
+A filter object to apply when retrieving instances.
+This parameter is optional.
 
 ```yaml
 Type: Object
@@ -139,8 +139,9 @@ Accept wildcard characters: False
 ```
 
 ### -BatchSize
-Specifies the number of instances to retrieve per batch.
-The default value is 1000.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -174,10 +175,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.DeviceDatasourceInstance objects.
 ## NOTES
-This function requires a valid API authentication and authorization.
-Use Connect-LMAccount to log in before running any commands.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

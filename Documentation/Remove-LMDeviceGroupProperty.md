@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -146,11 +146,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject. The output object contains the following properties:
-### - Id: The ID of the device group from which the property was removed.
-### - Message: A message indicating the success of the operation.
+### Returns a PSCustomObject containing the ID of the device group and a message confirming the successful removal of the property.
 ## NOTES
-- This function requires a valid LogicMonitor API authentication. Make sure you are logged in before running any commands.
-- Use the Connect-LMAccount function to log in before using this function.
+This function requires a valid LogicMonitor API authentication.
+Make sure you are logged in before running any commands.
 
 ## RELATED LINKS

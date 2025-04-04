@@ -3,29 +3,39 @@
 Retrieves data for LogicMonitor device instances.
 
 .DESCRIPTION
-The Get-LMDeviceInstanceData function retrieves data for LogicMonitor device instances based on the specified parameters.
+The Get-LMDeviceInstanceData function retrieves monitoring data for specified device instances in LogicMonitor. It supports data aggregation and time range filtering, with a maximum timeframe of 24 hours.
 
 .PARAMETER StartDate
-The start date for the data retrieval. If not specified, the function uses the default value of 24 hours ago which is the max timeframe for this endpoint.
+The start date for the data retrieval. Defaults to 24 hours ago if not specified.
 
 .PARAMETER EndDate
-The end date for the data retrieval. If not specified, the function uses the current date and time.
+The end date for the data retrieval. Defaults to current time if not specified.
 
 .PARAMETER Ids
-The array of device instance IDs for which to retrieve data. This parameter is mandatory.
+An array of device instance IDs for which to retrieve data. This parameter is mandatory and can be specified using the Id alias.
 
 .PARAMETER AggregationType
-The type of aggregation to apply to the retrieved data. Valid values are "first", "last", "min", "max", "sum", "average", and "none". The default value is "none".
+The type of aggregation to apply to the data. Valid values are "first", "last", "min", "max", "sum", "average", "none". Defaults to "none".
 
 .PARAMETER Period
-The period for the data retrieval. The default value is 1.
+The period for data aggregation. Defaults to 1 as this appears to be the only supported value.
 
 .EXAMPLE
-Get-LMDeviceInstanceData -StartDate (Get-Date).AddHours(-7) -EndDate (Get-Date) -Ids "12345", "67890" -AggregationType "average" -Period 1
-Retrieves data for the device instances with IDs "12345" and "67890" for the past 7 hours, using an average aggregation and a period of 1 day.
+#Retrieve data for multiple instances with aggregation
+Get-LMDeviceInstanceData -Ids "12345","67890" -AggregationType "average" -StartDate (Get-Date).AddHours(-12)
+
+.EXAMPLE
+#Retrieve raw data for a single instance
+Get-LMDeviceInstanceData -Id "12345" -AggregationType "none"
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Make sure to log in using Connect-LMAccount before running this command.
+You must run Connect-LMAccount before running this command. Maximum time range for data retrieval is 24 hours.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns an array of data points for the specified device instances.
 #>
 Function Get-LMDeviceInstanceData {
 

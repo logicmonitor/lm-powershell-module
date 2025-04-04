@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-LMDatasource
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new LogicMonitor datasource.
 
 ## SYNTAX
 
@@ -18,36 +18,25 @@ New-LMDatasource [-Datasource] <PSObject> [-ProgressAction <ActionPreference>] [
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMDatasource function creates a new datasource in LogicMonitor using a provided datasource configuration object.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+#Create a new datasource
+$config = @{
+    name = "MyDatasource"
+    # Additional configuration properties
+}
+New-LMDatasource -Datasource $config
+```
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Datasource
-{{ Fill Datasource Description }}
+A PSCustomObject containing the datasource configuration.
+Must follow the schema model defined in LogicMonitor's API documentation.
 
 ```yaml
 Type: PSObject
@@ -55,7 +44,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -69,6 +58,21 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -97,10 +101,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.Datasource object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
+For datasource schema details, see: https://www.logicmonitor.com/swagger-ui-master/api-v3/dist/#/Datasources/addDatasourceById
 
 ## RELATED LINKS

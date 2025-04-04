@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMLogMessage
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves log messages from LogicMonitor.
 
 ## SYNTAX
 
@@ -37,51 +37,28 @@ Get-LMLogMessage [-Query <String>] [-Range <String>] [-BatchSize <Int32>] [-Prog
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMLogMessage function retrieves log messages from LogicMonitor based on specified time ranges or date ranges.
+It supports both synchronous and asynchronous queries with pagination control.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve logs for a specific date range
+Get-LMLogMessage -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date)
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve logs asynchronously with a custom query
+Get-LMLogMessage -Range "1hour" -Query "error" -Async
+```
 
 ## PARAMETERS
 
-### -Async
-{{ Fill Async Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Range-Async, Date-Async
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-{{ Fill EndDate Description }}
+### -StartDate
+The start date for retrieving log messages.
+Required for Date parameter sets.
 
 ```yaml
 Type: DateTime
@@ -95,15 +72,16 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -MaxPages
-{{ Fill MaxPages Description }}
+### -EndDate
+The end date for retrieving log messages.
+Required for Date parameter sets.
 
 ```yaml
-Type: Int32
-Parameter Sets: Range-Async, Date-Async
+Type: DateTime
+Parameter Sets: Date-Async, Date-Sync
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -111,7 +89,7 @@ Accept wildcard characters: False
 ```
 
 ### -Query
-{{ Fill Query Description }}
+A query string to filter the log messages.
 
 ```yaml
 Type: String
@@ -126,32 +104,66 @@ Accept wildcard characters: False
 ```
 
 ### -Range
-{{ Fill Range Description }}
+The time range for retrieving log messages.
+Valid values are "15min", "30min", "1hour", "3hour", "6hour", "12hour", "24hour", "3day", "7day", "1month".
+Defaults to "15min".
 
 ```yaml
 Type: String
 Parameter Sets: Range-Async, Range-Sync
 Aliases:
-Accepted values: 15min, 30min, 1hour, 3hour, 6hour, 12hour, 24hour, 3day, 7day, 1month
 
 Required: False
 Position: Named
-Default value: None
+Default value: 15min
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -StartDate
-{{ Fill StartDate Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 300.
+Defaults to 300.
 
 ```yaml
-Type: DateTime
-Parameter Sets: Date-Async, Date-Sync
+Type: Int32
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
+Default value: 300
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -MaxPages
+The maximum number of pages to retrieve in async mode.
+Defaults to 10.
+
+```yaml
+Type: Int32
+Parameter Sets: Range-Async, Date-Async
+Aliases:
+
+Required: False
+Position: Named
+Default value: 10
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Async
+Switch to enable asynchronous query mode.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Range-Async, Date-Async
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -176,10 +188,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.LMLogs objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
+This command is reserver for internal use only.
 
 ## RELATED LINKS

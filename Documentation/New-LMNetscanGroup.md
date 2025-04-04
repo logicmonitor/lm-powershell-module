@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -18,17 +18,16 @@ New-LMNetscanGroup [-Name] <String> [[-Description] <String>] [-ProgressAction <
 ```
 
 ## DESCRIPTION
-The New-LMNetscanGroup function is used to create a new Netscan Group in LogicMonitor.
-It requires the Name parameter, which specifies the name of the group, and the optional Description parameter, which provides a description for the group.
+The New-LMNetscanGroup function creates a new Netscan Group in LogicMonitor.
+It allows you to specify a name and optional description for the group.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
 New-LMNetscanGroup -Name "Group1" -Description "This is a sample group"
+Creates a new Netscan Group with the name "Group1" and the description "This is a sample group".
 ```
-
-This example creates a new Netscan Group with the name "Group1" and the description "This is a sample group".
 
 ## PARAMETERS
 
@@ -50,7 +49,6 @@ Accept wildcard characters: False
 
 ### -Description
 Specifies the description for the Netscan Group.
-This parameter is optional.
 
 ```yaml
 Type: String
@@ -84,8 +82,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.NetScanGroup object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves event sources from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMEventSource function retrieves event source configurations from LogicMonitor. It can retrieve all event sources, a specific source by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific event source to retrieve.
+
+.PARAMETER Name
+The name of the specific event source to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving event sources.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all event sources
+Get-LMEventSource
+
+.EXAMPLE
+#Retrieve a specific event source by name
+Get-LMEventSource -Name "Windows-Events"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.EventSource objects.
+#>
+
 Function Get-LMEventSource {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

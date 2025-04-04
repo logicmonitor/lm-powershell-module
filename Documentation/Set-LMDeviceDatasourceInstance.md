@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMDeviceDatasourceInstance
 
 ## SYNOPSIS
-Sets the properties of a LogicMonitor device datasource instance.
+Updates a LogicMonitor device datasource instance configuration.
 
 ## SYNTAX
 
@@ -45,24 +45,15 @@ Set-LMDeviceDatasourceInstance [-DisplayName <String>] [-WildValue <String>] [-W
 ```
 
 ## DESCRIPTION
-The Set-LMDeviceDatasourceInstance function is used to set the properties of a LogicMonitor device datasource instance.
-It allows you to update the display name, wild values, description, custom properties, monitoring and alerting settings, and instance group ID of the specified instance.
+The Set-LMDeviceDatasourceInstance function modifies an existing device datasource instance in LogicMonitor, allowing updates to its display name, wild values, description, and various other properties.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Set-LMDeviceDatasourceInstance -InstanceId 12345 -DisplayName "New Instance Name" -Description "Updated instance description"
+Set-LMDeviceDatasourceInstance -InstanceId 123 -DisplayName "Updated Instance" -Description "New description"
+Updates the instance with ID 123 with a new display name and description.
 ```
-
-This example sets the display name and description of the instance with ID 12345.
-
-### EXAMPLE 2
-```
-Get-LMDevice -Name "MyDevice" | Set-LMDeviceDatasourceInstance -DatasourceName "MyDatasource" -DisplayName "New Instance Name"
-```
-
-This example retrieves the device with the name "MyDevice" and sets the display name of the instance associated with the datasource "MyDatasource".
 
 ## PARAMETERS
 
@@ -142,8 +133,9 @@ Accept wildcard characters: False
 ```
 
 ### -PropertiesMethod
-Specifies the method to use when updating the properties.
+Specifies how to handle existing properties.
 Valid values are "Add", "Replace", or "Refresh".
+Default is "Replace".
 
 ```yaml
 Type: String
@@ -159,7 +151,6 @@ Accept wildcard characters: False
 
 ### -StopMonitoring
 Specifies whether to stop monitoring the instance.
-This parameter accepts $true or $false.
 
 ```yaml
 Type: Boolean
@@ -175,7 +166,6 @@ Accept wildcard characters: False
 
 ### -DisableAlerting
 Specifies whether to disable alerting for the instance.
-This parameter accepts $true or $false.
 
 ```yaml
 Type: Boolean
@@ -206,7 +196,6 @@ Accept wildcard characters: False
 
 ### -InstanceId
 Specifies the ID of the instance to update.
-This parameter is mandatory and can be provided via pipeline.
 
 ```yaml
 Type: String
@@ -222,7 +211,6 @@ Accept wildcard characters: False
 
 ### -DatasourceName
 Specifies the name of the datasource associated with the instance.
-This parameter is mandatory when using the 'Name-dsName' parameter set.
 
 ```yaml
 Type: String
@@ -238,7 +226,6 @@ Accept wildcard characters: False
 
 ### -DatasourceId
 Specifies the ID of the datasource associated with the instance.
-This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter set.
 
 ```yaml
 Type: String
@@ -266,8 +253,6 @@ Accept wildcard characters: False
 
 ### -Id
 Specifies the ID of the device associated with the instance.
-This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter set.
-This parameter can also be specified using the 'DeviceId' alias.
 
 ```yaml
 Type: String
@@ -295,8 +280,6 @@ Accept wildcard characters: False
 
 ### -Name
 Specifies the name of the device associated with the instance.
-This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter set.
-This parameter can also be specified using the 'DeviceName' alias.
 
 ```yaml
 Type: String
@@ -361,8 +344,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### You can pipe objects containing InstanceId, DatasourceId, and Id properties to this function.
 ## OUTPUTS
 
+### Returns a LogicMonitor.DeviceDatasourceInstance object containing the updated instance information.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

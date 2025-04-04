@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -171,12 +171,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### You can pipe api token objects to this function.
+### You can pipe API token objects to this function.
 ## OUTPUTS
 
-### A custom object with the following properties:
-### - Id: The ID of the removed API token.
-### - Message: A message indicating the success of the removal operation.
+### Returns a PSCustomObject containing the ID of the removed API token and a success message confirming the removal.
 ## NOTES
 This function requires a valid API authentication.
 Make sure to log in using Connect-LMAccount before running this command.

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMUser
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves LogicMonitor users based on specified parameters.
 
 ## SYNTAX
 
@@ -32,26 +32,61 @@ Get-LMUser [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPrefere
 Get-LMUser [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
+### FilterWizard
+```
+Get-LMUser [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMUser function retrieves LogicMonitor users based on the specified parameters.
+It supports filtering by ID, username, or custom filter.
+The function uses the LogicMonitor REST API to make the requests.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+Get-LMUser -Id 123
+Retrieves the user with the specified ID.
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+Get-LMUser -Name "username"
+Retrieves the user with the specified username.
+```
+
+### EXAMPLE 3
+```
+Get-LMUser -Filter @{Property = "Value"}
+Retrieves users based on the specified custom filter.
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+Specifies the ID of the user to retrieve.
+This parameter is mutually exclusive with the Name and Filter parameters.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Id
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+Specifies the username of the user to retrieve.
+This parameter is mutually exclusive with the Id and Filter parameters.
+
+```yaml
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False
@@ -62,7 +97,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+Specifies a custom filter to retrieve users based on specific criteria.
+This parameter is mutually exclusive with the Id and Name parameters.
 
 ```yaml
 Type: Object
@@ -76,32 +112,34 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -FilterWizard
+Specifies the use of the FilterWizard to assist in building a valid filter.
+This parameter is mutually exclusive with the Id, Name, and Filter parameters.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
+Type: SwitchParameter
+Parameter Sets: FilterWizard
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-{{ Fill Name Description }}
+### -BatchSize
+Specifies the number of users to retrieve in each batch.
+The default value is 1000.
 
 ```yaml
-Type: String
-Parameter Sets: Name
+Type: Int32
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -126,10 +164,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
 ## OUTPUTS
 
-### System.Object
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
+Use Connect-LMAccount to authenticate before running this command.
 
 ## RELATED LINKS

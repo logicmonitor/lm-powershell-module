@@ -1,3 +1,42 @@
+<#
+.SYNOPSIS
+Retrieves datasources from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMDatasource function retrieves datasource information from LogicMonitor. It can return datasources by ID, name, display name, or using filters.
+
+.PARAMETER Id
+The ID of the datasource to retrieve. Part of a mutually exclusive parameter set.
+
+.PARAMETER Name
+The name of the datasource to retrieve. Part of a mutually exclusive parameter set.
+
+.PARAMETER DisplayName
+The display name of the datasource to retrieve. Part of a mutually exclusive parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving datasources. Part of a mutually exclusive parameter set.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve a datasource by ID
+Get-LMDatasource -Id 123
+
+.EXAMPLE
+#Retrieve a datasource by display name
+Get-LMDatasource -DisplayName "CPU Usage"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Datasource objects.
+#>
 Function Get-LMDatasource {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

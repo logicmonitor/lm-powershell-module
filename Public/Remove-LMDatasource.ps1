@@ -30,7 +30,7 @@ Removes the datasource with the display name "My Datasource".
 You can pipe input to this function.
 
 .OUTPUTS
-System.Management.Automation.PSCustomObject
+Returns a PSCustomObject containing the ID of the removed datasource and a success message confirming the removal.
 #>
 Function Remove-LMDatasource {
 

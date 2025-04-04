@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceDatasourceInstanceGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves instance groups for a LogicMonitor device datasource.
 
 ## SYNTAX
 
@@ -49,51 +49,28 @@ Get-LMDeviceDatasourceInstanceGroup -Name <String> -HdsId <String> [-Filter <Obj
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDeviceDatasourceInstanceGroup function retrieves all instance groups associated with a device datasource.
+It supports identifying the device and datasource by either ID or name, and allows filtering of the results.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve instance groups using names
+Get-LMDeviceDatasourceInstanceGroup -DatasourceName "CPU" -Name "Server01"
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve instance groups using IDs
+Get-LMDeviceDatasourceInstanceGroup -DatasourceId 123 -Id 456
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatasourceId
-{{ Fill DatasourceId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Name-dsId, Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DatasourceName
-{{ Fill DatasourceName Description }}
+The name of the datasource.
+Required for Id-dsName and Name-dsName parameter sets.
 
 ```yaml
 Type: String
@@ -107,15 +84,50 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Filter
-{{ Fill Filter Description }}
+### -DatasourceId
+The ID of the datasource.
+Required for Id-dsId and Name-dsId parameter sets.
 
 ```yaml
-Type: Object
-Parameter Sets: (All)
+Type: Int32
+Parameter Sets: Name-dsId, Id-dsId
 Aliases:
 
-Required: False
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+The ID of the device.
+Can be specified using the DeviceId alias.
+Required for Id-dsId, Id-dsName, and Id-HdsId parameter sets.
+
+```yaml
+Type: Int32
+Parameter Sets: Id-dsName, Id-dsId, Id-HdsId
+Aliases: DeviceId
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the device.
+Can be specified using the DeviceName alias.
+Required for Name-dsName, Name-dsId, and Name-HdsId parameter sets.
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName, Name-dsId, Name-HdsId
+Aliases: DeviceName
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -123,7 +135,8 @@ Accept wildcard characters: False
 ```
 
 ### -HdsId
-{{ Fill HdsId Description }}
+The ID of the device datasource.
+Required for Id-HdsId and Name-HdsId parameter sets.
 
 ```yaml
 Type: String
@@ -137,32 +150,35 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -Filter
+A filter object to apply when retrieving instance groups.
+This parameter is optional.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id-dsName, Id-dsId, Id-HdsId
-Aliases: DeviceId
+Type: Object
+Parameter Sets: (All)
+Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-{{ Fill Name Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId, Name-HdsId
-Aliases: DeviceName
+Type: Int32
+Parameter Sets: (All)
+Aliases:
 
-Required: True
+Required: False
 Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -187,10 +203,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns instance group objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

@@ -1,3 +1,34 @@
+<#
+.SYNOPSIS
+Creates a new Logic Module in LogicMonitor.
+
+.DESCRIPTION
+The New-LMLogicModule function creates a new Logic Module in LogicMonitor. It supports various types of modules including datasources, property rules, topology sources, event sources, log sources, and config sources.
+
+.PARAMETER LogicModule
+A PSCustomObject containing the Logic Module configuration. Must follow the schema model defined in LogicMonitor's API documentation.
+
+.PARAMETER Type
+The type of Logic Module to create. Valid values are: datasources, propertyrules, topologysources, eventsources, logsources, configsources
+
+.EXAMPLE
+$config = @{
+    name = "MyLogicModule"
+    # Additional configuration properties
+}
+New-LMLogicModule -LogicModule $config -Type "datasources"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+For Logic Module schema details, see: https://www.logicmonitor.com/swagger-ui-master/api-v3/dist/#/Datasources/addDatasourceById
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor object of the appropriate type based on the Type parameter: LogicMonitor.Datasource, LogicMonitor.PropertySource, LogicMonitor.TopologySource, LogicMonitor.EventSource, LogicMonitor.LogSource, LogicMonitor.ConfigSource
+#>
+
 Function New-LMLogicModule {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]

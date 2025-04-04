@@ -1,21 +1,44 @@
 <#
 .SYNOPSIS
-Store a connection to a specified LM portal for use with Connect-LMAccount
+Creates a cached LogicMonitor account connection.
 
 .DESCRIPTION
-Connect to a specified LM portal which will allow you run the other LM commands associated with the Logic.Monitor PS module. Used in conjunction with Disconnect-LMAccount to close a session previously connected via Connect-LMAccount
+The New-LMCachedAccount function stores LogicMonitor portal credentials securely for use with Connect-LMAccount.
 
 .PARAMETER AccessId
-Access ID from your API credential acquired from the LM Portal
+The Access ID from your LogicMonitor API credentials.
 
 .PARAMETER AccessKey
-Access Key from your API credential acquired from the LM Portal
+The Access Key from your LogicMonitor API credentials.
 
 .PARAMETER AccountName
-The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)
+The portal subdomain (e.g., "company" for company.logicmonitor.com).
+
+.PARAMETER BearerToken
+The Bearer token for authentication (alternative to AccessId/AccessKey).
+
+.PARAMETER CachedAccountName
+The name to use for the cached account. Defaults to AccountName.
+
+.PARAMETER OverwriteExisting
+Whether to overwrite an existing cached account. Defaults to false.
 
 .EXAMPLE
-New-LMCachedAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
+#Cache LMv1 credentials
+New-LMCachedAccount -AccessId "id123" -AccessKey "key456" -AccountName "company"
+
+.EXAMPLE
+#Cache Bearer token
+New-LMCachedAccount -BearerToken "token123" -AccountName "company" -CachedAccountName "prod"
+
+.NOTES
+This command creates a secure vault to store credentials if one doesn't exist.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+None. Returns success message if account is cached successfully.
 #>
 Function New-LMCachedAccount {
 

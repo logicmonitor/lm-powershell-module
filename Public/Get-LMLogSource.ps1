@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves log sources from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMLogSource function retrieves log source configurations from LogicMonitor. It can retrieve all log sources, a specific source by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific log source to retrieve.
+
+.PARAMETER Name
+The name of the specific log source to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving log sources.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all log sources
+Get-LMLogSource
+
+.EXAMPLE
+#Retrieve a specific log source by name
+Get-LMLogSource -Name "Linux-Syslog"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Logsource objects.
+#>
+
 Function Get-LMLogSource {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

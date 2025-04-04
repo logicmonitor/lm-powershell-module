@@ -1,40 +1,42 @@
 <#
 .SYNOPSIS
-Retrieves LogicMonitor AppliesTo functions based on different parameters.
+Retrieves AppliesTo functions from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMAppliesToFunction function retrieves LogicMonitor AppliesTo functions based on different parameters such as Id, Name, or Filter. It uses the LogicMonitor API to make the requests and returns the results.
+The Get-LMAppliesToFunction function retrieves AppliesTo functions from LogicMonitor based on specified criteria. These functions are used in LogicModule configurations to determine which devices they apply to.
 
 .PARAMETER Id
-Specifies the Id of the AppliesTo function to retrieve. This parameter is mutually exclusive with the Name and Filter parameters.
+The ID of the AppliesTo function to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Name
-Specifies the Name of the AppliesTo function to retrieve. This parameter is mutually exclusive with the Id and Filter parameters.
+The name of the AppliesTo function to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-Specifies a custom filter to apply when retrieving AppliesTo functions. This parameter is mutually exclusive with the Id and Name parameters. The filter should be an object that matches the filter structure expected by the LogicMonitor API.
+A filter object to apply when retrieving functions. Part of a mutually exclusive parameter set.
 
 .PARAMETER BatchSize
-Specifies the number of results to retrieve per request. The default value is 1000.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
+#Retrieve an AppliesTo function by ID
 Get-LMAppliesToFunction -Id 123
-Retrieves the AppliesTo function with the specified Id.
 
 .EXAMPLE
+#Retrieve an AppliesTo function by name
 Get-LMAppliesToFunction -Name "MyFunction"
-Retrieves the AppliesTo function with the specified Name.
 
 .EXAMPLE
-Get-LMAppliesToFunction -Filter @{ Property = "Value" }
-Retrieves the AppliesTo functions that match the specified custom filter.
+#Retrieve AppliesTo functions using a filter
+Get-LMAppliesToFunction -Filter $filterObject
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Make sure to log in using the Connect-LMAccount function before running any commands.
+You must run Connect-LMAccount before running this command.
 
-.LINK
-https://www.logicmonitor.com/support/rest-api-developers-guide/
+.INPUTS
+None. You cannot pipe objects to this command.
 
+.OUTPUTS
+Returns LogicMonitor.AppliesToFunction objects.
 #>
 Function Get-LMAppliesToFunction {
 

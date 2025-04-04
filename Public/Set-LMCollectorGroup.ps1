@@ -1,3 +1,44 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor collector group's configuration.
+
+.DESCRIPTION
+The Set-LMCollectorGroup function modifies an existing collector group's settings, including its name, description, properties, and auto-balance settings.
+
+.PARAMETER Id
+Specifies the ID of the collector group to modify. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the current name of the collector group. This parameter is mandatory when using the 'Name' parameter set.
+
+.PARAMETER NewName
+Specifies the new name for the collector group.
+
+.PARAMETER Description
+Specifies a new description for the collector group.
+
+.PARAMETER Properties
+Specifies a hashtable of custom properties to set for the collector group.
+
+.PARAMETER AutoBalance
+Specifies whether to enable auto-balancing for the collector group.
+
+.PARAMETER AutoBalanceInstanceCountThreshold
+Specifies the threshold for auto-balancing the collector group.
+
+.EXAMPLE
+Set-LMCollectorGroup -Id 123 -NewName "Updated Group" -AutoBalance $true
+Updates the collector group with ID 123 with a new name and enables auto-balancing.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns a LogicMonitor.CollectorGroup object containing the updated group information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
 Function Set-LMCollectorGroup {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMWebsiteGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor website group configuration.
 
 ## SYNTAX
 
@@ -41,51 +41,20 @@ Set-LMWebsiteGroup -Name <String> [-NewName <String>] [-Description <String>] [-
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMWebsiteGroup function modifies an existing website group in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMWebsiteGroup -Id 123 -NewName "Updated Group" -Description "New description" -ParentGroupId 456
+Updates the website group with new name, description, and parent group.
+```
 
 ## PARAMETERS
 
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableAlerting
-{{ Fill DisableAlerting Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the website group to modify.
 
 ```yaml
 Type: String
@@ -100,7 +69,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the current name of the website group.
 
 ```yaml
 Type: String
@@ -115,7 +84,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the website group.
 
 ```yaml
 Type: String
@@ -129,27 +98,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentGroupId
-{{ Fill ParentGroupId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Id-ParentGroupId, Name-ParentGroupId
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ParentGroupName
-{{ Fill ParentGroupName Description }}
+### -Description
+Specifies the description for the website group.
 
 ```yaml
 Type: String
-Parameter Sets: Id-ParentGroupName, Name-ParentGroupName
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -160,7 +114,7 @@ Accept wildcard characters: False
 ```
 
 ### -Properties
-{{ Fill Properties Description }}
+Specifies a hashtable of custom properties for the website group.
 
 ```yaml
 Type: Hashtable
@@ -175,13 +129,28 @@ Accept wildcard characters: False
 ```
 
 ### -PropertiesMethod
-{{ Fill PropertiesMethod Description }}
+Specifies how to handle properties.
+Valid values: "Add", "Replace", "Refresh".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: Add, Replace, Refresh
+
+Required: False
+Position: Named
+Default value: Replace
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableAlerting
+Indicates whether to disable alerting for the website group.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named
@@ -191,11 +160,41 @@ Accept wildcard characters: False
 ```
 
 ### -StopMonitoring
-{{ Fill StopMonitoring Description }}
+Indicates whether to stop monitoring the website group.
 
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ParentGroupId
+Specifies the ID of the parent group.
+
+```yaml
+Type: Int32
+Parameter Sets: Id-ParentGroupId, Name-ParentGroupId
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ParentGroupName
+Specifies the name of the parent group.
+
+```yaml
+Type: String
+Parameter Sets: Id-ParentGroupName, Name-ParentGroupName
 Aliases:
 
 Required: False
@@ -225,10 +224,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.WebsiteGroup object containing the updated configuration.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

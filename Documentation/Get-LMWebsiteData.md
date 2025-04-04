@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMWebsiteData
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves monitoring data for a specific website from LogicMonitor.
 
 ## SYNTAX
 
@@ -25,51 +25,28 @@ Get-LMWebsiteData -Name <String> [-StartDate <DateTime>] [-EndDate <DateTime>] [
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMWebsiteData function retrieves monitoring data for a specified website and checkpoint in LogicMonitor.
+The website can be identified by either ID or name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve website data by ID
+Get-LMWebsiteData -Id 123
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve website data with custom date range
+Get-LMWebsiteData -Name "www.example.com" -StartDate (Get-Date).AddDays(-1)
+```
 
 ## PARAMETERS
 
-### -CheckpointId
-{{ Fill CheckpointId Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-{{ Fill EndDate Description }}
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+The ID of the website to retrieve data from.
+Required for Id parameter set.
 
 ```yaml
 Type: Int32
@@ -78,13 +55,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+The name of the website to retrieve data from.
+Required for Name parameter set.
 
 ```yaml
 Type: String
@@ -99,7 +77,8 @@ Accept wildcard characters: False
 ```
 
 ### -StartDate
-{{ Fill StartDate Description }}
+The start date for retrieving website data.
+Defaults to 60 minutes ago if not specified.
 
 ```yaml
 Type: DateTime
@@ -109,6 +88,38 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndDate
+The end date for retrieving website data.
+Defaults to current time if not specified.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CheckpointId
+The ID of the specific checkpoint to retrieve data from.
+Defaults to 0.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -133,10 +144,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns website monitoring data objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
