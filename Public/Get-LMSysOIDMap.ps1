@@ -18,28 +18,21 @@ Specifies a filter to apply to the results.
 Specifies the number of records to retrieve per API request. Valid values are 1-1000. Default is 1000.
 
 .EXAMPLE
+#Retrieve all system OID mappings
 Get-LMSysOIDMap
 
-Gets all system OID mappings.
-
 .EXAMPLE
-Get-LMSysOIDMap -Id 123
-
-Gets the system OID mapping with ID 123.
-
-.EXAMPLE
+#Retrieve a specific OID mapping by name
 Get-LMSysOIDMap -Name "\.1\.3\.6\.1\.4\.1\.318\.1\.1\.32"
 
-Gets system OID mapping for "\.1\.3\.6\.1\.4\.1\.318\.1\.1\.32".
+.NOTES
+You must run Connect-LMAccount before running this command.
 
 .INPUTS
 None. You cannot pipe objects to this command.
 
-.LINK
-Module repo: https://github.com/logicmonitor/lm-powershell-module
-
-.LINK
-PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor
+.OUTPUTS
+Returns LogicMonitor.SysOIDMap objects.
 #>
 
 Function Get-LMSysOIDMap {

@@ -1,17 +1,25 @@
 <#
 .SYNOPSIS
-    Invokes a session logoff for one or more users in Logic Monitor.
+Forces user logoff in LogicMonitor.
 
 .DESCRIPTION
-    The Invoke-LMUserLogoff function is used to log off one or more users from a Logic Monitor session. It checks if the user is logged in and has valid API credentials before making the logoff request. If the user is not logged in, an error message is displayed.
+The Invoke-LMUserLogoff function forces one or more users to be logged out of their LogicMonitor sessions.
 
 .PARAMETER Usernames
-    Specifies an array of usernames for which the session logoff needs to be invoked.
+An array of usernames to log off.
 
 .EXAMPLE
-    Invoke-LMUserLogoff -Usernames "user1", "user2"
-    Invokes a session logoff for the users "user1" and "user2" in Logic Monitor.
+#Log off multiple users
+Invoke-LMUserLogoff -Usernames "user1", "user2"
 
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns a success message if the logoff is completed successfully.
 #>
 Function Invoke-LMUserLogoff {
 

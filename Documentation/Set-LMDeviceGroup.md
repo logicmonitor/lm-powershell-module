@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMDeviceGroup
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor device group configuration.
 
 ## SYNTAX
 
@@ -41,96 +41,20 @@ Set-LMDeviceGroup -Name <String> [-NewName <String>] [-Description <String>] [-P
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMDeviceGroup function modifies an existing device group in LogicMonitor, allowing updates to its name, description, properties, and various other settings.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMDeviceGroup -Id 123 -NewName "Updated Group" -Description "New description"
+Updates the device group with ID 123 with a new name and description.
+```
 
 ## PARAMETERS
 
-### -AppliesTo
-{{ Fill AppliesTo Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableAlerting
-{{ Fill DisableAlerting Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableNetFlow
-{{ Fill EnableNetFlow Description }}
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the device group to modify.
 
 ```yaml
 Type: String
@@ -157,7 +81,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the current name of the device group.
 
 ```yaml
 Type: String
@@ -172,7 +96,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the device group.
 
 ```yaml
 Type: String
@@ -186,27 +110,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentGroupId
-{{ Fill ParentGroupId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Id-ParentGroupId, Name-ParentGroupId
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ParentGroupName
-{{ Fill ParentGroupName Description }}
+### -Description
+Specifies the new description for the device group.
 
 ```yaml
 Type: String
-Parameter Sets: Id-ParentGroupName, Name-ParentGroupName
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -217,7 +126,7 @@ Accept wildcard characters: False
 ```
 
 ### -Properties
-{{ Fill Properties Description }}
+Specifies a hashtable of custom properties for the device group.
 
 ```yaml
 Type: Hashtable
@@ -232,13 +141,89 @@ Accept wildcard characters: False
 ```
 
 ### -PropertiesMethod
-{{ Fill PropertiesMethod Description }}
+Specifies how to handle existing properties.
+Valid values are "Add", "Replace", or "Refresh".
+Default is "Replace".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: Add, Replace, Refresh
+
+Required: False
+Position: Named
+Default value: Replace
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableAlerting
+Specifies whether to disable alerting for the device group.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableNetFlow
+Specifies whether to enable NetFlow for the device group.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AppliesTo
+Specifies the applies to expression for the device group.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ParentGroupId
+Specifies the ID of the parent group.
+
+```yaml
+Type: Int32
+Parameter Sets: Id-ParentGroupId, Name-ParentGroupId
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ParentGroupName
+Specifies the name of the parent group.
+
+```yaml
+Type: String
+Parameter Sets: Id-ParentGroupName, Name-ParentGroupName
+Aliases:
 
 Required: False
 Position: Named
@@ -255,6 +240,21 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -283,10 +283,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### You can pipe objects containing Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.DeviceGroup object containing the updated group information.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

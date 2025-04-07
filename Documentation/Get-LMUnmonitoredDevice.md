@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMUnmonitoredDevice
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves unmonitored devices from LogicMonitor.
 
 ## SYNTAX
 
@@ -18,24 +18,29 @@ Get-LMUnmonitoredDevice [[-Filter] <Object>] [[-BatchSize] <Int32>] [-ProgressAc
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMUnmonitoredDevice function retrieves information about devices that are discovered but not currently being monitored in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve all unmonitored devices
+Get-LMUnmonitoredDevice
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve unmonitored devices using a filter
+Get-LMUnmonitoredDevice -Filter $filterObject
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Filter
+A filter object to apply when retrieving unmonitored devices.
 
 ```yaml
-Type: Int32
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
@@ -46,17 +51,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Filter
-{{ Fill Filter Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
-Type: Object
+Type: Int32
 Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
-Default value: None
+Position: 2
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -81,10 +88,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.UnmonitoredDevice objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

@@ -102,6 +102,14 @@ New-LMWebsite -PingCheck -Name "Example Ping" -PingAddress "192.168.1.1" -PingCo
 
 This example creates a new LogicMonitor ping check for the IP address "192.168.1.1". It sends 5 pings with a timeout of 1000 milliseconds. It assigns the check to the group with ID "12345" and sets the overall alert level and individual alert level to "warn".
 
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Website object.
 #>
 Function New-LMWebsite {
 

@@ -1,29 +1,35 @@
 <#
 .SYNOPSIS
-Retrieves the debug result for a LogicMonitor collector.
+Retrieves debug results for a LogicMonitor collector.
 
 .DESCRIPTION
-The Get-LMCollectorDebugResult function retrieves the debug result for a LogicMonitor collector based on the specified session ID, collector ID, or collector name.
+The Get-LMCollectorDebugResult function retrieves the debug output for a specified collector debug session. It requires both a session ID and either a collector ID or name to identify the specific debug results to retrieve.
 
 .PARAMETER SessionId
-The session ID of the debug session.
+The ID of the debug session to retrieve results from. This parameter is mandatory.
 
 .PARAMETER Id
-The ID of the collector. This parameter is mandatory when using the 'Id' parameter set.
+The ID of the collector to retrieve debug results for. This parameter is mandatory when using the Id parameter set.
 
 .PARAMETER Name
-The name of the collector. This parameter is mandatory when using the 'Name' parameter set.
+The name of the collector to retrieve debug results for. This parameter is mandatory when using the Name parameter set.
 
 .EXAMPLE
+#Retrieve debug results using collector ID
 Get-LMCollectorDebugResult -SessionId 12345 -Id 67890
-Retrieves the debug result for the collector with ID 67890 in the debug session with ID 12345.
 
 .EXAMPLE
+#Retrieve debug results using collector name
 Get-LMCollectorDebugResult -SessionId 12345 -Name "Collector1"
-Retrieves the debug result for the collector with name "Collector1" in the debug session with ID 12345.
 
 .NOTES
-This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this command.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns the debug output for the specified collector debug session.
 #>
 Function Get-LMCollectorDebugResult {
     [CmdletBinding()]

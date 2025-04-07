@@ -1,38 +1,44 @@
 <#
 .SYNOPSIS
-Retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance.
+Retrieves alert recipients for a specific data point in a LogicMonitor device datasource instance.
 
 .DESCRIPTION
-The Get-LMDeviceDatasourceInstanceAlertRecipients function retrieves the alert recipients for a specific data point in a LogicMonitor device datasource instance. It requires valid API credentials and a logged-in session.
+The Get-LMDeviceDatasourceInstanceAlertRecipients function retrieves the alert recipients configured for a specific data point within a device's datasource instance. It supports identifying the device and datasource by either ID or name.
 
 .PARAMETER DatasourceName
-Specifies the name of the datasource. This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+The name of the datasource. Required for Id-dsName and Name-dsName parameter sets.
 
 .PARAMETER DatasourceId
-Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+The ID of the datasource. Required for Id-dsId and Name-dsId parameter sets.
 
 .PARAMETER Id
-Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets. It can also be specified using the 'DeviceId' alias.
+The ID of the device. Can be specified using the DeviceId alias. Required for Id-dsId and Id-dsName parameter sets.
 
 .PARAMETER Name
-Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets. It can also be specified using the 'DeviceName' alias.
+The name of the device. Can be specified using the DeviceName alias. Required for Name-dsName and Name-dsId parameter sets.
 
 .PARAMETER InstanceName
-Specifies the name of the datasource instance. This parameter is mandatory.
+The name of the datasource instance. This parameter is mandatory.
 
 .PARAMETER DataPointName
-Specifies the name of the data point. This parameter is mandatory.
+The name of the data point to retrieve alert recipients for. This parameter is mandatory.
 
 .EXAMPLE
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName "Ping-" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
-
-Retrieves the alert recipients for the "PingLossPercent" data point in the "CPU" datasource instance of the "Server01" device.
+#Retrieve alert recipients using names
+Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName "Ping" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
 
 .EXAMPLE
+#Retrieve alert recipients using IDs
 Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId 123 -Id 456 -InstanceName "Instance01" -DataPointName "PingLossPercent"
 
-Retrieves the alert recipients for the "PingLossPercent" data point in the datasource instance with ID 123 of the device with ID 456.
+.NOTES
+You must run Connect-LMAccount before running this command.
 
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns alert recipient configuration objects.
 #>
 Function Get-LMDeviceDatasourceInstanceAlertRecipients {
     [CmdletBinding()]
@@ -110,9 +116,6 @@ Function Get-LMDeviceDatasourceInstanceAlertRecipients {
         
         #Build header and uri
         $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$HdsiId/alertsettings/$DsidpId/recipients"
-
-        #Initalize vars
-        $Results = @()
 
         Try {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath

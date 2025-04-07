@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -36,8 +36,11 @@ Set-LMNormalizedProperties -Add -Alias "location" -Properties @("location", "snm
 Updates a normalized property with alias "location" to include the new properties.
 ```
 
-PS C:\\\> Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
+### EXAMPLE 2
+```
+Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
 Removes the "auto.meraki.location" property from the "location" alias.
+```
 
 ## PARAMETERS
 
@@ -57,7 +60,7 @@ Accept wildcard characters: False
 ```
 
 ### -Add
-{{ Fill Add Description }}
+Indicates that properties should be added to the existing normalized property.
 
 ```yaml
 Type: SwitchParameter
@@ -72,7 +75,7 @@ Accept wildcard characters: False
 ```
 
 ### -Remove
-{{ Fill Remove Description }}
+Indicates that properties should be removed from the existing normalized property.
 
 ```yaml
 Type: SwitchParameter
@@ -121,10 +124,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None.
 ## OUTPUTS
 
+### Returns a message indicating the success of the operation.
 ## NOTES
-Requires valid LogicMonitor API credentials set via Connect-LMAccount.
-This cmdlet uses LogicMonitor API v4.
+This function requires a valid LogicMonitor API authentication and uses API v4.
 
 ## RELATED LINKS

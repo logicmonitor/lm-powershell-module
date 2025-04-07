@@ -47,7 +47,13 @@ New-LMDeviceDatasourceInstance -DisplayName "Instance 1" -WildValue "Value 1" -D
 This example creates a new instance of a LogicMonitor device datasource with the specified display name, wild value, description, datasource name, and host device name.
 
 .NOTES
-Please ensure you are logged in before running any commands. Use Connect-LMAccount to login and try again.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DeviceDatasourceInstance object.
 #>
 Function New-LMDeviceDatasourceInstance {
 

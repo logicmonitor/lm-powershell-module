@@ -16,8 +16,7 @@ Removes the OpsNote with the ID "12345" from LogicMonitor.
 You can pipe objects to this function.
 
 .OUTPUTS
-System.Management.Automation.PSCustomObject
-Returns an object with the ID and a success message if the OpsNote is successfully removed.
+Returns a PSCustomObject containing the ID of the removed OpsNote and a message indicating the success of the removal operation.
 #>
 Function Remove-LMOpsNote {
 

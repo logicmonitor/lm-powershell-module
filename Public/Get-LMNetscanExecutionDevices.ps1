@@ -1,3 +1,43 @@
+<#
+.SYNOPSIS
+Retrieves devices discovered during a Netscan execution.
+
+.DESCRIPTION
+The Get-LMNetscanExecutionDevices function retrieves devices discovered during a specific Netscan execution in LogicMonitor. The Netscan can be identified by either ID or name.
+
+.PARAMETER Id
+The ID of the execution to retrieve devices from. Required for Id parameter set.
+
+.PARAMETER NspId
+The ID of the Netscan. Required when using Id parameter set.
+
+.PARAMETER NspName
+The name of the Netscan. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving devices.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve devices from a specific execution
+Get-LMNetscanExecutionDevices -Id 456 -NspId 123
+
+.EXAMPLE
+#Retrieve devices using Netscan name
+Get-LMNetscanExecutionDevices -Id 456 -NspName "Network-Discovery"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.NetScanExecutionDevice objects.
+#>
+
 Function Get-LMNetscanExecutionDevices {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

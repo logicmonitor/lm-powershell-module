@@ -3,15 +3,23 @@
 Invokes a NetScan task in LogicMonitor.
 
 .DESCRIPTION
-The Invoke-LMNetScan function is used to execute a NetScan task in LogicMonitor. It checks if the user is logged in and has valid API credentials before making the API call. If the user is logged in, it builds the necessary headers and URI, and then issues a GET request to execute the NetScan task. If the request is successful, it returns a message indicating that the NetScan task has been scheduled.
+The Invoke-LMNetScan function schedules execution of a specified NetScan task in LogicMonitor.
 
 .PARAMETER Id
-The ID of the NetScan task to be executed. This parameter is mandatory.
+The ID of the NetScan to execute.
 
 .EXAMPLE
+#Execute a NetScan
 Invoke-LMNetScan -Id "12345"
-Schedules the NetScan task with ID "12345" in LogicMonitor.
 
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns a success message if the NetScan is scheduled successfully.
 #>
 
 Function Invoke-LMNetScan {

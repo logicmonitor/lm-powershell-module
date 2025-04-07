@@ -1,42 +1,38 @@
 <#
 .SYNOPSIS
-    Invokes an active discovery task for LogicMonitor devices.
+Invokes an active discovery task for LogicMonitor devices.
 
 .DESCRIPTION
-    The Invoke-LMActiveDiscovery function is used to schedule an active discovery task for LogicMonitor devices. 
-    It accepts parameters to specify the devices for which the active discovery task should be scheduled.
+The Invoke-LMActiveDiscovery function schedules an active discovery task for LogicMonitor devices. It can target individual devices or device groups using either ID or name.
 
 .PARAMETER Id
-    Specifies the ID of the device for which the active discovery task should be scheduled. This parameter is mutually exclusive with the Name parameter.
+The ID of the device to run active discovery on. Required for Id parameter set.
 
 .PARAMETER Name
-    Specifies the name of the device for which the active discovery task should be scheduled. This parameter is mutually exclusive with the Id parameter.
+The name of the device to run active discovery on. Required for Name parameter set.
 
 .PARAMETER GroupId
-    Specifies the ID of the device group for which the active discovery task should be scheduled. This parameter is mutually exclusive with the GroupName parameter.
+The ID of the device group to run active discovery on. Required for GroupId parameter set.
 
 .PARAMETER GroupName
-    Specifies the name of the device group for which the active discovery task should be scheduled. This parameter is mutually exclusive with the GroupId parameter.
+The name of the device group to run active discovery on. Required for GroupName parameter set.
+
+.EXAMPLE
+#Run active discovery on a device by ID
+Invoke-LMActiveDiscovery -Id 12345
+
+.EXAMPLE
+#Run active discovery on a device group by name
+Invoke-LMActiveDiscovery -GroupName "Production-Servers"
 
 .NOTES
-    - This function requires a valid API authentication. Make sure you are logged in before running any commands.
-    - Use the Connect-LMAccount function to log in and obtain valid API credentials.
+You must run Connect-LMAccount before running this command.
 
-.EXAMPLE
-    Invoke-LMActiveDiscovery -Id 12345
-    Invokes an active discovery task for the device with ID 12345.
+.INPUTS
+None. You cannot pipe objects to this command.
 
-.EXAMPLE
-    Invoke-LMActiveDiscovery -Name "MyDevice"
-    Invokes an active discovery task for the device with the name "MyDevice".
-
-.EXAMPLE
-    Invoke-LMActiveDiscovery -GroupId "123"
-    Invokes an active discovery task for all devices in the device group with ID "123".
-
-.EXAMPLE
-    Invoke-LMActiveDiscovery -GroupName "Group2"
-    Invokes an active discovery task for all devices in the device group with the name "Group2".
+.OUTPUTS
+Returns a success message if the task is scheduled successfully.
 #>
 Function Invoke-LMActiveDiscovery {
 

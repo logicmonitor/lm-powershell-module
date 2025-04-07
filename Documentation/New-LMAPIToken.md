@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -25,30 +25,27 @@ New-LMAPIToken -Username <String> [-Note <String>] [-CreateDisabled] [-Type <Str
 ```
 
 ## DESCRIPTION
-The New-LMAPIToken function is used to create a new LogicMonitor API token.
-It requires the user to be logged in and have valid API credentials.
-The function supports two parameter sets: 'Id' and 'Username'.
-The 'Id' parameter set is used to specify the user ID for which the API token will be created.
-The 'Username' parameter set is used to specify the username for which the API token will be created.
-The function also supports additional parameters such as 'Note', 'CreateDisabled', and 'Type'.
+The New-LMAPIToken function creates a new API token for a specified user in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-LMAPIToken -Id "12345" -Note "API Token for user 12345"
+#Create a token by user ID
+New-LMAPIToken -Id "12345" -Note "API Token for automation"
 ```
 
 ### EXAMPLE 2
 ```
-New-LMAPIToken -Username "john.doe" -Note "API Token for user john.doe" -CreateDisabled
+#Create a token by username
+New-LMAPIToken -Username "john.doe" -Type "Bearer" -CreateDisabled
 ```
 
 ## PARAMETERS
 
 ### -Id
-Specifies the user ID for which the API token will be created.
-This parameter is mandatory when using the 'Id' parameter set.
+The ID of the user to create the token for.
+Required for Id parameter set.
 
 ```yaml
 Type: String[]
@@ -63,8 +60,8 @@ Accept wildcard characters: False
 ```
 
 ### -Username
-Specifies the username for which the API token will be created.
-This parameter is mandatory when using the 'Username' parameter set.
+The username to create the token for.
+Required for Username parameter set.
 
 ```yaml
 Type: String
@@ -79,7 +76,7 @@ Accept wildcard characters: False
 ```
 
 ### -Note
-Specifies a note for the API token.
+A note describing the purpose of the API token.
 
 ```yaml
 Type: String
@@ -94,7 +91,7 @@ Accept wildcard characters: False
 ```
 
 ### -CreateDisabled
-Specifies whether the API token should be created in a disabled state.
+Switch to create the token in a disabled state.
 
 ```yaml
 Type: SwitchParameter
@@ -109,9 +106,9 @@ Accept wildcard characters: False
 ```
 
 ### -Type
-Specifies the type of API token to create.
-Valid values are 'LMv1' and 'Bearer'.
-The default value is 'LMv1'.
+The type of API token to create.
+Valid values are "LMv1" and "Bearer".
+Defaults to "LMv1".
 
 ```yaml
 Type: String
@@ -145,10 +142,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.APIToken object.
 ## NOTES
-This function requires the user to be logged in and have valid API credentials.
-Use the Connect-LMAccount function to log in before running any commands.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

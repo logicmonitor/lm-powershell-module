@@ -41,6 +41,12 @@ This example creates a new LogicMonitor device group named "ChildDeviceGroup" wi
 
 .NOTES
 This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount to authenticate before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DeviceGroup object.
 #>
 Function New-LMDeviceGroup {
 

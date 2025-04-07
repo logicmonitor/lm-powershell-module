@@ -1,3 +1,43 @@
+<#
+.SYNOPSIS
+Retrieves reports from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMReport function retrieves report configurations from LogicMonitor. It can retrieve all reports, a specific report by ID or name, or filter the results using either a filter object or the filter wizard.
+
+.PARAMETER Id
+The ID of the specific report to retrieve.
+
+.PARAMETER Name
+The name of the specific report to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving reports.
+
+.PARAMETER FilterWizard
+Switch to enable the filter wizard for building a custom filter interactively.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all reports
+Get-LMReport
+
+.EXAMPLE
+#Retrieve a specific report by name
+Get-LMReport -Name "Monthly Usage Report"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Report objects.
+#>
+
 Function Get-LMReport {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
@@ -10,6 +50,9 @@ Function Get-LMReport {
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
+
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -36,6 +79,12 @@ Function Get-LMReport {
                 "Filter" {
                     #List of allowed filter props
                     $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }

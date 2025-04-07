@@ -21,6 +21,12 @@ Removes the dashboard group with the name "MyDashboardGroup".
 
 .INPUTS
 None.
+
+.OUTPUTS
+Returns a PSCustomObject containing the ID of the removed dashboard group and a success message confirming the removal.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
 #>
 Function Remove-LMDashboardGroup {
 

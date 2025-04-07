@@ -1,3 +1,45 @@
+<#
+.SYNOPSIS
+Retrieves datasource alert settings for a LogicMonitor device group.
+
+.DESCRIPTION
+The Get-LMDeviceGroupDatasourceAlertSetting function retrieves the alert settings for a specific datasource within a device group. It supports identifying both the group and datasource by either ID or name.
+
+.PARAMETER DatasourceName
+The name of the datasource. Required for Id-dsName and Name-dsName parameter sets.
+
+.PARAMETER DatasourceId
+The ID of the datasource. Required for Id-dsId and Name-dsId parameter sets.
+
+.PARAMETER Id
+The ID of the device group. Required for Id-dsId and Id-dsName parameter sets.
+
+.PARAMETER Name
+The name of the device group. Required for Name-dsName and Name-dsId parameter sets.
+
+.PARAMETER Filter
+A filter object to apply when retrieving alert settings. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve alert settings using names
+Get-LMDeviceGroupDatasourceAlertSetting -Name "Production Servers" -DatasourceName "CPU"
+
+.EXAMPLE
+#Retrieve alert settings using IDs
+Get-LMDeviceGroupDatasourceAlertSetting -Id 123 -DatasourceId 456
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DeviceGroupDatasourceAlertSetting objects.
+#>
 
 Function Get-LMDeviceGroupDatasourceAlertSetting {
 

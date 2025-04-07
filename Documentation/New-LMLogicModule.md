@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-LMLogicModule
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Creates a new Logic Module in LogicMonitor.
 
 ## SYNTAX
 
@@ -18,36 +18,25 @@ New-LMLogicModule [-LogicModule] <PSObject> [-Type] <String> [-ProgressAction <A
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The New-LMLogicModule function creates a new Logic Module in LogicMonitor.
+It supports various types of modules including datasources, property rules, topology sources, event sources, log sources, and config sources.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+$config = @{
+    name = "MyLogicModule"
+    # Additional configuration properties
+}
+New-LMLogicModule -LogicModule $config -Type "datasources"
+```
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -LogicModule
-{{ Fill LogicModule Description }}
+A PSCustomObject containing the Logic Module configuration.
+Must follow the schema model defined in LogicMonitor's API documentation.
 
 ```yaml
 Type: PSObject
@@ -55,23 +44,23 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: 0
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Type
-{{ Fill Type Description }}
+The type of Logic Module to create.
+Valid values are: datasources, propertyrules, topologysources, eventsources, logsources, configsources
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: datasources, propertyrules, topologysources, eventsources, logsources, configsources
 
 Required: True
-Position: 1
+Position: 2
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -85,6 +74,21 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -113,10 +117,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor object of the appropriate type based on the Type parameter: LogicMonitor.Datasource, LogicMonitor.PropertySource, LogicMonitor.TopologySource, LogicMonitor.EventSource, LogicMonitor.LogSource, LogicMonitor.ConfigSource
 ## NOTES
+You must run Connect-LMAccount before running this command.
+For Logic Module schema details, see: https://www.logicmonitor.com/swagger-ui-master/api-v3/dist/#/Datasources/addDatasourceById
 
 ## RELATED LINKS

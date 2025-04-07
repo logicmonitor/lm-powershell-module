@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Import-LMExchangeModule
 
 ## SYNOPSIS
-Imports an LM Exchange module.
+Imports an LM Exchange module into LogicMonitor.
 
 ## SYNTAX
 
@@ -17,20 +17,20 @@ Import-LMExchangeModule [-LMExchangeId] <String> [-ProgressAction <ActionPrefere
 ```
 
 ## DESCRIPTION
-The Import-LMExchangeModule function is used to import an LM Exchange module into LogicMonitor.
+The Import-LMExchangeModule function imports a specified LM Exchange module into your LogicMonitor portal.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Import an LM Exchange module
 Import-LMExchangeModule -LMExchangeId "LM12345"
-Imports the LM Exchange module with the ID "LM12345" into LogicMonitor.
 ```
 
 ## PARAMETERS
 
 ### -LMExchangeId
-The LM Exchange module ID to import.
+The ID of the LM Exchange module to import.
 This parameter is mandatory.
 
 ```yaml
@@ -65,8 +65,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns a success message if the import is successful.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

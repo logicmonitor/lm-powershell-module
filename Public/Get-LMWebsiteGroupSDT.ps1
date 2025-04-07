@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves Scheduled Down Time (SDT) entries for a website group from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMWebsiteGroupSDT function retrieves current SDT entries for a specified website group in LogicMonitor. The group can be identified by either ID or name.
+
+.PARAMETER Id
+The ID of the website group to retrieve SDT entries from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the website group to retrieve SDT entries from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving SDT entries.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve SDT entries by group ID
+Get-LMWebsiteGroupSDT -Id 123
+
+.EXAMPLE
+#Retrieve SDT entries for a specific group
+Get-LMWebsiteGroupSDT -Name "Production-Websites"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns website group SDT objects.
+#>
+
 Function Get-LMWebsiteGroupSDT {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

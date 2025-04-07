@@ -1,3 +1,39 @@
+<#
+.SYNOPSIS
+Retrieves a list of datasources for a LogicMonitor device group.
+
+.DESCRIPTION
+The Get-LMDeviceGroupDatasourceList function retrieves all datasources associated with a specific device group. The device group can be identified by either ID or name, and the results can be filtered.
+
+.PARAMETER Id
+The ID of the device group. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device group. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving datasources. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve datasources by device group ID
+Get-LMDeviceGroupDatasourceList -Id 123
+
+.EXAMPLE
+#Retrieve datasources by device group name with filter
+Get-LMDeviceGroupDatasourceList -Name "Production Servers" -Filter $filterObject
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DeviceGroupDatasource objects.
+#>
 
 Function Get-LMDeviceGroupDatasourceList {
 

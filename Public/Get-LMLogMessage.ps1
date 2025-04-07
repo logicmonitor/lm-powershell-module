@@ -1,3 +1,48 @@
+<#
+.SYNOPSIS
+Retrieves log messages from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMLogMessage function retrieves log messages from LogicMonitor based on specified time ranges or date ranges. It supports both synchronous and asynchronous queries with pagination control.
+
+.PARAMETER StartDate
+The start date for retrieving log messages. Required for Date parameter sets.
+
+.PARAMETER EndDate
+The end date for retrieving log messages. Required for Date parameter sets.
+
+.PARAMETER Query
+A query string to filter the log messages.
+
+.PARAMETER Range
+The time range for retrieving log messages. Valid values are "15min", "30min", "1hour", "3hour", "6hour", "12hour", "24hour", "3day", "7day", "1month". Defaults to "15min".
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 300. Defaults to 300.
+
+.PARAMETER MaxPages
+The maximum number of pages to retrieve in async mode. Defaults to 10.
+
+.PARAMETER Async
+Switch to enable asynchronous query mode.
+
+.EXAMPLE
+#Retrieve logs for a specific date range
+Get-LMLogMessage -StartDate (Get-Date).AddDays(-1) -EndDate (Get-Date)
+
+.EXAMPLE
+#Retrieve logs asynchronously with a custom query
+Get-LMLogMessage -Range "1hour" -Query "error" -Async
+
+.NOTES
+You must run Connect-LMAccount before running this command. This command is reserver for internal use only.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.LMLogs objects.
+#>
 Function Get-LMLogMessage {
 
     [CmdletBinding(DefaultParameterSetName = "Range-Async")]

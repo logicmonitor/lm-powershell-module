@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -130,9 +130,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### You can pipe objects to this function.
 ## OUTPUTS
 
-### A PSCustomObject representing the result of the removal operation. The object has the following properties:
-### - Id: The ID of the removed widget.
-### - Message: A message indicating the success of the removal operation.
+### Returns a PSCustomObject containing the ID of the removed widget and a message indicating the success of the removal operation.
 ## NOTES
 This function requires a valid API authentication to Logic Monitor.
 Make sure to log in using Connect-LMAccount before running this command.

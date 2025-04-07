@@ -1,3 +1,36 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor report group configuration.
+
+.DESCRIPTION
+The Set-LMReportGroup function modifies an existing report group in LogicMonitor.
+
+.PARAMETER Id
+Specifies the ID of the report group to modify.
+
+.PARAMETER Name
+Specifies the current name of the report group.
+
+.PARAMETER NewName
+Specifies the new name for the report group.
+
+.PARAMETER Description
+Specifies the new description for the report group.
+
+.EXAMPLE
+Set-LMReportGroup -Id 123 -NewName "Updated Reports" -Description "New description"
+Updates the report group with ID 123 with a new name and description.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.NetScanGroup object containing the updated group information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMReportGroup {
 
     [CmdletBinding()]

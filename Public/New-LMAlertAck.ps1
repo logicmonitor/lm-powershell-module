@@ -3,21 +3,26 @@
 Creates a new alert acknowledgment in LogicMonitor.
 
 .DESCRIPTION
-The New-LMAlertAck function is used to create a new alert acknowledgment in LogicMonitor. It sends a POST request to the LogicMonitor API to acknowledge one or more alerts.
+The New-LMAlertAck function acknowledges one or more alerts in LogicMonitor and adds a note to the acknowledgment.
 
 .PARAMETER Ids
-Specifies the alert IDs to be acknowledged. This parameter is mandatory and accepts an array of strings.
+The alert IDs to be acknowledged. This parameter is mandatory.
 
 .PARAMETER Note
-Specifies the note to be added to the acknowledgment. This parameter is mandatory and accepts a string.
+The note to be added to the acknowledgment. This parameter is mandatory.
 
 .EXAMPLE
+#Acknowledge multiple alerts
 New-LMAlertAck -Ids @("12345","67890") -Note "Acknowledging alerts"
 
-This example acknowledges the alerts with the IDs "12345" and "67890" and adds the note "Acknowledging alerts" to the acknowledgment.
-
 .NOTES
-This function requires a valid API authentication. Make sure you are logged in before running any commands by using the Connect-LMAccount function.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns a success message if the acknowledgment is created successfully.
 #>
 Function New-LMAlertAck {
     [CmdletBinding()]

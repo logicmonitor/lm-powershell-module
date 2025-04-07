@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMPropertysource
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor property source configuration.
 
 ## SYNTAX
 
@@ -27,51 +27,20 @@ Set-LMPropertysource -Name <String> [-NewName <String>] [-Description <String>] 
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMPropertysource function modifies an existing property source in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMPropertysource -Id 123 -NewName "UpdatedSource" -Description "New description" -Tags @("prod", "windows")
+Updates the property source with new name, description, and tags.
+```
 
 ## PARAMETERS
 
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Group
-{{ Fill Group Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the property source to modify.
 
 ```yaml
 Type: String
@@ -86,7 +55,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the current name of the property source.
 
 ```yaml
 Type: String
@@ -101,7 +70,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the property source.
 
 ```yaml
 Type: String
@@ -115,70 +84,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Script
-{{ Fill Script Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ScriptType
-{{ Fill ScriptType Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: embed, powerShell
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Tags
-{{ Fill Tags Description }}
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TagsMethod
-{{ Fill TagsMethod Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-Accepted values: Add, Refresh
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TechNotes
-{{ Fill TechNotes Description }}
+### -Description
+Specifies the description for the property source.
 
 ```yaml
 Type: String
@@ -193,7 +100,99 @@ Accept wildcard characters: False
 ```
 
 ### -appliesTo
-{{ Fill appliesTo Description }}
+Specifies the applies to expression for the property source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TechNotes
+Specifies technical notes for the property source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Tags
+Specifies an array of tags to associate with the property source.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TagsMethod
+Specifies how to handle tags.
+Valid values: "Add" (append to existing), "Refresh" (replace existing).
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: Refresh
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Group
+Specifies the group for the property source.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ScriptType
+Specifies the script type.
+Valid values: "embed", "powerShell".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Script
+Specifies the script content.
 
 ```yaml
 Type: String
@@ -227,10 +226,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.Propertysource object containing the updated configuration.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

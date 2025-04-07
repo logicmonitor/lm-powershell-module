@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMCollector
 
 ## SYNOPSIS
-Retrieves LogicMonitor collectors based on various parameters.
+Retrieves LogicMonitor collectors.
 
 ## SYNTAX
 
@@ -33,36 +33,34 @@ Get-LMCollector [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <Action
  [<CommonParameters>]
 ```
 
+### FilterWizard
+```
+Get-LMCollector [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
-The Get-LMCollector function retrieves LogicMonitor collectors based on the specified parameters.
-It supports filtering by collector ID, collector name, or custom filter.
-The function uses the LogicMonitor REST API to make the requests.
+The Get-LMCollector function retrieves collector information from LogicMonitor.
+It can return a single collector by ID or name, or multiple collectors using filters or the filter wizard.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Retrieve a collector by ID
 Get-LMCollector -Id 123
-Retrieves the collector with the specified ID.
 ```
 
 ### EXAMPLE 2
 ```
-Get-LMCollector -Name "Collector1"
-Retrieves the collector with the specified name.
-```
-
-### EXAMPLE 3
-```
-Get-LMCollector -Filter @{Property = "Value"}
-Retrieves collectors based on the specified custom filter.
+#Retrieve collectors using the filter wizard
+Get-LMCollector -FilterWizard
 ```
 
 ## PARAMETERS
 
 ### -Id
-Specifies the ID of the collector to retrieve.
-This parameter is mutually exclusive with the Name and Filter parameters.
+The ID of the collector to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Int32
@@ -77,8 +75,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the collector to retrieve.
-This parameter is mutually exclusive with the Id and Filter parameters.
+The name of the collector to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -93,8 +91,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-Specifies a custom filter to retrieve collectors based on specific criteria.
-This parameter is mutually exclusive with the Id and Name parameters.
+A filter object to apply when retrieving collectors.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
@@ -108,9 +106,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -FilterWizard
+Switch to use the filter wizard interface for building the filter.
+Part of a mutually exclusive parameter set.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: FilterWizard
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -BatchSize
-Specifies the number of collectors to retrieve in each batch.
-The default value is 1000.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -144,10 +159,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.Collector objects.
 ## NOTES
-This function requires a valid LogicMonitor API authentication.
-Use Connect-LMAccount to authenticate before running this command.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

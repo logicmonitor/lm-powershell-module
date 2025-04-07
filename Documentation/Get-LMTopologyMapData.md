@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMTopologyMapData
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves data for a specific topology map from LogicMonitor.
 
 ## SYNTAX
 
@@ -23,21 +23,28 @@ Get-LMTopologyMapData -Name <String> [-ProgressAction <ActionPreference>] [<Comm
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMTopologyMapData function retrieves the vertex and edge data for a specified topology map in LogicMonitor.
+The map can be identified by either ID or name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve topology map data by ID
+Get-LMTopologyMapData -Id 123
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve topology map data by name
+Get-LMTopologyMapData -Name "Network-Topology"
+```
 
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+The ID of the topology map to retrieve data from.
+Required for Id parameter set.
 
 ```yaml
 Type: Int32
@@ -46,13 +53,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+The name of the topology map to retrieve data from.
+Required for Name parameter set.
 
 ```yaml
 Type: String
@@ -86,10 +94,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.TopologyMapData objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

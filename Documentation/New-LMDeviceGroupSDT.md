@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -89,13 +89,7 @@ This allows you to temporarily disable monitoring for a specific group of device
 ### EXAMPLE 1
 ```
 New-LMDeviceGroupSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -StartHour 2 -DeviceGroupName "Production Servers"
-Creates a new scheduled downtime for the "Production Servers" device group, starting from January 1, 2022, 00:00:00 and ending on January 1, 2022, 06:00:00. The scheduled downtime will occur every day at 2 AM.
-```
-
-### EXAMPLE 2
-```
-New-LMDeviceGroupSDT -Comment "Monthly maintenance" -StartHour 8 -DeviceGroupId 12345 -Monthly
-Creates a new scheduled downtime for the device group with ID 12345, starting at 8 AM. The scheduled downtime will occur every month.
+Creates a new scheduled downtime for the "Production Servers" device group.
 ```
 
 ## PARAMETERS
@@ -150,7 +144,7 @@ Accept wildcard characters: False
 
 ### -StartHour
 Specifies the start hour for the scheduled downtime.
-This parameter is mandatory when using the 'Daily-DeviceGroupName', 'Monthly-DeviceGroupName', 'MonthlyByWeek-DeviceGroupName', 'Weekly-DeviceGroupName', 'Daily-DeviceGroupId', 'Monthly-DeviceGroupId', 'MonthlyByWeek-DeviceGroupId', or 'Weekly-DeviceGroupId' parameter sets.
+This parameter is mandatory when using recurring parameter sets.
 The value must be between 0 and 23.
 
 ```yaml
@@ -166,7 +160,9 @@ Accept wildcard characters: False
 ```
 
 ### -StartMinute
-{{ Fill StartMinute Description }}
+Specifies the start minute for the scheduled downtime.
+This parameter is mandatory when using recurring parameter sets.
+The value must be between 0 and 59.
 
 ```yaml
 Type: Int32
@@ -181,7 +177,9 @@ Accept wildcard characters: False
 ```
 
 ### -EndHour
-{{ Fill EndHour Description }}
+Specifies the end hour for the scheduled downtime.
+This parameter is mandatory when using recurring parameter sets.
+The value must be between 0 and 23.
 
 ```yaml
 Type: Int32
@@ -196,7 +194,9 @@ Accept wildcard characters: False
 ```
 
 ### -EndMinute
-{{ Fill EndMinute Description }}
+Specifies the end minute for the scheduled downtime.
+This parameter is mandatory when using recurring parameter sets.
+The value must be between 0 and 59.
 
 ```yaml
 Type: Int32
@@ -211,7 +211,8 @@ Accept wildcard characters: False
 ```
 
 ### -WeekDay
-{{ Fill WeekDay Description }}
+Specifies the day of the week for weekly or monthly by week SDTs.
+This parameter is mandatory when using the 'Weekly' or 'MonthlyByWeek' parameter sets.
 
 ```yaml
 Type: String
@@ -226,7 +227,8 @@ Accept wildcard characters: False
 ```
 
 ### -WeekOfMonth
-{{ Fill WeekOfMonth Description }}
+Specifies which week of the month for monthly by week SDTs.
+This parameter is mandatory when using the 'MonthlyByWeek' parameter set.
 
 ```yaml
 Type: String
@@ -241,7 +243,8 @@ Accept wildcard characters: False
 ```
 
 ### -DayOfMonth
-{{ Fill DayOfMonth Description }}
+Specifies the day of the month for monthly SDTs.
+This parameter is mandatory when using the 'Monthly' parameter set.
 
 ```yaml
 Type: Int32
@@ -256,8 +259,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceGroupId
-Specifies the ID of the device group for which the scheduled downtime should be created.
-This parameter is mandatory when using the 'OneTime-DeviceGroupId', 'Daily-DeviceGroupId', 'Monthly-DeviceGroupId', 'MonthlyByWeek-DeviceGroupId', or 'Weekly-DeviceGroupId' parameter sets.
+Specifies the ID of the device group.
+This parameter is mandatory when using ID-based parameter sets.
 
 ```yaml
 Type: String
@@ -272,8 +275,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceGroupName
-Specifies the name of the device group for which the scheduled downtime should be created.
-This parameter is mandatory when using the 'OneTime-DeviceGroupName', 'Daily-DeviceGroupName', 'Monthly-DeviceGroupName', 'MonthlyByWeek-DeviceGroupName', or 'Weekly-DeviceGroupName' parameter sets.
+Specifies the name of the device group.
+This parameter is mandatory when using name-based parameter sets.
 
 ```yaml
 Type: String
@@ -337,8 +340,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.SDT object.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

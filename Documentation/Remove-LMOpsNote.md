@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -99,8 +99,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### You can pipe objects to this function.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject
-### Returns an object with the ID and a success message if the OpsNote is successfully removed.
+### Returns a PSCustomObject containing the ID of the removed OpsNote and a message indicating the success of the removal operation.
 ## NOTES
 
 ## RELATED LINKS

@@ -1,3 +1,39 @@
+<#
+.SYNOPSIS
+Retrieves Netscan groups from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMNetscanGroup function retrieves Netscan group configurations from LogicMonitor. It can retrieve all groups, a specific group by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific Netscan group to retrieve.
+
+.PARAMETER Name
+The name of the specific Netscan group to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving Netscan groups.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all Netscan groups
+Get-LMNetscanGroup
+
+.EXAMPLE
+#Retrieve a specific Netscan group by name
+Get-LMNetscanGroup -Name "Production-Scans"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.NetScanGroup objects.
+#>
 Function Get-LMNetscanGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

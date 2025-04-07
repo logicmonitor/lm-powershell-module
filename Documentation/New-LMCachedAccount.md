@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-LMCachedAccount
 
 ## SYNOPSIS
-Store a connection to a specified LM portal for use with Connect-LMAccount
+Creates a cached LogicMonitor account connection.
 
 ## SYNTAX
 
@@ -25,20 +25,26 @@ New-LMCachedAccount -AccountName <String> -BearerToken <String> [-CachedAccountN
 ```
 
 ## DESCRIPTION
-Connect to a specified LM portal which will allow you run the other LM commands associated with the Logic.Monitor PS module.
-Used in conjunction with Disconnect-LMAccount to close a session previously connected via Connect-LMAccount
+The New-LMCachedAccount function stores LogicMonitor portal credentials securely for use with Connect-LMAccount.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-New-LMCachedAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
+#Cache LMv1 credentials
+New-LMCachedAccount -AccessId "id123" -AccessKey "key456" -AccountName "company"
+```
+
+### EXAMPLE 2
+```
+#Cache Bearer token
+New-LMCachedAccount -BearerToken "token123" -AccountName "company" -CachedAccountName "prod"
 ```
 
 ## PARAMETERS
 
 ### -AccessId
-Access ID from your API credential acquired from the LM Portal
+The Access ID from your LogicMonitor API credentials.
 
 ```yaml
 Type: String
@@ -53,7 +59,7 @@ Accept wildcard characters: False
 ```
 
 ### -AccessKey
-Access Key from your API credential acquired from the LM Portal
+The Access Key from your LogicMonitor API credentials.
 
 ```yaml
 Type: String
@@ -68,7 +74,7 @@ Accept wildcard characters: False
 ```
 
 ### -AccountName
-The subdomain for your LM portal, the name before ".logicmonitor.com" (subdomain.logicmonitor.com)
+The portal subdomain (e.g., "company" for company.logicmonitor.com).
 
 ```yaml
 Type: String
@@ -83,7 +89,7 @@ Accept wildcard characters: False
 ```
 
 ### -BearerToken
-{{ Fill BearerToken Description }}
+The Bearer token for authentication (alternative to AccessId/AccessKey).
 
 ```yaml
 Type: String
@@ -98,7 +104,8 @@ Accept wildcard characters: False
 ```
 
 ### -CachedAccountName
-{{ Fill CachedAccountName Description }}
+The name to use for the cached account.
+Defaults to AccountName.
 
 ```yaml
 Type: String
@@ -113,7 +120,8 @@ Accept wildcard characters: False
 ```
 
 ### -OverwriteExisting
-{{ Fill OverwriteExisting Description }}
+Whether to overwrite an existing cached account.
+Defaults to false.
 
 ```yaml
 Type: Boolean
@@ -147,8 +155,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### None. Returns success message if account is cached successfully.
 ## NOTES
+This command creates a secure vault to store credentials if one doesn't exist.
 
 ## RELATED LINKS

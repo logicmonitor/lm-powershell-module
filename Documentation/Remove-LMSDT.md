@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Remove-LMSDT
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Removes a Scheduled Down Time (SDT) entry from LogicMonitor.
 
 ## SYNTAX
 
@@ -17,36 +17,21 @@ Remove-LMSDT -Id <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confi
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Remove-LMSDT function removes a specified SDT entry from LogicMonitor using its ID.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Remove-LMSDT -Id "12345"
+Removes the SDT entry with ID "12345".
+```
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the SDT entry to remove.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -76,6 +61,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -ProgressAction
 {{ Fill ProgressAction Description }}
 
@@ -96,10 +96,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### You can pipe objects to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a PSCustomObject containing the ID of the removed SDT entry and a success message confirming the removal.
 ## NOTES
 
 ## RELATED LINKS

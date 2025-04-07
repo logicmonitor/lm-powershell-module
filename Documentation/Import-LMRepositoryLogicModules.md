@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -18,22 +18,21 @@ Import-LMRepositoryLogicModules [-Type] <String> [-LogicModuleNames] <String[]>
 ```
 
 ## DESCRIPTION
-The Import-LMRepositoryLogicModules function imports logic modules from the LogicMonitor repository.
-It requires the user to be logged in and have valid API credentials.
+The Import-LMRepositoryLogicModules function imports specified logic modules from the LogicMonitor repository into your portal.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Import specific datasources
 Import-LMRepositoryLogicModules -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"
-Imports the logic modules with the names "DataSource1" and "DataSource2" from the LogicMonitor repository.
 ```
 
 ## PARAMETERS
 
 ### -Type
-Specifies the type of logic modules to import.
-Valid values are "datasources", "propertyrules", "eventsources", "topologysources", and "configsources".
+The type of logic modules to import.
+Valid values are "datasources", "propertyrules", "eventsources", "topologysources", "configsources".
 
 ```yaml
 Type: String
@@ -48,8 +47,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogicModuleNames
-Specifies the names of the logic modules to import.
-This parameter accepts an array of strings.
+An array of logic module names to import.
 
 ```yaml
 Type: String[]
@@ -83,8 +81,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns a success message with the names of imported modules.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

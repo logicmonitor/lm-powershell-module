@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMAPIToken
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor API token's properties.
 
 ## SYNTAX
 
@@ -25,21 +25,21 @@ Set-LMAPIToken -AdminName <String> -Id <Int32> [-Note <String>] [-Status <String
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMAPIToken function modifies the properties of an existing API token in LogicMonitor, including its note and status.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMAPIToken -AdminId 123 -Id 456 -Note "Updated token" -Status "suspended"
+Updates the API token with ID 456 owned by admin 123 with a new note and status.
+```
 
 ## PARAMETERS
 
 ### -AdminId
-{{ Fill AdminId Description }}
+Specifies the ID of the admin user who owns the token.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: Int32
@@ -48,13 +48,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -AdminName
-{{ Fill AdminName Description }}
+Specifies the name of the admin user who owns the token.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -68,23 +69,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the API token to modify.
 
 ```yaml
 Type: Int32
@@ -93,13 +79,13 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Note
-{{ Fill Note Description }}
+Specifies a new note for the API token.
 
 ```yaml
 Type: String
@@ -114,13 +100,13 @@ Accept wildcard characters: False
 ```
 
 ### -Status
-{{ Fill Status Description }}
+Specifies the new status for the API token.
+Valid values are "active" or "suspended".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: active, suspended
 
 Required: False
 Position: Named
@@ -137,6 +123,21 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -165,10 +166,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
+### You can pipe objects containing AdminId and Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.APIToken object containing the updated token information.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDashboardWidget
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves dashboard widgets from LogicMonitor.
 
 ## SYNTAX
 
@@ -48,25 +48,48 @@ Get-LMDashboardWidget [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDashboardWidget function retrieves widget information from LogicMonitor dashboards.
+It can return widgets by ID, name, or by their associated dashboard.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve a widget by ID
+Get-LMDashboardWidget -Id 123
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve widgets from a specific dashboard
+Get-LMDashboardWidget -DashboardName "Production Overview"
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+The ID of the widget to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Id
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the widget to retrieve.
+Part of a mutually exclusive parameter set.
+
+```yaml
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False
@@ -77,7 +100,8 @@ Accept wildcard characters: False
 ```
 
 ### -DashboardId
-{{ Fill DashboardId Description }}
+The ID of the dashboard to retrieve widgets from.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -92,7 +116,8 @@ Accept wildcard characters: False
 ```
 
 ### -DashboardName
-{{ Fill DashboardName Description }}
+The name of the dashboard to retrieve widgets from.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -107,7 +132,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving widgets.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
@@ -121,32 +147,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -171,10 +184,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.DashboardWidget objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

@@ -1,52 +1,50 @@
 <#
 .SYNOPSIS
-Get device info from a connected LM portal
+Retrieves device information from LogicMonitor.
 
 .DESCRIPTION
-Get device info from a connected LM portal
+The Get-LMDevice function retrieves device information from LogicMonitor based on specified parameters. It can return a single device by ID or multiple devices based on name, display name, filter, or filter wizard. It also supports delta tracking for monitoring changes.
 
 .PARAMETER Id
-The device id for a device in LM.
+The ID of the device to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER DisplayName
-The display name value for a device in LM. This value can include wildcard input such as "*.example.com"
+The display name of the device to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Name
-The name value for a device in LM. This is the fqdn/ip used when adding a device into LM. This value accepts wildcard input such as "10.10.*"
+The name of the device to retrieve. Part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-A hashtable of additional filter properties to include with request. All properties are treated as if using the equals ":" operator. When using multiple filters they are combined as AND conditions.
+A filter object to apply when retrieving devices. Part of a mutually exclusive parameter set.
 
-An example Filter to get devices with alerting enabled and where the display name contains equal.com:
-    @{displayName="*.example.com";disableAlerting=$false}
-
-.PARAMETER BatchSize
-The return size for each request, this value if not specified defaults to 1000. If a result would return 1001 and items, two requests would be made to return the full set.
+.PARAMETER FilterWizard
+Switch to use the filter wizard interface for building the filter. Part of a mutually exclusive parameter set.
 
 .PARAMETER Delta
-Switch used to return a deltaId along with the requested data to use for delta change tracking.
+Switch to return a deltaId along with the requested data for change tracking.
 
 .PARAMETER DeltaId
-The deltaId string for a delta query you want to see changes for.
+The deltaId string for retrieving changes since a previous query.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-Get all devices:
-    Get-LMDevice
+#Retrieve a device by ID
+Get-LMDevice -Id 123
 
-Get specific device:
-    Get-LMDevice -Id 1
-    Get-LMDevice -DisplayName "device.example.com"
-    Get-LMDevice -Name "10.10.10.10"
-
-Get multiple devices using wildcards:
-    Get-LMDevice -DisplayName "*.example.com"
-    Get-LMDevice -Name "10.10.*"
-
-Get device/s using a custom filter:
-    Get-LMDevice -Filter "displayName -eq 'corp-*' -and preferredCollectorId -eq '1'"
+.EXAMPLE
+#Retrieve devices with delta tracking
+Get-LMDevice -Delta
 
 .NOTES
-Consult the LM API docs for a list of allowed fields when using filter parameter as all fields are not available for use with filtering.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Device objects.
 #>
 Function Get-LMDevice {
 
@@ -64,7 +62,11 @@ Function Get-LMDevice {
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
+        [Parameter(ParameterSetName = 'FilterWizard')]
+        [Switch]$FilterWizard,
+
         [Parameter(ParameterSetName = 'Filter')]
+        [Parameter(ParameterSetName = 'FilterWizard')]
         [Parameter(ParameterSetName = 'Name')]
         [Parameter(ParameterSetName = 'DisplayName')]
         [Parameter(ParameterSetName = 'All')]
@@ -107,6 +109,13 @@ Function Get-LMDevice {
                     #List of allowed filter props
                     $PropList = @()
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+                "FilterWizard" {
+                    $PropList = @()
+                    $Filter = Build-LMFilter -PassThru
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    Write-Host $Filter
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
             }

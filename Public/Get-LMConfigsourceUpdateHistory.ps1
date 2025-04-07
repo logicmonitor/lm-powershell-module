@@ -1,37 +1,41 @@
 <#
 .SYNOPSIS
-Retrieves the update history for a LogicMonitor configuration source.
+Retrieves update history for LogicMonitor configuration sources.
 
 .DESCRIPTION
-The Get-LMConfigsourceUpdateHistory function retrieves the update history for a LogicMonitor configuration source. It can be used to get information about the updates made to a configuration source, such as the update reasons and the modules that were updated.
+The Get-LMConfigsourceUpdateHistory function retrieves the update history for specified configuration sources. It can retrieve history by configuration source ID, name, or display name.
 
 .PARAMETER Id
-The ID of the configuration source. This parameter is mandatory when using the 'Id' parameter set.
+The ID of the configuration source. This parameter is mandatory when using the Id parameter set.
 
 .PARAMETER Name
-The name of the configuration source. This parameter is used to look up the ID of the configuration source. This parameter is used when using the 'Name' parameter set.
+The name of the configuration source. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER DisplayName
-The display name of the configuration source. This parameter is used to look up the ID of the configuration source. This parameter is used when using the 'DisplayName' parameter set.
+The display name of the configuration source. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-A filter object that specifies additional filtering criteria for the update history. This parameter is optional.
+A filter object to apply when retrieving update history. This parameter is optional.
 
 .PARAMETER BatchSize
-The number of results to retrieve per request. The default value is 1000. This parameter is optional.
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-Get-LMConfigsourceUpdateHistory -Id 1234
-Retrieves the update history for the configuration source with the ID 1234.
+#Retrieve update history by ID
+Get-LMConfigsourceUpdateHistory -Id 123
 
 .EXAMPLE
-Get-LMConfigsourceUpdateHistory -Name "MyConfigSource"
-Retrieves the update history for the configuration source with the name "MyConfigSource".
+#Retrieve update history by name
+Get-LMConfigsourceUpdateHistory -Name "Cisco Config"
 
-.EXAMPLE
-Get-LMConfigsourceUpdateHistory -DisplayName "My Config Source"
-Retrieves the update history for the configuration source with the display name "My Config Source".
+.NOTES
+You must run Connect-LMAccount before running this command.
 
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.ModuleUpdateHistory objects.
 #>
 Function Get-LMConfigsourceUpdateHistory {
 

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDatasourceAssociatedDevices
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves devices associated with a LogicMonitor datasource.
 
 ## SYNTAX
 
@@ -31,25 +31,48 @@ Get-LMDatasourceAssociatedDevices [-DisplayName <String>] [-Filter <Object>] [-B
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDatasourceAssociatedDevices function retrieves all devices that are associated with a specific datasource.
+It can identify the datasource by ID, name, or display name.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve devices associated with a datasource by ID
+Get-LMDatasourceAssociatedDevices -Id 123
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve devices associated with a datasource by name
+Get-LMDatasourceAssociatedDevices -Name "CPU"
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+The ID of the datasource to retrieve associated devices for.
+This parameter is mandatory when using the Id parameter set.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Id
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the datasource to retrieve associated devices for.
+Part of a mutually exclusive parameter set.
+
+```yaml
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False
@@ -60,7 +83,8 @@ Accept wildcard characters: False
 ```
 
 ### -DisplayName
-{{ Fill DisplayName Description }}
+The display name of the datasource to retrieve associated devices for.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -75,7 +99,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving associated devices.
+This parameter is optional.
 
 ```yaml
 Type: Object
@@ -89,32 +114,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -139,10 +151,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.DatasourceDevice objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

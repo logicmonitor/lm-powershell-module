@@ -1,3 +1,57 @@
+<#
+.SYNOPSIS
+Updates a LogicMonitor datasource configuration.
+
+.DESCRIPTION
+The Set-LMDatasource function modifies an existing datasource in LogicMonitor, allowing updates to its name, display name, description, applies to settings, and other properties.
+
+.PARAMETER Id
+Specifies the ID of the datasource to modify. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+Specifies the current name of the datasource. This parameter is mandatory when using the 'Name' parameter set.
+
+.PARAMETER NewName
+Specifies the new name for the datasource.
+
+.PARAMETER DisplayName
+Specifies the new display name for the datasource.
+
+.PARAMETER Description
+Specifies the new description for the datasource.
+
+.PARAMETER Tags
+Specifies an array of tags to associate with the datasource.
+
+.PARAMETER TagsMethod
+Specifies how to handle existing tags. Valid values are "Add" or "Refresh". Default is "Refresh".
+
+.PARAMETER AppliesTo
+Specifies the new applies to expression for the datasource.
+
+.PARAMETER TechNotes
+Specifies the new technical notes for the datasource.
+
+.PARAMETER PollingIntervalInSeconds
+Specifies the polling interval in seconds.
+
+.PARAMETER Datapoints
+Specifies the datapoints configuration object for the datasource.
+
+.EXAMPLE
+Set-LMDatasource -Id 123 -NewName "UpdatedSource" -Description "New description"
+Updates the datasource with ID 123 with a new name and description.
+
+.INPUTS
+You can pipe objects containing Id properties to this function.
+
+.OUTPUTS
+Returns a LogicMonitor.Datasource object containing the updated datasource information.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMDatasource {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]

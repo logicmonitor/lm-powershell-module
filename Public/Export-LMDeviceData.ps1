@@ -1,53 +1,59 @@
 <#
 .SYNOPSIS
-Exports device data from Logic Monitor.
+Exports device monitoring data from LogicMonitor.
 
 .DESCRIPTION
-The Export-LMDeviceData function exports device data from Logic Monitor based on the specified parameters. It collects data from the specified devices, their datasources, and their instances within a specified time range. The exported data can be saved in JSON or CSV format.
+The Export-LMDeviceData function exports monitoring data from LogicMonitor devices or device groups. It supports exporting data for specific time ranges and can filter datasources. Data can be exported in CSV or JSON format.
 
 .PARAMETER DeviceId
-Specifies the ID of the device to export data for. This parameter is mutually exclusive with the DeviceDisplayName, DeviceHostName, DeviceGroupId, and DeviceGroupName parameters.
+The ID of the device to export data from. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER DeviceDisplayName
-Specifies the display name of the device to export data for. This parameter is mutually exclusive with the DeviceId, DeviceHostName, DeviceGroupId, and DeviceGroupName parameters.
+The display name of the device to export data from. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER DeviceHostName
-Specifies the host name of the device to export data for. This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceGroupId, and DeviceGroupName parameters.
+The hostname of the device to export data from. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER DeviceGroupId
-Specifies the ID of the device group to export data for. This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceHostName, and DeviceGroupName parameters.
+The ID of the device group to export data from. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER DeviceGroupName
-Specifies the name of the device group to export data for. This parameter is mutually exclusive with the DeviceId, DeviceDisplayName, DeviceHostName, and DeviceGroupId parameters.
+The name of the device group to export data from. This parameter is part of a mutually exclusive parameter set.
 
 .PARAMETER StartDate
-Specifies the start date and time for the data collection. By default, it is set to the current date and time minus 1 hour.
+The start date and time for data collection. Defaults to 1 hour ago.
 
 .PARAMETER EndDate
-Specifies the end date and time for the data collection. By default, it is set to the current date and time.
+The end date and time for data collection. Defaults to current time.
 
 .PARAMETER DatasourceIncludeFilter
-Specifies the filter for including specific datasources. By default, it includes all datasources.
+A filter pattern to include specific datasources. Defaults to "*" (all datasources).
 
 .PARAMETER DatasourceExcludeFilter
-Specifies the filter for excluding specific datasources. By default, no datasources are excluded.
+A filter pattern to exclude specific datasources. Defaults to null (no exclusions).
 
 .PARAMETER ExportFormat
-Specifies the format for exporting the data. Valid values are "csv", "json", or "none". By default, it is set to "none".
+The format for the exported data. Valid values are "csv", "json", or "none". Defaults to "none".
 
 .PARAMETER ExportPath
-Specifies the path where the exported data will be saved. By default, it is set to the current location.
+The path where exported files will be saved. Defaults to current directory.
 
 .EXAMPLE
-Export-LMDeviceData -DeviceId 12345 -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) -ExportFormat json -ExportPath "C:\LMData"
-
-Exports device data for the device with ID 12345, collecting data for the last 7 days and saving it in JSON format at the specified path.
+#Export device data to JSON
+Export-LMDeviceData -DeviceId 12345 -StartDate (Get-Date).AddDays(-1) -ExportFormat json
 
 .EXAMPLE
-Export-LMDeviceData -DeviceGroupName "Production Servers" -StartDate (Get-Date).AddHours(-12) -ExportFormat csv
+#Export device group data to CSV with datasource filtering
+Export-LMDeviceData -DeviceGroupName "Production" -DatasourceIncludeFilter "CPU*" -ExportFormat csv
 
-Exports device data for all devices in the "Production Servers" group, collecting data for the last 12 hours and saving it in CSV format at the current location.
+.NOTES
+You must run Connect-LMAccount before running this command.
 
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns device data objects if ExportFormat is "none", otherwise creates export files.
 #>
 Function Export-LMDeviceData {
 

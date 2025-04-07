@@ -1,3 +1,45 @@
+<#
+.SYNOPSIS
+Retrieves overview graphs for a LogicMonitor datasource.
+
+.DESCRIPTION
+The Get-LMDatasourceOverviewGraph function retrieves overview graph information from LogicMonitor datasources. It can retrieve graphs by ID, name, or by their associated datasource using either datasource ID or name.
+
+.PARAMETER Id
+The ID of the overview graph to retrieve. This parameter is mandatory when using the Id-dsId or Id-dsName parameter sets.
+
+.PARAMETER DataSourceName
+The name of the datasource to retrieve overview graphs from. This parameter is mandatory for dsName, Id-dsName, Name-dsName, and Filter-dsName parameter sets.
+
+.PARAMETER DataSourceId
+The ID of the datasource to retrieve overview graphs from. This parameter is mandatory for dsId, Id-dsId, Name-dsId, and Filter-dsId parameter sets.
+
+.PARAMETER Name
+The name of the overview graph to retrieve. This parameter is mandatory for Name-dsId and Name-dsName parameter sets.
+
+.PARAMETER Filter
+A filter object to apply when retrieving overview graphs. This parameter is mandatory for Filter-dsId and Filter-dsName parameter sets.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve an overview graph by ID from a specific datasource
+Get-LMDatasourceOverviewGraph -Id 123 -DataSourceId 456
+
+.EXAMPLE
+#Retrieve overview graphs by name from a datasource
+Get-LMDatasourceOverviewGraph -Name "System Overview" -DataSourceName "CPU"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DatasourceGraph objects.
+#>
 Function Get-LMDatasourceOverviewGraph {
 
     [CmdletBinding()]

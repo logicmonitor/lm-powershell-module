@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,42 +8,34 @@ schema: 2.0.0
 # Get-LMAccountStatus
 
 ## SYNOPSIS
-Retrieves the status of the LogicMonitor account.
+Retrieves the current LogicMonitor account connection status.
 
 ## SYNTAX
 
 ```
-Get-LMAccountStatus [<CommonParameters>]
+Get-LMAccountStatus
 ```
 
 ## DESCRIPTION
-The Get-LMAccountStatus function is used to retrieve the status of the LogicMonitor account.
-It checks if the user is currently logged into any LogicMonitor portals and returns the account status.
+The Get-LMAccountStatus function retrieves the current connection status of the LogicMonitor account, including portal information, authentication validity, logging status, and authentication type.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Get the current account status
 Get-LMAccountStatus
 ```
 
-This example demonstrates how to use the Get-LMAccountStatus function to retrieve the status of the LogicMonitor account.
-
 ## PARAMETERS
-
-### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### [System.Management.Automation.PSCustomObject]
-### The function returns a custom object with the following properties:
-### - Portal: The LogicMonitor portal URL.
-### - Valid: Indicates if the user is currently logged into a LogicMonitor portal.
-### - Logging: Indicates if logging is enabled for the LogicMonitor account.
-### - Type: The type of authentication used for the LogicMonitor account.
+### Returns a PSCustomObject with the following properties: Portal, Valid, Logging, and Type
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

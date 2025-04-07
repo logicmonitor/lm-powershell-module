@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMReport
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves reports from LogicMonitor.
 
 ## SYNTAX
 
@@ -32,26 +32,52 @@ Get-LMReport [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPrefe
 Get-LMReport [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
+### FilterWizard
+```
+Get-LMReport [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMReport function retrieves report configurations from LogicMonitor.
+It can retrieve all reports, a specific report by ID or name, or filter the results using either a filter object or the filter wizard.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve all reports
+Get-LMReport
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve a specific report by name
+Get-LMReport -Name "Monthly Usage Report"
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+The ID of the specific report to retrieve.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Id
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the specific report to retrieve.
+
+```yaml
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False
@@ -62,7 +88,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving reports.
 
 ```yaml
 Type: Object
@@ -76,32 +102,34 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -FilterWizard
+Switch to enable the filter wizard for building a custom filter interactively.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
+Type: SwitchParameter
+Parameter Sets: FilterWizard
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-{{ Fill Name Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
-Type: String
-Parameter Sets: Name
+Type: Int32
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -126,10 +154,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.Report objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

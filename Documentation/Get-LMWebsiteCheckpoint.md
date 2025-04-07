@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMWebsiteCheckpoint
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves website checkpoints from LogicMonitor.
 
 ## SYNTAX
 
@@ -24,36 +24,26 @@ Get-LMWebsiteCheckpoint [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMWebsiteCheckpoint function retrieves checkpoint configurations used for website monitoring in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve all website checkpoints
+Get-LMWebsiteCheckpoint
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve checkpoints using a filter
+Get-LMWebsiteCheckpoint -Filter $filterObject
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving checkpoints.
 
 ```yaml
 Type: Object
@@ -63,6 +53,23 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -87,10 +94,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns website checkpoint objects.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

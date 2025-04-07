@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-LMAzureSubscriptionDiscovery
 
 ## SYNOPSIS
-Invokes the Azure subscription discovery process to return subscriptions for a specified client Id.
+Discovers Azure subscriptions for a given tenant.
 
 ## SYNTAX
 
@@ -18,19 +18,20 @@ Invoke-LMAzureSubscriptionDiscovery [-ClientId] <String> [-SecretKey] <String> [
 ```
 
 ## DESCRIPTION
-The Invoke-LMAzureSubscriptionDiscovery function is used to discover Azure subscriptions by making API requests to the LogicMonitor platform.
+The Invoke-LMAzureSubscriptionDiscovery function discovers available Azure subscriptions for a specified Azure tenant using provided credentials.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-LMAzureSubscriptionDiscovery -ClientId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -SecretKey "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -TenantId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+#Discover Azure subscriptions
+Invoke-LMAzureSubscriptionDiscovery -ClientId "client-id" -SecretKey "secret-key" -TenantId "tenant-id"
 ```
 
 ## PARAMETERS
 
 ### -ClientId
-The client ID of the Azure Active Directory application.
+The Azure Active Directory application client ID.
 
 ```yaml
 Type: String
@@ -45,7 +46,7 @@ Accept wildcard characters: False
 ```
 
 ### -SecretKey
-The secret key of the Azure Active Directory application.
+The Azure Active Directory application secret key.
 
 ```yaml
 Type: String
@@ -60,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -TenantId
-The tenant ID of the Azure Active Directory application.
+The Azure Active Directory tenant ID.
 
 ```yaml
 Type: String
@@ -75,8 +76,8 @@ Accept wildcard characters: False
 ```
 
 ### -IsChinaAccount
-Specifies whether the Azure account is a China account.
-Default value is $false.
+Indicates if this is an Azure China account.
+Defaults to $false.
 
 ```yaml
 Type: String
@@ -110,8 +111,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns a list of discovered Azure subscriptions.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

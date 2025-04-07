@@ -29,7 +29,13 @@ New-LMOpsNote -Note "Server maintenance scheduled for tomorrow" -NoteDate (Get-D
 This example creates a new OpsNote with the content "Server maintenance scheduled for tomorrow" and a note date set to tomorrow. It also associates the tags "maintenance" and "server" with the OpsNote.
 
 .NOTES
-LogicMonitor API credentials must be set before using this function. Use the Connect-LMAccount function to log in and set the credentials.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.OpsNote object.
 #>
 Function New-LMOpsNote {
 

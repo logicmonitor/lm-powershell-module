@@ -1,3 +1,43 @@
+<#
+.SYNOPSIS
+Retrieves devices associated with a LogicMonitor datasource.
+
+.DESCRIPTION
+The Get-LMDatasourceAssociatedDevices function retrieves all devices that are associated with a specific datasource. It can identify the datasource by ID, name, or display name.
+
+.PARAMETER Id
+The ID of the datasource to retrieve associated devices for. This parameter is mandatory when using the Id parameter set.
+
+.PARAMETER Name
+The name of the datasource to retrieve associated devices for. Part of a mutually exclusive parameter set.
+
+.PARAMETER DisplayName
+The display name of the datasource to retrieve associated devices for. Part of a mutually exclusive parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving associated devices. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve devices associated with a datasource by ID
+Get-LMDatasourceAssociatedDevices -Id 123
+
+.EXAMPLE
+#Retrieve devices associated with a datasource by name
+Get-LMDatasourceAssociatedDevices -Name "CPU"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.DatasourceDevice objects.
+#>
+
 Function Get-LMDatasourceAssociatedDevices {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

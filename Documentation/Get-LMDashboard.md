@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDashboard
 
 ## SYNOPSIS
-Retrieves LogicMonitor dashboards based on specified parameters.
+Retrieves dashboards from LogicMonitor.
 
 ## SYNTAX
 
@@ -51,53 +51,34 @@ Get-LMDashboard [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <Action
  [<CommonParameters>]
 ```
 
+### FilterWizard
+```
+Get-LMDashboard [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
-The Get-LMDashboard function retrieves LogicMonitor dashboards based on the specified parameters.
-It supports filtering by ID, name, group ID, group name, subgroups, and custom filters.
-The function uses the LogicMonitor REST API to make the requests.
+The Get-LMDashboard function retrieves dashboard information from LogicMonitor based on specified parameters.
+It supports filtering by ID, name, group information, and custom filters.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Retrieve a dashboard by ID
 Get-LMDashboard -Id 123
-Retrieves the dashboard with the specified ID.
 ```
 
 ### EXAMPLE 2
 ```
-Get-LMDashboard -Name "My Dashboard"
-Retrieves the dashboard with the specified name.
-```
-
-### EXAMPLE 3
-```
-Get-LMDashboard -GroupId 456
-Retrieves the dashboards that belong to the group with the specified ID.
-```
-
-### EXAMPLE 4
-```
-Get-LMDashboard -GroupName "My Group"
-Retrieves the dashboards that belong to the group with the specified name.
-```
-
-### EXAMPLE 5
-```
-Get-LMDashboard -GroupPathSearchString "Subgroup"
-Retrieves the dashboards that belong to subgroups matching the specified search string.
-```
-
-### EXAMPLE 6
-```
-Get-LMDashboard -Filter @{Property1 = "Value1"; Property2 = "Value2"}
-Retrieves the dashboards that match the specified custom filter.
+#Retrieve dashboards by group name
+Get-LMDashboard -GroupName "Production"
 ```
 
 ## PARAMETERS
 
 ### -Id
-Specifies the ID of the dashboard to retrieve.
+The ID of the dashboard to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Int32
@@ -112,7 +93,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the dashboard to retrieve.
+The name of the dashboard to retrieve.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -127,7 +109,8 @@ Accept wildcard characters: False
 ```
 
 ### -GroupId
-Specifies the ID of the group to filter the dashboards by.
+The ID of the group to filter dashboards by.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -142,7 +125,8 @@ Accept wildcard characters: False
 ```
 
 ### -GroupName
-Specifies the name of the group to filter the dashboards by.
+The name of the group to filter dashboards by.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -157,7 +141,8 @@ Accept wildcard characters: False
 ```
 
 ### -GroupPathSearchString
-Specifies a search string to filter the dashboards by group path.
+A search string to filter dashboards by group path.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -172,8 +157,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-Specifies a custom filter to apply to the dashboards.
-The filter should be an object that contains the filter properties.
+A filter object to apply when retrieving dashboards.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
@@ -187,9 +172,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -FilterWizard
+Switch to use the filter wizard interface for building the filter.
+Part of a mutually exclusive parameter set.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: FilterWizard
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -BatchSize
-Specifies the number of dashboards to retrieve in each request.
-The default value is 1000.
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -223,10 +225,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns LogicMonitor.Dashboard objects.
 ## NOTES
-This function requires a valid LogicMonitor API authentication.
-Use Connect-LMAccount to authenticate before running this function.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

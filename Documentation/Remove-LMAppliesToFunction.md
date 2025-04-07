@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -63,7 +63,6 @@ Accept wildcard characters: False
 ### -Id
 Specifies the ID of the AppliesTo function to be removed.
 This parameter is mandatory when using the 'Id' parameter set.
-The ID can be obtained using the Get-LMAppliesToFunction cmdlet.
 
 ```yaml
 Type: Int32
@@ -128,12 +127,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe input to this function.
+### None. You cannot pipe objects to this function.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject. The function returns an object with the following properties:
-### - Id: The ID of the removed AppliesTo function.
-### - Message: A message indicating the success of the removal operation.
+### Returns a PSCustomObject containing the ID of the removed AppliesTo function and a success message confirming the removal.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
+Make sure to log in using Connect-LMAccount before running this command.
 
 ## RELATED LINKS

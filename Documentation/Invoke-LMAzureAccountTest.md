@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-LMAzureAccountTest
 
 ## SYNOPSIS
-Invokes a test on an Azure account.
+Tests Azure account connectivity in LogicMonitor.
 
 ## SYNTAX
 
@@ -19,24 +19,21 @@ Invoke-LMAzureAccountTest [-ClientId] <String> [-SecretKey] <String> [[-CheckedS
 ```
 
 ## DESCRIPTION
-The Invoke-LMAzureAccountTest function is used to invoke a test on an Azure account.
-It checks if the user is logged in and has valid API credentials.
-If the user is logged in, it builds the necessary headers and URI, and then sends a POST request to the specified endpoint.
-The function returns the response from the API.
+The Invoke-LMAzureAccountTest function tests the connection and permissions for an Azure account in LogicMonitor.
+It verifies access to specified Azure services.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-LMAzureAccountTest -ClientId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -SecretKey "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -SubscriptionIds "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+#Test Azure account connectivity
+Invoke-LMAzureAccountTest -ClientId "client-id" -SecretKey "secret-key" -TenantId "tenant-id" -SubscriptionIds "sub-id"
 ```
-
-This example invokes a test on an Azure account using the specified client ID, secret key, and subscription IDs.
 
 ## PARAMETERS
 
 ### -ClientId
-The client ID of the Azure account.
+The Azure Active Directory application client ID.
 
 ```yaml
 Type: String
@@ -51,7 +48,7 @@ Accept wildcard characters: False
 ```
 
 ### -SecretKey
-The secret key of the Azure account.
+The Azure Active Directory application secret key.
 
 ```yaml
 Type: String
@@ -66,8 +63,8 @@ Accept wildcard characters: False
 ```
 
 ### -CheckedServices
-The list of services to be checked.
-Default value is a list of commonly used Azure services.
+The list of Azure services to test.
+Defaults to all supported services.
 
 ```yaml
 Type: String
@@ -82,7 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -SubscriptionIds
-The subscription IDs associated with the Azure account.
+The Azure subscription IDs to test.
 
 ```yaml
 Type: String
@@ -97,8 +94,8 @@ Accept wildcard characters: False
 ```
 
 ### -GroupId
-The group ID.
-Default value is -1.
+The LogicMonitor group ID to associate with the Azure account.
+Defaults to -1.
 
 ```yaml
 Type: String
@@ -113,7 +110,7 @@ Accept wildcard characters: False
 ```
 
 ### -TenantId
-The tenant ID of the Azure account.
+The Azure Active Directory tenant ID.
 
 ```yaml
 Type: String
@@ -128,8 +125,8 @@ Accept wildcard characters: False
 ```
 
 ### -IsChinaAccount
-Specifies whether the Azure account is a China account.
-Default value is $false.
+Indicates if this is an Azure China account.
+Defaults to $false.
 
 ```yaml
 Type: String
@@ -163,8 +160,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns test results for each Azure service.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

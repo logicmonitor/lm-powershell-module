@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # New-LMAccessGroupMapping
 
 ## SYNOPSIS
-Creates a new LogicMonitor access group mapping between an access group and an logicmodule.
+Creates a new LogicMonitor access group mapping.
 
 ## SYNTAX
 
@@ -18,21 +18,20 @@ New-LMAccessGroupMapping [-AccessGroupIds] <String[]> [-LogicModuleType] <String
 ```
 
 ## DESCRIPTION
-The New-LMAccessGroupMapping function is used to create a new access group mapping in LogicMonitor.
+The New-LMAccessGroupMapping function creates a mapping between an access group and a logic module in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Create a new access group mapping
 New-LMAccessGroupMapping -AccessGroupIds "12345" -LogicModuleType "DATASOURCE" -LogicModuleId "67890"
 ```
-
-This example creates a new access group mapping for the access group with ID "12345" and the logic module with ID "67890".
 
 ## PARAMETERS
 
 ### -AccessGroupIds
-The IDs of the access group.
+The IDs of the access groups to map.
 This parameter is mandatory.
 
 ```yaml
@@ -49,7 +48,7 @@ Accept wildcard characters: False
 
 ### -LogicModuleType
 The type of logic module.
-This parameter is mandatory.
+Valid values are "DATASOURCE", "EVENTSOURCE", "BATCHJOB", "JOBMONITOR", "LOGSOURCE", "TOPOLOGYSOURCE", "PROPERTYSOURCE", "APPLIESTO_FUNCTION", "SNMP_SYSOID_MAP".
 
 ```yaml
 Type: String
@@ -64,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -LogicModuleId
-The ID of the logic module.
+The ID of the logic module to map.
 This parameter is mandatory.
 
 ```yaml
@@ -99,10 +98,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns mapping details object.
 ## NOTES
-For this function to work, you need to be logged in and have valid API credentials.
-Use the Connect-LMAccount function to log in before running any commands.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

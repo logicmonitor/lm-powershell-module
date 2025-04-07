@@ -17,8 +17,13 @@ New-LMReportGroup -Name "MyReportGroup" -Description "This is a sample report gr
 This example creates a new report group with the name "MyReportGroup" and the description "This is a sample report group".
 
 .NOTES
-This function requires a valid API credential and authentication. Make sure you are logged in before running any commands using Connect-LMAccount.
+You must run Connect-LMAccount before running this command.
 
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.ReportGroup object.
 #>
 Function New-LMReportGroup {
 

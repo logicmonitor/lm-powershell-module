@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves topology sources from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMTopologySource function retrieves topology source configurations from LogicMonitor. It can retrieve all sources, a specific source by ID or name, or filter the results.
+
+.PARAMETER Id
+The ID of the specific topology source to retrieve.
+
+.PARAMETER Name
+The name of the specific topology source to retrieve.
+
+.PARAMETER Filter
+A filter object to apply when retrieving topology sources.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all topology sources
+Get-LMTopologySource
+
+.EXAMPLE
+#Retrieve a specific topology source by name
+Get-LMTopologySource -Name "Network-Discovery"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Topologysource objects.
+#>
+
 Function Get-LMTopologySource {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]

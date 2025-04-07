@@ -23,9 +23,7 @@ Removes the dashboard widget with the specified name.
 You can pipe objects to this function.
 
 .OUTPUTS
-A PSCustomObject representing the result of the removal operation. The object has the following properties:
-- Id: The ID of the removed widget.
-- Message: A message indicating the success of the removal operation.
+Returns a PSCustomObject containing the ID of the removed widget and a message indicating the success of the removal operation.
 
 .NOTES
 This function requires a valid API authentication to Logic Monitor. Make sure to log in using Connect-LMAccount before running this command.

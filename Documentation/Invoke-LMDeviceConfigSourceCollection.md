@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Invoke-LMDeviceConfigSourceCollection
 
 ## SYNOPSIS
-Invokes a configuration collection task for a LogicMonitor device.
+Invokes configuration collection for a device datasource.
 
 ## SYNTAX
 
@@ -49,28 +49,27 @@ Invoke-LMDeviceConfigSourceCollection -Name <String> -HdsId <String> -InstanceId
 ```
 
 ## DESCRIPTION
-The Invoke-LMDeviceConfigSourceCollection function is used to schedule a configuration collection task for a LogicMonitor device.
-It requires the user to be logged in and have valid API credentials.
+The Invoke-LMDeviceConfigSourceCollection function triggers configuration collection for a specified device datasource instance.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Invoke-LMDeviceConfigSourceCollection -Name "MyDevice" -DatasourceName "MyDatasource" -InstanceId "12345"
-Schedules a configuration collection task for the device with the name "MyDevice", the datasource with the name "MyDatasource", and the instance with the ID "12345".
+#Collect config using datasource name
+Invoke-LMDeviceConfigSourceCollection -Name "Device1" -DatasourceName "Config" -InstanceId "123"
 ```
 
 ### EXAMPLE 2
 ```
-Invoke-LMDeviceConfigSourceCollection -Id 123 -DatasourceId 456 -InstanceId "12345"
-Schedules a configuration collection task for the device with the ID 123, the datasource with the ID 456, and the instance with the ID "12345".
+#Collect config using datasource ID
+Invoke-LMDeviceConfigSourceCollection -Id 456 -DatasourceId 789 -InstanceId "123"
 ```
 
 ## PARAMETERS
 
 ### -DatasourceName
-Specifies the name of the datasource.
-This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+The name of the datasource.
+Required for dsName parameter sets.
 
 ```yaml
 Type: String
@@ -85,8 +84,8 @@ Accept wildcard characters: False
 ```
 
 ### -DatasourceId
-Specifies the ID of the datasource.
-This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+The ID of the datasource.
+Required for dsId parameter sets.
 
 ```yaml
 Type: Int32
@@ -101,8 +100,8 @@ Accept wildcard characters: False
 ```
 
 ### -Id
-Specifies the ID of the device.
-This parameter is mandatory when using the 'Id-dsId', 'Id-dsName', or 'Id-HdsId' parameter sets.
+The ID of the device.
+Required for Id parameter sets.
 
 ```yaml
 Type: Int32
@@ -117,8 +116,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the device.
-This parameter is mandatory when using the 'Name-dsName', 'Name-dsId', or 'Name-HdsId' parameter sets.
+The name of the device.
+Required for Name parameter sets.
 
 ```yaml
 Type: String
@@ -133,8 +132,8 @@ Accept wildcard characters: False
 ```
 
 ### -HdsId
-Specifies the ID of the host datasource.
-This parameter is mandatory when using the 'Id-HdsId' or 'Name-HdsId' parameter sets.
+The host datasource ID.
+Required for HdsId parameter sets.
 
 ```yaml
 Type: String
@@ -149,8 +148,7 @@ Accept wildcard characters: False
 ```
 
 ### -InstanceId
-Specifies the ID of the device instance.
-This parameter is mandatory.
+The ID of the datasource instance.
 
 ```yaml
 Type: String
@@ -184,9 +182,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns a success message if the collection is scheduled successfully.
 ## NOTES
-This function requires the LogicMonitor PowerShell module to be installed.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

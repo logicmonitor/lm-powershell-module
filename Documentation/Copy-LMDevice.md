@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Copy-LMDevice
 
 ## SYNOPSIS
-Copies a LogicMonitor device.
+Creates a copy of a LogicMonitor device.
 
 ## SYNTAX
 
@@ -18,21 +18,28 @@ Copy-LMDevice [-Name] <String> [[-DisplayName] <String>] [[-Description] <String
 ```
 
 ## DESCRIPTION
-The Copy-LMDevice function is used to create a copy of a LogicMonitor device.
-It takes the name, display name, description, and device object as parameters and creates a new device with the specified properties.
+The Copy-LMDevice function creates a new device based on an existing device's configuration.
+It allows you to specify a new name, display name, and description while maintaining other settings from the source device.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
+#Copy a device with basic settings
 Copy-LMDevice -Name "NewDevice" -DeviceObject $deviceObject
-Creates a copy of the device specified by the $deviceObject variable with the name "NewDevice".
+```
+
+### EXAMPLE 2
+```
+#Copy a device with custom display name and description
+Copy-LMDevice -Name "NewDevice" -DisplayName "New Display Name" -Description "New device description" -DeviceObject $deviceObject
 ```
 
 ## PARAMETERS
 
 ### -Name
-The name of the new device.
+The name for the new device.
+This parameter is mandatory.
 
 ```yaml
 Type: String
@@ -47,8 +54,8 @@ Accept wildcard characters: False
 ```
 
 ### -DisplayName
-The display name of the new device.
-If not provided, the name parameter will be used as the display name.
+The display name for the new device.
+If not specified, defaults to the Name parameter value.
 
 ```yaml
 Type: String
@@ -63,7 +70,7 @@ Accept wildcard characters: False
 ```
 
 ### -Description
-The description of the new device.
+An optional description for the new device.
 
 ```yaml
 Type: String
@@ -78,7 +85,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceObject
-The device object of the reference device that will be copied.
+The source device object to copy settings from.
+This parameter is mandatory.
 
 ```yaml
 Type: Object
@@ -112,9 +120,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### Returns the newly created device object.
 ## NOTES
-Any custom properties from the reference device that are masked will need to be updated on the cloned resource, as those values are not available to the LogicMonitor API.
+Masked custom properties from the source device will need to be manually updated on the new device as they are not available via the API.
 
 ## RELATED LINKS

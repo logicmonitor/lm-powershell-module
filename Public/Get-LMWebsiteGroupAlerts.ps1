@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves alerts for a website group from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMWebsiteGroupAlerts function retrieves alert information for a specified website group in LogicMonitor. The group can be identified by either ID or name.
+
+.PARAMETER Id
+The ID of the website group to retrieve alerts from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the website group to retrieve alerts from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving alerts.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve alerts by group ID
+Get-LMWebsiteGroupAlerts -Id 123
+
+.EXAMPLE
+#Retrieve alerts for a specific group
+Get-LMWebsiteGroupAlerts -Name "Production-Websites"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns website group alert objects.
+#>
+
 Function Get-LMWebsiteGroupAlerts {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

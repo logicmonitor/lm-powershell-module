@@ -23,7 +23,7 @@ Removes the report group with the name "MyReportGroup".
 You can pipe input to this function.
 
 .OUTPUTS
-System.Management.Automation.PSCustomObject. Returns an object with the removed report group Id and a success message.
+Returns a PSCustomObject containing the ID of the removed report group and a success message confirming the removal.
 #>
 Function Remove-LMReportGroup {
 

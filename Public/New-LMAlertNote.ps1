@@ -1,26 +1,28 @@
 <#
 .SYNOPSIS
-Creates a new note for one or more LogicMonitor alerts.
+Creates a new note for LogicMonitor alerts.
 
 .DESCRIPTION
-The New-LMAlertNote function creates a new note for one or more LogicMonitor alerts. It requires the alert IDs and the note content as mandatory parameters.
+The New-LMAlertNote function adds a note to one or more alerts in LogicMonitor.
 
 .PARAMETER Ids
-Specifies the alert IDs for which the note needs to be created. This parameter accepts an array of strings.
+The alert IDs to add the note to. This parameter is mandatory.
 
 .PARAMETER Note
-Specifies the content of the note to be created. This parameter accepts a string.
+The content of the note to add. This parameter is mandatory.
 
 .EXAMPLE
-New-LMAlertNote -Ids @("12345","67890") -Note "This is a sample note."
+#Add a note to multiple alerts
+New-LMAlertNote -Ids @("12345","67890") -Note "This is a sample note"
 
-This example creates a new note with the content "This is a sample note" for the alerts with IDs "12345" and "67890".
+.NOTES
+You must run Connect-LMAccount before running this command.
 
 .INPUTS
-None. You cannot pipe objects to this function.
+None. You cannot pipe objects to this command.
 
 .OUTPUTS
-System.String. Returns a success message if the note is created successfully.
+Returns a success message if the note is created successfully.
 #>
 Function New-LMAlertNote {
 

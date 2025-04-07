@@ -1,3 +1,40 @@
+<#
+.SYNOPSIS
+Retrieves historical Scheduled Down Time (SDT) entries for a website group from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMWebsiteGroupSDTHistory function retrieves historical SDT entries for a specified website group in LogicMonitor. The group can be identified by either ID or name.
+
+.PARAMETER Id
+The ID of the website group to retrieve SDT history from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the website group to retrieve SDT history from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving SDT history.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve SDT history by group ID
+Get-LMWebsiteGroupSDTHistory -Id 123
+
+.EXAMPLE
+#Retrieve SDT history for a specific group
+Get-LMWebsiteGroupSDTHistory -Name "Production-Websites"
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns historical website group SDT objects.
+#>
+
 Function Get-LMWebsiteGroupSDTHistory {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

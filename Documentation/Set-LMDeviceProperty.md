@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMDeviceProperty
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a property value for a LogicMonitor device.
 
 ## SYNTAX
 
@@ -25,21 +25,21 @@ Set-LMDeviceProperty -Name <String> -PropertyName <String> -PropertyValue <Strin
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMDeviceProperty function modifies the value of a specific property for a device in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMDeviceProperty -Id 123 -PropertyName "Location" -PropertyValue "New York"
+Updates the "Location" property to "New York" for the device with ID 123.
+```
 
 ## PARAMETERS
 
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the device.
+This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
 Type: Int32
@@ -48,13 +48,14 @@ Aliases:
 
 Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the name of the device.
+This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
 Type: String
@@ -69,7 +70,7 @@ Accept wildcard characters: False
 ```
 
 ### -PropertyName
-{{ Fill PropertyName Description }}
+Specifies the name of the property to update.
 
 ```yaml
 Type: String
@@ -84,7 +85,7 @@ Accept wildcard characters: False
 ```
 
 ### -PropertyValue
-{{ Fill PropertyValue Description }}
+Specifies the new value for the property.
 
 ```yaml
 Type: String
@@ -118,10 +119,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32
+### You can pipe objects containing Id properties to this function.
 ## OUTPUTS
 
-### System.Object
+### Returns the response from the API indicating the success of the property update.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

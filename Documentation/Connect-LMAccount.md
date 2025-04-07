@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -47,17 +47,20 @@ Used in conjunction with Disconnect-LMAccount to close a session previously conn
 
 ### EXAMPLE 1
 ```
+#Connecting to an Account using an Access ID and Access Key
 Connect-LMAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
 ```
 
 ### EXAMPLE 2
 ```
+#Connecting to an Account using a Bearer Token
 Connect-LMAccount -BearerToken xxxxxx -AccountName subdomain
 ```
 
 ### EXAMPLE 3
 ```
-Connect-LMAccount -UseCachedCredential
+#Connecting to an Account using a Cached Credential
+Connect-LMAccount -UseCachedCredential -CachedAccountName "CachedAccountName"
 ```
 
 ## PARAMETERS
@@ -255,12 +258,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
+### None. This command does not return any output.
 ## NOTES
 You must run this command before you will be able to execute other commands included with the Logic.Monitor module.
 
 ## RELATED LINKS
-
-[Module repo: https://github.com/logicmonitor/lm-powershell-module]()
-
-[PSGallery: https://www.powershellgallery.com/packages/Logic.Monitor]()
-

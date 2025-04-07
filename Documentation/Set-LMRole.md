@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMRole
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates a LogicMonitor role configuration.
 
 ## SYNTAX
 
@@ -56,24 +56,159 @@ Set-LMRole -Name <String> [-NewName <String>] [-CustomHelpLabel <String>] [-Cust
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMRole function modifies an existing role in LogicMonitor, including its permissions and privileges.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+Set-LMRole -Id 123 -NewName "Updated Role" -Description "New description" -DashboardsPermission "view"
+Updates the role with new name, description, and dashboard permissions.
+```
 
 ## PARAMETERS
 
-### -AllowWidgetSharing
-{{ Fill AllowWidgetSharing Description }}
+### -Id
+Specifies the ID of the role to modify.
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Id-Custom
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -Name
+Specifies the current name of the role.
+
+```yaml
+Type: String
+Parameter Sets: Name-Default, Name-Custom
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -NewName
+Specifies the new name for the role.
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomHelpLabel
+Specifies the custom help label for the role.
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomHelpURL
+Specifies the custom help URL for the role.
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Description
+Specifies the description for the role.
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RequireEULA
+Indicates whether to require EULA acceptance.
 
 ```yaml
 Type: SwitchParameter
+Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TwoFARequired
+Indicates whether to require two-factor authentication.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RoleGroupId
+Specifies the role group ID.
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DashboardsPermission
+Specifies dashboard permissions.
+Valid values: "view", "manage", "none".
+
+```yaml
+Type: String
 Parameter Sets: Id-Default, Name-Default
 Aliases:
 
@@ -84,11 +219,12 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -AllowedToManageResourceDashboards
-{{ Fill AllowedToManageResourceDashboards Description }}
+### -ResourcePermission
+Specifies resource permissions.
+Valid values: "view", "manage", "none".
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: Id-Default, Name-Default
 Aliases:
 
@@ -99,11 +235,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -AllowedToViewMapsTab
-{{ Fill AllowedToViewMapsTab Description }}
+### -LMXToolBoxPermission
+{{ Fill LMXToolBoxPermission Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: Id-Default, Name-Default
 Aliases:
 
@@ -114,11 +250,87 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ConfigTabRequiresManagePermission
-{{ Fill ConfigTabRequiresManagePermission Description }}
+### -LMXPermission
+{{ Fill LMXPermission Description }}
 
 ```yaml
-Type: SwitchParameter
+Type: String
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LogsPermission
+{{ Fill LogsPermission Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WebsitesPermission
+{{ Fill WebsitesPermission Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SavedMapsPermission
+{{ Fill SavedMapsPermission Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ReportsPermission
+{{ Fill ReportsPermission Description }}
+
+```yaml
+Type: String
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SettingsPermission
+Specifies settings permissions.
+Valid values: "view", "manage", "none", "manage-collectors", "view-collectors".
+
+```yaml
+Type: String
 Parameter Sets: Id-Default, Name-Default
 Aliases:
 
@@ -139,89 +351,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CustomHelpLabel
-{{ Fill CustomHelpLabel Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CustomHelpURL
-{{ Fill CustomHelpURL Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -CustomPrivilegesObject
-{{ Fill CustomPrivilegesObject Description }}
-
-```yaml
-Type: PSObject
-Parameter Sets: Id-Custom, Name-Custom
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DashboardsPermission
-{{ Fill DashboardsPermission Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Name-Default
-Aliases:
-Accepted values: view, manage, none
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-{{ Fill Description Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableRemoteSessionForResources
-{{ Fill EnableRemoteSessionForResources Description }}
+### -AllowWidgetSharing
+{{ Fill AllowWidgetSharing Description }}
 
 ```yaml
 Type: SwitchParameter
@@ -230,215 +366,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Id-Custom
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -LMXPermission
-{{ Fill LMXPermission Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Name-Default
-Aliases:
-Accepted values: view, install, none
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -LMXToolBoxPermission
-{{ Fill LMXToolBoxPermission Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Name-Default
-Aliases:
-Accepted values: view, manage, commit, publish, none
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -LogsPermission
-{{ Fill LogsPermission Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Name-Default
-Aliases:
-Accepted values: view, manage, none
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name-Default, Name-Custom
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NewName
-{{ Fill NewName Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ReportsPermission
-{{ Fill ReportsPermission Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Name-Default
-Aliases:
-Accepted values: view, manage, none
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RequireEULA
-{{ Fill RequireEULA Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResourcePermission
-{{ Fill ResourcePermission Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Name-Default
-Aliases:
-Accepted values: view, manage, none
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RoleGroupId
-{{ Fill RoleGroupId Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SavedMapsPermission
-{{ Fill SavedMapsPermission Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Name-Default
-Aliases:
-Accepted values: view, manage, none
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SettingsPermission
-{{ Fill SettingsPermission Description }}
-
-```yaml
-Type: String
-Parameter Sets: Id-Default, Name-Default
-Aliases:
-Accepted values: view, manage, none, manage-collectors, view-collectors
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TwoFARequired
-{{ Fill TwoFARequired Description }}
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Id-Default, Id-Custom, Name-Default, Name-Custom
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ViewSupport
-{{ Fill ViewSupport Description }}
+### -ConfigTabRequiresManagePermission
+{{ Fill ConfigTabRequiresManagePermission Description }}
 
 ```yaml
 Type: SwitchParameter
@@ -447,7 +381,37 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AllowedToViewMapsTab
+{{ Fill AllowedToViewMapsTab Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AllowedToManageResourceDashboards
+{{ Fill AllowedToManageResourceDashboards Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -462,21 +426,50 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WebsitesPermission
-{{ Fill WebsitesPermission Description }}
+### -ViewSupport
+{{ Fill ViewSupport Description }}
 
 ```yaml
-Type: String
+Type: SwitchParameter
 Parameter Sets: Id-Default, Name-Default
 Aliases:
-Accepted values: view, manage, none
 
 Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EnableRemoteSessionForResources
+{{ Fill EnableRemoteSessionForResources Description }}
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Id-Default, Name-Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CustomPrivilegesObject
+Specifies custom privileges for the role.
+
+```yaml
+Type: PSObject
+Parameter Sets: Id-Custom, Name-Custom
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -503,10 +496,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.String
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.Role object containing the updated role configuration.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

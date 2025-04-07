@@ -1,3 +1,43 @@
+<#
+.SYNOPSIS
+Retrieves a list of instances for a LogicMonitor device.
+
+.DESCRIPTION
+The Get-LMDeviceInstanceList function retrieves all instances associated with a specific device in LogicMonitor. The device can be identified by either ID or name, and the results can be filtered.
+
+.PARAMETER Id
+The ID of the device to retrieve instances from. Required for Id parameter set.
+
+.PARAMETER Name
+The name of the device to retrieve instances from. Required for Name parameter set.
+
+.PARAMETER Filter
+A filter object to apply when retrieving instances. This parameter is optional.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.PARAMETER CountOnly
+When set to true, returns only the total count of instances instead of the instance details.
+
+.EXAMPLE
+#Retrieve instances by device ID
+Get-LMDeviceInstanceList -Id 123
+
+.EXAMPLE
+#Get instance count for a device
+Get-LMDeviceInstanceList -Name "Production-Server" -CountOnly $true
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns device instance objects or a count if CountOnly is specified.
+#>
+
 Function Get-LMDeviceInstanceList {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]

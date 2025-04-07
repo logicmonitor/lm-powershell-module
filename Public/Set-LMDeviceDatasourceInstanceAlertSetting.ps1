@@ -1,3 +1,60 @@
+<#
+.SYNOPSIS
+Updates alert settings for a LogicMonitor device datasource instance.
+
+.DESCRIPTION
+The Set-LMDeviceDatasourceInstanceAlertSetting function modifies alert settings for a specific device datasource instance in LogicMonitor.
+
+.PARAMETER DatasourceName
+Specifies the name of the datasource. Required when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+.PARAMETER DatasourceId
+Specifies the ID of the datasource. Required when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+
+.PARAMETER Id
+Specifies the ID of the device. Can be specified using the 'DeviceId' alias.
+
+.PARAMETER Name
+Specifies the name of the device. Can be specified using the 'DeviceName' alias.
+
+.PARAMETER DatapointName
+Specifies the name of the datapoint for which to configure alerts.
+
+.PARAMETER InstanceName
+Specifies the name of the instance for which to configure alerts.
+
+.PARAMETER DisableAlerting
+Specifies whether to disable alerting for this instance.
+
+.PARAMETER AlertExpressionNote
+Specifies a note for the alert expression.
+
+.PARAMETER AlertExpression
+Specifies the alert expression in the format "(01:00 02:00) > -100 timezone=America/New_York".
+
+.PARAMETER AlertClearTransitionInterval
+Specifies the interval for alert clear transitions. Must be between 0 and 60.
+
+.PARAMETER AlertTransitionInterval
+Specifies the interval for alert transitions. Must be between 0 and 60.
+
+.PARAMETER AlertForNoData
+Specifies the alert level for no data conditions. Must be between 1 and 4.
+
+.EXAMPLE
+Set-LMDeviceDatasourceInstanceAlertSetting -Id 123 -DatasourceName "CPU" -DatapointName "Usage" -InstanceName "Total" -AlertExpression "> 90"
+Updates the alert settings for the CPU Usage datapoint on the specified device.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Returns a LogicMonitor.AlertSetting object containing the updated alert settings.
+
+.NOTES
+This function requires a valid LogicMonitor API authentication.
+#>
+
 Function Set-LMDeviceDatasourceInstanceAlertSetting {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]

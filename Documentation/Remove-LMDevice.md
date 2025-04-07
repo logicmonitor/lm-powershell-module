@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -153,9 +153,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### You can pipe input to this function.
 ## OUTPUTS
 
-### System.Management.Automation.PSCustomObject. The output object contains the following properties:
-### - Id: The ID of the removed device.
-### - Message: A message indicating the success of the removal operation.
+### Returns a PSCustomObject containing the ID of the removed device and a message indicating the success of the removal operation.
 ## NOTES
 
 ## RELATED LINKS

@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Get-LMDeviceGroupProperty
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Retrieves properties of a LogicMonitor device group.
 
 ## SYNTAX
 
@@ -25,25 +25,48 @@ Get-LMDeviceGroupProperty [-Name <String>] [-Filter <Object>] [-BatchSize <Int32
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Get-LMDeviceGroupProperty function retrieves all properties associated with a specified device group in LogicMonitor.
+The device group can be identified by either ID or name, and the results can be filtered.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
+```
+#Retrieve properties by group ID
+Get-LMDeviceGroupProperty -Id 123
 ```
 
-{{ Add example description here }}
+### EXAMPLE 2
+```
+#Retrieve filtered properties by group name
+Get-LMDeviceGroupProperty -Name "Production" -Filter $filterObject
+```
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+The ID of the device group to retrieve properties from.
+Required for Id parameter set.
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
+Parameter Sets: Id
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+The name of the device group to retrieve properties from.
+Required for Name parameter set.
+
+```yaml
+Type: String
+Parameter Sets: Name
 Aliases:
 
 Required: False
@@ -54,7 +77,8 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+A filter object to apply when retrieving properties.
+This parameter is optional.
 
 ```yaml
 Type: Object
@@ -68,32 +92,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
+Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -118,10 +129,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### System.Object
+### Returns property objects for the specified device group.
 ## NOTES
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

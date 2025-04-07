@@ -29,7 +29,13 @@ $instances = New-LMPushMetricInstance -InstancesArrary $instances -InstanceName 
 This example creates a new instance with the specified parameters and adds it to the existing instances array.
 
 .NOTES
-Ensure that you are logged in before running any commands by using the Connect-LMAccount cmdlet.
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns LogicMonitor.Instance object.
 #>
 Function New-LMPushMetricInstance {
 

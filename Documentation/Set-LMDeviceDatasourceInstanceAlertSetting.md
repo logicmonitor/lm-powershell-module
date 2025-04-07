@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Logic.Monitor
+Module Name: Dev.Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMDeviceDatasourceInstanceAlertSetting
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+Updates alert settings for a LogicMonitor device datasource instance.
 
 ## SYNTAX
 
@@ -45,141 +45,21 @@ Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Id <Int32> -Da
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+The Set-LMDeviceDatasourceInstanceAlertSetting function modifies alert settings for a specific device datasource instance in LogicMonitor.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
+### EXAMPLE 1
 ```
-
-{{ Add example description here }}
+90"
+Updates the alert settings for the CPU Usage datapoint on the specified device.
+```
 
 ## PARAMETERS
 
-### -AlertClearTransitionInterval
-{{ Fill AlertClearTransitionInterval Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AlertExpression
-{{ Fill AlertExpression Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AlertExpressionNote
-{{ Fill AlertExpressionNote Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AlertForNoData
-{{ Fill AlertForNoData Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AlertTransitionInterval
-{{ Fill AlertTransitionInterval Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatapointName
-{{ Fill DatapointName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatasourceId
-{{ Fill DatasourceId Description }}
-
-```yaml
-Type: Int32
-Parameter Sets: Name-dsId, Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -DatasourceName
-{{ Fill DatasourceName Description }}
+Specifies the name of the datasource.
+Required when using the 'Id-dsName' or 'Name-dsName' parameter sets.
 
 ```yaml
 Type: String
@@ -193,23 +73,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisableAlerting
-{{ Fill DisableAlerting Description }}
+### -DatasourceId
+Specifies the ID of the datasource.
+Required when using the 'Id-dsId' or 'Name-dsId' parameter sets.
 
 ```yaml
-Type: Boolean
-Parameter Sets: (All)
+Type: Int32
+Parameter Sets: Name-dsId, Id-dsId
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Id
-{{ Fill Id Description }}
+Specifies the ID of the device.
+Can be specified using the 'DeviceId' alias.
 
 ```yaml
 Type: Int32
@@ -218,28 +100,14 @@ Aliases: DeviceId
 
 Required: True
 Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InstanceName
-{{ Fill InstanceName Description }}
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-{{ Fill Name Description }}
+Specifies the name of the device.
+Can be specified using the 'DeviceName' alias.
 
 ```yaml
 Type: String
@@ -253,6 +121,129 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DatapointName
+Specifies the name of the datapoint for which to configure alerts.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceName
+Specifies the name of the instance for which to configure alerts.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DisableAlerting
+Specifies whether to disable alerting for this instance.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AlertExpressionNote
+Specifies a note for the alert expression.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AlertExpression
+Specifies the alert expression in the format "(01:00 02:00) \> -100 timezone=America/New_York".
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AlertClearTransitionInterval
+Specifies the interval for alert clear transitions.
+Must be between 0 and 60.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AlertTransitionInterval
+Specifies the interval for alert transitions.
+Must be between 0 and 60.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AlertForNoData
+Specifies the alert level for no data conditions.
+Must be between 1 and 4.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -WhatIf
 Shows what would happen if the cmdlet runs.
 The cmdlet is not run.
@@ -261,6 +252,21 @@ The cmdlet is not run.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named
@@ -289,10 +295,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### None.
 ## OUTPUTS
 
-### System.Object
+### Returns a LogicMonitor.AlertSetting object containing the updated alert settings.
 ## NOTES
+This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS

@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-Sets the properties of a LogicMonitor device datasource instance.
+Updates a LogicMonitor device datasource instance configuration.
 
 .DESCRIPTION
-The Set-LMDeviceDatasourceInstance function is used to set the properties of a LogicMonitor device datasource instance. It allows you to update the display name, wild values, description, custom properties, monitoring and alerting settings, and instance group ID of the specified instance.
+The Set-LMDeviceDatasourceInstance function modifies an existing device datasource instance in LogicMonitor, allowing updates to its display name, wild values, description, and various other properties.
 
 .PARAMETER DisplayName
 Specifies the new display name for the instance.
@@ -21,42 +21,44 @@ Specifies the description for the instance.
 Specifies a hashtable of custom properties for the instance.
 
 .PARAMETER PropertiesMethod
-Specifies the method to use when updating the properties. Valid values are "Add", "Replace", or "Refresh".
+Specifies how to handle existing properties. Valid values are "Add", "Replace", or "Refresh". Default is "Replace".
 
 .PARAMETER StopMonitoring
-Specifies whether to stop monitoring the instance. This parameter accepts $true or $false.
+Specifies whether to stop monitoring the instance.
 
 .PARAMETER DisableAlerting
-Specifies whether to disable alerting for the instance. This parameter accepts $true or $false.
+Specifies whether to disable alerting for the instance.
 
 .PARAMETER InstanceGroupId
 Specifies the ID of the instance group to which the instance belongs.
 
 .PARAMETER InstanceId
-Specifies the ID of the instance to update. This parameter is mandatory and can be provided via pipeline.
+Specifies the ID of the instance to update.
 
 .PARAMETER DatasourceName
-Specifies the name of the datasource associated with the instance. This parameter is mandatory when using the 'Name-dsName' parameter set.
+Specifies the name of the datasource associated with the instance.
 
 .PARAMETER DatasourceId
-Specifies the ID of the datasource associated with the instance. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter set.
+Specifies the ID of the datasource associated with the instance.
 
 .PARAMETER Id
-Specifies the ID of the device associated with the instance. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter set. This parameter can also be specified using the 'DeviceId' alias.
+Specifies the ID of the device associated with the instance.
 
 .PARAMETER Name
-Specifies the name of the device associated with the instance. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter set. This parameter can also be specified using the 'DeviceName' alias.
+Specifies the name of the device associated with the instance.
 
 .EXAMPLE
-Set-LMDeviceDatasourceInstance -InstanceId 12345 -DisplayName "New Instance Name" -Description "Updated instance description"
+Set-LMDeviceDatasourceInstance -InstanceId 123 -DisplayName "Updated Instance" -Description "New description"
+Updates the instance with ID 123 with a new display name and description.
 
-This example sets the display name and description of the instance with ID 12345.
+.INPUTS
+You can pipe objects containing InstanceId, DatasourceId, and Id properties to this function.
 
-.EXAMPLE
-Get-LMDevice -Name "MyDevice" | Set-LMDeviceDatasourceInstance -DatasourceName "MyDatasource" -DisplayName "New Instance Name"
+.OUTPUTS
+Returns a LogicMonitor.DeviceDatasourceInstance object containing the updated instance information.
 
-This example retrieves the device with the name "MyDevice" and sets the display name of the instance associated with the datasource "MyDatasource".
-
+.NOTES
+This function requires a valid LogicMonitor API authentication.
 #>
 
 Function Set-LMDeviceDatasourceInstance {

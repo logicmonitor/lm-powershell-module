@@ -1,3 +1,34 @@
+<#
+.SYNOPSIS
+Retrieves website checkpoints from LogicMonitor.
+
+.DESCRIPTION
+The Get-LMWebsiteCheckpoint function retrieves checkpoint configurations used for website monitoring in LogicMonitor.
+
+.PARAMETER Filter
+A filter object to apply when retrieving checkpoints.
+
+.PARAMETER BatchSize
+The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
+
+.EXAMPLE
+#Retrieve all website checkpoints
+Get-LMWebsiteCheckpoint
+
+.EXAMPLE
+#Retrieve checkpoints using a filter
+Get-LMWebsiteCheckpoint -Filter $filterObject
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns website checkpoint objects.
+#>
+
 Function Get-LMWebsiteCheckpoint {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
