@@ -78,7 +78,7 @@ Connect-LMAccount -UseCachedCredential
 It was brought to our attention that version 7.0 broke backwards compatibility with older versions of PowerShell. It was not our intention to remove compatibility with this latest update. The dependencies that required 7+ have been replaced with native PWSH commands and compatibility with 5.1 has been restored.
 ### Updated Cmdlets:
  - **Get-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* to the available parameters to allow for easy filtering for a specific instance group.
-  - **Get-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* and *-HdsId* to the available parameters to allow for easy targeting for a specific instance group.
+ - **Remove-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* and *-HdsId* to the available parameters to allow for easy targeting for a specific instance group.
 
 ## Previous Release 7.0
 
