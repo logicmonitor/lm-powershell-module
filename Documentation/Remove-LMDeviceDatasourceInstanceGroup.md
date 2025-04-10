@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Dev.Logic.Monitor
+Module Name: Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -12,27 +12,75 @@ Removes a LogicMonitor device datasource instance group.
 
 ## SYNTAX
 
-### Name-dsName
-```
-Remove-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Name <String> -InstanceGroupName <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### Id-dsName
+### Id-dsName-GroupName (Default)
 ```
 Remove-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Id <Int32> -InstanceGroupName <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
-### Name-dsId
+### Name-dsName-GroupId
+```
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Name <String> -InstanceGroupId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Name-dsName-GroupName
+```
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Name <String> -InstanceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Id-dsName-GroupId
+```
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Id <Int32> -InstanceGroupId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Name-dsId-GroupId
+```
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Name <String> -InstanceGroupId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Name-dsId-GroupName
 ```
 Remove-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Name <String> -InstanceGroupName <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
-### Id-dsId
+### Id-dsId-GroupId
+```
+Remove-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Id <Int32> -InstanceGroupId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Id-dsId-GroupName
 ```
 Remove-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Id <Int32> -InstanceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Id-HdsId-GroupId
+```
+Remove-LMDeviceDatasourceInstanceGroup -Id <Int32> -HdsId <String> -InstanceGroupId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Id-HdsId-GroupName
+```
+Remove-LMDeviceDatasourceInstanceGroup -Id <Int32> -HdsId <String> -InstanceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Name-HdsId-GroupId
+```
+Remove-LMDeviceDatasourceInstanceGroup -Name <String> -HdsId <String> -InstanceGroupId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Name-HdsId-GroupName
+```
+Remove-LMDeviceDatasourceInstanceGroup -Name <String> -HdsId <String> -InstanceGroupName <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -62,7 +110,7 @@ This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' paramete
 
 ```yaml
 Type: String
-Parameter Sets: Name-dsName, Id-dsName
+Parameter Sets: Id-dsName-GroupName, Name-dsName-GroupId, Name-dsName-GroupName, Id-dsName-GroupId
 Aliases:
 
 Required: True
@@ -78,7 +126,7 @@ This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter se
 
 ```yaml
 Type: Int32
-Parameter Sets: Name-dsId, Id-dsId
+Parameter Sets: Name-dsId-GroupId, Name-dsId-GroupName, Id-dsId-GroupId, Id-dsId-GroupName
 Aliases:
 
 Required: True
@@ -95,7 +143,7 @@ This parameter can also be specified using the 'DeviceId' alias.
 
 ```yaml
 Type: Int32
-Parameter Sets: Id-dsName, Id-dsId
+Parameter Sets: Id-dsName-GroupName, Id-dsName-GroupId, Id-dsId-GroupId, Id-dsId-GroupName, Id-HdsId-GroupId, Id-HdsId-GroupName
 Aliases: DeviceId
 
 Required: True
@@ -112,8 +160,23 @@ This parameter can also be specified using the 'DeviceName' alias.
 
 ```yaml
 Type: String
-Parameter Sets: Name-dsName, Name-dsId
+Parameter Sets: Name-dsName-GroupId, Name-dsName-GroupName, Name-dsId-GroupId, Name-dsId-GroupName, Name-HdsId-GroupId, Name-HdsId-GroupName
 Aliases: DeviceName
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HdsId
+Specifies the ID of the host datasource associated with the instance group. This parameter is mandatory when using the 'Id-HdsId' or 'Name-HdsId' parameter sets.
+
+```yaml
+Type: String
+Parameter Sets: Id-HdsId-GroupId, Id-HdsId-GroupName, Name-HdsId-GroupId, Name-HdsId-GroupName
+Aliases:
 
 Required: True
 Position: Named
@@ -128,7 +191,22 @@ This parameter is mandatory.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id-dsName-GroupName, Name-dsName-GroupName, Name-dsId-GroupName, Id-dsId-GroupName, Id-HdsId-GroupName, Name-HdsId-GroupName
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceGroupId
+Specifies the ID of the instance group to be removed. This parameter is mandatory.
+
+```yaml
+Type: String
+Parameter Sets: Name-dsName-GroupId, Id-dsName-GroupId, Name-dsId-GroupId, Id-dsId-GroupId, Id-HdsId-GroupId, Name-HdsId-GroupId
 Aliases:
 
 Required: True

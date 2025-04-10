@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Dev.Logic.Monitor
+Module Name: Logic.Monitor
 online version:
 schema: 2.0.0
 ---
@@ -14,38 +14,38 @@ Retrieves instance groups for a LogicMonitor device datasource.
 
 ### Name-dsName
 ```
-Get-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Name <String> [-Filter <Object>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Name <String> [-InstanceGroupName <String>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Get-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Id <Int32> [-Filter <Object>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceGroup -DatasourceName <String> -Id <Int32> [-InstanceGroupName <String>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Get-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Name <String> [-Filter <Object>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Name <String> [-InstanceGroupName <String>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Get-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceGroup -DatasourceId <Int32> -Id <Int32> [-InstanceGroupName <String>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-HdsId
 ```
-Get-LMDeviceDatasourceInstanceGroup -Id <Int32> -HdsId <String> [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceGroup -Id <Int32> -HdsId <String> [-InstanceGroupName <String>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-HdsId
 ```
-Get-LMDeviceDatasourceInstanceGroup -Name <String> -HdsId <String> [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDatasourceInstanceGroup -Name <String> -HdsId <String> [-InstanceGroupName <String>]
+ [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -144,6 +144,21 @@ Parameter Sets: Id-HdsId, Name-HdsId
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InstanceGroupName
+The name of the instance group to retrieve. This parameter is optional.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

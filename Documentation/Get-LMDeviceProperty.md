@@ -1,6 +1,6 @@
 ---
 external help file: Logic.Monitor-help.xml
-Module Name: Dev.Logic.Monitor
+Module Name: Logic.Monitor
 online version:
 schema: 2.0.0
 ---

@@ -34,6 +34,69 @@ function Build-LMFilter {
         [Switch]$PassThru
     )
 
+    # Helper function for getting user selection
+    function Get-UserSelection {
+        param(
+            [Parameter(Mandatory=$true)]
+            [string]$Prompt,
+            [Parameter(Mandatory=$true)]
+            [array]$Choices,
+            [Parameter(Mandatory=$true)]
+            [string]$ChoiceLabelProperty
+        )
+
+        Write-Host "$Prompt"
+        for ($i = 0; $i -lt $Choices.Count; $i++) {
+            Write-Host ("  " + ($i + 1) + ". " + $Choices[$i].($ChoiceLabelProperty))
+        }
+
+        $choiceNumber = 0
+        do {
+            $choiceInput = Read-Host "Enter selection number (1-$($Choices.Count))"
+            if ([int]::TryParse($choiceInput, [ref]$choiceNumber) -and $choiceNumber -ge 1 -and $choiceNumber -le $Choices.Count) {
+                # Valid input
+            } else {
+                Write-Host "Invalid input. Please enter a number between 1 and $($Choices.Count)." -ForegroundColor Red
+                $choiceNumber = 0 # Reset to ensure loop continues
+            }
+        } while ($choiceNumber -eq 0)
+
+        return $Choices[$choiceNumber - 1]
+    }
+
+    # Helper function for getting user confirmation
+    function Get-UserConfirmation {
+        param(
+            [Parameter(Mandatory=$true)]
+            [string]$Prompt,
+            [string]$DefaultAnswer = "n",
+            [string]$ConfirmSuccess = "Proceeding...",
+            [string]$ConfirmFailure = "Stopping..."
+        )
+
+        $answer = ""
+        $validAnswers = @("y", "n")
+        do {
+            $choiceInput = Read-Host "$Prompt (y/n) [$DefaultAnswer]"
+            if ([string]::IsNullOrEmpty($choiceInput)) {
+                $choiceInput = $DefaultAnswer
+            }
+            if ($validAnswers -contains $choiceInput.ToLower()) {
+                $answer = $choiceInput.ToLower()
+            } else {
+                Write-Host "Invalid input. Please enter 'y' or 'n'." -ForegroundColor Red
+            }
+        } while ([string]::IsNullOrEmpty($answer))
+
+        if ($answer -eq 'y') {
+            Write-Host $ConfirmSuccess
+            return $true
+        } else {
+            Write-Host $ConfirmFailure
+            return $false
+        }
+    }
+
     $Caller = $null
     #Check if called by another function, will be used to determine available fields in the future
     $CallStack = Get-PSCallStack
@@ -68,57 +131,55 @@ function Build-LMFilter {
         @{ Name = "Custom Property"; Value = "customProperties" }
     )
 
-    Write-SpectreHost -Message "Welcome to the [bold yellow]Logic Monitor[/] API Filter Builder! Use this wizard to build a filter expression for the [bold]Get-LM*[/] cmdlets."
+    Write-Host "Welcome to the Logic Monitor API Filter Builder! Use this wizard to build a filter expression for the Get-LM* cmdlets."
 
     #Explain the different types of filters
-    Write-SpectreHost -Message ""
-    Write-SpectreHost -Message "There are two types of filters: [bold yellow]Basic[/] and [bold yellow]Advanced[/]:"
-    Write-SpectreHost -Message "   - Basic filters are used to filter based on a single field and a value such as displayName."
-    Write-SpectreHost -Message "   - Advanced filters are used to filter based on a property and a value that is within that property. Applies to auto, system, inherited and custom properties."
-    Write-SpectreHost -Message ""
-    Write-SpectreHost -Message "[bold yellow]Note:[/] You can combine basic/advanced filters within the same filter equation using the [bold yellow]AND[/] or [bold yellow]OR[/] logical operators."
-    Write-SpectreHost -Message "[bold yellow]Note:[/] Currently, only devices, device groups, and alerts support advanced property filtering."
-    Write-SpectreHost -Message ""
+    Write-Host ""
+    Write-Host "There are two types of filters: Basic and Advanced:"
+    Write-Host "   - Basic filters are used to filter based on a single field and a value such as displayName."
+    Write-Host "   - Advanced filters are used to filter based on a property and a value that is within that property. Applies to auto, system, inherited and custom properties."
+    Write-Host ""
+    Write-Host "Note: You can combine basic/advanced filters within the same filter equation using the AND or OR logical operators."
+    Write-Host "Note: Currently, only devices, device groups, and alerts support advanced property filtering."
+    Write-Host ""
     while ($true) {
         # Get value type first
-        $selectedValueType = Read-SpectreSelection `
-            -Message "Select filter type:" `
+        $selectedValueType = Get-UserSelection `
+            -Prompt "Select filter type:" `
             -Choices $valueTypes `
-            -ChoiceLabelProperty "Name" `
-            -Color yellow
+            -ChoiceLabelProperty "Name"
         $keyChar = $selectedValueType.Value
 
         # Get property name based on filter type
         switch ($keyChar) {
             "B" {
-                $property = Read-SpectreText -Message "Enter attribute name:"
+                $property = Read-Host "Enter attribute name"
                 # Get operator
-                $selectedOperator = Read-SpectreSelection `
-                    -Message "Select operator:" `
+                $selectedOperator = Get-UserSelection `
+                    -Prompt "Select operator:" `
                     -Choices $operators `
-                    -ChoiceLabelProperty "Name" `
-                    -Color yellow
+                    -ChoiceLabelProperty "Name"
                 $operator = $selectedOperator.Value
-                $valueInput = Read-SpectreText -Message "Enter value:"
+                $valueInput = Read-Host "Enter value"
+                # Ensure string values are quoted for the filter
                 $value = "`"$valueInput`""
             }
             "A" {
-                $selectedProperty = Read-SpectreSelection `
-                    -Message "Select property type:" `
+                $selectedProperty = Get-UserSelection `
+                    -Prompt "Select property type:" `
                     -Choices $propertyTypes `
-                    -ChoiceLabelProperty "Name" `
-                    -Color yellow
+                    -ChoiceLabelProperty "Name"
                 $property = $selectedProperty.Value
                 # Get operator
-                $selectedOperator = Read-SpectreSelection `
-                    -Message "Select operator:" `
+                $selectedOperator = Get-UserSelection `
+                    -Prompt "Select operator:" `
                     -Choices $operators `
-                    -ChoiceLabelProperty "Name" `
-                    -Color yellow
+                    -ChoiceLabelProperty "Name"
                 $operator = $selectedOperator.Value
-                $jsonProperty = Read-SpectreText -Message "Enter property name:"
-                $jsonValue = Read-SpectreText -Message "Enter property value:"
-                $jsonObject = [ordered]@{ name = $jsonProperty; value = $jsonValue } | ConvertTo-Json -Compress | ConvertTo-Json
+                $jsonProperty = Read-Host "Enter property name"
+                $jsonValue = Read-Host "Enter property value"
+                # Convert to JSON string suitable for LM API. Needs double conversion for proper escaping in the final filter string.
+                $jsonObject = [ordered]@{ name = $jsonProperty; value = $jsonValue } | ConvertTo-Json -Compress | ConvertTo-Json -Compress
                 $value = $jsonObject
             }
         }
@@ -126,8 +187,8 @@ function Build-LMFilter {
         $conditions += "$property $operator $value"
 
         # First ask if they want to continue
-        $continue = Read-SpectreConfirm `
-            -Message "Would you like to add another condition?" `
+        $continue = Get-UserConfirmation `
+            -Prompt "Would you like to add another condition?" `
             -DefaultAnswer "n" `
             -ConfirmSuccess "Adding another condition..." `
             -ConfirmFailure "Finishing filter equation..."
@@ -137,11 +198,10 @@ function Build-LMFilter {
         }
 
         # If they want to continue, ask for the logical operator
-        $selectedLogicalOperator = Read-SpectreSelection `
-            -Message "Select logical operator" `
+        $selectedLogicalOperator = Get-UserSelection `
+            -Prompt "Select logical operator" `
             -Choices $logicalOperators `
-            -ChoiceLabelProperty "Name" `
-            -Color yellow
+            -ChoiceLabelProperty "Name"
         $conditions += $selectedLogicalOperator.Value
     }
 
@@ -149,12 +209,14 @@ function Build-LMFilter {
     Set-Variable -Name "LMFilter" -Value $filterEquation -Scope global
 
     If (!$PassThru) {
-        Format-SpectrePanel -Data ("'" + $filterEquation + "'") -Title "LM Api Filter Equation" -Border "Rounded" -Color "Green"
-        Write-SpectreHost -Message "Filter equation has been saved to the [bold yellow]LMFilter[/] variable."
-        return
+        Write-Host "--- LM API Filter Equation ---"
+        Write-Host "'$filterEquation'"
+        Write-Host "-----------------------------"
+        Write-Host "Filter equation has been saved to the `$LMFilter variable." -ForegroundColor Green
+        return # Return nothing visually when not using PassThru
     }
     Else {
-        Write-Host -Message "Filter equation has been saved to the `$LMFilter variable." -ForegroundColor Green
-        return $($filterEquation)
+        Write-Host "Filter equation has been saved to the `$LMFilter variable." -ForegroundColor Green
+        return $filterEquation # Return the string when using PassThru
     }
 } 

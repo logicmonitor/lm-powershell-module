@@ -20,6 +20,12 @@ Specifies the name of the device associated with the instance group. This parame
 .PARAMETER InstanceGroupName
 Specifies the name of the instance group to be removed. This parameter is mandatory.
 
+.PARAMETER InstanceGroupId
+Specifies the ID of the instance group to be removed. This parameter is mandatory.
+
+.PARAMETER HdsId
+Specifies the ID of the host datasource associated with the instance group. This parameter is mandatory when using the 'Id-HdsId' or 'Name-HdsId' parameter sets. 
+
 .EXAMPLE
 Remove-LMDeviceDatasourceInstanceGroup -DatasourceName "CPU" -Name "Server01" -InstanceGroupName "Group1"
 Removes the instance group named "Group1" associated with the "CPU" datasource on the device named "Server01".
@@ -36,34 +42,73 @@ Returns a PSCustomObject containing the instance ID and a message confirming the
 #>
 
 Function Remove-LMDeviceDatasourceInstanceGroup {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High', DefaultParameterSetName = 'Id-dsName-GroupName')]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
-        [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
+        # Datasource Name Parameter Sets
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName-GroupId')]
         [String]$DatasourceName,
-    
-        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
-        [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+
+        # Datasource ID Parameter Sets
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId-GroupId')]
         [Int]$DatasourceId,
-    
-        [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
-        [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
+
+        # Device ID Parameter Sets
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-HdsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-HdsId-GroupId')]
         [Alias('DeviceId')]
         [Int]$Id,
-    
-        [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
-        [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
+
+        # Device Name Parameter Sets
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-HdsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-HdsId-GroupId')]
         [Alias('DeviceName')]
         [String]$Name,
 
-        [Parameter(Mandatory)]
-        [String]$InstanceGroupName
+        # Host Datasource ID (HdsId) Parameter Sets
+        [Parameter(Mandatory, ParameterSetName = 'Id-HdsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-HdsId-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-HdsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-HdsId-GroupId')]
+        [String]$HdsId,
+
+        # Instance Group Name (Mutually Exclusive with InstanceGroupId)
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-HdsId-GroupName')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-HdsId-GroupName')]
+        [String]$InstanceGroupName,
+
+        # Instance Group ID (Mutually Exclusive with InstanceGroupName)
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsName-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsName-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-dsId-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-dsId-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Id-HdsId-GroupId')]
+        [Parameter(Mandatory, ParameterSetName = 'Name-HdsId-GroupId')]
+        [String]$InstanceGroupId
     )
+
     #Check if we are logged in and have valid api creds
     If ($Script:LMAuth.Valid) {
 
-        #Lookup Device Id
-        If ($Name) {
+        # Lookup Device Id if Name provided
+        If ($PSBoundParameters.ContainsKey('Name')) { # Check if Name was used
             $LookupResult = (Get-LMDevice -Name $Name).Id
             If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
@@ -71,37 +116,44 @@ Function Remove-LMDeviceDatasourceInstanceGroup {
             $Id = $LookupResult
         }
 
-        #Lookup DatasourceId
-        If ($DatasourceName -or $DatasourceId) {
-            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
+        # Lookup Host Datasource ID (HdsId) if Datasource Name/ID provided
+        If ($PSBoundParameters.ContainsKey('DatasourceName') -or $PSBoundParameters.ContainsKey('DatasourceId')) { # Check if DatasourceName/ID was used
+             # Determine the lookup value based on provided parameter
+            $DatasourceLookupValue = if ($PSBoundParameters.ContainsKey('DatasourceName')) { $DatasourceName } else { $DatasourceId }
+            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { ($_.dataSourceName -eq $DatasourceName -and $PSBoundParameters.ContainsKey('DatasourceName')) -or ($_.dataSourceId -eq $DatasourceId -and $PSBoundParameters.ContainsKey('DatasourceId')) }).Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceLookupValue) {
                 return
             }
             $HdsId = $LookupResult
         }
+        # Note: If HdsId was provided directly, we use that value and skip the lookup above.
 
-        #Lookup InstanceGroupId
-        $LookupResult = (Get-LMDeviceDatasourceInstanceGroup -Id $Id -HdsId $HdsId -Filter "name -eq '$InstanceGroupName'").Id
-        If (Test-LookupResult -Result $LookupResult -LookupString $InstanceGroupName) {
-            return
+        # Lookup InstanceGroupId if InstanceGroupName provided
+        # Only perform lookup if InstanceGroupName parameter was actually used
+        If ($PSBoundParameters.ContainsKey('InstanceGroupName')) {
+            Write-Verbose "Looking up Instance Group ID for Name: $InstanceGroupName"
+            $LookupResult = (Get-LMDeviceDatasourceInstanceGroup -Id $Id -HdsId $HdsId -Filter "name -eq '$InstanceGroupName'").Id
+            If (Test-LookupResult -Result $LookupResult -LookupString $InstanceGroupName) {
+                return
+            }
+            # Assign the found ID to InstanceGroupId for use later
+            $InstanceGroupId = $LookupResult
         }
-        $InstanceGroupId = $LookupResult
-        
-        #Build header and uri
+        # If InstanceGroupId was provided directly, we use that value.
+
+        # Build header and uri - uses $InstanceGroupId which is now always populated correctly
         $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/groups/$InstanceGroupId"
 
-        If ($PSItem) {
-            $Message = "DeviceDisplayName: $($PSItem.deviceDisplayName) | DatasourceName: $($PSItem.name) | InstanceGroupName: $($PSItem.InstanceGroupName)"
-        }
-        Elseif ($DatasourceName -and $DeviceName) {
-            $Message = "DeviceName: $DeviceName | DatasourceName: $DatasourceName | InstanceGroupName: $InstanceGroupName"
-        }
-        Else {
-            $Message = "DeviceId: $DeviceId | DatasourceId: $DatasourceId | InstanceGroupName: $InstanceGroupName"
-        }
+        # Construct message for ShouldProcess
+        $DeviceIdentifier = if ($PSBoundParameters.ContainsKey('Name')) { "DeviceName: $Name" } else { "DeviceId: $Id" }
+        $DatasourceIdentifier = if ($PSBoundParameters.ContainsKey('DatasourceName')) { "DatasourceName: $DatasourceName" } elseif ($PSBoundParameters.ContainsKey('DatasourceId')) { "DatasourceId: $DatasourceId" } else { "HdsId: $HdsId" }
+        $InstanceIdentifier = if ($PSBoundParameters.ContainsKey('InstanceGroupName')) { "InstanceGroupName: $InstanceGroupName" } else { "InstanceGroupId: $InstanceGroupId" }
+
+        $Message = "$DeviceIdentifier | $DatasourceIdentifier | $InstanceIdentifier"
+
 
         Try {
-            If ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance Group")) {                    
+            If ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance Group")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
 
@@ -109,12 +161,13 @@ Function Remove-LMDeviceDatasourceInstanceGroup {
 
                 #Issue request
                 $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                
+
+                # Adjusted output object to reflect correct ID used
                 $Result = [PSCustomObject]@{
-                    InstanceId = $InstanceId
-                    Message    = "Successfully removed ($Message)"
+                    InstanceGroupId = $InstanceGroupId # Output the ID used for deletion
+                    Message         = "Successfully removed ($Message)"
                 }
-                
+
                 Return $Result
             }
         }

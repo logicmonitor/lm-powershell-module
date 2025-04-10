@@ -20,6 +20,9 @@ The name of the device. Can be specified using the DeviceName alias. Required fo
 .PARAMETER HdsId
 The ID of the device datasource. Required for Id-HdsId and Name-HdsId parameter sets.
 
+.PARAMETER InstanceGroupName
+The name of the instance group to retrieve. This parameter is optional.
+
 .PARAMETER Filter
 A filter object to apply when retrieving instance groups. This parameter is optional.
 
@@ -72,6 +75,8 @@ Function Get-LMDeviceDatasourceInstanceGroup {
         [Parameter(Mandatory, ParameterSetName = 'Name-HdsId')]
         [String]$HdsId,
 
+        [String]$InstanceGroupName,
+
         [Object]$Filter,
 
         [ValidateRange(1, 1000)]
@@ -117,9 +122,18 @@ Function Get-LMDeviceDatasourceInstanceGroup {
                 #List of allowed filter props
                 $PropList = @()
                 $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                If ($InstanceGroupName) {
+                    $InstanceGroupName = $InstanceGroupName.Replace("&", "%26").Replace("'", "%27") #Escape special characters
+                    $ValidFilter = $ValidFilter + ",name:`"$InstanceGroupName`""
+                }
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+            } ElseIf ($InstanceGroupName) {
+                If ($InstanceGroupName) {
+                    $InstanceGroupName = $InstanceGroupName.Replace("&", "%26").Replace("'", "%27") #Escape special characters
+                    $ValidFilter = "name:`"$InstanceGroupName`""
+                }
                 $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
-
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
