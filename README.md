@@ -73,14 +73,37 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.0.1
-### Restore 5.1 compatibility
-It was brought to our attention that version 7.0 broke backwards compatibility with older versions of PowerShell. It was not our intention to remove compatibility with this latest update. The dependencies that required 7+ have been replaced with native PWSH commands and compatibility with 5.1 has been restored.
+## 7.1.0
+### New Cmdlets:
+ - **New-LMAlertRule**: Create alert rules with custom priorities, escalation chains, and filtering options.
+ - **Set-LMAlertRule**: Update existing alert rules with modified settings such as escalation chains or priority levels.
+ - **Remove-LMAlertRule**: Delete alert rules by ID or name with confirmation protection.
+ - **Get-LMLogicModuleMetadata**: Retrieve metadata about Logic Modules with filtering by type, tag, status, or usage.
 ### Updated Cmdlets:
- - **Get-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* to the available parameters to allow for easy filtering for a specific instance group.
- - **Remove-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* and *-HdsId* to the available parameters to allow for easy targeting for a specific instance group.
+ - **Set-LMWebsite**: Added *-TestLocationAll*, *-TestLocationCollectorIds*, and *-TestLocationSmgIds* parameters with improved validation logic to control test location settings.
 
-## Previous Release 7.0
+### Examples
+
+```powershell
+# Create a new alert rule with specific escalation settings
+New-LMAlertRule -Name "Critical Production Alerts" -Priority 10 -EscalatingChainId 5 -LevelStr "Critical" -DeviceGroups "Production/Web Servers"
+
+# Update an existing alert rule
+Set-LMAlertRule -Id 123 -NewName "Updated Rule Name" -Priority 5 -EscalatingChainId 10
+
+# Remove an alert rule by ID
+Remove-LMAlertRule -Id 456 -Confirm:$false
+
+# Get Logic Module metadata for DataSources that are in use
+Get-LMLogicModuleMetadata -Type DATASOURCE -isInUse $true
+
+# Configure a website to test from multiple collector groups (only for external websites)
+# TestLocationSmgIds correspond to LogicMonitor regions:
+# 2 = US - Washington DC, 3 = Europe - Dublin, 4 = US - Oregon, 5 = Asia - Singapore, 6 = Australia - Sydney
+Set-LMWebsite -Id 123 -IsInternal $false -TestLocationSmgIds @(2, 3, 4) # Tests from Washington DC, Dublin, and Oregon
+```
+
+## Previous Release 7.0.1
 
 ### Documentation Overhaul
 We're excited to announce our new comprehensive documentation site at [https://logicmonitor.github.io/lm-powershell-module-docs/](https://logicmonitor.github.io/lm-powershell-module-docs/). The site includes:
@@ -103,6 +126,10 @@ Build-LMFilter
 Get-LMDeviceGroup -FilterWizard
 ```
 ![Filter Wizard Example](https://logicmonitor.github.io/lm-powershell-module-docs/_astro/LMFilter.4g625cq9_1boMAv.webp)
+
+### Updated Cmdlets:
+ - **Get-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* to the available parameters to allow for easy filtering for a specific instance group.
+ - **Remove-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* and *-HdsId* to the available parameters to allow for easy targeting for a specific instance group.
 
 
 [Previous Release Notes](RELEASENOTES.md)

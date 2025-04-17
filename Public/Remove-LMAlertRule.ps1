@@ -1,0 +1,98 @@
+<#
+.SYNOPSIS
+Removes a LogicMonitor alert rule.
+
+.DESCRIPTION
+The Remove-LMAlertRule function removes a LogicMonitor alert rule based on the specified ID or name.
+
+.PARAMETER Id
+The ID of the alert rule to remove. This parameter is mandatory when using the 'Id' parameter set.
+
+.PARAMETER Name
+The name of the alert rule to remove. This parameter is mandatory when using the 'Name' parameter set.
+
+.EXAMPLE
+Remove-LMAlertRule -Id 123
+Removes the alert rule with the ID 123.
+
+.EXAMPLE
+Remove-LMAlertRule -Name "MyAlertRule"
+Removes the alert rule with the name "MyAlertRule".
+
+.NOTES
+This function requires a valid LogicMonitor API authentication. Make sure to log in using Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
+.OUTPUTS
+Returns a PSCustomObject containing the ID of the removed alert rule and a success message confirming the removal.
+#>
+Function Remove-LMAlertRule {
+
+    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
+    Param (
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
+        [Int]$Id,
+
+        [Parameter(Mandatory, ParameterSetName = 'Name')]
+        [String]$Name
+    )
+    Begin {}
+    Process {
+        #Check if we are logged in and have valid api creds
+        If ($Script:LMAuth.Valid) {
+
+            #Lookup Id if supplying name
+            If ($Name) {
+                $LookupResult = (Get-LMAlertRule -Name $Name).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                    return
+                }
+                $Id = $LookupResult
+            }
+
+            If($PSItem){
+                $Message = "Id: $Id | Name: $($PSItem.name)"
+            }
+            ElseIf($Name){
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else{
+                $Message = "Id: $Id"
+            }
+            
+            #Build header and uri
+            $ResourcePath = "/setting/alert/rules/$Id"
+
+            Try {
+                If ($PSCmdlet.ShouldProcess($Message, "Remove Alert Rule")) {                    
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
+                    
+                    $Result = [PSCustomObject]@{
+                        Id = $Id
+                        Message = "Successfully removed ($Message)"
+                    }
+                    
+                    Return $Result
+                }
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
+                }
+            }
+        }
+        Else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+        }
+    }
+    End {}
+}

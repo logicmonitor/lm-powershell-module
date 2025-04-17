@@ -21,6 +21,7 @@ Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Descriptio
  [-SSLAlertThresholds <String[]>] [-PageLoadAlertTimeInMS <Int32>] [-FailedCount <Int32>]
  [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-PollingInterval <Int32>] [-WebsiteSteps <String[]>]
+ [-TestLocationAll <Boolean>] [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
@@ -31,7 +32,8 @@ Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Descriptio
  [-UseDefaultLocationSetting <Boolean>] [-GroupId <String>] [-PingAddress <String>] [-PingCount <Int32>]
  [-PingTimeout <Int32>] [-PingPercentNotReceived <Int32>] [-FailedCount <Int32>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>]
- [-PollingInterval <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-PollingInterval <Int32>] [-TestLocationAll <Boolean>] [-TestLocationCollectorIds <Int32[]>]
+ [-TestLocationSmgIds <Int32[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -430,6 +432,58 @@ Accept wildcard characters: False
 ```yaml
 Type: String[]
 Parameter Sets: Website
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TestLocationAll
+Indicates whether to test from all locations. Cannot be used with TestLocationCollectorIds or TestLocationSmgIds.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TestLocationCollectorIds
+Array of collector IDs to use for testing. Cannot be used with TestLocationAll or TestLocationSmgIds.
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TestLocationSmgIds
+Array of collector group IDs to use for testing. Can only be used when IsInternal is false. Cannot be used with TestLocationAll or TestLocationCollectorIds.
+
+Available collector group IDs correspond to LogicMonitor regions:
+- 2 = US - Washington DC
+- 3 = Europe - Dublin
+- 4 = US - Oregon
+- 5 = Asia - Singapore
+- 6 = Australia - Sydney
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
 Aliases:
 
 Required: False
