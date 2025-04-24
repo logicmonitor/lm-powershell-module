@@ -21,7 +21,8 @@ New-LMWebsite [-WebCheck] -Name <String> [-IsInternal <Boolean>] [-Description <
  [-SSLAlertThresholds <String[]>] [-PageLoadAlertTimeInMS <Int32>] [-IgnoreSSL <Boolean>]
  [-FailedCount <Int32>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
  [-Properties <Hashtable>] [-PropertiesMethod <String>] [-PollingInterval <Int32>] [-WebsiteSteps <Object[]>]
- [-CheckPoints <Object[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-CheckPoints <Object[]>] [-TestLocationAll <Boolean>] [-TestLocationCollectorIds <Int32[]>]
+ [-TestLocationSmgIds <Int32[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Ping
@@ -31,7 +32,8 @@ New-LMWebsite [-PingCheck] -Name <String> [-IsInternal <Boolean>] [-Description 
  [-UseDefaultLocationSetting <Boolean>] [-GroupId <String>] -PingAddress <String> [-PingCount <Int32>]
  [-PingTimeout <Int32>] [-PingPercentNotReceived <Int32>] [-FailedCount <Int32>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>]
- [-PollingInterval <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-PollingInterval <Int32>] [-TestLocationAll <Boolean>] [-TestLocationCollectorIds <Int32[]>]
+ [-TestLocationSmgIds <Int32[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -56,6 +58,22 @@ New-LMWebsite -PingCheck -Name "Example Ping" -PingAddress "192.168.1.1" -PingCo
 This example creates a new LogicMonitor ping check for the IP address "192.168.1.1".
 It sends 5 pings with a timeout of 1000 milliseconds.
 It assigns the check to the group with ID "12345" and sets the overall alert level and individual alert level to "warn".
+
+### EXAMPLE 3
+```
+New-LMWebsite -WebCheck -Name "External Website" -WebsiteDomain "example.com" -IsInternal $false -TestLocationSmgIds @(2, 3, 4)
+```
+
+This example creates a new LogicMonitor website check for an external website "example.com".
+It configures the check to test from specific LogicMonitor regions (US - Washington DC, Europe - Dublin, and US - Oregon).
+
+### EXAMPLE 4
+```
+New-LMWebsite -WebCheck -Name "Internal Website" -WebsiteDomain "internal.example.com" -IsInternal $true -TestLocationCollectorIds @(1, 2, 3)
+```
+
+This example creates a new LogicMonitor website check for an internal website "internal.example.com".
+It configures the check to test from specific collectors with IDs 1, 2, and 3.
 
 ## PARAMETERS
 
@@ -491,11 +509,62 @@ Accept wildcard characters: False
 ```
 
 ### -CheckPoints
-Specifies the check points for the check.
+Specifies the check points for the check. This is a legacy parameter and has been replaced with the TestLocation* parameters and may be removed in a future version.
 
 ```yaml
 Type: Object[]
 Parameter Sets: Website
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TestLocationAll
+Specifies whether to test from all locations. This parameter is only valid for external checks and cannot be used with TestLocationCollectorIds or TestLocationSmgIds.
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TestLocationCollectorIds
+Specifies the collector IDs to use for testing. Can only be used when IsInternal is true. Cannot be used with TestLocationAll or TestLocationSmgIds.
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TestLocationSmgIds
+Specifies the collector group IDs to use for testing. Can only be used when IsInternal is false. Cannot be used with TestLocationAll or TestLocationCollectorIds.
+Available collector group IDs correspond to LogicMonitor regions:
+- 2 = US - Washington DC
+- 3 = Europe - Dublin
+- 4 = US - Oregon
+- 5 = Asia - Singapore
+- 6 = Australia - Sydney
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
 Aliases:
 
 Required: False

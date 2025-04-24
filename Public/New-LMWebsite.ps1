@@ -90,7 +90,16 @@ Specifies the polling interval for the check.
 Specifies the steps to perform for the website check.
 
 .PARAMETER CheckPoints
-Specifies the check points for the check.
+Specifies the check points for the check. This is a legacy parameter and will be deprecated in a future release.
+
+.PARAMETER TestLocationAll
+Specifies whether to test all locations. This parameter is only valid for external checks.
+
+.PARAMETER TestLocationCollectorIds
+Specifies the collector IDs for the test locations.
+
+.PARAMETER TestLocationSmgIds
+Specifies the SMG IDs for the test locations.
 
 .EXAMPLE
 New-LMWebsite -WebCheck -Name "Example Website" -WebsiteDomain "example.com" -HttpType "https" -GroupId "12345" -OverallAlertLevel "error" -IndividualAlertLevel "warn"
@@ -195,130 +204,203 @@ Function New-LMWebsite {
         [Object[]]$WebsiteSteps,
 
         [Parameter(ParameterSetName = "Website")]
-        [Object[]]$CheckPoints
-    )
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-
-        If ($Webcheck) {
-            $Type = "webcheck"
-        }
-        Else {
-            $Type = "pingcheck"
-        }
-
+        [Object[]]$CheckPoints,
         
-        $Steps = @()
-        If ($Type -eq "webcheck") {
-            If ($WebsiteSteps) {
-                $Steps = $WebsiteSteps
+        [Nullable[boolean]]$TestLocationAll, #Only valid for external checks
+
+        [Int[]]$TestLocationCollectorIds,
+
+        [Int[]]$TestLocationSmgIds
+    )
+    
+    Begin {
+        # Function to validate test location parameters
+        Function ValidateTestLocationParameters {
+            param (
+                [Nullable[boolean]]$IsInternal,
+                [Nullable[boolean]]$TestLocationAll,
+                [Int[]]$TestLocationCollectorIds,
+                [Int[]]$TestLocationSmgIds
+            )
+
+            $isValid = $true
+            $errorMessage = ""
+
+            # Check for mutually exclusive parameters
+            if ($TestLocationSmgIds -and $IsInternal) {
+                $errorMessage = "TestLocationSmgIds can only be used when IsInternal is false"
+                $isValid = $false
+            }
+            elseif (!$IsInternal -and $TestLocationCollectorIds) {
+                $errorMessage = "TestLocationCollectorIds can only be used when IsInternal is true"
+                $isValid = $false
+            }
+            elseif ($TestLocationAll -and $TestLocationCollectorIds) {
+                $errorMessage = "TestLocationAll cannot be used with TestLocationCollectorIds"
+                $isValid = $false
+            }
+            elseif ($TestLocationAll -and $TestLocationSmgIds) {
+                $errorMessage = "TestLocationAll cannot be used with TestLocationSmgIds"
+                $isValid = $false
+            }
+
+            return @{
+                IsValid = $isValid
+                ErrorMessage = $errorMessage
+            }
+        }
+    }
+    
+    Process {
+        #Check if we are logged in and have valid api creds
+        If ($Script:LMAuth.Valid) {
+
+            # Validate test location parameters
+            $validationResult = ValidateTestLocationParameters -IsInternal $IsInternal -TestLocationAll $TestLocationAll -TestLocationCollectorIds $TestLocationCollectorIds -TestLocationSmgIds $TestLocationSmgIds
+            if (-not $validationResult.IsValid) {
+                Write-Error $validationResult.ErrorMessage
+                return
+            }
+
+            If ($Webcheck) {
+                $Type = "webcheck"
             }
             Else {
-                $Steps += [PSCustomObject]@{
-                    useDefaultRoot    = $true
-                    url               = ""
-                    HTTPVersion       = "1.1"
-                    HTTPMethod        = "GET"
-                    HTTPHeaders       = ""
-                    HTTPBody          = ""
-                    followRedirection = $true
-                    fullpageLoad      = $false
-                    requireAuth       = $false
-                    matchType         = "plain"
-                    invertMatch       = $false
-                    path              = ""
-                    keyword           = ""
-                    statusCode        = ""
-                    type              = "config"
-                    postDataEditType  = "raw"
-                    auth              = @{
-                        type     = "basic"
-                        domain   = ""
-                        userName = ""
-                        password = ""
+                $Type = "pingcheck"
+            }
+
+            
+            $Steps = @()
+            If ($Type -eq "webcheck") {
+                If ($WebsiteSteps) {
+                    $Steps = $WebsiteSteps
+                }
+                Else {
+                    $Steps += [PSCustomObject]@{
+                        useDefaultRoot    = $true
+                        url               = ""
+                        HTTPVersion       = "1.1"
+                        HTTPMethod        = "GET"
+                        HTTPHeaders       = ""
+                        HTTPBody          = ""
+                        followRedirection = $true
+                        fullpageLoad      = $false
+                        requireAuth       = $false
+                        matchType         = "plain"
+                        invertMatch       = $false
+                        path              = ""
+                        keyword           = ""
+                        statusCode        = ""
+                        type              = "config"
+                        postDataEditType  = "raw"
+                        auth              = @{
+                            type     = "basic"
+                            domain   = ""
+                            userName = ""
+                            password = ""
+                        }
                     }
                 }
             }
-        }
-        
-        #Build custom props hashtable
-        $customProperties = @()
-        If ($Properties) {
-            Foreach ($Key in $Properties.Keys) {
-                $customProperties += @{name = $Key; value = $Properties[$Key] }
-            }
-        }
-        
-        #Build header and uri
-        $ResourcePath = "/website/websites"
-        
-        Try {
-            $AlertExp = ""
-            If ($SSLAlertThresholds) {
-                $AlertExp = "< " + $SSLAlertThresholds -join " "
-            }
             
-            $Data = @{
-                name                        = $Name
-                description                 = $Description
-                disableAlerting             = $DisableAlerting
-                isInternal                  = $IsInternal
-                properties                  = $customProperties
-                stopMonitoring              = $StopMonitoring
-                groupId                     = $GroupId
-                pollingInterval             = $PollingInterval
-                overallAlertLevel           = $OverallAlertLevel
-                individualAlertLevel        = $IndividualAlertLevel
-                useDefaultAlertSetting      = $UseDefaultAlertSetting
-                useDefaultLocationSetting   = $UseDefaultLocationSetting
-                host                        = $PingAddress
-                triggerSSLStatusAlert       = $TriggerSSLStatusAlert
-                triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
-                count                       = $PingCount
-                ignoreSSL                   = $IgnoreSSL
-                percentPktsNotReceiveInTime = $PingPercentNotReceived
-                timeoutInMSPktsNotReceive   = $PingTimeout
-                transition                  = $FailedCount
-                pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
-                alertExpr                   = $AlertExp
-                schema                      = $HttpType
-                domain                      = $WebsiteDomain
-                type                        = $Type
-                steps                       = $Steps
-            }
-            
-            If ($CheckPoints) {
-                $TestLocations = [PSCustomObject]@{
-                    all          = $true
-                    smgIds       = @()
-                    collectorIds = @($CheckPoints.smgId.GetEnumerator() | ForEach-Object { If ($_ -ne 0) { [Int]$_ } })
+            #Build custom props hashtable
+            $customProperties = @()
+            If ($Properties) {
+                Foreach ($Key in $Properties.Keys) {
+                    $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
-
-                $Data.checkpoints = $CheckPoints
-                $Data.testLocation = $TestLocations
             }
-            #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "testLocation" -and $_ -ne "steps" -and $_ -ne "checkpoints") { $Data.Remove($_) } }
-            $Data = ($Data | ConvertTo-Json -Depth 5)
             
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+            #Build header and uri
+            $ResourcePath = "/website/websites"
+            
+            Try {
+                $AlertExp = ""
+                If ($SSLAlertThresholds) {
+                    $AlertExp = "< " + $SSLAlertThresholds -join " "
+                }
+                
+                $Data = @{
+                    name                        = $Name
+                    description                 = $Description
+                    disableAlerting             = $DisableAlerting
+                    isInternal                  = $IsInternal
+                    properties                  = $customProperties
+                    stopMonitoring              = $StopMonitoring
+                    groupId                     = $GroupId
+                    pollingInterval             = $PollingInterval
+                    overallAlertLevel           = $OverallAlertLevel
+                    individualAlertLevel        = $IndividualAlertLevel
+                    useDefaultAlertSetting      = $UseDefaultAlertSetting
+                    useDefaultLocationSetting   = $UseDefaultLocationSetting
+                    host                        = $PingAddress
+                    triggerSSLStatusAlert       = $TriggerSSLStatusAlert
+                    triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
+                    count                       = $PingCount
+                    ignoreSSL                   = $IgnoreSSL
+                    percentPktsNotReceiveInTime = $PingPercentNotReceived
+                    timeoutInMSPktsNotReceive   = $PingTimeout
+                    transition                  = $FailedCount
+                    pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
+                    alertExpr                   = $AlertExp
+                    schema                      = $HttpType
+                    domain                      = $WebsiteDomain
+                    type                        = $Type
+                    steps                       = $Steps
+                }
+                
+                # Build testLocation object based on which parameter is provided
+                $testLocation = $null
+                If ($TestLocationAll) {
+                    $testLocation = @{ all = $true }
+                }
+                ElseIf ($TestLocationCollectorIds) {
+                    $testLocation = @{ collectorIds = $TestLocationCollectorIds }
+                }
+                ElseIf ($TestLocationSmgIds) {
+                    $testLocation = @{ smgIds = $TestLocationSmgIds }
+                }
+                ElseIf ($CheckPoints) {
+                    # Legacy support for CheckPoints parameter
+                    $TestLocations = [PSCustomObject]@{
+                        all          = $true
+                        smgIds       = @()
+                        collectorIds = @($CheckPoints.smgId.GetEnumerator() | ForEach-Object { If ($_ -ne 0) { [Int]$_ } })
+                    }
+                    $testLocation = $TestLocations
+                    $Data.checkpoints = $CheckPoints
+                }
+                
+                # Add testLocation to data if it exists
+                If ($testLocation) {
+                    $Data.testLocation = $testLocation
+                }
+                
+                #Remove empty keys so we dont overwrite them
+                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "testLocation" -and $_ -ne "steps" -and $_ -ne "checkpoints") { $Data.Remove($_) } }
+                $Data = ($Data | ConvertTo-Json -Depth 5)
+                
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                #Issue request
+                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
+            }
+            Catch [Exception] {
+                $Proceed = Resolve-LMException -LMException $PSItem
+                If (!$Proceed) {
+                    Return
+                }
             }
         }
+        Else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+        }
     }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
-    }
+    
+    End {}
 }

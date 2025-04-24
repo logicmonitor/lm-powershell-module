@@ -24,6 +24,9 @@
 .PARAMETER ContentType
     Specifies the content type of the API request. The default value is "application/json".
 
+.PARAMETER UserAgent
+    Specifies the User-Agent header for the API request. The default value is "LogicMonitor-PowerShell-Module".
+
 .OUTPUTS
     Returns an array containing the constructed header and a web request session object.
 
@@ -53,7 +56,9 @@ Function New-LMHeader {
 
         [Int]$Version = 3,
 
-        [String]$ContentType = "application/json"
+        [String]$ContentType = "application/json",
+        
+        [String]$UserAgent = "Logic.Monitor-PowerShell-Module"
     )
 
     # Use TLS 1.2
@@ -61,6 +66,24 @@ Function New-LMHeader {
 
     $Header = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
     $Session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+
+    # Try to get module version
+    $ModuleVersion = $null
+    try {
+        $ModuleInfo = Get-Module -Name "Logic.Monitor" -ListAvailable | Select-Object -First 1
+        if ($ModuleInfo) {
+            $ModuleVersion = $ModuleInfo.Version.ToString()
+        }
+    } catch {
+        # Silently continue if module version can't be determined
+    }
+
+    # Add User-Agent to headers with version if available
+    $UserAgentString = $UserAgent
+    if ($ModuleVersion) {
+        $UserAgentString = "$UserAgent/$ModuleVersion"
+    }
+    $Header.Add("User-Agent", $UserAgentString)
 
     If ($Auth.Type -eq "Bearer") {
         $Token = [System.Net.NetworkCredential]::new("", $Auth.BearerToken).Password

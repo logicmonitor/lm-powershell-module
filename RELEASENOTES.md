@@ -1,4 +1,41 @@
 # Previous module release notes
+## 7.1.0
+### New Cmdlets:
+ - **New-LMAlertRule**: Create alert rules with custom priorities, escalation chains, and filtering options.
+ - **Set-LMAlertRule**: Update existing alert rules with modified settings such as escalation chains or priority levels.
+ - **Remove-LMAlertRule**: Delete alert rules by ID or name with confirmation protection.
+ - **Get-LMLogicModuleMetadata**: Retrieve metadata about Logic Modules with filtering by type, tag, status, or usage.
+### Updated Cmdlets:
+ - **Set-LMWebsite**: Added *-TestLocationAll*, *-TestLocationCollectorIds*, and *-TestLocationSmgIds* parameters with improved validation logic to control test location settings.
+
+## 7.0.1
+
+### Documentation Overhaul
+We're excited to announce our new comprehensive documentation site at [https://logicmonitor.github.io/lm-powershell-module-docs/](https://logicmonitor.github.io/lm-powershell-module-docs/). The site includes:
+- Detailed command reference information
+- Code examples and snippets
+- Best practices guides
+
+### New Filter Wizard
+Introducing the Filter Wizard, a new interactive tool to help build complex filters:
+- Visual filter construction
+- Support for all filter operators
+- Real-time filter preview
+- Available through `Build-LMFilter` or `-FilterWizard` parameter
+
+```powershell
+# Use the standalone filter builder
+Build-LMFilter
+
+# Use built-in filter wizard parameter
+Get-LMDeviceGroup -FilterWizard
+```
+![Filter Wizard Example](https://logicmonitor.github.io/lm-powershell-module-docs/_astro/LMFilter.4g625cq9_1boMAv.webp)
+
+### Updated Cmdlets:
+ - **Get-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* to the available parameters to allow for easy filtering for a specific instance group.
+ - **Remove-LMDeviceDatasourceInstanceGroup**: Added *-InstanceGroupName* and *-HdsId* to the available parameters to allow for easy targeting for a specific instance group.
+
 ## 6.6
 ### Updated Cmdlets:
  - **Get-LMSysOIDMap**: Added cmdlet to query and retrieve sysOIDMap details.
