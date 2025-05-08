@@ -73,12 +73,35 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.1.1
+## 7.2
 ### Updated Cmdlets:
- - **New-LMWebsite**: Added *-TestLocationAll*, *-TestLocationCollectorIds*, and *-TestLocationSmgIds* parameters with improved validation logic to control test location settings. The legacy *-CheckPoints* parameter is now marked as deprecated and may be removed in a future version.
+ - **Connect-LMAccount**: Added beta support for LM GovCloud tenants. To connect to a GovCloud instance use the **-GovCloud** switch when connecting. All existing cmdlets have been updated to support GovCloud portals but not all features in Commercial tenants are available in GovCloud.
 
-### Changes:
- - **API Headers**: Updated API request headers to use a custom User-Agent for usage reporting on versions deployed.
+### New Cmdlets:
+ - **Get-LMLogPartition**: Retrieves details of existing log partitions.
+ - **Get-LMLogPartitionRetention**: Gets the available retention policies for a portal.
+ - **Set-LMLogPartition**: Modifies the settings of specified log partitions. Available parameters include Sku, Rentention, Status and Description.
+ - **Set-LMLogPartitionAction**: Updates a log partition to resume or pause log ingest.
+ - **New-LMLogPartition**: Creates new log partition for log management.
+ - **Remove-LMLogPartition**: Deletes specified log partitions from the system. A log partition must have ingest disabled for 24 hours before it can be removed.
+
+### Examples:
+```powershell
+#Retrieve a specific log partition by name
+Get-LMLogPartition -Name "customerA"
+
+#Get a log partition and update its description and disable ingest
+Get-LMLogPartition -Name "CustomerB" | Set-LMLogPartition -Description "Offboarded 5/5/25" -Debug -Status inactive
+
+#Remove a disabled log partition
+Remove-LMLogPartition -Name "CustomerB" -Confirm:$false
+
+#Resume log ingestion
+Set-LMLogPartitionAction -Name "CustomerC" -Action "resume"
+```
+
+### Changes in v7:
+ - **API Headers**: Updated all API request headers to use a custom User-Agent (Logic.Monitor-PowerShell-Module/Version) for usage reporting on versions deployed.
 
 ### Documentation Overhaul
 We're excited to announce our new comprehensive documentation site at [https://logicmonitor.github.io/lm-powershell-module-docs/](https://logicmonitor.github.io/lm-powershell-module-docs/). The site includes:

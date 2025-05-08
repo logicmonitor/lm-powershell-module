@@ -1,4 +1,11 @@
 # Previous module release notes
+## 7.1.1
+### Updated Cmdlets:
+ - **New-LMWebsite**: Added *-TestLocationAll*, *-TestLocationCollectorIds*, and *-TestLocationSmgIds* parameters with improved validation logic to control test location settings. The legacy *-CheckPoints* parameter is now marked as deprecated and may be removed in a future version.
+
+### Changes:
+ - **API Headers**: Updated API request headers to use a custom User-Agent for usage reporting on versions deployed.
+ 
 ## 7.1.0
 ### New Cmdlets:
  - **New-LMAlertRule**: Create alert rules with custom priorities, escalation chains, and filtering options.
