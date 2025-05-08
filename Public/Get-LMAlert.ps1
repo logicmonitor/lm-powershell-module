@@ -160,7 +160,7 @@ Function Get-LMAlert {
             
             Try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 

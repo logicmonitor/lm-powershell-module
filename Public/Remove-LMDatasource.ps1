@@ -83,7 +83,7 @@ Function Remove-LMDatasource {
             Try {
                 If ($PSCmdlet.ShouldProcess($Message, "Remove Datasource")) {                    
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 

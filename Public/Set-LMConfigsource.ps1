@@ -133,7 +133,7 @@ Function Set-LMConfigsource {
 
                 If ($PSCmdlet.ShouldProcess($Message, "Set Configsource")) {  
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + "?forceUniqueIdentifier=true"
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?forceUniqueIdentifier=true"
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 

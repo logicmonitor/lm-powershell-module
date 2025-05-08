@@ -87,13 +87,15 @@ Function Remove-LMDeviceDatasourceInstance {
 
             #Lookup Wildcard Id
             If(!$InstanceId -and $WildValue) {
-                $InstanceId = (Get-LMDeviceDataSourceInstance -Id $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.wildValue -eq $WildValue }).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $InstanceId) {
+                $LookupResult = (Get-LMDeviceDataSourceInstance -Id $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.wildValue -eq $WildValue }).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $WildValue) {
                     return
                 }
+                $InstanceId = $LookupResult
             }
-            Else{
+            Elseif (!$InstanceId -and !$WildValue) {
                 Write-Error "Please provide a valid instance ID or wildvalue to remove a device datasource instance."
+                Return
             }
             
             #Build header and uri
@@ -112,7 +114,7 @@ Function Remove-LMDeviceDatasourceInstance {
             Try {
                 If ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance")) {                    
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath + $QueryParams
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 

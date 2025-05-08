@@ -29,6 +29,12 @@ Name of cached account you wish to connect to. This parameter is optional and ca
 .PARAMETER SessionSync
 Use session sync capability instead of api key
 
+.PARAMETER GovCloud
+Connect using the LM GovCloud portal
+
+.PARAMETER SkipCredValidation
+Skip validation of credentials, useful when connecting to a portal that is not yet configured with the Logic.Monitor module
+
 .EXAMPLE
 #Connecting to an Account using an Access ID and Access Key
 Connect-LMAccount -AccessId xxxxxx -AccessKey xxxxxx -AccountName subdomain
@@ -82,6 +88,8 @@ Function Connect-LMAccount {
         [Switch]$AutoUpdateModuleVersion,
 
         [Switch]$SkipVersionCheck,
+
+        [Switch]$GovCloud,
 
         [Switch]$SkipCredValidation
     )
@@ -239,6 +247,7 @@ Function Connect-LMAccount {
         Portal      = $AccountName
         Valid       = $true
         Type        = $Type
+        GovCloud    = $GovCloud.IsPresent
     }
 
     #Check for newer version of Logic.Monitor module

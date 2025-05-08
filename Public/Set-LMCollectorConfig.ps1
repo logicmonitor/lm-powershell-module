@@ -249,7 +249,7 @@ Function Set-LMCollectorConfig {
                 If ($PSCmdlet.ShouldProcess($Message, "Set Collector Config ")) {  
                     Write-Warning "[WARN]: This command will restart the targeted collector on update of the configuration" 
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
                     
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
@@ -263,7 +263,7 @@ Function Set-LMCollectorConfig {
                             #Build header and uri
                             $ResourcePath = "/setting/collector/collectors/$Id/services/restart/$Response"
                             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/santaba/rest" + $ResourcePath
+                            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
         
                             $SubmitResponse = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
                             If ($SubmitResponse.errorMessage -eq "The task is still running") {

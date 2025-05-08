@@ -15,28 +15,29 @@ Connect to a specified LM portal to run commands against
 ### LMv1 (Default)
 ```
 Connect-LMAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-DisableConsoleLogging]
- [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-GovCloud] [-SkipCredValidation]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Bearer
 ```
 Connect-LMAccount -BearerToken <String> -AccountName <String> [-DisableConsoleLogging]
- [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-GovCloud] [-SkipCredValidation]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### SessionSync
 ```
 Connect-LMAccount -AccountName <String> [-SessionSync] [-DisableConsoleLogging] [-AutoUpdateModuleVersion]
- [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-SkipVersionCheck] [-GovCloud] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Cached
 ```
 Connect-LMAccount [-UseCachedCredential] [-CachedAccountName <String>] [-DisableConsoleLogging]
- [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-SkipCredValidation] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-AutoUpdateModuleVersion] [-SkipVersionCheck] [-GovCloud] [-SkipCredValidation]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -220,8 +221,23 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -GovCloud
+Connect using the LM GovCloud portal
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -SkipCredValidation
-{{ Fill SkipCredValidation Description }}
+Skip validation of credentials, useful when connecting to a portal that is not yet configured with the Logic.Monitor module
 
 ```yaml
 Type: SwitchParameter
