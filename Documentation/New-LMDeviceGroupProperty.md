@@ -5,47 +5,49 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-LMDeviceGroupProperty
+# New-LMDeviceGroupProperty
 
 ## SYNOPSIS
-Removes a property from a LogicMonitor device group.
+Creates a new device group property in LogicMonitor.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Remove-LMDeviceGroupProperty -Id <Int32> -PropertyName <String> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-LMDeviceGroupProperty -Id <Int32> -PropertyName <String> -PropertyValue <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Remove-LMDeviceGroupProperty -Name <String> -PropertyName <String> [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceGroupProperty -Name <String> -PropertyName <String> -PropertyValue <String>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Remove-LMDeviceGroupProperty function removes a specified property from a LogicMonitor device group.
-It can remove the property either by providing the device group ID or the device group name.
+The New-LMDeviceGroupProperty function creates a new device group property in LogicMonitor.
+It allows you to specify the property name and value, and either the device group ID or device group name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Remove-LMDeviceGroupProperty -Id 1234 -PropertyName "Property1"
-Removes the property named "Property1" from the device with ID 1234.
+New-LMDeviceGroupProperty -Id 1234 -PropertyName "Location" -PropertyValue "New York"
 ```
+
+Creates a new device group property with the name "Location" and value "New York" for the device group with ID 1234.
 
 ### EXAMPLE 2
 ```
-Remove-LMDeviceGroupProperty -Name "Device1" -PropertyName "Property2"
-Removes the property named "Property2" from the device with the name "Device1".
+New-LMDeviceGroupProperty -Name "Servers" -PropertyName "Environment" -PropertyValue "Production"
 ```
+
+Creates a new device group property with the name "Environment" and value "Production" for the device group with the name "Servers".
 
 ## PARAMETERS
 
 ### -Id
-The ID of the device group from which the property should be removed.
+Specifies the ID of the device group.
 This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
@@ -61,7 +63,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the device group from which the property should be removed.
+Specifies the name of the device group.
 This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
@@ -77,8 +79,7 @@ Accept wildcard characters: False
 ```
 
 ### -PropertyName
-The name of the property to be removed.
-This parameter is mandatory.
+Specifies the name of the property to create.
 
 ```yaml
 Type: String
@@ -92,31 +93,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+### -PropertyValue
+Specifies the value of the property to create.
 
 ```yaml
-Type: SwitchParameter
+Type: String
 Parameter Sets: (All)
-Aliases: wi
+Aliases:
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -143,12 +128,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None.
+### You can pipe device group objects to this command.
 ## OUTPUTS
 
-### Returns a PSCustomObject containing the ID of the device group and a message confirming the successful removal of the property.
+### Returns LogicMonitor.DeviceGroupProperty object.
 ## NOTES
-This function requires a valid LogicMonitor API authentication.
-Make sure you are logged in before running any commands.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

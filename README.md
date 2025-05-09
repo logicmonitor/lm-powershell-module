@@ -73,6 +73,17 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
+## 7.2.1
+### Updated Cmdlets:
+ - **Remove-LMDeviceGroupProperty**: Added pipeline support for passing DeviceGroup objects to this cmdlet for processing.
+
+### New Cmdlets:
+ - **Set-LMDeviceGroupProperty**: Cmdlet to update the value of a custom property assigned to a device group. Cmdlet takes a *-Id* or *-Name* of the device group to be updated along with a *-PropertyName* and *-PropertyValue*. This cmdlet has pipeline support for DeviceGroup objects.
+ - **New-LMDeviceGroupProperty**: Cmdlet to remove the value of a custom property assigned to a device group. Cmdlet takes a *-Id* or *-Name* of the device group to be updated along with a *-PropertyName* that is to be deleted. This cmdlet has pipeline support for DeviceGroup objects.
+
+### Bug Fixes:
+ - **-Filter Parameter**: Fixed an issue that caused and invalid filter error when trying to use filters that contains special reserved characters such as *()$&#[]*.
+
 ## 7.2
 ### Updated Cmdlets:
  - **Connect-LMAccount**: Added beta support for LM GovCloud tenants. To connect to a GovCloud instance use the **-GovCloud** switch when connecting. All existing cmdlets have been updated to support GovCloud portals but not all features in Commercial tenants are available in GovCloud.

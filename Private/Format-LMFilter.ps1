@@ -83,7 +83,19 @@ Function Format-LMFilter {
                 }
             }
         }
-        #$FormatedFilter = $FormatedFilter.Replace("\", "\\")
+
+        #Escape reserved characters DEVTS-21125, limit to non filter characters, replace with URL encoded characters
+        $FormatedFilter = $FormatedFilter.Replace("(", "%5C%28")
+        $FormatedFilter = $FormatedFilter.Replace(")", "%5C%29")
+        $FormatedFilter = $FormatedFilter.Replace("$", "%5C%24")
+        $FormatedFilter = $FormatedFilter.Replace("&", "%5C%26")
+        $FormatedFilter = $FormatedFilter.Replace("#", "%5C%23")
+        $FormatedFilter = $FormatedFilter.Replace("[", "%5C%5B")
+        $FormatedFilter = $FormatedFilter.Replace("]", "%5C%5D")
+
+        #Apply patent pending double URL encoding to appease the API gods
+        $FormatedFilter = [System.Web.HttpUtility]::UrlEncode($FormatedFilter)
+
         Write-Debug "Constructed Filter-v2: $FormatedFilter"
         Return $FormatedFilter
     }

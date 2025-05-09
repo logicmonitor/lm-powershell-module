@@ -23,7 +23,7 @@ Remove-LMDeviceGroupProperty -Name "Device1" -PropertyName "Property2"
 Removes the property named "Property2" from the device with the name "Device1".
 
 .INPUTS
-None.
+You can pipe device group objects to this command.
 
 .OUTPUTS
 Returns a PSCustomObject containing the ID of the device group and a message confirming the successful removal of the property.
@@ -35,7 +35,7 @@ Function Remove-LMDeviceGroupProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id',ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
