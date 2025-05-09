@@ -82,7 +82,7 @@ Connect-LMAccount -UseCachedCredential
  - **New-LMDeviceGroupProperty**: Cmdlet to remove the value of a custom property assigned to a device group. Cmdlet takes a *-Id* or *-Name* of the device group to be updated along with a *-PropertyName* that is to be deleted. This cmdlet has pipeline support for DeviceGroup objects.
 
 ### Bug Fixes:
- - **-Filter Parameter**: Fixed an issue that caused and invalid filter error when trying to use filters that contains special reserved characters such as *()$&#[]*.
+ - **-Filter Parameter**: Fixed an issue that caused an invalid filter error when trying to use filters that contain special reserved characters such as *()$&#[]*.
 
 ## 7.2
 ### Updated Cmdlets:
