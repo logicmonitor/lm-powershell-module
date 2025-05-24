@@ -73,45 +73,63 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.2.1
+## 7.2.2
 ### Updated Cmdlets:
- - **Remove-LMDeviceGroupProperty**: Added pipeline support for passing DeviceGroup objects to this cmdlet for processing.
+ - **Get-LMAlert**: Starting with portal version 222 you can now add the parameter -customColumns to your bulk alert requests to return up to 5 additional properties under the customColumn key. Previously this was limited to direct **/alert/alerts/$id** but has been opened up to all alert queries.
+
+ ```powershell
+ Get-LMAlert -customColumns "system.hostStatus,custom.prop,other.prop"
+ ```
 
 ### New Cmdlets:
- - **Set-LMDeviceGroupProperty**: Cmdlet to update the value of a custom property assigned to a device group. Cmdlet takes a *-Id* or *-Name* of the device group to be updated along with a *-PropertyName* and *-PropertyValue*. This cmdlet has pipeline support for DeviceGroup objects.
- - **New-LMDeviceGroupProperty**: Cmdlet to remove the value of a custom property assigned to a device group. Cmdlet takes a *-Id* or *-Name* of the device group to be updated along with a *-PropertyName* that is to be deleted. This cmdlet has pipeline support for DeviceGroup objects.
+ - **Get-LMCostOptimizationRecommendations**: Cmdlet to the current recommendations available in Cost Optimization. When using filters, consult the LM API docs for allowed filter fields as not all fields support filtering at this time.
 
-### Bug Fixes:
- - **-Filter Parameter**: Fixed an issue that caused an invalid filter error when trying to use filters that contain special reserved characters such as *()$&#[]*.
-
-## 7.2
-### Updated Cmdlets:
- - **Connect-LMAccount**: Added beta support for LM GovCloud tenants. To connect to a GovCloud instance use the **-GovCloud** switch when connecting. All existing cmdlets have been updated to support GovCloud portals but not all features in Commercial tenants are available in GovCloud.
-
-### New Cmdlets:
- - **Get-LMLogPartition**: Retrieves details of existing log partitions.
- - **Get-LMLogPartitionRetention**: Gets the available retention policies for a portal.
- - **Set-LMLogPartition**: Modifies the settings of specified log partitions. Available parameters include Sku, Rentention, Status and Description.
- - **Set-LMLogPartitionAction**: Updates a log partition to resume or pause log ingest.
- - **New-LMLogPartition**: Creates new log partition for log management.
- - **Remove-LMLogPartition**: Deletes specified log partitions from the system. A log partition must have ingest disabled for 24 hours before it can be removed.
-
-### Examples:
 ```powershell
-#Retrieve a specific log partition by name
-Get-LMLogPartition -Name "customerA"
-
-#Get a log partition and update its description and disable ingest
-Get-LMLogPartition -Name "CustomerB" | Set-LMLogPartition -Description "Offboarded 5/5/25" -Debug -Status inactive
-
-#Remove a disabled log partition
-Remove-LMLogPartition -Name "CustomerB" -Confirm:$false
-
-#Resume log ingestion
-Set-LMLogPartitionAction -Name "CustomerC" -Action "resume"
+#Retrieve cost optimization recommendations using a filter
+Get-LMCostOptimizationRecommendations -Filter 'recommendationCategory -eq "Underutilized AWS EC2 instances"'
 ```
 
-### Changes in v7:
+ - **Get-LMCostOptimizationRecommendationCategories**: Cmdlet to list the available categories available for recommendations. This cmdlet does not currently support filtering.
+
+ - **Get-LMService**: Ease of use cmdlet to return service resource info. Currently Get-LMDevice returns these resources but a separate cmdlet has been created to easily distinguished between a device and service. All the same parameters supported in *Get-LMDevice* are supported with this cmdlet.
+
+ - **Get-LMServiceMember**: Cmdlet to return members assigned to a service. Supports service retrieval by id, displayName and name.
+
+ - **New-Recipient**: Utility cmdlet to assist in properly formating recipient arrays for use with *LMRecipientGroup cmdlets. See example for usage.
+
+ - **New-RecipientGroup**: Cmdlet to create new recipient groups. Use the New-Recipient utility cmdlet to properly construct your recipient list.
+
+ - **Set-RecipientGroup**: Cmdlet to update specified recipient groups. Supports pipeline input.
+
+ - **Remove-RecipientGroup**: Cmdlet to remove specified recipient groups. Supports pipeline input.
+
+```powershell
+#This example creates a new LogicMonitor recipient group named "MyRecipientGroup" with a description and recipients built using the New-LMRecipient function.
+$recipients = @(
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method 'email'
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method 'sms'
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method 'voice'
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method 'smsemail'
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method '<name_of_existing_integration>'
+    New-LMRecipient -Type 'ARBITRARY' -Addr 'someone@other.com' -Method 'email'
+    New-LMRecipient -Type 'GROUP' -Addr 'Helpdesk'
+)
+New-LMRecipientGroup -Name "MyRecipientGroup" -Description "This is a test recipient group" -Recipients $recipients
+
+#This example updates a LogicMonitor recipient group named "MyRecipientGroupUpdated" with a description and recipients built using the New-LMRecipient function.
+$recipients = @(
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method 'email'
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method 'sms'
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method 'voice'
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method 'smsemail'
+    New-LMRecipient -Type 'ADMIN' -Addr 'user@domain.com' -Method '<name_of_existing_integration>'
+    New-LMRecipient -Type 'ARBITRARY' -Addr 'someone@other.com' -Method 'email'
+    New-LMRecipient -Type 'GROUP' -Addr 'Helpdesk'
+)
+Set-LMRecipientGroup -Id "1234567890" -NewName "MyRecipientGroupUpdated" -Description "This is a test recipient group updated" -Recipients $recipients
+```
+
+### Major Changes in v7:
  - **API Headers**: Updated all API request headers to use a custom User-Agent (Logic.Monitor-PowerShell-Module/Version) for usage reporting on versions deployed.
 
 ### Documentation Overhaul

@@ -82,7 +82,6 @@ Function Get-LMAlert {
         [Parameter(ParameterSetName = 'FilterWizard')]
         [Switch]$FilterWizard,
 
-        [Parameter(ParameterSetName = 'Id')]
         [String[]]$CustomColumns,
 
         [ValidateRange(1, 1000)]
@@ -124,24 +123,7 @@ Function Get-LMAlert {
             #Build query params
 
             Switch ($PSCmdlet.ParameterSetName) {
-                "Id" { 
-                    $resourcePath += "/$Id" 
-                
-                    #Check if we need to add customColumns
-                    If ($CustomColumns) {
-                        $FormatedColumns = @()
-                        Foreach ($Column in $CustomColumns) {
-                            $FormatedColumns += [System.Web.HTTPUtility]::UrlEncode($Column)
-                        }
-
-                        If ($QueryParams) {
-                            $QueryParams += "&customColumns=$($FormatedColumns -join ",")"
-                        }
-                        Else {
-                            $QueryParams = "?customColumns=$($FormatedColumns -join",")"
-                        }
-                    }
-                }
+                "Id" { $resourcePath += "/$Id" }
                 "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
                 "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
                 "Filter" {
@@ -155,6 +137,21 @@ Function Get-LMAlert {
                     $Filter = Build-LMFilter -PassThru
                     $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=$Sort"
+                }
+            }
+
+            #Check if we need to add customColumns
+            If ($CustomColumns) {
+                $FormatedColumns = @()
+                Foreach ($Column in $CustomColumns) {
+                    $FormatedColumns += [System.Web.HTTPUtility]::UrlEncode($Column)
+                }
+
+                If ($QueryParams) {
+                    $QueryParams += "&customColumns=$($FormatedColumns -join ",")"
+                }
+                Else {
+                    $QueryParams = "?customColumns=$($FormatedColumns -join",")"
                 }
             }
             

@@ -1,4 +1,42 @@
 # Previous module release notes
+## 7.2.1
+### Updated Cmdlets:
+ - **Remove-LMDeviceGroupProperty**: Added pipeline support for passing DeviceGroup objects to this cmdlet for processing.
+
+### New Cmdlets:
+ - **Set-LMDeviceGroupProperty**: Cmdlet to update the value of a custom property assigned to a device group. Cmdlet takes a *-Id* or *-Name* of the device group to be updated along with a *-PropertyName* and *-PropertyValue*. This cmdlet has pipeline support for DeviceGroup objects.
+ - **New-LMDeviceGroupProperty**: Cmdlet to remove the value of a custom property assigned to a device group. Cmdlet takes a *-Id* or *-Name* of the device group to be updated along with a *-PropertyName* that is to be deleted. This cmdlet has pipeline support for DeviceGroup objects.
+
+### Bug Fixes:
+ - **-Filter Parameter**: Fixed an issue that caused an invalid filter error when trying to use filters that contain special reserved characters such as *()$&#[]*.
+
+## 7.2
+### Updated Cmdlets:
+ - **Connect-LMAccount**: Added beta support for LM GovCloud tenants. To connect to a GovCloud instance use the **-GovCloud** switch when connecting. All existing cmdlets have been updated to support GovCloud portals but not all features in Commercial tenants are available in GovCloud.
+
+### New Cmdlets:
+ - **Get-LMLogPartition**: Retrieves details of existing log partitions.
+ - **Get-LMLogPartitionRetention**: Gets the available retention policies for a portal.
+ - **Set-LMLogPartition**: Modifies the settings of specified log partitions. Available parameters include Sku, Rentention, Status and Description.
+ - **Set-LMLogPartitionAction**: Updates a log partition to resume or pause log ingest.
+ - **New-LMLogPartition**: Creates new log partition for log management.
+ - **Remove-LMLogPartition**: Deletes specified log partitions from the system. A log partition must have ingest disabled for 24 hours before it can be removed.
+
+### Examples:
+```powershell
+#Retrieve a specific log partition by name
+Get-LMLogPartition -Name "customerA"
+
+#Get a log partition and update its description and disable ingest
+Get-LMLogPartition -Name "CustomerB" | Set-LMLogPartition -Description "Offboarded 5/5/25" -Debug -Status inactive
+
+#Remove a disabled log partition
+Remove-LMLogPartition -Name "CustomerB" -Confirm:$false
+
+#Resume log ingestion
+Set-LMLogPartitionAction -Name "CustomerC" -Action "resume"
+```
+
 ## 7.1.1
 ### Updated Cmdlets:
  - **New-LMWebsite**: Added *-TestLocationAll*, *-TestLocationCollectorIds*, and *-TestLocationSmgIds* parameters with improved validation logic to control test location settings. The legacy *-CheckPoints* parameter is now marked as deprecated and may be removed in a future version.

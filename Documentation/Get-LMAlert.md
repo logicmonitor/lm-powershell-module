@@ -14,15 +14,15 @@ Retrieves alerts from LogicMonitor.
 
 ### All (Default)
 ```
-Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-BatchSize <Int32>]
- [-Sort <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-CustomColumns <String[]>]
+ [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Range
 ```
 Get-LMAlert [-StartDate <DateTime>] [-EndDate <DateTime>] [-Severity <String>] [-Type <String>]
- [-ClearedAlerts <Boolean>] [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-ClearedAlerts <Boolean>] [-CustomColumns <String[]>] [-BatchSize <Int32>] [-Sort <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
@@ -35,13 +35,15 @@ Get-LMAlert -Id <String> [-Severity <String>] [-Type <String>] [-ClearedAlerts <
 ### Filter
 ```
 Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-Filter <Object>]
- [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-CustomColumns <String[]>] [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### FilterWizard
 ```
 Get-LMAlert [-Severity <String>] [-Type <String>] [-ClearedAlerts <Boolean>] [-FilterWizard]
- [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-CustomColumns <String[]>] [-BatchSize <Int32>] [-Sort <String>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -199,7 +201,7 @@ Array of custom column names to include in the results.
 
 ```yaml
 Type: String[]
-Parameter Sets: Id
+Parameter Sets: (All)
 Aliases:
 
 Required: False
