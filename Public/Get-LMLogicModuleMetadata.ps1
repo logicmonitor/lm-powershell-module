@@ -54,7 +54,7 @@ Function Get-LMLogicModuleMetadata {
         [Boolean]$isInUse,
 
         [Parameter(Mandatory = $false)]
-        [ValidateSet("DATASOURCE", "PROPERTYSOURCE", "CONFIGSOURCE", "EVENTSOURCE", "TOPOLOGYSOURCE", "SNMP_SYSOID_MAP","LOGSOURCE","APPLIESTO_FUNCTION")]
+        [ValidateSet("DATASOURCE", "PROPERTYSOURCE", "CONFIGSOURCE", "DIAGNOSTICSOURCE", "EVENTSOURCE", "TOPOLOGYSOURCE", "SNMP_SYSOID_MAP","LOGSOURCE","APPLIESTO_FUNCTION")]
         [String]$Type,
 
         [Parameter(Mandatory = $false)]
@@ -91,30 +91,13 @@ Function Get-LMLogicModuleMetadata {
             $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
             #Perform filtering since this endpoint does not support filtering
-            If ($isInUse -ne $null -and $isInUse -eq $true) {
-                $Response = $Response | Where-Object { $_.isInUse -eq $true }
-            } ElseIf ($isInUse -ne $null -and $isInUse -eq $false) {
-                $Response = $Response | Where-Object { $_.isInUse -eq $false }
-            }
-
-            If ($Type) {
-                $Response = $Response | Where-Object { $_.type -eq $Type }
-            }
-
-            If ($Tag) {
-                $Response = $Response | Where-Object { $_.tags -contains $Tag }
-            }
-
-            If ($Name) {
-                $Response = $Response | Where-Object { $_.name -like "*$Name*" }
-            }
-
-            If ($Status) {
-                $Response = $Response | Where-Object { $_.status -like "*$Status*" }
-            }
-
-            If ($AuthorPortalName) {
-                $Response = $Response | Where-Object { $_.authorPortalName -like "*$AuthorPortalName*" }
+            $Response = $Response | Where-Object {
+                ($null -eq $isInUse         -or $_.isInUse         -eq $isInUse)         -and
+                ([string]::IsNullOrEmpty($Type)            -or $_.type            -eq $Type)            -and
+                ([string]::IsNullOrEmpty($Tag)             -or $_.tags            -contains $Tag)      -and
+                ([string]::IsNullOrEmpty($Name)            -or $_.name            -like "*$Name*")     -and
+                ([string]::IsNullOrEmpty($Status)          -or $_.status          -like "*$Status*")   -and
+                ([string]::IsNullOrEmpty($AuthorPortalName)-or $_.authorPortalName -like "*$AuthorPortalName*")
             }
              
         }

@@ -1817,6 +1817,59 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.DiagnosticSource-->
+      <View>
+         <Name>LogicMonitorDiagnosticSource</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DiagnosticSource</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>tags</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>technology</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>appliesTo</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>tags</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>technology</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>appliesTo</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.Topologysource-->
       <View>
          <Name>LogicMonitorTopologysource</Name>

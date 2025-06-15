@@ -84,7 +84,13 @@ Function Set-LMRecipientGroup {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                @($Data.Keys) | ForEach-Object {
+                    if ($_ -eq 'groupName') {
+                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
+                    } else {
+                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
+                    }
+                }
 
                 $Data = ($Data | ConvertTo-Json)
 

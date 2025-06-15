@@ -1,33 +1,30 @@
 <#
 .SYNOPSIS
-Updates a LogicMonitor website group configuration.
+Updates a LogicMonitor Service group configuration.
 
 .DESCRIPTION
-The Set-LMWebsiteGroup function modifies an existing website group in LogicMonitor.
+The Set-LMServiceGroup function modifies an existing Service group in LogicMonitor, allowing updates to its name, description, properties, and various other settings.
 
 .PARAMETER Id
-Specifies the ID of the website group to modify.
+Specifies the ID of the Service group to modify.
 
 .PARAMETER Name
-Specifies the current name of the website group.
+Specifies the current name of the Service group.
 
 .PARAMETER NewName
-Specifies the new name for the website group.
+Specifies the new name for the Service group.
 
 .PARAMETER Description
-Specifies the description for the website group.
+Specifies the new description for the Service group.
 
 .PARAMETER Properties
-Specifies a hashtable of custom properties for the website group.
+Specifies a hashtable of custom properties for the Service group.
 
 .PARAMETER PropertiesMethod
-Specifies how to handle properties. Valid values: "Add", "Replace", "Refresh".
+Specifies how to handle existing properties. Valid values are "Add", "Replace", or "Refresh". Default is "Replace".
 
 .PARAMETER DisableAlerting
-Indicates whether to disable alerting for the website group.
-
-.PARAMETER StopMonitoring
-Indicates whether to stop monitoring the website group.
+Specifies whether to disable alerting for the Service group.
 
 .PARAMETER ParentGroupId
 Specifies the ID of the parent group.
@@ -36,27 +33,26 @@ Specifies the ID of the parent group.
 Specifies the name of the parent group.
 
 .EXAMPLE
-Set-LMWebsiteGroup -Id 123 -NewName "Updated Group" -Description "New description" -ParentGroupId 456
-Updates the website group with new name, description, and parent group.
+Set-LMServiceGroup -Id 123 -NewName "Updated Group" -Description "New description"
+Updates the Service group with ID 123 with a new name and description.
 
 .INPUTS
-None.
+You can pipe objects containing Id properties to this function.
 
 .OUTPUTS
-Returns a LogicMonitor.WebsiteGroup object containing the updated configuration.
+Returns a LogicMonitor.DeviceGroup object containing the updated group information.
 
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
+Function Set-LMServiceGroup {
 
-Function Set-LMWebsiteGroup {
-
-    [CmdletBinding(DefaultParameterSetName = 'Id-ParentGroupId')]
+    [CmdletBinding(DefaultParameterSetName = "Id-ParentGroupId", SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupId', ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName', ValueFromPipelineByPropertyName)]
+        [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName')]
         [String]$Id,
-
+        
         [Parameter(Mandatory, ParameterSetName = 'Name-ParentGroupId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-ParentGroupName')]
         [String]$Name,
@@ -72,14 +68,10 @@ Function Set-LMWebsiteGroup {
 
         [Nullable[boolean]]$DisableAlerting,
 
-        [Nullable[boolean]]$StopMonitoring,
-
-        #Need to implement testLocation
-
         [Parameter(ParameterSetName = 'Id-ParentGroupId')]
         [Parameter(ParameterSetName = 'Name-ParentGroupId')]
         [Nullable[Int]]$ParentGroupId,
-        
+
         [Parameter(ParameterSetName = 'Id-ParentGroupName')]
         [Parameter(ParameterSetName = 'Name-ParentGroupName')]
         [String]$ParentGroupName
@@ -89,26 +81,22 @@ Function Set-LMWebsiteGroup {
         #Check if we are logged in and have valid api creds
         If ($Script:LMAuth.Valid) {
 
-            #Lookup ParentGroupName
+            #Lookup Group Id
             If ($Name) {
-                $LookupResult = (Get-LMWebsiteGroup -Name $Name).Id
+                $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
                 If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
 
-            #Lookup ParentGroupName
+            #Lookup ParentGroupId
             If ($ParentGroupName) {
-                If ($ParentGroupName -Match "\*") {
-                    Write-Error "Wildcard values not supported for groups names."
+                $LookupResult = (Get-LMDeviceGroup -Name $ParentGroupName).Id
+                If (Test-LookupResult -Result $LookupResult -LookupString $ParentGroupName) {
                     return
                 }
-                $ParentGroupId = (Get-LMWebsiteGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-                If (!$ParentGroupId) {
-                    Write-Error "Unable to find group: $ParentGroupName, please check spelling and try again."
-                    return
-                }
+                $ParentGroupId = $LookupResult
             }
 
             #Build custom props hashtable
@@ -120,16 +108,25 @@ Function Set-LMWebsiteGroup {
             }
                     
             #Build header and uri
-            $ResourcePath = "/website/groups/$Id"
+            $ResourcePath = "/device/groups/$Id"
+
+            If ($PSItem) {
+                $Message = "Id: $Id | Name: $($PSItem.name) | Path: $($PSItem.fullPath)"
+            }
+            Elseif ($Name) {
+                $Message = "Id: $Id | Name: $Name)"
+            }
+            Else {
+                $Message = "Id: $Id"
+            }
 
             Try {
                 $Data = @{
-                    name            = $NewName
-                    description     = $Description
-                    disableAlerting = $DisableAlerting
-                    stopMonitoring  = $StopMonitoring
-                    properties      = $customProperties
-                    parentId        = $ParentGroupId
+                    name             = $NewName
+                    description      = $Description
+                    disableAlerting  = $DisableAlerting
+                    customProperties = $customProperties
+                    parentId         = $ParentGroupId
                 }
 
                 #Remove empty keys so we dont overwrite them
@@ -143,15 +140,17 @@ Function Set-LMWebsiteGroup {
             
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+                If ($PSCmdlet.ShouldProcess($Message, "Set Device Group")) { 
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem
