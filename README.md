@@ -92,35 +92,8 @@ Connect-LMAccount -UseCachedCredential
 
  - **New-LMCachedAccount / Remove-LMCachedAccount**: Improved logic for handling credential vaults and metadata validation.
 
-## 7.2.2
-### Updated Cmdlets:
- - **Get-LMAlert**: Starting with portal version 222 you can now add the parameter -customColumns to your bulk alert requests to return up to 5 additional properties under the customColumn key. Previously this was limited to direct **/alert/alerts/$id** but has been opened up to all alert queries.
-
- ```powershell
- Get-LMAlert -customColumns "system.hostStatus,custom.prop,other.prop"
- ```
-
-### New Cmdlets:
- - **Get-LMCostOptimizationRecommendations**: Cmdlet to the current recommendations available in Cost Optimization. When using filters, consult the LM API docs for allowed filter fields as not all fields support filtering at this time.
-
-```powershell
-#Retrieve cost optimization recommendations using a filter
-Get-LMCostOptimizationRecommendations -Filter 'recommendationCategory -eq "Underutilized AWS EC2 instances"'
-```
-
- - **Get-LMCostOptimizationRecommendationCategories**: Cmdlet to list the available categories available for recommendations. This cmdlet does not currently support filtering.
-
- - **Get-LMService**: Ease of use cmdlet to return service resource info. Currently Get-LMDevice returns these resources but a separate cmdlet has been created to easily distinguished between a device and service. All the same parameters supported in *Get-LMDevice* are supported with this cmdlet.
-
- - **Get-LMServiceMember**: Cmdlet to return members assigned to a service. Supports service retrieval by id, displayName and name.
-
- - **New-Recipient**: Utility cmdlet to assist in properly formating recipient arrays for use with *LMRecipientGroup cmdlets. See example for usage.
-
- - **New-RecipientGroup**: Cmdlet to create new recipient groups. Use the New-Recipient utility cmdlet to properly construct your recipient list.
-
- - **Set-RecipientGroup**: Cmdlet to update specified recipient groups. Supports pipeline input.
-
- - **Remove-RecipientGroup**: Cmdlet to remove specified recipient groups. Supports pipeline input.
+### Note on DiagnosticSources:
+DiagnosticSources are currently in closed beta and are not fully supported at this time. Only users in the DiagnosticSource closed beta will be able to leverage these cmdlets.
 
 ### Major Changes in v7:
  - **API Headers**: Updated all API request headers to use a custom User-Agent (Logic.Monitor-PowerShell-Module/Version) for usage reporting on versions deployed.
