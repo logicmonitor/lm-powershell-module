@@ -34,7 +34,7 @@ jobs:
             AccountName="$env:LM_PORTAL"
             BearerToken="$env:LM_BEARER_TOKEN"
             Module="./Logic.Monitor.psd1"
-            PreferredCollectorId="8"
+            PreferredCollectorId="76"
           }
 
           $Version = $PSVersionTable.PSVersion
