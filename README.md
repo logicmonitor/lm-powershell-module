@@ -73,27 +73,56 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.3.0
-### New Cmdlets:
- - **Get-LMDiagnosticSource**: Retrieves LogicMonitor Diagnostic Sources by ID, Name, DisplayName, or filter. Supports pagination and returns objects of type `LogicMonitor.DiagnosticSource`.
- - **New-LMDiagnosticSource**: Creates a new Diagnostic Source in LogicMonitor using a provided configuration object.
- - **Set-LMDiagnosticSource**: Updates an existing Diagnostic Source. Supports updating by ID or Name, and only sends fields that are explicitly set. Special handling for the `name` field via the `-NewName` parameter.
- - **Remove-LMDiagnosticSource**: Removes a Diagnostic Source by ID or Name.
+## 7.3.1
+### Introducing Automation Cmdlets:
 
- - **Get-LMServiceGroup**: Retrieves LogicMonitor Service Groups by ID, Name, DisplayName, or filter. Supports pagination and returns objects of type `LogicMonitor.DeviceGroup`.
- - **New-LMServiceGroup**: Creates a new Service Group in LogicMonitor.
- - **Set-LMServiceGroup**: Updates an existing Service Group. Supports updating by ID or Name, and only sends fields that are explicitly set. Special handling for the `name` field via the `-NewName` parameter.
- - **Remove-LMServiceGroup**: Removes a Service Group by ID or Name.
+This version of the Logic.Monitor module brings the first of many "automation" cmdlets that utilize the core API cmdlets to perform scripted actions within a LogicMonitor portal. These initial cmdlets have been asked for by the community and we are happy to be able to include them directly in the core Logic.Monitor powershell module. As always, please provide feedback and feature requests for automation/cmdlets you would like to see added in the future.
 
-### Updated Cmdlets:
- - **Get-LMLogicModuleMetadata**: Added support for `DIAGNOSTICSOURCE` in the `-Type` parameter. Improved filtering logic for all parameters. Fixed bug with isInUser filtering not returning all results when omitted.
+- **Invoke-LMDeviceDedupe**: Identifies and removes duplicate devices based on sysname or IP address matching. Helps clean up portals with duplicate device entries.
+  ```powershell
+  # List duplicates in a specific device group
+  Invoke-LMDeviceDedupe -ListDuplicates -DeviceGroupId 8
+  
+  # Remove duplicates from entire portal
+  Invoke-LMDeviceDedupe -RemoveDuplicates
+  ```
 
- - **Set-LMDatasource, Set-LMDevice, Set-LMDeviceGroup, Set-LMConfigsource, Set-LMPropertysource, Set-LMCollectorGroup, Set-LMTopologysource, Set-LMWebsiteGroup, Set-LMReportGroup, Set-LMRole, Set-LMNetscanGroup, Set-LMRecipientGroup, Set-LMAppliesToFunction, Set-LMAccessGroup**: Unified the empty key removal logic and special handling for `name`/`NewName` (or `groupName`/`NewName` for recipient groups). Now, the `name` (or `groupName`) field is only included if `-NewName` is specified, matching the new pattern.
+- **Import-LMDevicesFromCSV**: Bulk imports devices from CSV file with support for custom properties and automatic device group creation.
+  ```powershell
+  # Import devices from CSV file
+  Import-LMDevicesFromCSV -FilePath "C:\Devices.csv" -CollectorId 1234
+  
+  # Generate example CSV template
+  Import-LMDevicesFromCSV -GenerateExampleCSV
+  ```
 
- - **New-LMCachedAccount / Remove-LMCachedAccount**: Improved logic for handling credential vaults and metadata validation.
+- **Import-LMDeviceGroupsFromCSV**: Bulk imports device groups from CSV file with support for properties and AppliesTo logic.
+  ```powershell
+  # Import device groups from CSV
+  Import-LMDeviceGroupsFromCSV -FilePath "C:\Groups.csv" -PassThru
+  
+  # Generate example CSV template
+  Import-LMDeviceGroupsFromCSV -GenerateExampleCSV
+  ```
 
-### Note on DiagnosticSources:
-DiagnosticSources are currently in closed beta and are not fully supported at this time. Only users in the DiagnosticSource closed beta will be able to leverage these cmdlets.
+- **Find-LMDashboardWidgets**: Searches all dashboard widgets for references to specific datasources. Useful for impact analysis before datasource changes.
+  ```powershell
+  # Find widgets using specific datasources
+  Find-LMDashboardWidgets -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCENTER_VM_PERFORMANCE")
+  ```
+
+- **Copy-LMDevicePropertyToGroup**: Copies custom properties from a device to device groups. Excludes sensitive credential properties.
+  ```powershell
+  # Copy properties from device to groups
+  Copy-LMDevicePropertyToGroup -SourceDeviceId 123 -TargetGroupId 456,457 -PropertyNames "location","department"
+  ```
+
+- **Copy-LMDevicePropertyToDevice**: Copies custom properties between devices. Excludes sensitive credential properties.
+  ```powershell
+  # Copy properties between devices
+  Copy-LMDevicePropertyToDevice -SourceDeviceId 123 -TargetDeviceId 456,457 -PropertyNames "location","department"
+  ```
+
 
 ### Major Changes in v7:
  - **API Headers**: Updated all API request headers to use a custom User-Agent (Logic.Monitor-PowerShell-Module/Version) for usage reporting on versions deployed.

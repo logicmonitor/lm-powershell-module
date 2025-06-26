@@ -1,4 +1,26 @@
 # Previous module release notes
+## 7.3.0
+### New Cmdlets:
+ - **Get-LMDiagnosticSource**: Retrieves LogicMonitor Diagnostic Sources by ID, Name, DisplayName, or filter. Supports pagination and returns objects of type `LogicMonitor.DiagnosticSource`.
+ - **New-LMDiagnosticSource**: Creates a new Diagnostic Source in LogicMonitor using a provided configuration object.
+ - **Set-LMDiagnosticSource**: Updates an existing Diagnostic Source. Supports updating by ID or Name, and only sends fields that are explicitly set. Special handling for the `name` field via the `-NewName` parameter.
+ - **Remove-LMDiagnosticSource**: Removes a Diagnostic Source by ID or Name.
+
+ - **Get-LMServiceGroup**: Retrieves LogicMonitor Service Groups by ID, Name, DisplayName, or filter. Supports pagination and returns objects of type `LogicMonitor.DeviceGroup`.
+ - **New-LMServiceGroup**: Creates a new Service Group in LogicMonitor.
+ - **Set-LMServiceGroup**: Updates an existing Service Group. Supports updating by ID or Name, and only sends fields that are explicitly set. Special handling for the `name` field via the `-NewName` parameter.
+ - **Remove-LMServiceGroup**: Removes a Service Group by ID or Name.
+
+### Updated Cmdlets:
+ - **Get-LMLogicModuleMetadata**: Added support for `DIAGNOSTICSOURCE` in the `-Type` parameter. Improved filtering logic for all parameters. Fixed bug with isInUser filtering not returning all results when omitted.
+
+ - **Set-LMDatasource, Set-LMDevice, Set-LMDeviceGroup, Set-LMConfigsource, Set-LMPropertysource, Set-LMCollectorGroup, Set-LMTopologysource, Set-LMWebsiteGroup, Set-LMReportGroup, Set-LMRole, Set-LMNetscanGroup, Set-LMRecipientGroup, Set-LMAppliesToFunction, Set-LMAccessGroup**: Unified the empty key removal logic and special handling for `name`/`NewName` (or `groupName`/`NewName` for recipient groups). Now, the `name` (or `groupName`) field is only included if `-NewName` is specified, matching the new pattern.
+
+ - **New-LMCachedAccount / Remove-LMCachedAccount**: Improved logic for handling credential vaults and metadata validation.
+
+### Note on DiagnosticSources:
+DiagnosticSources are currently in closed beta and are not fully supported at this time. Only users in the DiagnosticSource closed beta will be able to leverage these cmdlets.
+
 ## 7.2.2
 ### Updated Cmdlets:
  - **Get-LMAlert**: Starting with portal version 222 you can now add the parameter -customColumns to your bulk alert requests to return up to 5 additional properties under the customColumn key. Previously this was limited to direct **/alert/alerts/$id** but has been opened up to all alert queries.
