@@ -8,8 +8,7 @@ schema: 2.0.0
 # Copy-LMDevicePropertyToDevice
 
 ## SYNOPSIS
-Copies device properties from a source device to target devices.
-Sensitive properties cannot be copied as their values are not available via API.
+Copies device properties from a source device to target devices. Sensitive properties cannot be copied as their values are not available via API.
 
 ## SYNTAX
 
@@ -28,8 +27,7 @@ Copy-LMDevicePropertyToDevice -SourceGroupId <String> -TargetDeviceId <String[]>
 ## DESCRIPTION
 The Copy-LMDevicePropertyToDevice function copies specified properties from a source device to one or more target devices.
 The source device can be randomly selected from a group or explicitly specified.
-Properties are copied to the targets while
-preserving other existing device properties.
+Properties are copied to the targets while preserving other existing device properties.
 
 ## EXAMPLES
 

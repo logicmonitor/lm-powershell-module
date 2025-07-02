@@ -3,9 +3,7 @@
     Copies device properties from a source device to target devices. Sensitive properties cannot be copied as their values are not available via API.
 
 .DESCRIPTION
-    The Copy-LMDevicePropertyToDevice function copies specified properties from a source device to one or more target devices.
-    The source device can be randomly selected from a group or explicitly specified. Properties are copied to the targets while
-    preserving other existing device properties.
+    The Copy-LMDevicePropertyToDevice function copies specified properties from a source device to one or more target devices. The source device can be randomly selected from a group or explicitly specified. Properties are copied to the targets while preserving other existing device properties.
 
 .PARAMETER SourceDeviceId
     The ID of the source device to copy properties from. This parameter is part of the "SourceDevice" parameter set.

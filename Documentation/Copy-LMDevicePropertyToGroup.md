@@ -8,8 +8,7 @@ schema: 2.0.0
 # Copy-LMDevicePropertyToGroup
 
 ## SYNOPSIS
-Copies device properties from a source device to target device groups.
-Sensitive properties cannot be copied as their values are not available via API.
+Copies device properties from a source device to target device groups. Sensitive properties cannot be copied as their values are not available via API.
 
 ## SYNTAX
 
@@ -28,8 +27,7 @@ Copy-LMDevicePropertyToGroup -SourceGroupId <String> -TargetGroupId <String[]> -
 ## DESCRIPTION
 The Copy-LMDevicePropertyToGroup function copies specified properties from a source device to one or more target device groups.
 The source device can be randomly selected from a group or explicitly specified.
-Properties are copied to the target groups while
-preserving other existing group properties.
+Properties are copied to the target groups while preserving other existing group properties.
 
 ## EXAMPLES
 
