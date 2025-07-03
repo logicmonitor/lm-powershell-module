@@ -42,6 +42,7 @@ jobs:
     needs: publish_to_gallery
     runs-on: ubuntu-latest
     environment: publish
+    continue-on-error: true
     steps:
       - name: Send custom JSON data to Slack workflow
         uses: slackapi/slack-github-action@v1.25.0
