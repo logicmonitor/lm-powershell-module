@@ -83,15 +83,10 @@ Function Set-LMDiagnosticSource {
                     appliesTo       = $AppliesTo
                 }
                 # Remove empty keys so we don't overwrite them, with special handling for 'name'/'NewName'
-                @($Data.Keys) | ForEach-Object {
-                    if ($_ -eq 'name') {
-                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
-                    } else {
-                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
-                    }
-                }
-
-                $Data = ($Data | ConvertTo-Json)
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -ConditionalKeep @{ 'name' = 'NewName' }
 
                 If ($PSCmdlet.ShouldProcess($Message, "Set DiagnosticSource")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data

@@ -54,7 +54,7 @@ This function requires a valid LogicMonitor API authentication.
 
 Function Set-LMSDT {
 
-    [CmdletBinding(DefaultParameterSetName = "OneTime")]
+    [CmdletBinding(DefaultParameterSetName = "OneTime", SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory)]
         [String]$Id,
@@ -106,8 +106,9 @@ Function Set-LMSDT {
         #Build header and uri
         $ResourcePath = "/sdt/sdts/$Id"
 
-        Try {
-            $Data = @{}
+        $Message = "Id: $Id"
+
+        $Data = @{}
             $Data.Add('comment', $Comment)
             $Data.Add('hour', $StartHour)
             $Data.Add('minute', $StartMinute)
@@ -127,26 +128,27 @@ Function Set-LMSDT {
             }
 
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
 
-            $Data = ($Data | ConvertTo-Json)
+            If ($PSCmdlet.ShouldProcess($Message, "Set SDT")) {
+                Try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    #Issue request using new centralized method with retry logic
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return $Response
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+                    Return $Response
+                }
+                Catch {
+                    # Error is already displayed by Resolve-LMException, just return cleanly
+                    return
+                }
             }
-        }
     }
     Else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

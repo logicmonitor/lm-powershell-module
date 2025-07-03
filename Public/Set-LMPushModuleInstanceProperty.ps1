@@ -39,7 +39,7 @@ This function requires a valid LogicMonitor API authentication.
 
 Function Set-LMPushModuleInstanceProperty {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$DeviceId,
@@ -76,6 +76,13 @@ Function Set-LMPushModuleInstanceProperty {
             #Build header and uri
             $ResourcePath = "/instance_property/ingest"
 
+            If ($DeviceName) {
+                $Message = "DeviceId: $DeviceId | DeviceName: $DeviceName | DataSource: $DataSourceName | Instance: $InstanceName | Property: $PropertyName = $PropertyValue"
+            }
+            Else {
+                $Message = "DeviceId: $DeviceId | DataSource: $DataSourceName | Instance: $InstanceName | Property: $PropertyName = $PropertyValue"
+            }
+
             Try {
                 $Data = @{
                     resourceIds        = @{"system.deviceid" = $DeviceId }
@@ -86,15 +93,17 @@ Function Set-LMPushModuleInstanceProperty {
 
                 $Data = ($Data | ConvertTo-Json)
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
+                If ($PSCmdlet.ShouldProcess($Message, "Set Push Module Instance Property")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return $Response
+                    Return $Response
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

@@ -377,26 +377,29 @@ Function New-LMWebsite {
                 }
                 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "testLocation" -and $_ -ne "steps" -and $_ -ne "checkpoints") { $Data.Remove($_) } }
-                $Data = ($Data | ConvertTo-Json -Depth 5)
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys @() `
+                    -AlwaysKeepKeys @('testLocation', 'steps', 'checkpoints') `
+                    -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
+                    -Context @{ PropertiesMethod = $PropertiesMethod }
                 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+                Try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request using new centralized method with retry logic
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
+                }
+                Catch {
+                    # Error is already displayed by Resolve-LMException, just return cleanly
+                    return
                 }
             }
-        }
         Else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }

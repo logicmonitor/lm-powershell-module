@@ -130,8 +130,7 @@ Function Set-LMDeviceGroup {
                 $Message = "Id: $Id"
             }
 
-            Try {
-                $Data = @{
+            $Data = @{
                     name             = $NewName
                     description      = $Description
                     appliesTo        = $AppliesTo
@@ -142,35 +141,31 @@ Function Set-LMDeviceGroup {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.Keys) | ForEach-Object {
-                    if ($_ -eq 'name') {
-                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
-                    } else {
-                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
-                    }
-                }
-            
-                $Data = ($Data | ConvertTo-Json)
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -ConditionalKeep @{ 'name' = 'NewName' } `
+                    -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
+                    -Context @{ PropertiesMethod = $PropertiesMethod }
 
                 If ($PSCmdlet.ShouldProcess($Message, "Set Device Group")) { 
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+                    Try {
+                        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                    #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                        #Issue request using new centralized method with retry logic
+                        $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
+                        Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
+                    }
+                    Catch {
+                        # Error is already displayed by Resolve-LMException, just return cleanly
+                        return
+                    }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
-            }
-        }
         Else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }

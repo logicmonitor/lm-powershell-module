@@ -85,13 +85,10 @@ Function Set-LMAPIToken {
                 }
                 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
-                
-                If ($Status) {
-                    $Data.status = $(If ($Status -eq "active") { 2 }Else { 1 })
+                if ($Status) {
+                    $Data.status = $(if ($Status -eq "active") { 2 } else { 1 })
                 }
-                
-                $Data = ($Data | ConvertTo-Json)
+                $Data = Format-LMData -Data $Data -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
                 
                 If ($PSCmdlet.ShouldProcess($Message, "Set API Token")) {  
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 

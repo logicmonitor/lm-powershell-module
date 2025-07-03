@@ -84,7 +84,7 @@ It enforces strict validation rules for TestLocation parameters to prevent inval
 
 Function Set-LMWebsite {
 
-    [CmdletBinding(DefaultParameterSetName = "Website")]
+    [CmdletBinding(DefaultParameterSetName = "Website", SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -233,6 +233,16 @@ Function Set-LMWebsite {
             #Build header and uri
             $ResourcePath = "/website/websites/$Id"
 
+            If ($PSItem) {
+                $Message = "Id: $Id | Name: $($PSItem.name)"
+            }
+            ElseIf ($Name) {
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else {
+                $Message = "Id: $Id"
+            }
+
             Try {
                 $alertExpr = $null
                 If ($SSLAlertThresholds) {
@@ -281,19 +291,23 @@ Function Set-LMWebsite {
 
             
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
-            
-                $Data = ($Data | ConvertTo-Json -Depth 10)
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
+                    -Context @{ PropertiesMethod = $PropertiesMethod }
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+                If ($PSCmdlet.ShouldProcess($Message, "Set Website")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

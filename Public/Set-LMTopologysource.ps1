@@ -51,7 +51,7 @@ This function requires a valid LogicMonitor API authentication.
 
 Function Set-LMTopologysource {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -95,6 +95,16 @@ Function Set-LMTopologysource {
             #Build header and uri
             $ResourcePath = "/setting/topologysources/$Id"
 
+            If ($PSItem) {
+                $Message = "Id: $Id | Name: $($PSItem.name)"
+            }
+            ElseIf ($Name) {
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else {
+                $Message = "Id: $Id"
+            }
+
             $collectorAttribute = $null
             If ($ScriptType -or $Script) {
                 $collectorAttribute = @{
@@ -106,8 +116,7 @@ Function Set-LMTopologysource {
                 @($collectorAttribute.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($collectorAttribute[$_])) { $collectorAttribute.Remove($_) } }
             }
 
-            Try {
-                $Data = @{
+            $Data = @{
                     name               = $NewName
                     description        = $Description
                     appliesTo          = $appliesTo
@@ -118,33 +127,29 @@ Function Set-LMTopologysource {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.Keys) | ForEach-Object {
-                    if ($_ -eq 'name') {
-                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
-                    } else {
-                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -ConditionalKeep @{ 'name' = 'NewName' }
+
+                If ($PSCmdlet.ShouldProcess($Message, "Set Topology Source")) {
+                    Try {
+                        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?forceUniqueIdentifier=true"
+
+                        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                        #Issue request using new centralized method with retry logic
+                        $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                        Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Topologysource" )
+                    }
+                    Catch {
+                        # Error is already displayed by Resolve-LMException, just return cleanly
+                        return
                     }
                 }
-            
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?forceUniqueIdentifier=true"
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Topologysource" )
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
-            }
-        }
         Else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }

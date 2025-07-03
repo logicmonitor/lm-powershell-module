@@ -51,7 +51,7 @@ This function requires a valid LogicMonitor API authentication.
 
 Function Set-LMWebsiteGroup {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id-ParentGroupId')]
+    [CmdletBinding(DefaultParameterSetName = 'Id-ParentGroupId', SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName', ValueFromPipelineByPropertyName)]
@@ -122,41 +122,48 @@ Function Set-LMWebsiteGroup {
             #Build header and uri
             $ResourcePath = "/website/groups/$Id"
 
-            Try {
-                $Data = @{
-                    name            = $NewName
-                    description     = $Description
-                    disableAlerting = $DisableAlerting
-                    stopMonitoring  = $StopMonitoring
-                    properties      = $customProperties
-                    parentId        = $ParentGroupId
-                }
-
-                #Remove empty keys so we dont overwrite them
-                @($Data.Keys) | ForEach-Object {
-                    if ($_ -eq 'name') {
-                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
-                    } else {
-                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
-                    }
-                }
-            
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
+            If ($PSItem) {
+                $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+            ElseIf ($Name) {
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else {
+                $Message = "Id: $Id"
+            }
+
+            $Data = @{
+                name            = $NewName
+                description     = $Description
+                disableAlerting = $DisableAlerting
+                stopMonitoring  = $StopMonitoring
+                properties      = $customProperties
+                parentId        = $ParentGroupId
+            }
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                -ConditionalKeep @{ 'name' = 'NewName' } `
+                -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
+                -Context @{ PropertiesMethod = $PropertiesMethod }
+
+            If ($PSCmdlet.ShouldProcess($Message, "Set Website Group")) {
+                Try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request using new centralized method with retry logic
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
+                }
+                Catch {
+                    # Error is already displayed by Resolve-LMException, just return cleanly
+                    return
                 }
             }
         }

@@ -33,7 +33,7 @@ This function requires you to be logged in and have valid API credentials. Use t
 #>
 Function Set-LMAccessGroup {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
@@ -83,15 +83,10 @@ Function Set-LMAccessGroup {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.Keys) | ForEach-Object {
-                    if ($_ -eq 'name') {
-                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
-                    } else {
-                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
-                    }
-                }
-            
-                $Data = ($Data | ConvertTo-Json)
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -ConditionalKeep @{ 'name' = 'NewName' }
 
                 If ($PSCmdlet.ShouldProcess($Message, "Set AccessGroup")) {  
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data

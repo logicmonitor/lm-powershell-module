@@ -54,7 +54,7 @@ This function requires a valid LogicMonitor API authentication.
 
 Function Set-LMDeviceGroupDatasourceAlertSetting {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
@@ -132,6 +132,13 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
             #Build header and uri
             $ResourcePath = "/device/groups/$Id/datasources/$DatasourceId/alertsettings"
 
+            If ($Name) {
+                $Message = "Id: $Id | Name: $Name | DatasourceId: $DatasourceId | DatapointName: $DatapointName"
+            }
+            Else {
+                $Message = "Id: $Id | DatasourceId: $DatasourceId | DatapointName: $DatapointName"
+            }
+
             Try {
                 $dpConfig = @{
                     disableAlerting              = $DisableAlerting
@@ -153,15 +160,18 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
                 }
 
                 $Data = ($Data | ConvertTo-Json)
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                
+                If ($PSCmdlet.ShouldProcess($Message, "Set Device Group Datasource Alert Setting")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = (Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data).dpConfig
+                    #Issue request
+                    $Response = (Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data).dpConfig
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroupDatasourceAlertSetting" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroupDatasourceAlertSetting" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

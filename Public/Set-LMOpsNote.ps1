@@ -45,7 +45,7 @@ This function requires a valid LogicMonitor API authentication.
 
 Function Set-LMOpsNote {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -108,6 +108,13 @@ Function Set-LMOpsNote {
             #Build header and uri
             $ResourcePath = "/setting/opsnotes/$Id"
 
+            If ($PSItem) {
+                $Message = "Id: $Id | Note: $($PSItem.note)"
+            }
+            Else {
+                $Message = "Id: $Id"
+            }
+
             Try {
                 $Data = @{
                     happenOnInSec = $NoteDate
@@ -117,23 +124,26 @@ Function Set-LMOpsNote {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
-
                 If ($ClearTags) {
                     $Data.tags = @()
                 }
 
-                $Data = ($Data | ConvertTo-Json)
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
+                    -AlwaysKeepKeys @($(if ($ClearTags) { 'tags' } else { @() }))
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                If ($PSCmdlet.ShouldProcess($Message, "Set Ops Note")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return $Response
+                    Return $Response
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

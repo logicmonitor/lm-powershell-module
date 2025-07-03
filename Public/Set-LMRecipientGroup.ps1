@@ -44,7 +44,7 @@ Returns LogicMonitor.RecipientGroup object.
 #>
 Function Set-LMRecipientGroup {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -76,6 +76,16 @@ Function Set-LMRecipientGroup {
             #Build header and uri
             $ResourcePath = "/setting/recipientgroups/$Id"
 
+            If ($PSItem) {
+                $Message = "Id: $Id | Name: $($PSItem.groupName)"
+            }
+            ElseIf ($Name) {
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else {
+                $Message = "Id: $Id"
+            }
+
             Try {
                 $Data = @{
                     groupName   = $NewName
@@ -84,25 +94,22 @@ Function Set-LMRecipientGroup {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.Keys) | ForEach-Object {
-                    if ($_ -eq 'groupName') {
-                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
-                    } else {
-                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
-                    }
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -ConditionalKeep @{ 'name' = 'NewName' }
+
+                If ($PSCmdlet.ShouldProcess($Message, "Set Recipient Group")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.RecipientGroup")
                 }
-
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.RecipientGroup")
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

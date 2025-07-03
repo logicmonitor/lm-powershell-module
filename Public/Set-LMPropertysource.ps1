@@ -54,7 +54,7 @@ This function requires a valid LogicMonitor API authentication.
 
 Function Set-LMPropertysource {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -105,6 +105,16 @@ Function Set-LMPropertysource {
             #Build header and uri
             $ResourcePath = "/setting/propertyrules/$Id"
 
+            If ($PSItem) {
+                $Message = "Id: $Id | Name: $($PSItem.name)"
+            }
+            ElseIf ($Name) {
+                $Message = "Id: $Id | Name: $Name"
+            }
+            Else {
+                $Message = "Id: $Id"
+            }
+
             Try {
                 $Data = @{
                     name         = $NewName
@@ -118,25 +128,22 @@ Function Set-LMPropertysource {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.Keys) | ForEach-Object {
-                    if ($_ -eq 'name') {
-                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
-                    } else {
-                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
-                    }
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -ConditionalKeep @{ 'name' = 'NewName' }
+
+                If ($PSCmdlet.ShouldProcess($Message, "Set Property Source")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?forceUniqueIdentifier=true"
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Propertysource" )
                 }
-            
-                $Data = ($Data | ConvertTo-Json)
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?forceUniqueIdentifier=true"
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Propertysource" )
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

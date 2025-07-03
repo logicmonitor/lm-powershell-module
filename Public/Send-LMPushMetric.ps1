@@ -101,8 +101,10 @@ Function Send-LMPushMetric {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "instances") { $Data.Remove($_) } }
-                $Data = ($Data | ConvertTo-Json -Depth 10)
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys @() `
+                    -AlwaysKeepKeys @('instances')
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath + $QueryParams

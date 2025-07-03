@@ -65,7 +65,7 @@ This function requires a valid LogicMonitor API authentication.
 #>
 Function Set-LMUser {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -187,9 +187,18 @@ Function Set-LMUser {
             
             #Build header and uri
             $ResourcePath = "/setting/admins/$Id"
+
+            If ($PSItem) {
+                $Message = "Id: $Id | Username: $($PSItem.username)"
+            }
+            ElseIf ($Username) {
+                $Message = "Id: $Id | Username: $Username"
+            }
+            Else {
+                $Message = "Id: $Id"
+            }
     
-            Try {
-                $Data = @{
+            $Data = @{
                     username            = $NewUsername
                     email               = $Email
                     acceptEULA          = $AcceptEULA
@@ -211,27 +220,28 @@ Function Set-LMUser {
 
                 }
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
 
-                $Data = ($Data | ConvertTo-Json)
+                If ($PSCmdlet.ShouldProcess($Message, "Set User")) {
+                    Try {
+                        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                        #Issue request using new centralized method with retry logic
+                        $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                        Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
+                    }
+                    Catch {
+                        # Error is already displayed by Resolve-LMException, just return cleanly
+                        return
+                    }
                 }
             }
-        }
         Else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }

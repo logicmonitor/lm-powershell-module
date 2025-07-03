@@ -37,7 +37,7 @@ This function requires a valid LogicMonitor API authentication and uses API v4.
 
 Function Set-LMNormalizedProperties {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
         [Parameter(Mandatory = $true)]
         [String]$Alias,
@@ -165,14 +165,19 @@ Function Set-LMNormalizedProperties {
 
             $Body = $Body | ConvertTo-Json -Depth 10
 
-            Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-                
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+            $ActionType = If ($Add) { "add" } Else { "remove" }
+            $PropertiesCount = ($Properties | Measure-Object).Count
+            $Message = "Alias: $Alias | Action: $ActionType | Properties: $PropertiesCount"
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+            Try {
+                If ($PSCmdlet.ShouldProcess($Message, "Set Normalized Properties")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                    
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
                 # Check for errors in the response
                 if ($Response.errors.Count -gt 0) {
@@ -181,8 +186,9 @@ Function Set-LMNormalizedProperties {
                     }
                     Return
                 }
-                Write-Output "Normalized properties updated successfully"
-                return
+                    Write-Output "Normalized properties updated successfully"
+                    return
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem

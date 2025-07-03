@@ -107,9 +107,10 @@ Function New-LMOpsNote {
             }
 
             #Remove empty keys so we dont overwrite them
-            @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "scopes" -and $_ -ne "tags") { $Data.Remove($_) } }
-
-            $Data = ($Data | ConvertTo-Json)
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys @() `
+                -AlwaysKeepKeys @('scopes', 'tags')
 
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

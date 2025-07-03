@@ -177,9 +177,11 @@ Function Set-LMDeviceDatasourceInstanceAlertSetting {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($Data.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($Data[$_]) -and $_ -ne "alertExpr" -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) } }
+                $Data = Format-LMData `
+                    -Data $Data `
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -AlwaysKeepKeys @('alertExpr')
 
-                $Data = ($Data | ConvertTo-Json)
                 If ($PSCmdlet.ShouldProcess($Message, "Set Device Datasource Instance Alert Setting")) { 
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

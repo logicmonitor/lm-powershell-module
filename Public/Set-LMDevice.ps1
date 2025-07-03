@@ -155,54 +155,49 @@ Function Set-LMDevice {
                 $Message = "Id: $Id"
             }
 
-            Try {
-                $Data = @{
-                    name                         = $NewName
-                    displayName                  = $DisplayName
-                    description                  = $Description
-                    disableAlerting              = $DisableAlerting
-                    enableNetflow                = $EnableNetFlow
-                    customProperties             = $customProperties
-                    preferredCollectorId         = $PreferredCollectorId
-                    preferredCollectorGroupId    = $PreferredCollectorGroupId
-                    autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId
-                    link                         = $Link
-                    netflowCollectorGroupId      = $NetflowCollectorGroupId
-                    netflowCollectorId           = $NetflowCollectorId
-                    isPreferredLogCollectorConfigured = $EnableLogCollector
-                    logCollectorGroupId          = $LogCollectorGroupId
-                    logCollectorId               = $LogCollectorId
-                    hostGroupIds                 = $HostGroupIds -join ","
-                }
+            $Data = @{
+                name                         = $NewName
+                displayName                  = $DisplayName
+                description                  = $Description
+                disableAlerting              = $DisableAlerting
+                enableNetflow                = $EnableNetFlow
+                customProperties             = $customProperties
+                preferredCollectorId         = $PreferredCollectorId
+                preferredCollectorGroupId    = $PreferredCollectorGroupId
+                autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId
+                link                         = $Link
+                netflowCollectorGroupId      = $NetflowCollectorGroupId
+                netflowCollectorId           = $NetflowCollectorId
+                isPreferredLogCollectorConfigured = $EnableLogCollector
+                logCollectorGroupId          = $LogCollectorGroupId
+                logCollectorId               = $LogCollectorId
+                hostGroupIds                 = $HostGroupIds -join ","
+            }
 
-                
-                #Remove empty keys so we dont overwrite them
-                @($Data.Keys) | ForEach-Object {
-                    if ($_ -eq 'name') {
-                        if ('NewName' -notin $PSBoundParameters.Keys) { $Data.Remove($_) }
-                    } else {
-                        if ([string]::IsNullOrEmpty($Data[$_]) -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $Data.Remove($_) }
-                    }
-                }
             
-                $Data = ($Data | ConvertTo-Json)
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+            -Data $Data `
+            -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+            -ConditionalKeep @{ 'name' = 'NewName' } `
+            -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
+            -Context @{ PropertiesMethod = $PropertiesMethod }
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Device")) { 
+            If ($PSCmdlet.ShouldProcess($Message, "Set Device")) { 
+                Try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                    #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request using new centralized method with retry logic
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
                     Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
                 }
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                Catch {
+                    # Error is already displayed by Resolve-LMException, just return cleanly
+                    return
                 }
             }
         }

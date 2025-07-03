@@ -30,7 +30,7 @@ This function requires a valid LogicMonitor API authentication.
 
 Function Set-LMLogPartitionAction {
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     Param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
@@ -60,17 +60,29 @@ Function Set-LMLogPartitionAction {
             #Build header and uri
             $ResourcePath = "/log/partitions/$Id/$Action"
 
+            If ($PSItem) {
+                $Message = "Id: $Id | Name: $($PSItem.name) | Action: $Action"
+            }
+            ElseIf ($Name) {
+                $Message = "Id: $Id | Name: $Name | Action: $Action"
+            }
+            Else {
+                $Message = "Id: $Id | Action: $Action"
+            }
+
             Try {
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                If ($PSCmdlet.ShouldProcess($Message, "Set Log Partition Action")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
+                    #Issue request
+                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
+                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
+                }
             }
             Catch [Exception] {
                 $Proceed = Resolve-LMException -LMException $PSItem
