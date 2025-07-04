@@ -70,10 +70,12 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.User object.
 #>
-Function New-LMUser {
+function New-LMUser {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Justification = 'Required for allowing auto generated passwords to be stored in a global variable')]
+
+    param (
         [Parameter(Mandatory)]
         [String]$Username,
 
@@ -82,7 +84,7 @@ Function New-LMUser {
 
         [Boolean]$AcceptEULA = $false,
 
-        [String]$Password,
+        [SecureString]$Password,
 
         [String[]]$UserGroups,
 
@@ -115,31 +117,31 @@ Function New-LMUser {
         [String[]]$Views = @("All")
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Build role id list
         $Roles = @()
-        Foreach ($Role in $RoleNames) {
+        foreach ($Role in $RoleNames) {
             $RoleId = (Get-LMRole -Name $Role | Select-Object -First 1 ).Id
-            If ($RoleId) {
+            if ($RoleId) {
                 $Roles += @{id = $RoleId }
             }
-            Else {
-                Write-Warning "[WARN]: Unable to locate user role named $Role, it will be skipped" 
+            else {
+                Write-Warning "[WARN]: Unable to locate user role named $Role, it will be skipped"
             }
         }
 
         $AdminGroupIds = ""
-        If ($UserGroups) {
+        if ($UserGroups) {
             $AdminGroupIds = @()
-            Foreach ($Group in $UserGroups) {
-                If ($Group -Match "\*") {
-                    Write-Error "Wildcard values not supported for groups." 
+            foreach ($Group in $UserGroups) {
+                if ($Group -match "\*") {
+                    Write-Error "Wildcard values not supported for groups."
                     return
                 }
                 $Id = (Get-LMUserGroup -Name $Group | Select-Object -First 1 ).Id
-                If (!$Id) {
-                    Write-Error "Unable to find user group: $Group, please check spelling and try again." 
+                if (!$Id) {
+                    Write-Error "Unable to find user group: $Group, please check spelling and try again."
                     return
                 }
                 $AdminGroupIds += $Id
@@ -158,86 +160,87 @@ Function New-LMUser {
             Websites   = $false
         }
 
-        Foreach ($View in $Views) {
-            If ($View -eq "All") {
-                Foreach ($key in $($ViewPermission.keys)) {
+        foreach ($View in $Views) {
+            if ($View -eq "All") {
+                foreach ($key in $($ViewPermission.keys)) {
                     $ViewPermission[$key] = $true
                 }
                 break
             }
-            Elseif ($ViewPermission.ContainsKey($View)) {
+            elseif ($ViewPermission.ContainsKey($View)) {
                 $ViewPermission[$View] = $true
             }
         }
 
         #Auto generate password if not provided
         $AutoGeneratePassword = $False
-        If (!$Password) {
+        if (!$Password) {
             $Password = New-LMRandomCred
             $AutoGeneratePassword = $True
         }
-        
+
         #Build header and uri
         $ResourcePath = "/setting/admins"
 
-        Try {
-            $Data = @{
-                username            = $Username
-                email               = $Email
-                acceptEULA          = $AcceptEULA
-                password            = $Password
-                firstName           = $FirstName 
-                lastName            = $LastName
-                forcePasswordChange = $ForcePasswordChange
-                phone               = "+" + $Phone.Replace("-", "")
-                note                = $Note
-                roles               = $Roles
-                smsEmail            = $SmsEmail
-                smsEmailFormat      = $SmsEmailFormat
-                status              = $Status
-                timezone            = $Timezone
-                twoFAEnabled        = $TwoFAEnabled
-                viewPermission      = $ViewPermission
-                adminGroupIds       = $AdminGroupIds
+        $Data = @{
+            username            = $Username
+            email               = $Email
+            acceptEULA          = $AcceptEULA
+            password            = $Password
+            firstName           = $FirstName
+            lastName            = $LastName
+            forcePasswordChange = $ForcePasswordChange
+            phone               = "+" + $Phone.Replace("-", "")
+            note                = $Note
+            roles               = $Roles
+            smsEmail            = $SmsEmail
+            smsEmailFormat      = $SmsEmailFormat
+            status              = $Status
+            timezone            = $Timezone
+            twoFAEnabled        = $TwoFAEnabled
+            viewPermission      = $ViewPermission
+            adminGroupIds       = $AdminGroupIds
 
-            }
-
-            #Remove empty keys so we dont overwrite them
-            $Data = Format-LMData `
-                -Data $Data `
-                -UserSpecifiedKeys @()
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-            If ($AutoGeneratePassword) {
-                If (!$global:LMUserData) {
-                    $UserData = New-Object System.Collections.ArrayList
-                    $UserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
-                    New-Variable -Name LMUserData -Scope global -Value $UserData
-                }
-                Else {
-                    $global:LMUserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
-                }
-                
-                Write-Information "[INFO]: Auto generated password assigned to $Username`: $Password" 
-                Write-Information "[INFO]: Auto generated passwords are also stored in a reference variable called `$LMUserData" 
-            }
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        #Remove empty keys so we dont overwrite them
+        $Data = Format-LMData `
+            -Data $Data `
+            -UserSpecifiedKeys @()
+
+        $Message = "Username: $Username | Email: $Email"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create User")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                if ($AutoGeneratePassword) {
+                    if (!$global:LMUserData) {
+                        $UserData = New-Object System.Collections.ArrayList
+                        $UserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
+                        New-Variable -Name LMUserData -Scope global -Value $UserData
+                    }
+                    else {
+                        $global:LMUserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
+                    }
+
+                    Write-Information "[INFO]: Auto generated password assigned to $Username`: $Password"
+                    Write-Information "[INFO]: Auto generated passwords are also stored in a reference variable called `$LMUserData"
+                }
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

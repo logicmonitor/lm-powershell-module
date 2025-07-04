@@ -34,10 +34,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns the newly created device object.
 #>
-Function Copy-LMDevice {
+function Copy-LMDevice {
 
     [CmdletBinding()]
-    Param (
+    param (
 
         [Parameter(Mandatory)]
         [String]$Name,
@@ -50,18 +50,18 @@ Function Copy-LMDevice {
         $DeviceObject
     )
     #Check if we are logged in and have valid api creds
-    Begin {
+    begin {
         Write-Output "[INFO]: Any custom properties from the reference device that are masked will need to be updated on the cloned resource as those values are not available to the LM API."
     }
-    Process {
-        If ($Script:LMAuth.Valid) {
+    process {
+        if ($Script:LMAuth.Valid) {
             #Strip out dynamic groups
-            $HostGroupIds = ($DeviceObjec.hostGroupIds -Split "," | Get-LMDeviceGroup | Where-Object { $_.appliesTo -eq "" }).Id -Join ","
+            $HostGroupIds = ($DeviceObjec.hostGroupIds -split "," | Get-LMDeviceGroup | Where-Object { $_.appliesTo -eq "" }).Id -join ","
 
             $Data = @{
                 name                         = $Name
-                displayName                  = If ($DisplayName) { $DisplayName }Else { $DeviceObject.displayName }
-                description                  = If ($Description) { $Description }Else { $DeviceObject.description }
+                displayName                  = if ($DisplayName) { $DisplayName }else { $DeviceObject.displayName }
+                description                  = if ($Description) { $Description }else { $DeviceObject.description }
                 disableAlerting              = $DeviceObject.disableAlerting
                 enableNetflow                = $DeviceObject.enableNetFlow
                 customProperties             = $DeviceObject.customProperties
@@ -74,13 +74,13 @@ Function Copy-LMDevice {
                 netflowCollectorId           = $DeviceObject.netflowCollectorId
                 logCollectorGroupId          = $DeviceObject.logCollectorGroupId
                 logCollectorId               = $DeviceObject.logCollectorId
-                hostGroupIds                 = If ($HostGroupIds) { $HostGroupIds }Else { 1 }
+                hostGroupIds                 = if ($HostGroupIds) { $HostGroupIds }else { 1 }
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/device/devices"
 
-            Try {
+            try {
                 $Data = ($Data | ConvertTo-Json)
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
@@ -88,21 +88,18 @@ Function Copy-LMDevice {
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {
+    end {
     }
 }

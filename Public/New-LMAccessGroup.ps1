@@ -27,10 +27,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.AccessGroup object.
 #>
-Function New-LMAccessGroup {
+function New-LMAccessGroup {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
 
         [Parameter(Mandatory)]
         [String]$Name,
@@ -41,45 +41,47 @@ Function New-LMAccessGroup {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-                    
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/setting/accessgroup/add"
 
-            Try {
-                $Data = @{
-                    description                         = $Description
-                    name                                = $Name
-                    tenantId                            = $Tenant
-                }
-
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys @()
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AccessGroup" )
+            $Data = @{
+                description = $Description
+                name        = $Name
+                tenantId    = $Tenant
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys @()
+
+            $Message = "Name: $Name"
+
+            if ($PSCmdlet.ShouldProcess($Message, "Create Access Group")) {
+                try {
+
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AccessGroup" )
+                }
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

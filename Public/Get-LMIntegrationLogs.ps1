@@ -41,10 +41,10 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.IntegrationLog objects.
 #>
 
-Function Get-LMIntegrationLogs {
+function Get-LMIntegrationLog {
 
     [CmdletBinding(DefaultParameterSetName = 'Range')]
-    Param (
+    param (
         [Parameter(ParameterSetName = 'Id')]
         [String]$Id,
 
@@ -64,8 +64,8 @@ Function Get-LMIntegrationLogs {
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/setting/integrations/auditlogs"
 
@@ -77,27 +77,27 @@ Function Get-LMIntegrationLogs {
         $QueryLimit = 10000 #API limit to how many results can be returned
 
         #Convert to epoch, if not set use defaults
-        If (!$StartDate) {
-            If ($PSCmdlet.ParameterSetName -ne "Id") {
-                Write-Warning "[WARN]: No start date specified, defaulting to last 30 days" 
+        if (!$StartDate) {
+            if ($PSCmdlet.ParameterSetName -ne "Id") {
+                Write-Warning "[WARN]: No start date specified, defaulting to last 30 days"
             }
             [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddDays(-30)).ToUnixTimeSeconds()
         }
-        Else {
+        else {
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
         }
 
-        If (!$EndDate) {
+        if (!$EndDate) {
             [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
         }
-        Else {
+        else {
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
-        #Loop through requests 
-        While (!$Done) {
+        #Loop through requests
+        while (!$Done) {
             #Build query params
-            Switch ($PSCmdlet.ParameterSetName) {
+            switch ($PSCmdlet.ParameterSetName) {
                 "Range" { $QueryParams = "?filter=successfulResults%3A%22false%22%2CfailedResults%3A%22false%22%2ChappenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"%2C_all~`"*$SearchString*`"&size=$BatchSize&offset=$Count&sort=+happenedOnMs" }
                 "Id" { $resourcePath += "/$Id" }
                 "Filter" {
@@ -108,46 +108,43 @@ Function Get-LMIntegrationLogs {
                 }
             }
 
-            Try {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                
-                
-                
+
+
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
+                if ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.IntegrationLog" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.IntegrationLog" )
                 }
                 #Check result size and if needed loop again
-                Else {
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $QueryLimit) {
+                    if ($Count -ge $QueryLimit) {
                         $Done = $true
-                        Write-Warning "[WARN]: Reached $QueryLimit record query limitation for this endpoint" 
+                        Write-Warning "[WARN]: Reached $QueryLimit record query limitation for this endpoint"
                     }
-                    Elseif ($Count -ge $Total -and $Total -ge 0) {
+                    elseif ($Count -ge $Total -and $Total -ge 0) {
                         $Done = $true
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.IntegrationLog" )
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.IntegrationLog" )
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

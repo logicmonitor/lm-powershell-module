@@ -35,10 +35,10 @@ Returns a message indicating the success of the operation.
 This function requires a valid LogicMonitor API authentication and uses API v4.
 #>
 
-Function Set-LMNormalizedProperties {
+function Set-LMNormalizedProperty {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory = $true)]
         [String]$Alias,
         [Parameter(Mandatory = $true, ParameterSetName = "Add")]
@@ -50,12 +50,12 @@ Function Set-LMNormalizedProperties {
     )
 
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
             #Get existing normalized properties as all updates have to be done via bulk
             $ExistingProperties = Get-LMNormalizedProperties
-            
+
             #Build header and uri
             $ResourcePath = "/normalizedProperties/bulk"
 
@@ -110,18 +110,18 @@ Function Set-LMNormalizedProperties {
                         # Only include full property details if it's editable
                         if ($prop.isEditable) {
                             $Body.data.items += [PSCustomObject]@{
-                                id = $prop.id
-                                model = "normalizedProperties"
-                                alias = $prop.alias
-                                hostProperty = $prop.hostProperty
+                                id                   = $prop.id
+                                model                = "normalizedProperties"
+                                alias                = $prop.alias
+                                hostProperty         = $prop.hostProperty
                                 hostPropertyPriority = $prop.hostPropertyPriority
-                                description = $prop.description
+                                description          = $prop.description
                             }
                         }
                         else {
                             # For non-editable properties, only include id and model
                             $Body.data.items += [PSCustomObject]@{
-                                id = $prop.id
+                                id    = $prop.id
                                 model = "normalizedProperties"
                             }
                         }
@@ -130,7 +130,7 @@ Function Set-LMNormalizedProperties {
                         if ($prop.isEditable) {
                             # For other aliases, only include id and model
                             $Body.data.items += [PSCustomObject]@{
-                                id = $prop.id
+                                id    = $prop.id
                                 model = "normalizedProperties"
                             }
                         }
@@ -153,9 +153,9 @@ Function Set-LMNormalizedProperties {
                     # Only add if it doesn't already exist
                     if (-not $exists) {
                         $Body.data.items += [PSCustomObject]@{
-                            model = "normalizedProperties"
-                            alias = $Alias
-                            hostProperty = $Property
+                            model                = "normalizedProperties"
+                            alias                = $Alias
+                            hostProperty         = $Property
                             hostPropertyPriority = $Index
                         }
                         $Index++
@@ -165,41 +165,38 @@ Function Set-LMNormalizedProperties {
 
             $Body = $Body | ConvertTo-Json -Depth 10
 
-            $ActionType = If ($Add) { "add" } Else { "remove" }
+            $ActionType = if ($Add) { "add" } else { "remove" }
             $PropertiesCount = ($Properties | Measure-Object).Count
             $Message = "Alias: $Alias | Action: $ActionType | Properties: $PropertiesCount"
 
-            Try {
-                If ($PSCmdlet.ShouldProcess($Message, "Set Normalized Properties")) {
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "Set Normalized Properties")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-                    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
-                # Check for errors in the response
-                if ($Response.errors.Count -gt 0) {
-                    foreach ($error in $Response.errors) {
-                        Write-Error "Error updating normalized properties: $($error.message)"
+                    # Check for errors in the response
+                    if ($Response.errors.Count -gt 0) {
+                        foreach ($errorItem in $Response.errors) {
+                            Write-Error "Error updating normalized properties: $($errorItem.message)"
+                        }
+                        return
                     }
-                    Return
-                }
                     Write-Output "Normalized properties updated successfully"
                     return
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

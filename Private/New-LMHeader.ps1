@@ -40,9 +40,10 @@
     # Use the $header and $session objects for making LogicMonitor API requests.
 #>
 
-Function New-LMHeader {
+function New-LMHeader {
     [CmdletBinding()]
-    Param (
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Not needed for this function')]
+    param (
         [Parameter(Mandatory)]
         $Auth,
 
@@ -57,25 +58,26 @@ Function New-LMHeader {
         [Int]$Version = 3,
 
         [String]$ContentType = "application/json",
-        
+
         [String]$UserAgent = "Logic.Monitor-PowerShell-Module"
     )
 
-    # Use TLS 1.2
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    # Use TLS 1.3 if available and fallback to TLS 1.2
+    $protocols = [Net.SecurityProtocolType]::Tls12
+    if ([Enum]::GetNames([Net.SecurityProtocolType]) -contains 'Tls13') {
+        $protocols = $protocols -bor [Net.SecurityProtocolType]::Tls13
+    }
+    [Net.ServicePointManager]::SecurityProtocol = $protocols
 
     $Header = New-Object "System.Collections.Generic.Dictionary[[String],[String]]"
     $Session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
 
     # Try to get module version
     $ModuleVersion = $null
-    try {
-        $ModuleInfo = Get-Module -Name "Logic.Monitor" -ListAvailable | Select-Object -First 1
-        if ($ModuleInfo) {
-            $ModuleVersion = $ModuleInfo.Version.ToString()
-        }
-    } catch {
-        # Silently continue if module version can't be determined
+
+    $ModuleInfo = Get-Module -Name "Logic.Monitor" -ListAvailable | Select-Object -First 1
+    if ($ModuleInfo) {
+        $ModuleVersion = $ModuleInfo.Version.ToString()
     }
 
     # Add User-Agent to headers with version if available
@@ -85,30 +87,30 @@ Function New-LMHeader {
     }
     $Header.Add("User-Agent", $UserAgentString)
 
-    If ($Auth.Type -eq "Bearer") {
+    if ($Auth.Type -eq "Bearer") {
         $Token = [System.Net.NetworkCredential]::new("", $Auth.BearerToken).Password
         $Header.Add("Authorization", "Bearer $Token")
     }
-    Elseif ($Auth.Type -eq "SessionSync") {
+    elseif ($Auth.Type -eq "SessionSync") {
         $SessionInfo = Get-LMSession -AccountName $Auth.Portal
-        If ($SessionInfo) {
+        if ($SessionInfo) {
             $Header.Add("Cookie", "JSESSIONID=$($SessionInfo.jSessionID)")
             $Session.Cookies.Add((New-Object System.Net.Cookie("JSESSIONID", $SessionInfo.jSessionID, "/", $SessionInfo.domain)))
             $Header.Add("X-CSRF-Token", "$($SessionInfo.token)")
         }
-        Else {
-            Throw "Unable to generate header details, ensure you are connected to a portal and try again."
+        else {
+            throw "Unable to generate header details, ensure you are connected to a portal and try again."
         }
     }
-    Else {
+    else {
         # Get current time in milliseconds...
         $Epoch = [Math]::Round((New-TimeSpan -Start (Get-Date -Date "1/1/1970") -End (Get-Date).ToUniversalTime()).TotalMilliseconds)
 
         # Concatenate general request details...
-        If ($Method -eq "GET" -or $Method -eq "DELETE") {
+        if ($Method -eq "GET" -or $Method -eq "DELETE") {
             $RequestVars = $Method + $Epoch + $ResourcePath
         }
-        Else {
+        else {
             $RequestVars = $Method + $Epoch + $Data + $ResourcePath
         }
 
@@ -128,5 +130,5 @@ Function New-LMHeader {
     $Header.Add("Content-Type", $ContentType)
     $Header.Add("X-Version", $Version)
 
-    Return @($Header, $Session)
+    return @($Header, $Session)
 }

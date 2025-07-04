@@ -52,22 +52,22 @@ Returns a LogicMonitor.DeviceGroupDatasourceAlertSetting object containing the u
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMDeviceGroupDatasourceAlertSetting {
+function Set-LMDeviceGroupDatasourceAlertSetting {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [String]$DatasourceName,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [Int]$DatasourceId,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Int]$Id,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [String]$Name,
@@ -80,7 +80,7 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
         [String]$AlertExpressionNote,
 
         [Parameter(Mandatory)]
-        [AllowEmptyString()] 
+        [AllowEmptyString()]
         [String]$AlertExpression, #format for alert expression (01:00 02:00) > -100 timezone=America/New_York
 
         [Parameter(Mandatory)]
@@ -97,33 +97,33 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
 
     )
 
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup DeviceGroupId
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-    
+
             #Lookup DatasourceId
-            If ($DatasourceName) {
+            if ($DatasourceName) {
                 $LookupResult = (Get-LMDatasource -Name $DatasourceName).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                     return
                 }
                 $DatasourceId = $LookupResult
             }
 
             #Lookup DatapointId
-            If ($DatapointName) {
+            if ($DatapointName) {
                 $LookupResult = (Get-LMDeviceGroupDatasourceAlertSetting -Id $Id -DatasourceId $DatasourceId | Where-Object { $_.dataPointName -eq $DatapointName }).dataPointId
-                If (Test-LookupResult -Result $LookupResult -LookupString $DatapointName) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $DatapointName) {
                     return
                 }
                 $DatapointId = $LookupResult
@@ -132,14 +132,14 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
             #Build header and uri
             $ResourcePath = "/device/groups/$Id/datasources/$DatasourceId/alertsettings"
 
-            If ($Name) {
+            if ($Name) {
                 $Message = "Id: $Id | Name: $Name | DatasourceId: $DatasourceId | DatapointName: $DatapointName"
             }
-            Else {
+            else {
                 $Message = "Id: $Id | DatasourceId: $DatasourceId | DatapointName: $DatapointName"
             }
 
-            Try {
+            try {
                 $dpConfig = @{
                     disableAlerting              = $DisableAlerting
                     dataPointId                  = $DatapointId
@@ -153,36 +153,33 @@ Function Set-LMDeviceGroupDatasourceAlertSetting {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                @($dpConfig.keys) | ForEach-Object { If ([string]::IsNullOrEmpty($dpConfig[$_]) -and $_ -ne "alertExpr" -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $dpConfig.Remove($_) } }
+                @($dpConfig.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($dpConfig[$_]) -and $_ -ne "alertExpr" -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $dpConfig.Remove($_) } }
 
                 $Data = @{
                     dpConfig = @($dpConfig)
                 }
 
                 $Data = ($Data | ConvertTo-Json)
-                
-                If ($PSCmdlet.ShouldProcess($Message, "Set Device Group Datasource Alert Setting")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+
+                if ($PSCmdlet.ShouldProcess($Message, "Set Device Group Datasource Alert Setting")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = (Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data).dpConfig
+                    $Response = (Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data).dpConfig
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroupDatasourceAlertSetting" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroupDatasourceAlertSetting" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

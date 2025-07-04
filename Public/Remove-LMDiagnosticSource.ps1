@@ -25,47 +25,48 @@ You can pipe input to this function.
 .OUTPUTS
 Returns a PSCustomObject containing the ID of the removed diagnostic source and a success message confirming the removal.
 #>
-Function Remove-LMDiagnosticSource {
+function Remove-LMDiagnosticSource {
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$Name
     )
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-            If ($Name) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+            if ($Name) {
                 $LookupResult = (Get-LMDiagnosticSource -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) { return }
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) { return }
                 $Id = $LookupResult
             }
             $ResourcePath = "/setting/diagnosticssources/$Id"
             $Message = "Id: $Id | Name: $Name"
-            Try {
-                If ($PSCmdlet.ShouldProcess($Message, "Remove DiagnosticSource")) {
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "Remove DiagnosticSource")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
 
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                    
+                    Invoke-LMRestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+
                     $Result = [PSCustomObject]@{
                         Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
-                    Return $Result
+                    return $Result
                 }
-            } Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) { Return }
             }
-        } Else {
+            catch {
+                return
+            }
+        }
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
-} 
+    end {}
+}

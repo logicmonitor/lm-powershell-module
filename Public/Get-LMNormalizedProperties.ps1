@@ -21,85 +21,82 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.NormalizedProperties objects.
 #>
-Function Get-LMNormalizedProperties {
+function Get-LMNormalizedProperty {
 
     [CmdletBinding()]
-    Param ()
+    param ()
 
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-            
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/normalizedProperties/filter"
 
             $Body = [PSCustomObject]@{
                 meta = @{
                     filters = @{
-                        filterType = "FILTER_CATEGORICAL_MODEL_TYPE"
+                        filterType           = "FILTER_CATEGORICAL_MODEL_TYPE"
                         normalizedProperties = @{
                             dynamic = @(
                                 @{
-                                    field = "alias"
+                                    field       = "alias"
                                     expressions = @(
                                         @{
                                             operator = "REGEX"
-                                            value = ".*"
+                                            value    = ".*"
                                         }
                                     )
                                 }
                             )
                         }
                     }
-                    paging = @{
-                        perPageCount = 100
+                    paging  = @{
+                        perPageCount    = 100
                         pageOffsetCount = 0
                     }
-                    sort = "alias, hostPropertyPriority"
+                    sort    = "alias, hostPropertyPriority"
                     columns = @(
-                        @{ properties = "id, name, propertyType"}
+                        @{ properties = "id, name, propertyType" }
                     )
                 }
             } | ConvertTo-Json -Depth 10
 
-            Try {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-                
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
                 # Transform the response to return just the normalized property values
                 if ($Response.data.byId.normalizedProperties) {
                     $normalizedProperties = $Response.data.byId.normalizedProperties
                     $transformedProperties = @()
-                    
+
                     # Get all property names and sort them numerically
                     $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
-                    
+
                     # Add each property's value to the array
                     foreach ($propName in $propertyNames) {
                         $transformedProperties += $normalizedProperties.$propName
                     }
-                    
-                    Return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
+
+                    return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
                 }
-                
+
                 return $Response
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

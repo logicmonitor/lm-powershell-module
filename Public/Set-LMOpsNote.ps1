@@ -43,10 +43,10 @@ Returns the response from the API containing the updated operations note informa
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMOpsNote {
+function Set-LMOpsNote {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
 
@@ -60,38 +60,38 @@ Function Set-LMOpsNote {
 
         [String[]]$DeviceGroupIds,
 
-        [String[]]$WebsiteIds, 
+        [String[]]$WebsiteIds,
 
         [String[]]$DeviceIds
     )
 
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
-            If ($NoteDate) {
+            if ($NoteDate) {
                 $Epoch = Get-Date -Date "01/01/1970"
                 [int64]$NoteDate = (New-TimeSpan -Start $Epoch -End $NoteDate.ToUniversalTime()).TotalSeconds
             }
 
             $Scope = @()
-            If ($ResourceIds -or $WebsiteIds -or $DeviceGroupIds) {
-                Foreach ($deviceId in $DeviceIds) {
+            if ($ResourceIds -or $WebsiteIds -or $DeviceGroupIds) {
+                foreach ($deviceId in $DeviceIds) {
                     $Scope += [PSCustomObject]@{
                         type     = "device"
                         groupId  = "0"
                         deviceId = $deviceId
                     }
                 }
-                Foreach ($websiteId in $WebsiteIds) {
+                foreach ($websiteId in $WebsiteIds) {
                     $Scope += [PSCustomObject]@{
                         type      = "website"
                         groupId   = "0"
                         websiteId = $websiteId
                     }
                 }
-                Foreach ($groupId in $DeviceGroupIds) {
+                foreach ($groupId in $DeviceGroupIds) {
                     $Scope += @{
                         type    = "deviceGroup"
                         groupId = $groupId
@@ -100,7 +100,7 @@ Function Set-LMOpsNote {
             }
 
             $TagList = @()
-            Foreach ($tag in $Tags) {
+            foreach ($tag in $Tags) {
                 $TagList += @{name = $tag }
             }
 
@@ -108,14 +108,14 @@ Function Set-LMOpsNote {
             #Build header and uri
             $ResourcePath = "/setting/opsnotes/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Note: $($PSItem.note)"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
-            Try {
+            try {
                 $Data = @{
                     happenOnInSec = $NoteDate
                     note          = $Note
@@ -124,37 +124,34 @@ Function Set-LMOpsNote {
                 }
 
                 #Remove empty keys so we dont overwrite them
-                If ($ClearTags) {
+                if ($ClearTags) {
                     $Data.tags = @()
                 }
 
                 $Data = Format-LMData `
                     -Data $Data `
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
-                    -AlwaysKeepKeys @($(if ($ClearTags) { 'tags' } else { @() }))
+                -AlwaysKeepKeys @($(if ($ClearTags) { 'tags' } else { @() }))
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Ops Note")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                if ($PSCmdlet.ShouldProcess($Message, "Set Ops Note")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return $Response
+                    return $Response
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

@@ -30,10 +30,10 @@ None. You can pipe LogicMonitor.Device objects to this command.
 .OUTPUTS
 Returns LogicMonitor.ServiceMember objects.
 #>
-Function Get-LMServiceMember {
+function Get-LMServiceMember {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
-    Param (
+    param (
         [Parameter(ParameterSetName = 'Id', Mandatory, ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
@@ -47,23 +47,23 @@ Function Get-LMServiceMember {
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Id via Name
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMService -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
 
             #Lookup Id via DisplayName
-            If ($DisplayName) {
+            if ($DisplayName) {
                 $LookupResult = (Get-LMService -DisplayName $DisplayName).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $DisplayName) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $DisplayName) {
                     return
                 }
                 $Id = $LookupResult
@@ -73,41 +73,38 @@ Function Get-LMServiceMember {
             $ResourcePath = "/device/devices/$Id/service/members"
 
             #Initalize vars
-            $QueryParams = ""
+            $QueryParams = "?size=$BatchSize"
             $Count = 0
             $Done = $false
             $Results = @()
 
-            #Loop through requests 
-            While (!$Done) {
-                Try {
+            #Loop through requests
+            while (!$Done) {
+                try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    if ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+                catch {
+                    return
                 }
             }
-            Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.ServiceMember" )
+            return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.ServiceMember" )
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

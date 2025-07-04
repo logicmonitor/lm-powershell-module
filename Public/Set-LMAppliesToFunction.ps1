@@ -33,10 +33,10 @@ Returns a LogicMonitor.AppliesToFunction object containing the updated function 
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
-Function Set-LMAppliesToFunction {
+function Set-LMAppliesToFunction {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$Name,
 
@@ -50,30 +50,32 @@ Function Set-LMAppliesToFunction {
         [String]$AppliesTo
 
     )
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
 
-        #Lookup Id if supplying name
-        If ($Name) {
-            $LookupResult = (Get-LMAppliesToFunction -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
-                return
+    begin {}
+    process {
+        #Check if we are logged in and have valid api creds
+        if ($Script:LMAuth.Valid) {
+
+            #Lookup Id if supplying name
+            if ($Name) {
+                $LookupResult = (Get-LMAppliesToFunction -Name $Name).Id
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                    return
+                }
+                $Id = $LookupResult
             }
-            $Id = $LookupResult
-        }
 
-        
-        #Build header and uri
-        $ResourcePath = "/setting/functions/$Id"
 
-        If ($PSItem) {
-            $Message = "Id: $Id | Name: $($PSItem.name)"
-        }
-        Else {
-            $Message = "Id: $Id"
-        }
+            #Build header and uri
+            $ResourcePath = "/setting/functions/$Id"
 
-        Try {
+            if ($PSItem) {
+                $Message = "Id: $Id | Name: $($PSItem.name)"
+            }
+            else {
+                $Message = "Id: $Id"
+            }
+
             $Data = @{
                 name        = $NewName
                 description = $Description
@@ -86,26 +88,26 @@ Function Set-LMAppliesToFunction {
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
                 -ConditionalKeep @{ 'name' = 'NewName' }
 
-            If ($PSCmdlet.ShouldProcess($Message, "Set AppliesTo Function")) {  
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "Set AppliesTo Function")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AppliesToFunction" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AppliesToFunction" )
+                }
+            }
+            catch {
+                return
             }
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
-    }
+
 }

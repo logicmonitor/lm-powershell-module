@@ -56,10 +56,14 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 None. This command does not return any output.
 #>
-Function Connect-LMAccount {
+function Connect-LMAccount {
 
     [CmdletBinding(DefaultParameterSetName = "LMv1")]
-    Param (
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'Required for the function to work')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification = 'Required for the function to work')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Required for the function to work')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Required for the function to work')]
+    param (
         [Parameter(Mandatory, ParameterSetName = 'LMv1')]
         [String]$AccessId,
 
@@ -95,150 +99,150 @@ Function Connect-LMAccount {
     )
 
     #Autoload web assembly if on older version of powershell
-    If ((Get-Host).Version.Major -lt 6) {
+    if ((Get-Host).Version.Major -lt 6) {
         Add-Type -AssemblyName System.Web
     }
 
-    If($DisableConsoleLogging.IsPresent) {
+    if ($DisableConsoleLogging.IsPresent) {
         $Script:InformationPreference = 'SilentlyContinue'
     }
-    Else {
+    else {
         $Script:InformationPreference = 'Continue'
     }
 
-    If ($UseCachedCredential -or $CachedAccountName) {
+    if ($UseCachedCredential -or $CachedAccountName) {
 
-        Try {
+        try {
             Get-SecretVault -Name Logic.Monitor -ErrorAction Stop | Out-Null
             Write-Information "[INFO]: Existing vault Logic.Monitor already exists, skipping creation"
         }
-        Catch {
-            If ($_.Exception.Message -like "*Vault Logic.Monitor does not exist in registry*") {
-                Write-Information "[INFO]: Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor" 
+        catch {
+            if ($_.Exception.Message -like "*Vault Logic.Monitor does not exist in registry*") {
+                Write-Information "[INFO]: Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor"
                 Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore
                 Get-SecretStoreConfiguration | Out-Null
             }
         }
         $CredentialPath = Join-Path -Path $Home -ChildPath "Logic.Monitor.json"
-        If ((Test-Path -Path $CredentialPath)) {
-            Write-Information "[INFO]: Previous version of cached accounts detected, migrating to secret store..." 
+        if ((Test-Path -Path $CredentialPath)) {
+            Write-Information "[INFO]: Previous version of cached accounts detected, migrating to secret store..."
             $CredentialFile = Get-Content -Path $CredentialPath | ConvertFrom-Json | Sort-Object -Property Modified -Descending
             $MigrationComplete = $true
-            Foreach ($Credential in $CredentialFile) {
+            foreach ($Credential in $CredentialFile) {
                 $CurrentDate = Get-Date
                 [Hashtable]$Metadata = @{
                     Portal   = [String]$Credential.Portal
                     Id       = [String]$Credential.Id
                     Modified = [DateTime]$CurrentDate
                 }
-                Try {
+                try {
                     Set-Secret -Name $Credential.Portal -Secret $Credential.Key -Vault Logic.Monitor -Metadata $Metadata -NoClobber
                     Write-Information "[INFO]: Successfully migrated cached account secret for portal: $($Credential.Portal)"
                 }
-                Catch {
+                catch {
                     Write-Error $_.Exception.Message
                     $MigrationComplete = $false
                 }
             }
-            If ($MigrationComplete) {
+            if ($MigrationComplete) {
                 Remove-Item -Path $CredentialPath -Confirm:$false
                 Write-Information "[INFO]: Successfully migrated cached accounts into secret store, your legacy account cache hes been removed."
             }
-            Else {
+            else {
                 $NewName = Join-Path -Path $Home -ChildPath "Logic.Monitor-Migrated.json"
                 Rename-Item -Path $CredentialPath -Confirm:$false -NewName $NewName
-                Write-Error "[ERROR]: Unable to fully migrate cached accounts into secret store, your legacy account cache has been archived at: $NewName. No other attemps will be made to migrate any failed accounts." 
+                Write-Error "[ERROR]: Unable to fully migrate cached accounts into secret store, your legacy account cache has been archived at: $NewName. No other attemps will be made to migrate any failed accounts."
             }
         }
 
-        If ($CachedAccountName) {
+        if ($CachedAccountName) {
             #If supplied and account name just use that vs showing a list of accounts
             $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor
             $CachedAccountIndex = $CachedAccountSecrets.Name.IndexOf($CachedAccountName)
-            If ($CachedAccountIndex -ne -1) {
+            if ($CachedAccountIndex -ne -1) {
                 $AccountName = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Portal"]
                 $AccessId = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Id"]
                 $Type = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Type"]
-                If (($Type -eq "LMv1") -or ($null -eq $Type)) {
+                if (($Type -eq "LMv1") -or ($null -eq $Type)) {
                     [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                 }
-                Else {
+                else {
                     [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                 }
             }
-            Else {
+            else {
                 Write-Error "Entered CachedAccountName ($CachedAccountName) does not match one of the stored credentials, please check the selected entry and try again"
-                Return
+                return
             }
         }
-        Else {
+        else {
             #List out current portals with saved credentials and let users chose which to use
             $i = 0
             $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor
-            If ($CachedAccountSecrets) {
+            if ($CachedAccountSecrets) {
                 Write-Host "Selection Number | Portal Name"
-                Foreach ($Credential in $CachedAccountSecrets) {
-                    If ($Credential.Name -notlike "*LMSessionSync*") {
+                foreach ($Credential in $CachedAccountSecrets) {
+                    if ($Credential.Name -notlike "*LMSessionSync*") {
                         Write-Host "$i)     $($Credential.Name)"
                     }
                     $i++
                 }
                 $StoredCredentialIndex = Read-Host -Prompt "Enter the number for the cached credential you wish to use"
-                If ($CachedAccountSecrets[$StoredCredentialIndex]) {
+                if ($CachedAccountSecrets[$StoredCredentialIndex]) {
                     $AccountName = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Portal"]
                     $CachedAccountName = $CachedAccountSecrets[$StoredCredentialIndex].Name
                     $AccessId = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Id"]
                     $Type = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Type"]
-                    If ($Type -eq "LMv1") {
+                    if ($Type -eq "LMv1") {
                         [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                     }
-                    Elseif ($Type -eq "Bearer") {
+                    elseif ($Type -eq "Bearer") {
                         [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                     }
-                    Else {
+                    else {
                         Write-Error "Invalid credential type detected for selection: $Type"
-                        Return
+                        return
                     }
                 }
-                Else {
+                else {
                     Write-Error "Entered value does not match one of the listed credentials, please check the selected entry and try again"
-                    Return
+                    return
                 }
             }
-            Else {
+            else {
                 Write-Error "No entries currently found in secret vault Logic.Monitor"
-                Return
+                return
             }
         }
     }
-    Else {
-        If ($PsCmdlet.ParameterSetName -eq "LMv1") {
+    else {
+        if ($PsCmdlet.ParameterSetName -eq "LMv1") {
             #Convert to secure string
             [SecureString]$AccessKey = $AccessKey | ConvertTo-SecureString -AsPlainText -Force
             $Type = "LMv1"
         }
-        Elseif ($PsCmdlet.ParameterSetName -eq "SessionSync") {
+        elseif ($PsCmdlet.ParameterSetName -eq "SessionSync") {
             $Session = Get-LMSession -AccountName $AccountName
-            If ($Session) {
+            if ($Session) {
                 $AccessId = $Session.jSessionID #Session Id
                 $AccessKey = $Session.token #CSRF Token
                 $Type = "SessionSync"
             }
-            Else {
-                Throw "Unable to validate session sync info for: $AccountName"
+            else {
+                throw "Unable to validate session sync info for: $AccountName"
             }
         }
-        Else {
+        else {
             #Convert to secure string
             [SecureString]$BearerToken = $BearerToken | ConvertTo-SecureString -AsPlainText -Force
             $Type = "Bearer"
         }
     }
 
-    If (!$Type) {
+    if (!$Type) {
         $Type = "LMv1"
     }
-    
+
     #Create Credential Object for reuse in other functions
     $Script:LMAuth = [PSCustomObject]@{
         Id          = $AccessId
@@ -251,67 +255,67 @@ Function Connect-LMAccount {
     }
 
     #Check for newer version of Logic.Monitor module
-    Try {
-        If ($AutoUpdateModuleVersion -and !$SkipVersionCheck) {
+    try {
+        if ($AutoUpdateModuleVersion -and !$SkipVersionCheck) {
             Update-LogicMonitorModule
         }
-        Elseif (!$SkipVersionCheck) {
+        elseif (!$SkipVersionCheck) {
             Update-LogicMonitorModule -CheckOnly
         }
     }
-    Catch {
-        Write-Error "[ERROR]: Unable to check for newer version of Logic.Monitor module: $($_.Exception.Message)" 
+    catch {
+        Write-Error "[ERROR]: Unable to check for newer version of Logic.Monitor module: $($_.Exception.Message)"
     }
 
-    If (!$SkipCredValidation) {
-        Try {
+    if (!$SkipCredValidation) {
+        try {
             #Collect portal info and api username and roles
-            If ($Type -eq "Bearer") {
+            if ($Type -eq "Bearer") {
                 $Token = [System.Net.NetworkCredential]::new("", $BearerToken).Password
                 $ApiInfo = Get-LMAPIToken -Type Bearer -ErrorAction SilentlyContinue | Where-Object { $_.accessKey -like "$($Token.Substring(0,20))*" }
             }
-            Else {
+            else {
                 $ApiInfo = Get-LMAPIToken -Filter "accessId -eq '$AccessId'" -ErrorAction SilentlyContinue
             }
-    
-            If ($ApiInfo) {
+
+            if ($ApiInfo) {
                 $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-                Write-Information "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) using account ($($ApiInfo.adminName) via $Type Token) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." 
-                Return
+                Write-Information "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) using account ($($ApiInfo.adminName) via $Type Token) with assigned roles: $($ApiInfo.roles -join ",") - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)."
+                return
             }
-            Else {
-                Try {
+            else {
+                try {
                     $PortalInfo = Get-LMPortalInfo -ErrorAction Stop
-                    Write-Information "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) via $Type Token - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)." 
-                    Return
+                    Write-Information "[INFO]: Connected to LM portal $($PortalInfo.companyDisplayName) via $Type Token - ($($PortalInfo.numberOfDevices) devices | $($PortalInfo.numOfWebsites) websites)."
+                    return
                 }
-                Catch {
-                    Throw "Unable to validate API token info"
+                catch {
+                    throw "Unable to validate API token info"
                 }
             }
         }
-        Catch {
-            Try {
+        catch {
+            try {
                 $DeviceInfo = Get-LMDevice -ErrorAction Stop
-    
-                If ($DeviceInfo) {
-                    Write-Information "[INFO]: Connected to LM portal $AccountName via $Type Token with limited permissions, ensure your api token has the necessary rights needed to run desired commands." 
-                    Return
+
+                if ($DeviceInfo) {
+                    Write-Information "[INFO]: Connected to LM portal $AccountName via $Type Token with limited permissions, ensure your api token has the necessary rights needed to run desired commands."
+                    return
                 }
-                Else {
-                    Throw "Unable to verify api token permission levels, ensure api token has rights to view all/select resources or at minimum view access for Account Information"
+                else {
+                    throw "Unable to verify api token permission levels, ensure api token has rights to view all/select resources or at minimum view access for Account Information"
                 }
             }
-            Catch {
-    
+            catch {
+
                 #Clear credential object from environment
                 Remove-Variable LMAuth -Scope Script -ErrorAction SilentlyContinue
-                Throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
+                throw "Unable to login to account, please ensure your access info and account name are correct: $($_.Exception.Message)"
             }
-            Return
+            return
         }
     }
-    Else {
-        Write-Information "[INFO]: Skipping validation of credentials, connected to LM portal $AccountName via $Type, ensure your api token has the necessary rights needed to run desired commands." 
+    else {
+        Write-Information "[INFO]: Skipping validation of credentials, connected to LM portal $AccountName via $Type, ensure your api token has the necessary rights needed to run desired commands."
     }
 }

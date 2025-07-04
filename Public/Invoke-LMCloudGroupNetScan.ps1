@@ -28,10 +28,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns a success message if the task is scheduled successfully.
 #>
-Function Invoke-LMCloudGroupNetScan {
+function Invoke-LMCloudGroupNetScan {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'GroupId')]
         [String]$Id,
 
@@ -39,52 +39,49 @@ Function Invoke-LMCloudGroupNetScan {
         [String]$Name
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Id if supplying username
-            If ($Name) {
+            if ($Name) {
                 $GroupInfo = Get-LMDeviceGroup -Name $Name
                 $LookupResult = $GroupInfo.Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
-                    Return
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                    return
                 }
                 $Id = $LookupResult
             }
-            Else {
+            else {
                 $GroupInfo = Get-LMDeviceGroup -Id $Id
             }
 
-            If ($GroupInfo.groupType -notlike "*AWS*" -and $GroupInfo.groupType -notlike "*Azure*" -and $GroupInfo.groupType -notlike "*GCP*") {
+            if ($GroupInfo.groupType -notlike "*AWS*" -and $GroupInfo.groupType -notlike "*Azure*" -and $GroupInfo.groupType -notlike "*GCP*") {
                 Write-Error "Specified group: $($GroupInfo.Name) is not of type AWs/Azure/GCP. Please ensure the specified group is a Cloud group and try again."
             }
-                
+
             #Build header and uri
             $ResourcePath = "/device/groups/$Id/scheduleNetscans"
 
-            Try {
-    
+            try {
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-    
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
 
-                Return "Scheduled LMCloud NetScan task for NetScan id: $Id."
+                return "Scheduled LMCloud NetScan task for NetScan id: $Id."
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

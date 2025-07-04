@@ -29,28 +29,28 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor object of the appropriate type based on the Type parameter: LogicMonitor.Datasource, LogicMonitor.PropertySource, LogicMonitor.TopologySource, LogicMonitor.EventSource, LogicMonitor.LogSource, LogicMonitor.ConfigSource
 #>
 
-Function New-LMLogicModule {
+function New-LMLogicModule {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [PSCustomObject]$LogicModule, #follow the schema model listed here: https://www.logicmonitor.com/swagger-ui-master/api-v3/dist/#/Datasources/addDatasourceById,
 
         [Parameter(Mandatory)]
-        [ValidateSet("datasources", "propertyrules", "topologysources", "eventsources","logsources","configsources")]
+        [ValidateSet("datasources", "propertyrules", "topologysources", "eventsources", "logsources", "configsources")]
         [String]$Type
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-                    
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/setting/$Type"
-            
+
             $Message = "LogicModule Name: $($LogicModule.name) | Type: $Type"
 
-            Switch ($Type) {
+            switch ($Type) {
                 "datasources" {
                     $ObjectType = "LogicMonitor.Datasource"
                 }
@@ -71,33 +71,30 @@ Function New-LMLogicModule {
                 }
             }
 
-            Try {
-                $Data = $LogicModule
+            $Data = $LogicModule
+            $Data = ($Data | ConvertTo-Json -Depth 10)
 
-                $Data = ($Data | ConvertTo-Json -Depth 10)
-
-                If ($PSCmdlet.ShouldProcess($Message, "New LogicModule")) {  
+            if ($PSCmdlet.ShouldProcess($Message, "New LogicModule")) {
+                try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName $ObjectType )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName $ObjectType )
                 }
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                catch {
+
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

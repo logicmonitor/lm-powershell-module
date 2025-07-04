@@ -34,10 +34,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns a success message if the export is completed successfully.
 #>
-Function Export-LMLogicModule {
+function Export-LMLogicModule {
 
     [CmdletBinding(DefaultParameterSetName = "Id")]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Alias("Id")]
         [Int]$LogicModuleId,
@@ -46,24 +46,24 @@ Function Export-LMLogicModule {
         [String]$LogicModuleName,
 
         [Parameter(Mandatory)]
-        [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources","logsources", "functions", "oids")]
+        [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources", "logsources", "functions", "oids")]
         [String]$Type,
 
         [String]$DownloadPath = (Get-Location).Path
     )
-    Begin {
+    begin {
 
     }
-    Process {
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             $LogicModuleInfo = @()
             $QueryParams = ""
             $ExportPath = ""
 
-            If ($LogicModuleName) {
-                Switch ($Type) {
+            if ($LogicModuleName) {
+                switch ($Type) {
                     "datasources" {
                         $LogicModuleInfo = Get-LMDataSource -Name $LogicModuleName
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
@@ -108,13 +108,13 @@ Function Export-LMLogicModule {
                     }
                 }
                 #Verify our query only returned one result
-                If (Test-LookupResult -Result $LogicModuleInfo.Id -LookupString $LogicModuleName) {
+                if (Test-LookupResult -Result $LogicModuleInfo.Id -LookupString $LogicModuleName) {
                     return
                 }
                 $LogicModuleId = $LogicModuleInfo.Id
             }
-            Else {
-                Switch ($Type) {
+            else {
+                switch ($Type) {
                     "datasources" {
                         $LogicModuleInfo = Get-LMDatasource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
@@ -160,31 +160,28 @@ Function Export-LMLogicModule {
                 }
             }
 
-            
+
             #Build header and uri
             $ResourcePath = "/setting/$Type/$LogicModuleId"
-            
-            Try {
+
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] -OutFile $ExportPath
+                Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] -OutFile $ExportPath | Out-Null
 
-                Return "Successfully downloaded LogicModule id ($LogicModuleId) of type $Type"
+                return "Successfully downloaded LogicModule id ($LogicModuleId) of type $Type"
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

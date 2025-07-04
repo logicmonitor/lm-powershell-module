@@ -25,10 +25,10 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.NormalizedProperties object.
 #>
 
-Function New-LMNormalizedProperties {
+function New-LMNormalizedProperty {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory = $true)]
         [String]$Alias,
         [Parameter(Mandatory = $true)]
@@ -36,10 +36,10 @@ Function New-LMNormalizedProperties {
     )
 
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-            
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/normalizedProperties/bulk"
 
@@ -50,53 +50,54 @@ Function New-LMNormalizedProperties {
                 }
             }
             $Index = 1
-            ForEach ($Property in $Properties) {
+            foreach ($Property in $Properties) {
                 $Body.data.items += [PSCustomObject]@{
-                    alias = $Alias
-                    hostProperty = $Property
+                    alias                = $Alias
+                    hostProperty         = $Property
                     hostPropertyPriority = $Index
-                    model = "normalizedProperties"
+                    model                = "normalizedProperties"
                 }
                 $Index++
             }
 
             $Body = $Body | ConvertTo-Json -Depth 10
 
-            Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-                
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+            $Message = "Alias: $Alias"
 
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
-            }
+            if ($PSCmdlet.ShouldProcess($Message, "Create Normalized Property")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-            # Transform the response to return just the normalized property values
-            if ($Response.data.byId.normalizedProperties) {
-                $normalizedProperties = $Response.data.byId.normalizedProperties
-                $transformedProperties = @()
-                
-                # Get all property names and sort them numerically
-                $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
-                
-                # Add each property's value to the array
-                foreach ($propName in $propertyNames) {
-                    $transformedProperties += $normalizedProperties.$propName
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+
+                    # Transform the response to return just the normalized property values
+                    if ($Response.data.byId.normalizedProperties) {
+                        $normalizedProperties = $Response.data.byId.normalizedProperties
+                        $transformedProperties = @()
+
+                        # Get all property names and sort them numerically
+                        $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
+
+                        # Add each property's value to the array
+                        foreach ($propName in $propertyNames) {
+                            $transformedProperties += $normalizedProperties.$propName
+                        }
+
+                        return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
+                    }
                 }
-                
-                Return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
+                catch {
+                    return
+                }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

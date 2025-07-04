@@ -19,19 +19,19 @@ None. You cannot pipe objects to this command.
 Returns a PSCustomObject with the following properties: Portal, Valid, Logging, and Type
 #>
 
-Function Get-LMAccountStatus {
+function Get-LMAccountStatus {
     #Clear credential object from environment
-    If ($Script:LMAuth) {
+    if ($Script:LMAuth) {
         $Result = [PSCustomObject]@{
-            Portal  = $Script:LMAuth.Portal
-            Valid   = $Script:LMAuth.Valid
-            Logging = $Script:LMAuth.Logging
-            Type    = $Script:LMAuth.Type
+            Portal   = $Script:LMAuth.Portal
+            Valid    = $Script:LMAuth.Valid
+            Logging  = $Script:LMAuth.Logging
+            Type     = $Script:LMAuth.Type
             GovCloud = $Script:LMAuth.GovCloud
         }
         return $Result
     }
-    Else {
+    else {
         return "Not currently logged into any LogicMonitor portals."
     }
 }

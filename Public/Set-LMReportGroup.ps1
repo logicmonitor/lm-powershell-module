@@ -31,10 +31,10 @@ Returns a LogicMonitor.NetScanGroup object containing the updated group informat
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMReportGroup {
+function Set-LMReportGroup {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -48,66 +48,63 @@ Function Set-LMReportGroup {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
             #Lookup Group Id
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMReportGroup -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/report/groups/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
-            Try {
-                $Data = @{
-                    description = $Description
-                    name        = $NewName
-                }
+            $Data = @{
+                description = $Description
+                name        = $NewName
+            }
 
-            
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-                    -ConditionalKeep @{ 'name' = 'NewName' }
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                -ConditionalKeep @{ 'name' = 'NewName' }
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Report Group")) {
+            if ($PSCmdlet.ShouldProcess($Message, "Set Report Group")) {
+                try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScanGroup" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScanGroup" )
                 }
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                catch {
+
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

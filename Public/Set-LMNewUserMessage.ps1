@@ -25,10 +25,10 @@ Returns the response from the API indicating the success of the update.
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMNewUserMessage {
+function Set-LMNewUserMessage {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
 
         [Parameter(Mandatory)]
         [String]$MessageBody,
@@ -38,16 +38,16 @@ Function Set-LMNewUserMessage {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Build header and uri
             $ResourcePath = "/setting/messagetemplate"
 
             $Message = "New User Message Template"
 
-            Try {
+            try {
                 $Data = @{
                     messageBody    = $MessageBody
                     messageSubject = $MessageSubject
@@ -58,28 +58,25 @@ Function Set-LMNewUserMessage {
                     -Data $Data `
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set New User Message Template")) {
+                if ($PSCmdlet.ShouldProcess($Message, "Set New User Message Template")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return $Response
+                    return $Response
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

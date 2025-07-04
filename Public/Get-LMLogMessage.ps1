@@ -43,38 +43,38 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.LMLogs objects.
 #>
-Function Get-LMLogMessage {
+function Get-LMLogMessage {
 
     [CmdletBinding(DefaultParameterSetName = "Range-Async")]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Date-Sync')]
         [Parameter(Mandatory, ParameterSetName = 'Date-Async')]
         [Datetime]$StartDate,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Date-Sync')]
         [Parameter(Mandatory, ParameterSetName = 'Date-Async')]
         [Datetime]$EndDate,
-    
+
         [String]$Query,
-    
+
         [Parameter(ParameterSetName = 'Range-Sync')]
         [Parameter(ParameterSetName = 'Range-Async')]
         [ValidateSet("15min", "30min", "1hour", "3hour", "6hour", "12hour", "24hour", "3day", "7day", "1month")]
         [String]$Range = "15min",
-    
+
         [Int]$BatchSize = 300,
-    
+
         [Parameter(ParameterSetName = 'Date-Async')]
         [Parameter(ParameterSetName = 'Range-Async')]
         [Int]$MaxPages = 10,
-    
+
         [Parameter(ParameterSetName = 'Date-Async')]
         [Parameter(ParameterSetName = 'Range-Async')]
         [Switch]$Async
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/log/search"
 
@@ -84,12 +84,12 @@ Function Get-LMLogMessage {
         #Convert to epoch, if not set use defaults
         $CurrentTime = Get-Date
 
-        If ($StartDate -and $EndDate) {
+        if ($StartDate -and $EndDate) {
             $StartTime = ([DateTimeOffset]$($StartDate)).ToUnixTimeMilliseconds()
             $EndTime = ([DateTimeOffset]$($EndDate)).ToUnixTimeMilliseconds()
         }
-        Else {
-            Switch ($Range) {
+        else {
+            switch ($Range) {
                 "15min" {
                     $StartTime = ([DateTimeOffset]$($CurrentTime.AddMinutes(-15))).ToUnixTimeMilliseconds()
                     $EndTime = ([DateTimeOffset]$($CurrentTime)).ToUnixTimeMilliseconds()
@@ -152,34 +152,34 @@ Function Get-LMLogMessage {
 
         $Body = $Data | ConvertTo-Json -Depth 10
 
-        Try {
+        try {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
 
             # Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+            $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
-            If (!$Async) {
-                If ($Response.data.byId.logs.PSObject.Properties.Value) {
-                    Return (Add-ObjectTypeInfo -InputObject $Response.data.byId.logs.PSObject.Properties.Value -TypeName "LogicMonitor.LMLogs")
+            if (!$Async) {
+                if ($Response.data.byId.logs.PSObject.Properties.Value) {
+                    return (Add-ObjectTypeInfo -InputObject $Response.data.byId.logs.PSObject.Properties.Value -TypeName "LogicMonitor.LMLogs")
                 }
-                Else {
+                else {
                     Write-Information "No results found for query ($($Query))"
-                    Return
+                    return
                 }
             }
 
             # Handle async response
-            If ($Response.meta.queryId -and $Response.meta.progress -ne 1) {
+            if ($Response.meta.queryId -and $Response.meta.progress -ne 1) {
                 $QueryId = $Response.meta.queryId
                 $Complete = $false
                 $Results = @()
                 $Cursor = $null
                 $Page = 0
                 # Poll for completion
-                While (!$Complete) {
+                while (!$Complete) {
                     $CompletionPercentage = [Math]::Round($Response.meta.progress * 100, 2)
                     Write-Information "Log message query ($($QueryId)) is running, this may take some time. First pass scan $CompletionPercentage% complete, working on page $($Page) of results."
                     Start-Sleep -Seconds 2
@@ -194,7 +194,7 @@ Function Get-LMLogMessage {
                         }
                     }
                     #cursor is used to build the pagination, using the chunk path and index to build the cursor on the next bucket that needs to be scanned
-                    If ($Cursor) {
+                    if ($Cursor) {
                         $Data.meta.cursor = $Cursor
                         $Data.meta.filter = @{
                             query = $Query
@@ -209,45 +209,42 @@ Function Get-LMLogMessage {
 
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-        
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
-        
-                    # Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
-                    If ($Response.meta.progress -eq 1) {
-                        If ($Response.data.byId.logs.PSObject.Properties.Value) {
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+
+                    # Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+
+                    if ($Response.meta.progress -eq 1) {
+                        if ($Response.data.byId.logs.PSObject.Properties.Value) {
                             $Results += $Response.data.byId.logs.PSObject.Properties.Value
                             $Cursor = $Response.meta.cursor
                             $Page++
                         }
-                        If ($Response.meta.isLastPage -eq $true -or $Page -ge $MaxPages) {
+                        if ($Response.meta.isLastPage -eq $true -or $Page -ge $MaxPages) {
                             $Complete = $true
                         }
                     }
                 }
-                If ($Results) {
-                    If ($Page -eq $MaxPages) {
+                if ($Results) {
+                    if ($Page -eq $MaxPages) {
                         Write-Information "Max pages reached, stopping query. If you need more results, try increasing the MaxPages parameter."
                     }
-                    Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LMLogs")
+                    return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LMLogs")
                 }
-                Else {
+                else {
                     Write-Information "No results found for query ($($QueryId))"
                 }
             }
-            Else {
+            else {
                 Write-Error "Error getting log messages: $($Response)"
             }
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        catch {
+            return
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

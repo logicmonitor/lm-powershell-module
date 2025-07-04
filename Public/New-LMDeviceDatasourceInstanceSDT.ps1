@@ -51,10 +51,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.SDT object.
 #>
-Function New-LMDeviceDatasourceInstanceSDT {
+function New-LMDeviceDatasourceInstanceSDT {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         [String]$Comment,
 
@@ -114,12 +114,12 @@ Function New-LMDeviceDatasourceInstanceSDT {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Build header and uri
         $ResourcePath = "/sdt/sdts"
 
-        Switch -Wildcard ($PSCmdlet.ParameterSetName) {
+        switch -Wildcard ($PSCmdlet.ParameterSetName) {
             "OneTime*" { $Occurance = "oneTime" }
             "Daily*" { $Occurance = "daily" }
             "Monthly*" { $Occurance = "monthly" }
@@ -127,91 +127,93 @@ Function New-LMDeviceDatasourceInstanceSDT {
             "Weekly*" { $Occurance = "weekly" }
         }
 
-        Try {
-            $Data = $null
+        $Data = $null
 
-            $Data = @{
-                comment              = $Comment
-                dataSourceInstanceId = $DeviceDataSourceInstanceId
-                sdtType              = $Occurance
-                #timezone                = $Timezone
-                type                 = "DeviceDataSourceInstanceSDT"
-            }
-
-            Switch ($Occurance) {
-                "onetime" {
-                    #Get UTC time based on selected timezone
-                    # $TimeZoneID = [System.TimeZoneInfo]::FindSystemTimeZoneById($Timezone)
-                    # $StartUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($StartDate.ToUniversalTime(), $TimeZoneID)
-                    # $EndUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($EndDate.ToUniversalTime(), $TimeZoneID)
-
-                    # $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
-                    # $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
-
-                    $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
-                    $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
-                    $Data.Add('endDateTime', [math]::Round($EndDateTime))
-                    $Data.Add('startDateTime', [math]::Round($StartDateTime))
-                }
-
-                "daily" {
-                    $Data.Add('hour', $StartHour)
-                    $Data.Add('minute', $StartMinute)
-                    $Data.Add('endHour', $EndHour)
-                    $Data.Add('endMinute', $EndMinute)
-                } 
-               
-                "weekly" {
-                    $Data.Add('hour', $StartHour)
-                    $Data.Add('minute', $StartMinute)
-                    $Data.Add('endHour', $EndHour)
-                    $Data.Add('endMinute', $EndMinute)
-                    $Data.Add('weekDay', $WeekDay)
-                } 
-               
-                "monthly" {
-                    $Data.Add('hour', $StartHour)
-                    $Data.Add('minute', $StartMinute)
-                    $Data.Add('endHour', $EndHour)
-                    $Data.Add('endMinute', $EndMinute)
-                    $Data.Add('monthDay', $DayOfMonth)
-                } 
-               
-                "monthlyByWeek" {
-                    $Data.Add('hour', $StartHour)
-                    $Data.Add('minute', $StartMinute)
-                    $Data.Add('endHour', $EndHour)
-                    $Data.Add('endMinute', $EndMinute)
-                    $Data.Add('weekDay', $WeekDay)
-                    $Data.Add('weekOfMonth', $WeekOfMonth)
-                } 
-
-                default {}
-            }
-
-            #Remove empty keys so we dont overwrite them
-            $Data = Format-LMData `
-                -Data $Data `
-                -UserSpecifiedKeys @()
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return $Response
+        $Data = @{
+            comment              = $Comment
+            dataSourceInstanceId = $DeviceDataSourceInstanceId
+            sdtType              = $Occurance
+            #timezone                = $Timezone
+            type                 = "DeviceDataSourceInstanceSDT"
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        switch ($Occurance) {
+            "onetime" {
+                #Get UTC time based on selected timezone
+                # $TimeZoneID = [System.TimeZoneInfo]::FindSystemTimeZoneById($Timezone)
+                # $StartUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($StartDate.ToUniversalTime(), $TimeZoneID)
+                # $EndUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($EndDate.ToUniversalTime(), $TimeZoneID)
+
+                # $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
+                # $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
+
+                $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
+                $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
+                $Data.Add('endDateTime', [math]::Round($EndDateTime))
+                $Data.Add('startDateTime', [math]::Round($StartDateTime))
+            }
+
+            "daily" {
+                $Data.Add('hour', $StartHour)
+                $Data.Add('minute', $StartMinute)
+                $Data.Add('endHour', $EndHour)
+                $Data.Add('endMinute', $EndMinute)
+            }
+
+            "weekly" {
+                $Data.Add('hour', $StartHour)
+                $Data.Add('minute', $StartMinute)
+                $Data.Add('endHour', $EndHour)
+                $Data.Add('endMinute', $EndMinute)
+                $Data.Add('weekDay', $WeekDay)
+            }
+
+            "monthly" {
+                $Data.Add('hour', $StartHour)
+                $Data.Add('minute', $StartMinute)
+                $Data.Add('endHour', $EndHour)
+                $Data.Add('endMinute', $EndMinute)
+                $Data.Add('monthDay', $DayOfMonth)
+            }
+
+            "monthlyByWeek" {
+                $Data.Add('hour', $StartHour)
+                $Data.Add('minute', $StartMinute)
+                $Data.Add('endHour', $EndHour)
+                $Data.Add('endMinute', $EndMinute)
+                $Data.Add('weekDay', $WeekDay)
+                $Data.Add('weekOfMonth', $WeekOfMonth)
+            }
+
+            default {}
+        }
+
+        #Remove empty keys so we dont overwrite them
+        $Data = Format-LMData `
+            -Data $Data `
+            -UserSpecifiedKeys @()
+
+        $Message = "Comment: $Comment | DeviceDataSourceInstanceId: $DeviceDataSourceInstanceId"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Device Datasource Instance SDT")) {
+            try {
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return $Response
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

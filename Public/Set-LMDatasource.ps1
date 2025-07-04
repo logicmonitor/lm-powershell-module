@@ -52,10 +52,10 @@ Returns a LogicMonitor.Datasource object containing the updated datasource infor
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMDatasource {
+function Set-LMDatasource {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
 
@@ -83,39 +83,39 @@ Function Set-LMDatasource {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup ParentGroupName
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDatasource -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-            
+
             #Get existing tags if we are adding tags
-            If ($Tags -and $TagsMethod -eq "Add") {
+            if ($Tags -and $TagsMethod -eq "Add") {
                 $Tags = [String[]](Get-LMDatasource -Id $Id).tags + $Tags
             }
-            
-                    
+
+
             #Build header and uri
             $ResourcePath = "/setting/datasources/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | DisplayName: $($PSItem.displayName)"
             }
-            Elseif ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
-            Try {
+            try {
                 $Data = @{
                     name            = $NewName
                     displayName     = $DisplayName
@@ -133,28 +133,25 @@ Function Set-LMDatasource {
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
                     -ConditionalKeep @{ 'name' = 'NewName' }
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Datasource")) {  
+                if ($PSCmdlet.ShouldProcess($Message, "Set Datasource")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?forceUniqueIdentifier=true"
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Datasource" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Datasource" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

@@ -35,109 +35,109 @@ Generates an example CSV file named "SampleLMDeviceImportCSV.csv" in the current
 - If the collector ID is not specified in the CSV file, the function uses the collector ID specified by the CollectorId parameter.
 #>
 
-Function Import-LMDevicesFromCSV {
-    [CmdletBinding(DefaultParameterSetName="Import")]
+function Import-LMDevicesFromCSV {
+    [CmdletBinding(DefaultParameterSetName = "Import")]
     param (
-        [Parameter(Mandatory=$true, ParameterSetName="Import")]
-        [ValidateScript({Test-Path $_})]
+        [Parameter(Mandatory = $true, ParameterSetName = "Import")]
+        [ValidateScript({ Test-Path $_ })]
         [String]$FilePath,
-        
-        [Parameter(ParameterSetName="Sample")]
+
+        [Parameter(ParameterSetName = "Sample")]
         [Switch]$GenerateExampleCSV,
-        
-        [Parameter(ParameterSetName="Import")]
+
+        [Parameter(ParameterSetName = "Import")]
         [Switch]$PassThru,
-        
-        [Parameter(ParameterSetName="Import")]
+
+        [Parameter(ParameterSetName = "Import")]
         [Nullable[Int]]$CollectorId,
 
-        [Parameter(ParameterSetName="Import")]
+        [Parameter(ParameterSetName = "Import")]
         [Nullable[Int]]$AutoBalancedCollectorGroupId
 
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {
+    begin {
         $Results = New-Object System.Collections.ArrayList
     }
-    Process {
-        If($GenerateExampleCSV){
+    process {
+        if ($GenerateExampleCSV) {
             $SampleCSV = ("ip,displayname,hostgroup,collectorid,abcgid,description,snmp.community,property.name1,property.name2").Split(",")
 
             [PSCustomObject]@{
-                $SampleCSV[0]="192.168.1.1"
-                $SampleCSV[1]="SampleDeviceName"
-                $SampleCSV[2]="Full/Path/To/Resource"
-                $SampleCSV[3]="0"
-                $SampleCSV[4]="$null"
-                $SampleCSV[5]="My sample device"
-                $SampleCSV[6]="public"
-                $SampleCSV[7]="property value 1"
-                $SampleCSV[8]="property value 2"
-            } | Export-Csv "SampleLMDeviceImportCSV.csv"  -Force -NoTypeInformation
+                $SampleCSV[0] = "192.168.1.1"
+                $SampleCSV[1] = "SampleDeviceName"
+                $SampleCSV[2] = "Full/Path/To/Resource"
+                $SampleCSV[3] = "0"
+                $SampleCSV[4] = "$null"
+                $SampleCSV[5] = "My sample device"
+                $SampleCSV[6] = "public"
+                $SampleCSV[7] = "property value 1"
+                $SampleCSV[8] = "property value 2"
+            } | Export-Csv "SampleLMDeviceImportCSV.csv" -Force -NoTypeInformation
 
-            Write-Host "[INFO]: Saved sample CSV (SampleLMDeviceImportCSV.csv) to current directory."
+            Write-Information "[INFO]: Saved sample CSV (SampleLMDeviceImportCSV.csv) to current directory."
 
-            Return
+            return
         }
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
             $DeviceList = Import-Csv -Path $FilePath
 
-            If($DeviceList){
+            if ($DeviceList) {
                 #Get property headers for adding to property hashtable
-                $PropertyHeaders = ($DeviceList | Get-Member -MemberType NoteProperty).Name | Where-Object {$_ -notmatch "ip|displayname|hostgroup|collectorid|abcgid|description"}
-                
+                $PropertyHeaders = ($DeviceList | Get-Member -MemberType NoteProperty).Name | Where-Object { $_ -notmatch "ip|displayname|hostgroup|collectorid|abcgid|description" }
+
                 $i = 1
                 $DeviceCount = ($DeviceList | Measure-Object).Count
 
                 #Loop through device list and add to portal
-                Foreach($Device in $DeviceList){
-                    Write-Progress -Activity "Processing Device Import: $($Device.displayname)" -Status "$([Math]::Floor($($i/$DeviceCount*100)))% Completed" -PercentComplete $($i/$DeviceCount*100) -Id 0
+                foreach ($Device in $DeviceList) {
+                    Write-Progress -Activity "Processing Device Import: $($Device.displayname)" -Status "$([Math]::Floor($($i/$DeviceCount*100)))% Completed" -PercentComplete $($i / $DeviceCount * 100) -Id 0
                     $Properties = @{}
-                    Foreach($Property in $PropertyHeaders){
+                    foreach ($Property in $PropertyHeaders) {
                         $Value = $Device."$Property"
-                        If(-not [string]::IsNullOrWhiteSpace($Value)){
+                        if (-not [string]::IsNullOrWhiteSpace($Value)) {
                             $Properties.Add($Property, $Value)
                         }
-                        Else{
+                        else {
                             Write-Debug "Skipping adding property $Property since null for $($Device.displayName)"
                         }
                     }
-                    Try{
-                        $CurrentGroup = $Device.hostgroup.Replace("\","/") #Replace backslashes with forward slashes for LM API
-                        $GroupId = (Get-LMDeviceGroup | Where-Object {$_.fullpath -eq $CurrentGroup}).Id
-                        If(!$GroupId){
+                    try {
+                        $CurrentGroup = $Device.hostgroup.Replace("\", "/") #Replace backslashes with forward slashes for LM API
+                        $GroupId = (Get-LMDeviceGroup | Where-Object { $_.fullpath -eq $CurrentGroup }).Id
+                        if (!$GroupId) {
                             $GroupPaths = $Device.hostgroup.Split("/")
                             $j = 1
                             $GroupPathsCount = ($GroupPaths | Measure-Object).Count
-                            Foreach($Path in $GroupPaths){
-                                Write-Progress -Activity "Processing Group Creation: $CurrentGroup" -Status "$([Math]::Floor($($j/$GroupPathsCount*100)))% Completed" -PercentComplete $($j/$GroupPathsCount*100) -ParentId 0 -Id 1
+                            foreach ($Path in $GroupPaths) {
+                                Write-Progress -Activity "Processing Group Creation: $CurrentGroup" -Status "$([Math]::Floor($($j/$GroupPathsCount*100)))% Completed" -PercentComplete $($j / $GroupPathsCount * 100) -ParentId 0 -Id 1
                                 $GroupId = New-LMDeviceGroupFromPath -Path $Path -PreviousGroupId $GroupId
                                 $j++
                             }
                         }
 
                         #Parameter takes precedence over csv value
-                        If(!$CollectorId){$SetCollectorId = $Device.collectorid}Else{$SetCollectorId = $CollectorId}
+                        if (!$CollectorId) { $SetCollectorId = $Device.collectorid }else { $SetCollectorId = $CollectorId }
 
                         #Parameter takes precedence over csv value
-                        If(!$AutoBalancedCollectorGroupId){$SetAutoBalancedCollectorGroupId = $Device.abcgid}Else{$SetAutoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId}
+                        if (!$AutoBalancedCollectorGroupId) { $SetAutoBalancedCollectorGroupId = $Device.abcgid }else { $SetAutoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId }
 
-                        If($null -eq $SetCollectorId){
+                        if ($null -eq $SetCollectorId) {
                             Write-Error "[ERROR]: CollectorId is required for device import, please ensure you have a valid collector id in your csv file."
-                            Break
+                            break
                         }
 
                         $DeviceParams = @{
-                            Name = $Device.ip
-                            DisplayName = $Device.displayname
-                            Description = $Device.description
-                            PreferredCollectorId = $SetCollectorId
+                            Name                         = $Device.ip
+                            DisplayName                  = $Device.displayname
+                            Description                  = $Device.description
+                            PreferredCollectorId         = $SetCollectorId
                             AutoBalancedCollectorGroupId = $SetAutoBalancedCollectorGroupId
-                            HostGroupIds = $GroupId
-                            Properties = $Properties
-                            ErrorAction = "Stop"
-                            }
+                            HostGroupIds                 = $GroupId
+                            Properties                   = $Properties
+                            ErrorAction                  = "Stop"
+                        }
 
                         #Remove empty values from hashtable
                         @($DeviceParams.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($DeviceParams[$_])) { $DeviceParams.Remove($_) } }
@@ -146,17 +146,17 @@ Function Import-LMDevicesFromCSV {
                         $Results.Add($Device) | Out-Null
                         $i++
                     }
-                    Catch{
+                    catch {
                         Write-Error "[ERROR]: Unable to add device $($Device.displayname) to portal: $_"
                     }
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {
-        Return $(If($PassThru){$Results}Else{$Null})
+    end {
+        return $(if ($PassThru) { $Results }else { $Null })
     }
 }

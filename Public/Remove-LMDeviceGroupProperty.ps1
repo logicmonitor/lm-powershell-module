@@ -31,11 +31,11 @@ Returns a PSCustomObject containing the ID of the device group and a message con
 .NOTES
 This function requires a valid LogicMonitor API authentication. Make sure you are logged in before running any commands.
 #>
-Function Remove-LMDeviceGroupProperty {
+function Remove-LMDeviceGroupProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
-    Param (
-        [Parameter(Mandatory, ParameterSetName = 'Id',ValueFromPipelineByPropertyName)]
+    param (
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
@@ -45,58 +45,55 @@ Function Remove-LMDeviceGroupProperty {
         [String]$PropertyName
 
     )
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Id if supplying username
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-            
+
             #Build header and uri
             $ResourcePath = "/device/groups/$Id/properties/$PropertyName"
 
-            If ($Name) {
+            if ($Name) {
                 $Message = "Id: $Id | Name: $Name | Property: $PropertyName"
             }
-            Else {
+            else {
                 $Message = "Id: $Id | Property: $PropertyName"
             }
 
-            Try {
-                If ($PSCmdlet.ShouldProcess($Message, "Remove Device Group Property")) {                    
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "Remove Device Group Property")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                    
+                    Invoke-LMRestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+
                     $Result = [PSCustomObject]@{
                         Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
-                    
-                    Return $Result
+
+                    return $Result
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

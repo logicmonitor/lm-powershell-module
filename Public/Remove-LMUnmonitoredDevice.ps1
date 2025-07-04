@@ -19,50 +19,47 @@ None.
 Returns a LogicMonitor.UnmonitoredDevice object containing information about the removed devices.
 #>
 
-Function Remove-LMUnmonitoredDevice {
+function Remove-LMUnmonitoredDevice {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [String[]]$Ids
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-            
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/device/unmonitoreddevices/batchdelete"
 
             $Message = "Id(s): $Ids"
-    
-            Try {
-                If ($PSCmdlet.ShouldProcess($Message, "Remove Unmonitored Devices")) {                    
+
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "Remove Unmonitored Devices")) {
                     [String[]]$Data = $Ids
                     $Data = ($Data | ConvertTo-Json -AsArray)
-    
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                    
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.UnmonitoredDevice" )
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.UnmonitoredDevice" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

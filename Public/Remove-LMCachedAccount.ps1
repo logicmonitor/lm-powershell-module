@@ -29,9 +29,9 @@ You can pipe objects to this function.
 This function does not generate any output.
 #>
 
-Function Remove-LMCachedAccount {
+function Remove-LMCachedAccount {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Single', ValueFromPipelineByPropertyName)]
         [Alias("Portal")]
         [String]$CachedAccountName,
@@ -39,49 +39,51 @@ Function Remove-LMCachedAccount {
         [Parameter(ParameterSetName = 'All')]
         [Switch]$RemoveAllEntries
     )
-    Begin {}
-    Process {
+    begin {}
+    process {
         $RequiredKeys = @('Modified', 'Portal', 'Type', 'Id')
-        If ($RemoveAllEntries) {
+        if ($RemoveAllEntries) {
             $CachedAccounts = Get-SecretInfo -Vault Logic.Monitor
-            If ($PSCmdlet.ShouldProcess("$((($CachedAccounts | Measure-Object).Count)) cached account(s)", "Remove All Cached Accounts")) {
-                Foreach ($Account in $CachedAccounts.Name) {
+            if ($PSCmdlet.ShouldProcess("$((($CachedAccounts | Measure-Object).Count)) cached account(s)", "Remove All Cached Accounts")) {
+                foreach ($Account in $CachedAccounts.Name) {
                     $SecretInfo = Get-SecretInfo -Vault Logic.Monitor -Name $Account
                     $Metadata = $SecretInfo.Metadata
                     $MissingKeys = $RequiredKeys | Where-Object { -not $Metadata.ContainsKey($_) }
                     if ($MissingKeys.Count -eq 0) {
-                        Try {
+                        try {
                             Remove-Secret -Name $Account -Vault Logic.Monitor -Confirm:$false -ErrorAction Stop
                             Write-Information "[INFO]: Removed cached account secret for: $Account"
                         }
-                        Catch {
+                        catch {
                             Write-Error $_.Exception.Message
                         }
-                    } else {
+                    }
+                    else {
                         Write-Information "[INFO]: Skipped account $Account - missing required metadata keys: $($MissingKeys -join ', ')"
                     }
                 }
                 Write-Information "[INFO]: Processed all entries from credential cache"
             }
         }
-        Else {
-            If ($PSCmdlet.ShouldProcess($CachedAccountName, "Remove Cached Account")) {
+        else {
+            if ($PSCmdlet.ShouldProcess($CachedAccountName, "Remove Cached Account")) {
                 $SecretInfo = Get-SecretInfo -Vault Logic.Monitor -Name $CachedAccountName
                 $Metadata = $SecretInfo.Metadata
                 $MissingKeys = $RequiredKeys | Where-Object { -not $Metadata.ContainsKey($_) }
                 if ($MissingKeys.Count -eq 0) {
-                    Try {
+                    try {
                         Remove-Secret -Name $CachedAccountName -Vault Logic.Monitor -Confirm:$false -ErrorAction Stop
                         Write-Information "[INFO]: Removed cached account secret for: $CachedAccountName"
                     }
-                    Catch {
+                    catch {
                         Write-Error $_.Exception.Message
                     }
-                } else {
+                }
+                else {
                     Write-Information "[INFO]: Skipped account $CachedAccountName - missing required metadata keys: $($MissingKeys -join ', ')"
                 }
             }
         }
     }
-    End {}
+    end {}
 }

@@ -31,10 +31,10 @@ Returns the response from the API indicating the success of the property update.
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMPushModuleDeviceProperty {
+function Set-LMPushModuleDeviceProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
@@ -48,30 +48,30 @@ Function Set-LMPushModuleDeviceProperty {
         [String]$PropertyValue
     )
 
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDevice -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-            
+
             #Build header and uri
             $ResourcePath = "/resource_property/ingest"
 
-            If ($Name) {
+            if ($Name) {
                 $Message = "Id: $Id | Name: $Name | Property: $PropertyName = $PropertyValue"
             }
-            Else {
+            else {
                 $Message = "Id: $Id | Property: $PropertyName = $PropertyValue"
             }
 
-            Try {
+            try {
                 $Data = @{
                     resourceIds        = @{"system.deviceid" = $Id }
                     resourceProperties = @{$PropertyName = $PropertyValue }
@@ -79,28 +79,25 @@ Function Set-LMPushModuleDeviceProperty {
 
                 $Data = ($Data | ConvertTo-Json)
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Push Module Device Property")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+                if ($PSCmdlet.ShouldProcess($Message, "Set Push Module Device Property")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return $Response
+                    return $Response
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

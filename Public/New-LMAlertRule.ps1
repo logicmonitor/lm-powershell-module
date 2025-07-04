@@ -61,10 +61,10 @@ Returns the response from the API containing the new alert rule information.
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function New-LMAlertRule {
+function New-LMAlertRule {
 
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'Low')]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         [String]$Name,
 
@@ -98,63 +98,60 @@ Function New-LMAlertRule {
         [String]$Description
     )
 
-    Begin {}
+    begin {}
 
-    Process {
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Build header and uri
             $ResourcePath = "/setting/alert/rules"
 
             #Build body
             $Data = @{
-                name = $Name
-                priority = $Priority
+                name              = $Name
+                priority          = $Priority
                 escalatingChainId = $EscalatingChainId
-                levelStr = $LevelStr
+                levelStr          = $LevelStr
             }
 
             #Add optional properties to Data
-            If ($EscalationInterval) { $Data.Add("escalationInterval", $EscalationInterval) }
-            If ($ResourceProperties) { $Data.Add("resourceProperties", $ResourceProperties) }
-            If ($Devices) { $Data.Add("devices", $Devices) }
-            If ($DeviceGroups) { $Data.Add("deviceGroups", $DeviceGroups) }
-            If ($DataSource) { $Data.Add("dataSource", $DataSource) }
-            If ($DataSourceInstanceName) { $Data.Add("dataSourceInstanceName", $DataSourceInstanceName) }
-            If ($DataPoint) { $Data.Add("dataPoint", $DataPoint) }
-            If ($PSBoundParameters.ContainsKey("SuppressAlertClear")) { $Data.Add("suppressAlertClear", $SuppressAlertClear) }
-            If ($PSBoundParameters.ContainsKey("SuppressAlertAckSdt")) { $Data.Add("suppressAlertAckSdt", $SuppressAlertAckSdt) }
-            If ($Description) { $Data.Add("description", $Description) }
-            
+            if ($EscalationInterval) { $Data.Add("escalationInterval", $EscalationInterval) }
+            if ($ResourceProperties) { $Data.Add("resourceProperties", $ResourceProperties) }
+            if ($Devices) { $Data.Add("devices", $Devices) }
+            if ($DeviceGroups) { $Data.Add("deviceGroups", $DeviceGroups) }
+            if ($DataSource) { $Data.Add("dataSource", $DataSource) }
+            if ($DataSourceInstanceName) { $Data.Add("dataSourceInstanceName", $DataSourceInstanceName) }
+            if ($DataPoint) { $Data.Add("dataPoint", $DataPoint) }
+            if ($PSBoundParameters.ContainsKey("SuppressAlertClear")) { $Data.Add("suppressAlertClear", $SuppressAlertClear) }
+            if ($PSBoundParameters.ContainsKey("SuppressAlertAckSdt")) { $Data.Add("suppressAlertAckSdt", $SuppressAlertAckSdt) }
+            if ($Description) { $Data.Add("description", $Description) }
+
             $Data = ($Data | ConvertTo-Json -Depth 10)
 
             $Message = "Name: $Name | Priority: $Priority | EscalatingChainId: $EscalatingChainId"
 
-            If ($PSCmdlet.ShouldProcess($Message, "Create Alert Rule")) {
-                Try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+            if ($PSCmdlet.ShouldProcess($Message, "Create Alert Rule")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AlertRule")
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AlertRule")
                 }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
 
-    End {}
+    end {}
 }

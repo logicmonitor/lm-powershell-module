@@ -42,10 +42,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.DeviceGroup object.
 #>
-Function New-LMServiceGroup {
+function New-LMServiceGroup {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         [String]$Name,
 
@@ -62,16 +62,16 @@ Function New-LMServiceGroup {
         [String]$ParentGroupName
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Lookup ParentGroupName
-        If ($ParentGroupName) {
-            If ($ParentGroupName -Match "\*") {
+        if ($ParentGroupName) {
+            if ($ParentGroupName -match "\*") {
                 Write-Error "Wildcard values not supported for groups names."
                 return
             }
             $ParentGroupId = (Get-LMDeviceGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-            If (!$ParentGroupId) {
+            if (!$ParentGroupId) {
                 Write-Error "Unable to find group: $ParentGroupName, please check spelling and try again."
                 return
             }
@@ -79,45 +79,46 @@ Function New-LMServiceGroup {
 
         #Build custom props hashtable
         $customProperties = @()
-        If ($Properties) {
-            Foreach ($Key in $Properties.Keys) {
+        if ($Properties) {
+            foreach ($Key in $Properties.Keys) {
                 $customProperties += @{name = $Key; value = $Properties[$Key] }
             }
         }
-        
+
         #Build header and uri
         $ResourcePath = "/device/groups"
 
-        Try {
-            $Data = @{
-                name                                = $Name
-                description                         = $Description
-                customProperties                    = $customProperties
-                disableAlerting                     = $DisableAlerting
-                parentId                            = $ParentGroupId
-                groupType                           = "BizService"
-            }
-
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
+        $Data = @{
+            name             = $Name
+            description      = $Description
+            customProperties = $customProperties
+            disableAlerting  = $DisableAlerting
+            parentId         = $ParentGroupId
+            groupType        = "BizService"
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        $Data = ($Data | ConvertTo-Json)
+
+        $Message = "Name: $Name"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Service Group")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

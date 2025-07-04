@@ -38,10 +38,10 @@ You can pipe API token objects to this function.
 .OUTPUTS
 Returns a PSCustomObject containing the ID of the removed API token and a success message confirming the removal.
 #>
-Function Remove-LMAPIToken {
+function Remove-LMAPIToken {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$UserId,
 
@@ -56,67 +56,64 @@ Function Remove-LMAPIToken {
         [Int]$APITokenId
     )
 
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup UserName Id if supplying username
-            If ($UserName) {
+            if ($UserName) {
                 $LookupResult = (Get-LMUser -Name $UserName).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $UserName) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $UserName) {
                     return
                 }
                 $UserId = $LookupResult
             }
 
-            If ($AccessId) {
+            if ($AccessId) {
                 $LookupResult = (Get-LMAPIToken -AccessId $AccessId)
-                If (Test-LookupResult -Result $LookupResult -LookupString $AccessId) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $AccessId) {
                     return
                 }
                 $UserId = $LookupResult.adminId
                 $APITokenId = $LookupResult.id
             }
-            
+
             #Build header and uri
             $ResourcePath = "/setting/admins/$UserId/apitokens/$APITokenId"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $APITokenId | AccessId: $($PSItem.accessId)| AdminName:$($PSItem.adminName)"
             }
-            Else {
+            else {
                 $Message = "Id: $APITokenId"
             }
 
-            Try {
-                If ($PSCmdlet.ShouldProcess($Message, "Remove API Token")) {                    
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "Remove API Token")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                    
+                    Invoke-LMRestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+
                     $Result = [PSCustomObject]@{
                         Id      = $APITokenId
                         Message = "Successfully removed ($Message)"
                     }
-                    
-                    Return $Result
+
+                    return $Result
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
-    } 
-    End {}
+    }
+    end {}
 }

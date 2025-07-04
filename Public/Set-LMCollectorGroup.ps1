@@ -39,10 +39,10 @@ Returns a LogicMonitor.CollectorGroup object containing the updated group inform
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
-Function Set-LMCollectorGroup {
+function Set-LMCollectorGroup {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -62,13 +62,13 @@ Function Set-LMCollectorGroup {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
             #Lookup Collector Name
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMCollectorGroup -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
@@ -76,26 +76,26 @@ Function Set-LMCollectorGroup {
 
             #Build custom props hashtable
             $customProperties = @()
-            If ($Properties) {
-                Foreach ($Key in $Properties.Keys) {
+            if ($Properties) {
+                foreach ($Key in $Properties.Keys) {
                     $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/setting/collector/groups/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | Description: $($PSItem.description)"
             }
-            Elseif ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
-            Try {
+            try {
                 $Data = @{
                     description                       = $Description
                     name                              = $NewName
@@ -105,35 +105,32 @@ Function Set-LMCollectorGroup {
                     autoBalanceInstanceCountThreshold = $AutoBalanceInstanceCountThreshold
                 }
 
-            
+
                 #Remove empty keys so we dont overwrite them
                 $Data = Format-LMData `
                     -Data $Data `
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
                     -ConditionalKeep @{ 'name' = 'NewName' }
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Collector Group")) {  
+                if ($PSCmdlet.ShouldProcess($Message, "Set Collector Group")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.CollectorGroup" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.CollectorGroup" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

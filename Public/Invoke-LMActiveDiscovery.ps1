@@ -34,10 +34,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns a success message if the task is scheduled successfully.
 #>
-Function Invoke-LMActiveDiscovery {
+function Invoke-LMActiveDiscovery {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
@@ -51,74 +51,71 @@ Function Invoke-LMActiveDiscovery {
         [String]$GroupName
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             $deviceList = @()
 
             #Lookup device name
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDevice -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $deviceList = $LookupResult
             }
-            Elseif ($Id) {
+            elseif ($Id) {
                 $deviceList = $Id
             }
 
             #Look up devices by group
-            If ($GroupName) {
-                If ($GroupName -Match "\*") {
-                    Write-Error "Wildcard values not supported for group names." 
+            if ($GroupName) {
+                if ($GroupName -match "\*") {
+                    Write-Error "Wildcard values not supported for group names."
                     return
                 }
                 $deviceList = (Get-LMDeviceGroupDevices -Name $GroupName).Id
-                If (!$deviceList) {
-                    Write-Error "Unable to find devices for group: $GroupName, please check spelling and try again." 
+                if (!$deviceList) {
+                    Write-Error "Unable to find devices for group: $GroupName, please check spelling and try again."
                     return
                 }
             }
-            Elseif ($GroupId) {
+            elseif ($GroupId) {
                 $deviceList = (Get-LMDeviceGroupDevices -Id $GroupId).Id
-                If (!$deviceList) {
-                    Write-Error "Unable to find devices for groupId: $GroupId, please check spelling and try again." 
+                if (!$deviceList) {
+                    Write-Error "Unable to find devices for groupId: $GroupId, please check spelling and try again."
                     return
                 }
             }
-                    
-            
-            #Loop through requests 
-            Foreach ($device in $deviceList) {
-                
+
+
+            #Loop through requests
+            foreach ($device in $deviceList) {
+
                 #Build header and uri
                 $ResourcePath = "/device/devices/$device/scheduleAutoDiscovery"
-               
-                Try {
-    
+
+                try {
+
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
-                    
+                    Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+
                     Write-Information "[INFO]: Scheduled Active Discovery task for device id: $device."
                 }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

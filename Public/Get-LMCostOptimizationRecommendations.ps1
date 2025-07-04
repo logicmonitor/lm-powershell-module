@@ -9,7 +9,7 @@ The Get-LMCostOptimizationRecommendations function retrieves cloud cost optimiza
 The alphanumeric ID of the cost optimization recommendation to retrieve. Example: 1-2-EBS_UNATTACHED
 
 .PARAMETER Filter
-A filter object to apply when retrieving cost optimization recommendations. 
+A filter object to apply when retrieving cost optimization recommendations.
 
 .PARAMETER BatchSize
 The number of results to return per request. Must be between 1 and 1000. Defaults to 50.
@@ -31,10 +31,10 @@ No input is accepted.
 .OUTPUTS
 Returns LogicMonitor.CostOptimizationRecommendations objects.
 #>
-Function Get-LMCostOptimizationRecommendations {
+function Get-LMCostOptimizationRecommendation {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
-    Param (
+    param (
         [Parameter(ParameterSetName = 'Id')]
         [String]$Id,
 
@@ -45,10 +45,10 @@ Function Get-LMCostOptimizationRecommendations {
         [Int]$BatchSize = 50
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-            
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/cost-optimization/recommendations"
 
@@ -58,10 +58,10 @@ Function Get-LMCostOptimizationRecommendations {
             $Done = $false
             $Results = @()
 
-            #Loop through requests 
-            While (!$Done) {
+            #Loop through requests
+            while (!$Done) {
                 #Build query params
-                Switch ($PSCmdlet.ParameterSetName) {
+                switch ($PSCmdlet.ParameterSetName) {
                     "All" { $QueryParams = "?size=$BatchSize&offset=$Count" }
                     "Id" { $ResourcePath += "/$Id" }
                     "Filter" {
@@ -77,45 +77,42 @@ Function Get-LMCostOptimizationRecommendations {
                         $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                     }
                 }
-                Try {
+                try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                        
-                    
-                    
+
+
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-                #Stop looping if single device, no need to continue
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
-                    $Done = $true
-                    Return $Response
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.CostOptimizationRecommendations" )
-                }
-                #Check result size and if needed loop again
-                Else {
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    #Stop looping if single device, no need to continue
+                    if ($PSCmdlet.ParameterSetName -eq "Id") {
                         $Done = $true
+                        return $Response
+                        return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.CostOptimizationRecommendations" )
+                    }
+                    #Check result size and if needed loop again
+                    else {
+                        [Int]$Total = $Response.Total
+                        [Int]$Count += ($Response.Items | Measure-Object).Count
+                        $Results += $Response.Items
+                        if ($Count -ge $Total) {
+                            $Done = $true
+                        }
                     }
                 }
-                }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+                catch {
+                    return
                 }
             }
-            Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.CostOptimizationRecommendations" )
+            return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.CostOptimizationRecommendations" )
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

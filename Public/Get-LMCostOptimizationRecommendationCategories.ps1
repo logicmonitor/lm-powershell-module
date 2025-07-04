@@ -28,10 +28,10 @@ No input is accepted.
 .OUTPUTS
 Returns LogicMonitor.CostOptimizationRecommendationCategory objects.
 #>
-Function Get-LMCostOptimizationRecommendationCategories {
+function Get-LMCostOptimizationRecommendationCategory {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
-    Param (
+    param (
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
@@ -40,10 +40,10 @@ Function Get-LMCostOptimizationRecommendationCategories {
         [Int]$BatchSize = 50
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-            
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/cost-optimization/recommendations/categories"
 
@@ -53,10 +53,10 @@ Function Get-LMCostOptimizationRecommendationCategories {
             $Done = $false
             $Results = @()
 
-            #Loop through requests 
-            While (!$Done) {
+            #Loop through requests
+            while (!$Done) {
                 #Build query params
-                Switch ($PSCmdlet.ParameterSetName) {
+                switch ($PSCmdlet.ParameterSetName) {
                     "All" { $QueryParams = "?size=$BatchSize&offset=$Count" }
                     "Filter" {
                         #List of allowed filter props
@@ -71,38 +71,32 @@ Function Get-LMCostOptimizationRecommendationCategories {
                         $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                     }
                 }
-                Try {
+                try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                        
-                    
-                    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                     #Check result size and if needed loop again
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    if ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
-                Catch [Exception] {
-                    $Proceed = Resolve-LMException -LMException $PSItem
-                    If (!$Proceed) {
-                        Return
-                    }
+                catch {
+                    return
                 }
             }
-            Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.CostOptimizationRecommendationCategory" )
+            return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.CostOptimizationRecommendationCategory" )
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

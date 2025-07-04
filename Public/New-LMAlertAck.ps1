@@ -24,54 +24,53 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns a success message if the acknowledgment is created successfully.
 #>
-Function New-LMAlertAck {
-    [CmdletBinding()]
-    Param (
+function New-LMAlertAck {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [Alias("Id")]
         [String[]]$Ids,
         [Parameter(Mandatory)]
         [String]$Note
     )
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
-            
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/alert/alerts/ack"
 
-            Try {
-
-                $Data = @{
-                    alertIds   = $Ids
-                    ackComment = $Note
-                }
-
-                $Data = ($Data | ConvertTo-Json)
-                
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-WebRequest -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                If ($Response.StatusCode -eq 200) {
-                    Return "Successfully acknowledged alert id(s): $Ids"
-                }
+            $Data = @{
+                alertIds   = $Ids
+                ackComment = $Note
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+
+            $Data = ($Data | ConvertTo-Json)
+
+            $Message = "Alert IDs: $($Ids -join ', ')"
+
+            if ($PSCmdlet.ShouldProcess($Message, "Acknowledge Alerts")) {
+                try {
+
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request
+                    Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data | Out-Null
+
+                    return "Successfully acknowledged alert id(s): $Ids"
+                }
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

@@ -28,10 +28,10 @@ Returns a PSCustomObject containing the ID of the removed dashboard and a messag
 .NOTES
 This function requires a valid LogicMonitor API authentication. Make sure you are logged in before running this command.
 #>
-Function Remove-LMDashboard {
+function Remove-LMDashboard {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
@@ -39,15 +39,15 @@ Function Remove-LMDashboard {
         [String]$Name
 
     )
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Id if supplying dashboard name
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDashboard -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
@@ -56,44 +56,41 @@ Function Remove-LMDashboard {
             #Build header and uri
             $ResourcePath = "/dashboard/dashboards/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            Elseif ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
-            Try {
-                If ($PSCmdlet.ShouldProcess($Message, "Remove Dashboard")) {                    
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "Remove Dashboard")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                    
+                    Invoke-LMRestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+
                     $Result = [PSCustomObject]@{
                         Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
-                    
-                    Return $Result
+
+                    return $Result
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

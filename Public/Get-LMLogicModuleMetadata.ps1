@@ -46,15 +46,15 @@ Returns LogicMonitor.LogicModuleMetadata objects.
 #>
 
 
-Function Get-LMLogicModuleMetadata {
+function Get-LMLogicModuleMetadatum {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory = $false)]
         [Boolean]$isInUse,
 
         [Parameter(Mandatory = $false)]
-        [ValidateSet("DATASOURCE", "PROPERTYSOURCE", "CONFIGSOURCE", "DIAGNOSTICSOURCE", "EVENTSOURCE", "TOPOLOGYSOURCE", "SNMP_SYSOID_MAP","LOGSOURCE","APPLIESTO_FUNCTION")]
+        [ValidateSet("DATASOURCE", "PROPERTYSOURCE", "CONFIGSOURCE", "DIAGNOSTICSOURCE", "EVENTSOURCE", "TOPOLOGYSOURCE", "SNMP_SYSOID_MAP", "LOGSOURCE", "APPLIESTO_FUNCTION")]
         [String]$Type,
 
         [Parameter(Mandatory = $false)]
@@ -69,52 +69,49 @@ Function Get-LMLogicModuleMetadata {
 
         [Parameter(Mandatory = $false)]
         [String]$Name
-        
+
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/setting/logicmodules/metadata"
 
         #Initalize vars
         $QueryParams = ""
 
-        Try {
+        try {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                    
-                
+
+
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
             #Perform filtering since this endpoint does not support filtering
             $Response = $Response | Where-Object {
-                ($null -eq $isInUse         -or $_.isInUse         -eq $isInUse)         -and
-                ([string]::IsNullOrEmpty($Type)            -or $_.type            -eq $Type)            -and
-                ([string]::IsNullOrEmpty($Tag)             -or $_.tags            -contains $Tag)      -and
-                ([string]::IsNullOrEmpty($Name)            -or $_.name            -like "*$Name*")     -and
-                ([string]::IsNullOrEmpty($Status)          -or $_.status          -like "*$Status*")   -and
-                ([string]::IsNullOrEmpty($AuthorPortalName)-or $_.authorPortalName -like "*$AuthorPortalName*")
+                ($null -eq $isInUse -or $_.isInUse -eq $isInUse) -and
+                ([string]::IsNullOrEmpty($Type) -or $_.type -eq $Type) -and
+                ([string]::IsNullOrEmpty($Tag) -or $_.tags -contains $Tag) -and
+                ([string]::IsNullOrEmpty($Name) -or $_.name -like "*$Name*") -and
+                ([string]::IsNullOrEmpty($Status) -or $_.status -like "*$Status*") -and
+                ([string]::IsNullOrEmpty($AuthorPortalName) -or $_.authorPortalName -like "*$AuthorPortalName*")
             }
-             
+
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        catch {
+            return
         }
-        If ($Response) {
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogicModuleMetadata" )
+        if ($Response) {
+            return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogicModuleMetadata" )
         }
-        Else {
+        else {
             Write-Error "No results found"
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

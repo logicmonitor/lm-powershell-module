@@ -30,27 +30,27 @@ Get-SecretInfo
 
 #>
 
-Function Get-LMCachedAccount {
+function Get-LMCachedAccount {
     [CmdletBinding()]
-    Param (
+    param (
         [String]$CachedAccountName
     )
-    If ($CachedAccountName) {
+    if ($CachedAccountName) {
         $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor -Name $CachedAccountName
     }
-    Else {
+    else {
         $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor
     }
     $CachedAccounts = @()
-    Foreach ($Secret in $CachedAccountSecrets) {
+    foreach ($Secret in $CachedAccountSecrets) {
         $CachedAccounts += [PSCustomObject]@{
             CachedAccountName = $Secret.Name
             Portal            = $Secret.Metadata["Portal"]
-            Id                = If (!$Secret.Metadata["Id"]) { "N/A" }Else { $Secret.Metadata["Id"] }
+            Id                = if (!$Secret.Metadata["Id"]) { "N/A" }else { $Secret.Metadata["Id"] }
             Modified          = $Secret.Metadata["Modified"]
-            Type              = If (!$Secret.Metadata["Type"]) { "LMv1" }Else { $Secret.Metadata["Type"] }
+            Type              = if (!$Secret.Metadata["Type"]) { "LMv1" }else { $Secret.Metadata["Type"] }
         }
     }
-    Return $CachedAccounts
+    return $CachedAccounts
 
 }

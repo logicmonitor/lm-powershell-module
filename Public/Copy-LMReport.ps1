@@ -34,10 +34,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns the newly created report object.
 #>
-Function Copy-LMReport {
+function Copy-LMReport {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [String]$Name,
 
@@ -49,37 +49,34 @@ Function Copy-LMReport {
         $ReportObject
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Replace name and description if present
         $ReportObject.name = $Name
-        If ($Description) { $ReportObject.description = $Description }
-        If ($ParentGroupId) { $ReportObject.groupId = $ParentGroupId }
-        
+        if ($Description) { $ReportObject.description = $Description }
+        if ($ParentGroupId) { $ReportObject.groupId = $ParentGroupId }
+
         #Build header and uri
         $ResourcePath = "/report/reports"
 
-        Try {
-            $Data = ($ReportObject | ConvertTo-Json)
+        $Data = ($ReportObject | ConvertTo-Json)
 
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+        try {
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+            $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Report" )
+            return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Report" )
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        catch {
+            return
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

@@ -30,10 +30,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.Dashboard objects.
 #>
-Function Export-LMDashboard {
+function Export-LMDashboard {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
-    Param (
+    param (
         [Parameter(ParameterSetName = 'Id')]
         [Int]$Id,
 
@@ -46,52 +46,47 @@ Function Export-LMDashboard {
     )
 
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Lookup Id
-        If ($Name) {
+        if ($Name) {
             $LookupResult = (Get-LMDashboard -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
             $Id = $LookupResult
         }
-        
+
         #Build header and uri
         $ResourcePath = "/dashboard/dashboards/$Id"
 
         #Initalize vars
         $QueryParams = "?format=file&template=true"
 
-        Try {
+        try {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-            
-            
-            
+
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
             #Export to JSON
             $Response | ConvertTo-Json -Depth 10 | Out-File -FilePath "$FilePath\$($Response.Name).json"
 
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        catch {
+            return
         }
 
         Write-Information "[INFO]: Dashboard ($($Response.Name)) exported to $FilePath$([IO.Path]::DirectorySeparatorChar)$($Response.Name).json"
-        If ($PassThru) {
-            Return $Response
+        if ($PassThru) {
+            return $Response
         }
-        Return
+        return
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

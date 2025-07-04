@@ -37,11 +37,11 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.Instance object.
 #>
-Function New-LMPushMetricInstance {
+function New-LMPushMetricInstance {
 
-    [CmdletBinding()]
-    Param (
-        
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
+
         [System.Collections.Generic.List[object]]$InstancesArrary,
 
         [Parameter(Mandatory)]
@@ -52,28 +52,32 @@ Function New-LMPushMetricInstance {
         [String]$InstanceDescription,
 
         [Hashtable]$InstanceProperties,
- 
+
         [Parameter(Mandatory)]
         [System.Collections.Generic.List[object]]$Datapoints
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        If (!$InstancesArrary) {
+    if ($Script:LMAuth.Valid) {
+        if (!$InstancesArrary) {
             $InstancesArrary = [System.Collections.Generic.List[object]]::New()
         }
 
-        #Add new instance to new instances array
-        $InstancesArrary.Add([PSCustomObject]@{
-                instanceName        = $InstanceName
-                instanceDisplayName = If ($InstanceDisplayName) { $InstanceDisplayName }Else { $InstanceName }
-                instanceProperties  = $InstanceProperties
-                instanceDescription = $InstanceDescription
-                dataPoints          = $Datapoints
-            })
+        $Message = "InstanceName: $InstanceName"
 
-        Return $InstancesArrary
+        if ($PSCmdlet.ShouldProcess($Message, "Create Push Metric Instance")) {
+            #Add new instance to new instances array
+            $InstancesArrary.Add([PSCustomObject]@{
+                    instanceName        = $InstanceName
+                    instanceDisplayName = if ($InstanceDisplayName) { $InstanceDisplayName }else { $InstanceName }
+                    instanceProperties  = $InstanceProperties
+                    instanceDescription = $InstanceDescription
+                    dataPoints          = $Datapoints
+                })
+
+            return $InstancesArrary
+        }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

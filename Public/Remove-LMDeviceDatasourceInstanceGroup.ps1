@@ -24,7 +24,7 @@ Specifies the name of the instance group to be removed. This parameter is mandat
 Specifies the ID of the instance group to be removed. This parameter is mandatory.
 
 .PARAMETER HdsId
-Specifies the ID of the host datasource associated with the instance group. This parameter is mandatory when using the 'Id-HdsId' or 'Name-HdsId' parameter sets. 
+Specifies the ID of the host datasource associated with the instance group. This parameter is mandatory when using the 'Id-HdsId' or 'Name-HdsId' parameter sets.
 
 .EXAMPLE
 Remove-LMDeviceDatasourceInstanceGroup -DatasourceName "CPU" -Name "Server01" -InstanceGroupName "Group1"
@@ -41,9 +41,9 @@ None.
 Returns a PSCustomObject containing the instance ID and a message confirming the successful removal of the instance group.
 #>
 
-Function Remove-LMDeviceDatasourceInstanceGroup {
+function Remove-LMDeviceDatasourceInstanceGroup {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High', DefaultParameterSetName = 'Id-dsName-GroupName')]
-    Param (
+    param (
         # Datasource Name Parameter Sets
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName-GroupName')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName-GroupId')]
@@ -105,23 +105,25 @@ Function Remove-LMDeviceDatasourceInstanceGroup {
     )
 
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         # Lookup Device Id if Name provided
-        If ($PSBoundParameters.ContainsKey('Name')) { # Check if Name was used
+        if ($PSBoundParameters.ContainsKey('Name')) {
+            # Check if Name was used
             $LookupResult = (Get-LMDevice -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
             $Id = $LookupResult
         }
 
         # Lookup Host Datasource ID (HdsId) if Datasource Name/ID provided
-        If ($PSBoundParameters.ContainsKey('DatasourceName') -or $PSBoundParameters.ContainsKey('DatasourceId')) { # Check if DatasourceName/ID was used
-             # Determine the lookup value based on provided parameter
+        if ($PSBoundParameters.ContainsKey('DatasourceName') -or $PSBoundParameters.ContainsKey('DatasourceId')) {
+            # Check if DatasourceName/ID was used
+            # Determine the lookup value based on provided parameter
             $DatasourceLookupValue = if ($PSBoundParameters.ContainsKey('DatasourceName')) { $DatasourceName } else { $DatasourceId }
             $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { ($_.dataSourceName -eq $DatasourceName -and $PSBoundParameters.ContainsKey('DatasourceName')) -or ($_.dataSourceId -eq $DatasourceId -and $PSBoundParameters.ContainsKey('DatasourceId')) }).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceLookupValue) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $DatasourceLookupValue) {
                 return
             }
             $HdsId = $LookupResult
@@ -130,10 +132,10 @@ Function Remove-LMDeviceDatasourceInstanceGroup {
 
         # Lookup InstanceGroupId if InstanceGroupName provided
         # Only perform lookup if InstanceGroupName parameter was actually used
-        If ($PSBoundParameters.ContainsKey('InstanceGroupName')) {
+        if ($PSBoundParameters.ContainsKey('InstanceGroupName')) {
             Write-Verbose "Looking up Instance Group ID for Name: $InstanceGroupName"
             $LookupResult = (Get-LMDeviceDatasourceInstanceGroup -Id $Id -HdsId $HdsId -Filter "name -eq '$InstanceGroupName'").Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $InstanceGroupName) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $InstanceGroupName) {
                 return
             }
             # Assign the found ID to InstanceGroupId for use later
@@ -152,15 +154,15 @@ Function Remove-LMDeviceDatasourceInstanceGroup {
         $Message = "$DeviceIdentifier | $DatasourceIdentifier | $InstanceIdentifier"
 
 
-        Try {
-            If ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance Group")) {
+        if ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance Group")) {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
+                Invoke-LMRestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
 
                 # Adjusted output object to reflect correct ID used
                 $Result = [PSCustomObject]@{
@@ -168,17 +170,14 @@ Function Remove-LMDeviceDatasourceInstanceGroup {
                     Message         = "Successfully removed ($Message)"
                 }
 
-                Return $Result
+                return $Result
             }
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

@@ -44,10 +44,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.APIToken objects.
 #>
-Function Get-LMAPIToken {
+function Get-LMAPIToken {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
-    Param (
+    param (
         [Parameter(ParameterSetName = 'AdminId')]
         [Int]$AdminId,
 
@@ -67,8 +67,8 @@ Function Get-LMAPIToken {
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/setting/admins/apitokens"
 
@@ -78,14 +78,14 @@ Function Get-LMAPIToken {
         $Done = $false
         $Results = @()
 
-        If ($Type -eq "Bearer") {
+        if ($Type -eq "Bearer") {
             $BearerParam = "&type=bearer"
         }
 
-        #Loop through requests 
-        While (!$Done) {
+        #Loop through requests
+        while (!$Done) {
             #Build query params
-            Switch ($PSCmdlet.ParameterSetName) {
+            switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
                 "Id" { $QueryParams = "?filter=id:$Id&size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
                 "AccessId" { $QueryParams = "?filter=accessId:`"$AccessId`"&size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
@@ -97,40 +97,37 @@ Function Get-LMAPIToken {
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id$BearerParam"
                 }
             }
-            Try {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
+                if ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.APIToken" )
+                    return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.APIToken" )
                 }
                 #Check result size and if needed loop again
-                Else {
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    if ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.APIToken" )
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.APIToken" )
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

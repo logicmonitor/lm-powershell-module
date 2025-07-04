@@ -45,9 +45,9 @@ Returns a LogicMonitor.DiagnosticSource object containing the updated diagnostic
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
-Function Set-LMDiagnosticSource {
+function Set-LMDiagnosticSource {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
 
@@ -62,49 +62,50 @@ Function Set-LMDiagnosticSource {
         [String]$Technology,
         [String]$AppliesTo
     )
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-            If ($Name) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+            if ($Name) {
                 $LookupResult = (Get-LMDiagnosticSource -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) { return }
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) { return }
                 $Id = $LookupResult
             }
             $ResourcePath = "/setting/diagnosticssources/$Id"
             $Message = "Id: $Id | Name: $Name"
-            Try {
-                $Data = @{
-                    name            = $NewName
-                    description     = $Description
-                    group           = $Group
-                    groovyScript    = $GroovyScript
-                    tags            = $Tags -join ","
-                    technology      = $Technology
-                    appliesTo       = $AppliesTo
-                }
-                # Remove empty keys so we don't overwrite them, with special handling for 'name'/'NewName'
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-                    -ConditionalKeep @{ 'name' = 'NewName' }
+            $Data = @{
+                name         = $NewName
+                description  = $Description
+                group        = $Group
+                groovyScript = $GroovyScript
+                tags         = $Tags -join ","
+                technology   = $Technology
+                appliesTo    = $AppliesTo
+            }
+            # Remove empty keys so we don't overwrite them, with special handling for 'name'/'NewName'
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                -ConditionalKeep @{ 'name' = 'NewName' }
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set DiagnosticSource")) {
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "Set DiagnosticSource")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
 
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DiagnosticSource")
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DiagnosticSource")
                 }
-            } Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) { Return }
             }
-        } Else {
+            catch {
+                return
+            }
+        }
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
-} 
+    end {}
+}

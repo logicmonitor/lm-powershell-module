@@ -28,71 +28,69 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns a PSCustomObject containing the ID of the removed alert rule and a success message confirming the removal.
 #>
-Function Remove-LMAlertRule {
+function Remove-LMAlertRule {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id',SupportsShouldProcess,ConfirmImpact='High')]
-    Param (
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'High')]
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]
         [String]$Name
     )
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Id if supplying name
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMAlertRule -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
 
-            If($PSItem){
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf($Name){
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else{
+            else {
                 $Message = "Id: $Id"
             }
-            
+
             #Build header and uri
             $ResourcePath = "/setting/alert/rules/$Id"
 
-            Try {
-                If ($PSCmdlet.ShouldProcess($Message, "Remove Alert Rule")) {                    
+            if ($PSCmdlet.ShouldProcess($Message, "Remove Alert Rule")) {
+                try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                    
+                    Invoke-LMRestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+
                     $Result = [PSCustomObject]@{
-                        Id = $Id
+                        Id      = $Id
                         Message = "Successfully removed ($Message)"
                     }
-                    
-                    Return $Result
+
+                    return $Result
                 }
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                catch {
+
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

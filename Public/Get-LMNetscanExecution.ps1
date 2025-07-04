@@ -35,10 +35,10 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.NetScanExecution objects.
 #>
 
-Function Get-LMNetscanExecution {
+function Get-LMNetscanExecution {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
@@ -51,16 +51,16 @@ Function Get-LMNetscanExecution {
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
-        If ($Name) {
+        if ($Name) {
             $LookupResult = (Get-LMNetscan -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
             $Id = $LookupResult
         }
-        
+
         #Build header and uri
         $ResourcePath = "/setting/netscans/$Id/executions"
 
@@ -70,52 +70,49 @@ Function Get-LMNetscanExecution {
         $Done = $false
         $Results = @()
 
-        #Loop through requests 
-        While (!$Done) {
+        #Loop through requests
+        while (!$Done) {
             #Build query params
-            If ($Filter) {
+            if ($Filter) {
                 #List of allowed filter props
                 $PropList = @()
                 $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                 $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
 
-            Try {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                    
-                
-                
+
+
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
+                if ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.NetScanExecution" )
+                    return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.NetScanExecution" )
                 }
                 #Check result size and if needed loop again
-                Else {
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    if ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NetScanExecution" )
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NetScanExecution" )
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

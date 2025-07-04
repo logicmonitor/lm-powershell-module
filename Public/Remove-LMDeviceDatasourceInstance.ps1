@@ -34,21 +34,21 @@ None.
 .OUTPUTS
 Returns a PSCustomObject containing the instance ID and a message confirming the successful removal of the datasource instance.
 #>
-Function Remove-LMDeviceDatasourceInstance {
+function Remove-LMDeviceDatasourceInstance {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [String]$DatasourceName,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [Int]$DatasourceId,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Int]$DeviceId,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [String]$DeviceName,
@@ -62,83 +62,80 @@ Function Remove-LMDeviceDatasourceInstance {
 
     )
 
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Device Id
-            If ($DeviceName) {
+            if ($DeviceName) {
                 $LookupResult = (Get-LMDevice -Name $DeviceName).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
                     return
                 }
                 $DeviceId = $LookupResult
             }
 
             #Lookup DatasourceId
-            If ($DatasourceName -or $DatasourceId) {
+            if ($DatasourceName -or $DatasourceId) {
                 $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } ).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                     return
                 }
                 $HdsId = $LookupResult
             }
 
             #Lookup Wildcard Id
-            If(!$InstanceId -and $WildValue) {
+            if (!$InstanceId -and $WildValue) {
                 $LookupResult = (Get-LMDeviceDataSourceInstance -Id $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.wildValue -eq $WildValue }).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $WildValue) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $WildValue) {
                     return
                 }
                 $InstanceId = $LookupResult
             }
-            Elseif (!$InstanceId -and !$WildValue) {
+            elseif (!$InstanceId -and !$WildValue) {
                 Write-Error "Please provide a valid instance ID or wildvalue to remove a device datasource instance."
-                Return
+                return
             }
-            
+
             #Build header and uri
             $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "DeviceDisplayName: $($PSItem.deviceDisplayName) | DatasourceName: $($PSItem.name) | WildValue: $($PSItem.wildValue)"
             }
-            Elseif ($DatasourceName -and $DeviceName) {
+            elseif ($DatasourceName -and $DeviceName) {
                 $Message = "Name: $DeviceName | DatasourceName: $DatasourceName | WildValue: $WildValue"
             }
-            Else {
+            else {
                 $Message = "Id: $DeviceId | DatasourceId: $DatasourceId | WildValue: $WildValue"
             }
 
-            Try {
-                If ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance")) {                    
+            if ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance")) {
+                try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1]
-                    
+                    Invoke-LMRestMethod -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+
                     $Result = [PSCustomObject]@{
                         InstanceId = $InstanceId
                         Message    = "Successfully removed ($Message)"
                     }
-                    
-                    Return $Result
+
+                    return $Result
                 }
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

@@ -21,49 +21,46 @@ Returns an array of objects containing the devices that match the specified quer
 .NOTES
 This function requires a valid LogicMonitor API authentication. The query syntax must follow LogicMonitor's applies to query format.
 #>
-Function Test-LMAppliesToQuery {
+function Test-LMAppliesToQuery {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [String]$Query
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
-        
+
         #Build header and uri
         $ResourcePath = "/functions"
 
-        Try {
-            $Data = @{
-                currentAppliesTo    = $Query
-                originalAppliesTo   = $Query
-                needInheritProps    = $true
-                type                = "testAppliesTo"
-            }
+        $Data = @{
+            currentAppliesTo  = $Query
+            originalAppliesTo = $Query
+            needInheritProps  = $true
+            type              = "testAppliesTo"
+        }
 
-            $Data = ($Data | ConvertTo-Json)
+        $Data = ($Data | ConvertTo-Json)
 
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+        try {
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
             #Issue request
-            $Response = (Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data).currentMatches
+            $Response = (Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data).currentMatches
 
-            Return $Response
+            return $Response
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        catch {
+            return
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

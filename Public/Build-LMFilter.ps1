@@ -30,6 +30,7 @@ None. You cannot pipe objects to this command.
 
 function Build-LMFilter {
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Required for the function to work')]
     param(
         [Switch]$PassThru
     )
@@ -37,11 +38,11 @@ function Build-LMFilter {
     # Helper function for getting user selection
     function Get-UserSelection {
         param(
-            [Parameter(Mandatory=$true)]
+            [Parameter(Mandatory = $true)]
             [string]$Prompt,
-            [Parameter(Mandatory=$true)]
+            [Parameter(Mandatory = $true)]
             [array]$Choices,
-            [Parameter(Mandatory=$true)]
+            [Parameter(Mandatory = $true)]
             [string]$ChoiceLabelProperty
         )
 
@@ -55,7 +56,8 @@ function Build-LMFilter {
             $choiceInput = Read-Host "Enter selection number (1-$($Choices.Count))"
             if ([int]::TryParse($choiceInput, [ref]$choiceNumber) -and $choiceNumber -ge 1 -and $choiceNumber -le $Choices.Count) {
                 # Valid input
-            } else {
+            }
+            else {
                 Write-Host "Invalid input. Please enter a number between 1 and $($Choices.Count)." -ForegroundColor Red
                 $choiceNumber = 0 # Reset to ensure loop continues
             }
@@ -67,7 +69,7 @@ function Build-LMFilter {
     # Helper function for getting user confirmation
     function Get-UserConfirmation {
         param(
-            [Parameter(Mandatory=$true)]
+            [Parameter(Mandatory = $true)]
             [string]$Prompt,
             [string]$DefaultAnswer = "n",
             [string]$ConfirmSuccess = "Proceeding...",
@@ -83,7 +85,8 @@ function Build-LMFilter {
             }
             if ($validAnswers -contains $choiceInput.ToLower()) {
                 $answer = $choiceInput.ToLower()
-            } else {
+            }
+            else {
                 Write-Host "Invalid input. Please enter 'y' or 'n'." -ForegroundColor Red
             }
         } while ([string]::IsNullOrEmpty($answer))
@@ -91,18 +94,19 @@ function Build-LMFilter {
         if ($answer -eq 'y') {
             Write-Host $ConfirmSuccess
             return $true
-        } else {
+        }
+        else {
             Write-Host $ConfirmFailure
             return $false
         }
     }
 
-    $Caller = $null
-    #Check if called by another function, will be used to determine available fields in the future
-    $CallStack = Get-PSCallStack
-    if ($CallStack.Count -gt 1) {
-        $Caller = $CallStack[1].FunctionName
-    }
+    # $Caller = $null
+    # #Check if called by another function, will be used to determine available fields in the future
+    # $CallStack = Get-PSCallStack
+    # if ($CallStack.Count -gt 1) {
+    #     $Caller = $CallStack[1].FunctionName
+    # }
 
     $conditions = @()
     $operators = @(
@@ -208,15 +212,15 @@ function Build-LMFilter {
     $filterEquation = $conditions -join ' '
     Set-Variable -Name "LMFilter" -Value $filterEquation -Scope global
 
-    If (!$PassThru) {
+    if (!$PassThru) {
         Write-Host "--- LM API Filter Equation ---"
         Write-Host "'$filterEquation'"
         Write-Host "-----------------------------"
         Write-Host "Filter equation has been saved to the `$LMFilter variable." -ForegroundColor Green
         return # Return nothing visually when not using PassThru
     }
-    Else {
+    else {
         Write-Host "Filter equation has been saved to the `$LMFilter variable." -ForegroundColor Green
         return $filterEquation # Return the string when using PassThru
     }
-} 
+}

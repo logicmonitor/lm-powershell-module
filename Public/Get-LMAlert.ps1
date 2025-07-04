@@ -55,10 +55,12 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.Alert objects.
 #>
-Function Get-LMAlert {
+function Get-LMAlert {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
-    Param (
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Required for the FilterWizard to work')]
+
+    param (
         [Parameter(ParameterSetName = 'Range')]
         [Datetime]$StartDate,
 
@@ -90,8 +92,8 @@ Function Get-LMAlert {
         [String]$Sort = "+resourceId"
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/alert/alerts"
 
@@ -104,25 +106,25 @@ Function Get-LMAlert {
 
 
         #Convert to epoch, if not set use defaults
-        If (!$StartDate) {
+        if (!$StartDate) {
             [int]$StartDate = 0
         }
-        Else {
+        else {
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
         }
 
-        If (!$EndDate) {
+        if (!$EndDate) {
             [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
         }
-        Else {
+        else {
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
-        #Loop through requests 
-        While (!$Done) {
+        #Loop through requests
+        while (!$Done) {
             #Build query params
 
-            Switch ($PSCmdlet.ParameterSetName) {
+            switch ($PSCmdlet.ParameterSetName) {
                 "Id" { $resourcePath += "/$Id" }
                 "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
                 "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
@@ -141,59 +143,56 @@ Function Get-LMAlert {
             }
 
             #Check if we need to add customColumns
-            If ($CustomColumns) {
+            if ($CustomColumns) {
                 $FormatedColumns = @()
-                Foreach ($Column in $CustomColumns) {
+                foreach ($Column in $CustomColumns) {
                     $FormatedColumns += [System.Web.HTTPUtility]::UrlEncode($Column)
                 }
 
-                If ($QueryParams) {
+                if ($QueryParams) {
                     $QueryParams += "&customColumns=$($FormatedColumns -join ",")"
                 }
-                Else {
+                else {
                     $QueryParams = "?customColumns=$($FormatedColumns -join",")"
                 }
             }
-            
-            Try {
+
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
                 #Stop looping if single device, no need to continue
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
+                if ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Alert" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Alert" )
                 }
                 #Check result size and if needed loop again
-                Else {
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $QueryLimit) {
+                    if ($Count -ge $QueryLimit) {
                         $Done = $true
-                        Write-Warning "[WARN]: Reached $QueryLimit record query limitation for this endpoint" 
+                        Write-Warning "[WARN]: Reached $QueryLimit record query limitation for this endpoint"
                     }
-                    Elseif ($Count -ge $Total -and $Total -ge 0) {
+                    elseif ($Count -ge $Total -and $Total -ge 0) {
                         $Done = $true
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
 
         # Return $Results
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Alert" )
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Alert" )
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

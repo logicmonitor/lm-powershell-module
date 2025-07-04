@@ -95,10 +95,10 @@
     Returns LogicMonitor.Role object.
 
 #>
-Function New-LMRole {
+function New-LMRole {
 
-    [CmdletBinding(DefaultParameterSetName = 'Default')]
-    Param (
+    [CmdletBinding(DefaultParameterSetName = 'Default', SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Custom')]
         [Parameter(Mandatory, ParameterSetName = 'Default')]
         [String]$Name,
@@ -154,7 +154,7 @@ Function New-LMRole {
         [Parameter(ParameterSetName = 'Default')]
         [ValidateSet("view", "manage", "commit", "publish", "none")]
         [String]$LMXToolBoxPermission = "none",
-        
+
         [Parameter(ParameterSetName = 'Default')]
         [ValidateSet("view", "install", "none")]
         [String]$LMXPermission = "none",
@@ -192,16 +192,16 @@ Function New-LMRole {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
-        
+
         #Build header and uri
         $ResourcePath = "/setting/roles"
         $Privileges = @()
 
-        If (!$CustomPrivilegesObject) {
+        if (!$CustomPrivilegesObject) {
 
-            If ($ViewTraces) {
+            if ($ViewTraces) {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
@@ -211,7 +211,7 @@ Function New-LMRole {
                 }
             }
 
-            If ($EnableRemoteSessionForResources) {
+            if ($EnableRemoteSessionForResources) {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
@@ -221,7 +221,7 @@ Function New-LMRole {
                 }
             }
 
-            If ($AllowedToViewMapsTab) {
+            if ($AllowedToViewMapsTab) {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
@@ -231,7 +231,7 @@ Function New-LMRole {
                 }
             }
 
-            If ($AllowWidgetSharing) {
+            if ($AllowWidgetSharing) {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "sharingwidget"
                     objectName   = "sharingwidget"
@@ -241,7 +241,7 @@ Function New-LMRole {
                 }
             }
 
-            If ($CreatePrivateDashboards) {
+            if ($CreatePrivateDashboards) {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "private"
                     objectName   = "private"
@@ -251,7 +251,7 @@ Function New-LMRole {
                 }
             }
 
-            If ($LMXToolBoxPermission) {
+            if ($LMXToolBoxPermission) {
                 $Privileges += [PSCustomObject]@{
                     objectId   = "allinstalledmodules"
                     objectName = "All installed modules"
@@ -260,7 +260,7 @@ Function New-LMRole {
                 }
             }
 
-            If ($LMXPermission) {
+            if ($LMXPermission) {
                 $Privileges += [PSCustomObject]@{
                     objectId   = "All exchange modules"
                     objectName = "private"
@@ -269,7 +269,7 @@ Function New-LMRole {
                 }
             }
 
-            If ($ViewSupport) {
+            if ($ViewSupport) {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "chat"
                     objectName   = "help"
@@ -285,7 +285,7 @@ Function New-LMRole {
                     subOperation = ""
                 }
             }
-            Else {
+            else {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "chat"
                     objectName   = "help"
@@ -299,7 +299,7 @@ Function New-LMRole {
                 objectId     = ""
                 objectName   = "configNeedDeviceManagePermission"
                 objectType   = "configNeedDeviceManagePermission"
-                operation    = If ($ConfigTabRequiresManagePermission) { "write" }Else { "read" }
+                operation    = if ($ConfigTabRequiresManagePermission) { "write" }else { "read" }
                 subOperation = ""
             }
 
@@ -307,77 +307,77 @@ Function New-LMRole {
                 objectId     = ""
                 objectName   = "deviceDashboard"
                 objectType   = "deviceDashboard"
-                operation    = If ($AllowedToManageResourceDashboards) { "write" }Else { "read" }
+                operation    = if ($AllowedToManageResourceDashboards) { "write" }else { "read" }
                 subOperation = ""
             }
 
-            If ($DashboardsPermission -ne "none") {
+            if ($DashboardsPermission -ne "none") {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
                     objectType   = "dashboard_group"
-                    operation    = If ($DashboardsPermission -eq "manage") { "write" }Else { "read" }
+                    operation    = if ($DashboardsPermission -eq "manage") { "write" }else { "read" }
                     subOperation = ""
                 }
             }
 
-            If ($ResourcePermission -ne "none") {
+            if ($ResourcePermission -ne "none") {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
                     objectType   = "host_group"
-                    operation    = If ($ResourcePermission -eq "manage") { "write" }Else { "read" }
+                    operation    = if ($ResourcePermission -eq "manage") { "write" }else { "read" }
                     subOperation = ""
                 }
             }
 
-            If ($LogsPermission -ne "none") {
+            if ($LogsPermission -ne "none") {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
                     objectType   = "logs"
-                    operation    = If ($LogsPermission -eq "manage") { "write" }Else { "read" }
+                    operation    = if ($LogsPermission -eq "manage") { "write" }else { "read" }
                     subOperation = ""
                 }
             }
 
-            If ($WebsitesPermission -ne "none") {
+            if ($WebsitesPermission -ne "none") {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
                     objectType   = "website_group"
-                    operation    = If ($WebsitesPermission -eq "manage") { "write" }Else { "read" }
+                    operation    = if ($WebsitesPermission -eq "manage") { "write" }else { "read" }
                     subOperation = ""
                 }
             }
 
-            If ($SavedMapsPermission -ne "none") {
+            if ($SavedMapsPermission -ne "none") {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
                     objectType   = "map"
-                    operation    = If ($SavedMapsPermission -eq "manage") { "write" }Else { "read" }
+                    operation    = if ($SavedMapsPermission -eq "manage") { "write" }else { "read" }
                     subOperation = ""
                 }
             }
 
-            If ($ReportsPermission -ne "none") {
+            if ($ReportsPermission -ne "none") {
                 $Privileges += [PSCustomObject]@{
                     objectId     = "*"
                     objectName   = "*"
                     objectType   = "report_group"
-                    operation    = If ($ReportsPermission -eq "manage") { "write" }Else { "read" }
+                    operation    = if ($ReportsPermission -eq "manage") { "write" }else { "read" }
                     subOperation = ""
                 }
             }
 
-            If ($SettingsPermission -ne "none") {
-                If ($SettingsPermission -ne "manage-collectors" -and $SettingsPermission -ne "view-collectors") {
+            if ($SettingsPermission -ne "none") {
+                if ($SettingsPermission -ne "manage-collectors" -and $SettingsPermission -ne "view-collectors") {
                     $Privileges += [PSCustomObject]@{
                         objectId     = "*"
                         objectName   = "*"
                         objectType   = "setting"
-                        operation    = If ($SettingsPermission -eq "manage") { "write" }Else { "read" }
+                        operation    = if ($SettingsPermission -eq "manage") { "write" }else { "read" }
                         subOperation = ""
                     }
 
@@ -385,57 +385,58 @@ Function New-LMRole {
                         objectId     = "useraccess.*"
                         objectName   = "useraccess.*"
                         objectType   = "setting"
-                        operation    = If ($ResourcePermission -eq "manage") { "write" }Else { "read" }
+                        operation    = if ($ResourcePermission -eq "manage") { "write" }else { "read" }
                         subOperation = ""
                     }
                 }
-                Else {
+                else {
                     $Privileges += [PSCustomObject]@{
                         objectId   = "collectorgroup.*"
                         objectName = "Collectors"
                         objectType = "setting"
-                        operation  = If ($SettingsPermission -eq "manage-collectors") { "write" }Else { "read" }
+                        operation  = if ($SettingsPermission -eq "manage-collectors") { "write" }else { "read" }
                     }
                 }
             }
 
         }
 
-        Try {
-            $Data = @{
-                customHelpLabel = $CustomHelpLabel
-                customHelpURL   = $CustomHelpURL
-                description     = $Description
-                name            = $Name
-                requireEULA     = $RequireEULA.IsPresent 
-                roleGroupId     = $RoleGroupId
-                twoFARequired   = $TwoFARequired
-                privileges      = If ($CustomPrivilegesObject) { $CustomPrivilegesObject }Else { $Privileges }
-            }
-
-            #Remove empty keys so we dont overwrite them
-            $Data = Format-LMData `
-                -Data $Data `
-                -UserSpecifiedKeys @()
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Role" )
+        $Data = @{
+            customHelpLabel = $CustomHelpLabel
+            customHelpURL   = $CustomHelpURL
+            description     = $Description
+            name            = $Name
+            requireEULA     = $RequireEULA.IsPresent
+            roleGroupId     = $RoleGroupId
+            twoFARequired   = $TwoFARequired
+            privileges      = if ($CustomPrivilegesObject) { $CustomPrivilegesObject }else { $Privileges }
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        #Remove empty keys so we dont overwrite them
+        $Data = Format-LMData `
+            -Data $Data `
+            -UserSpecifiedKeys @()
+
+        $Message = "Name: $Name"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Role")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Role" )
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

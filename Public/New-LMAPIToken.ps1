@@ -38,10 +38,10 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.APIToken object.
 #>
 
-Function New-LMAPIToken {
+function New-LMAPIToken {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [String[]]$Id,
         [Parameter(Mandatory, ParameterSetName = 'Username')]
@@ -52,53 +52,54 @@ Function New-LMAPIToken {
         [String]$Type = "LMv1"
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
-        If ($Username) {
-            If ($Username -Match "\*") {
-                Write-Error "Wildcard values not supported for device group name." 
+        if ($Username) {
+            if ($Username -match "\*") {
+                Write-Error "Wildcard values not supported for device group name."
                 return
             }
             $Id = (Get-LMUser -Name $Username | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Error "Unable to find user with name: $Username, please check spelling and try again." 
+            if (!$Id) {
+                Write-Error "Unable to find user with name: $Username, please check spelling and try again."
                 return
             }
         }
-        
+
         #Build header and uri
-        If ($Type -eq "Bearer") {
+        if ($Type -eq "Bearer") {
             $Params = "?type=bearer"
         }
 
         $ResourcePath = "/setting/admins/$Id/apitokens"
 
-        Try {
-            $Data = @{
-                note   = $Note
-                status = $(If ($CreateDisabled) { 1 }Else { 2 })
-            }
-
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $Params
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.APIToken" )
+        $Data = @{
+            note   = $Note
+            status = $(if ($CreateDisabled) { 1 }else { 2 })
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        $Data = ($Data | ConvertTo-Json)
+
+        $Message = "User ID: $Id | Type: $Type"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create API Token")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $Params
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.APIToken" )
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

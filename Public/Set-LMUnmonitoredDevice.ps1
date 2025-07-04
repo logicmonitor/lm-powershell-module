@@ -32,10 +32,10 @@ Returns a LogicMonitor.Device object containing the updated device information.
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMUnmonitoredDevice {
+function Set-LMUnmonitoredDevice {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [String[]]$Ids,
 
@@ -48,9 +48,9 @@ Function Set-LMUnmonitoredDevice {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Build header and uri
             $ResourcePath = "/device/unmonitoreddevices/services/assign"
@@ -59,35 +59,35 @@ Function Set-LMUnmonitoredDevice {
             $Message = "Device Count: $IdsCount | DeviceGroupId: $DeviceGroupId"
 
             $Data = @{
-                    collectorId      = $CollectorId
-                    description      = $Description
-                    deviceGroupId    = $DeviceGroupId
-                    missingDeviceIds = $Ids
+                collectorId      = $CollectorId
+                description      = $Description
+                deviceGroupId    = $DeviceGroupId
+                missingDeviceIds = $Ids
+            }
+
+            $Data = ($Data | ConvertTo-Json)
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set Unmonitored Device")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request using new centralized method with retry logic
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
                 }
+                catch {
 
-                $Data = ($Data | ConvertTo-Json)
-
-                If ($PSCmdlet.ShouldProcess($Message, "Set Unmonitored Device")) {
-                    Try {
-                        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                        #Issue request using new centralized method with retry logic
-                        $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                        Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
-                    }
-                    Catch {
-                        # Error is already displayed by Resolve-LMException, just return cleanly
-                        return
-                    }
+                    return
                 }
             }
-        Else {
+        }
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

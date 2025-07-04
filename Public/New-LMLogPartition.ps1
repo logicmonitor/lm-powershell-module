@@ -37,10 +37,10 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.LogPartition object.
 #>
 
-Function New-LMLogPartition {
+function New-LMLogPartition {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         [String]$Name,
         [Parameter(Mandatory)]
@@ -52,50 +52,51 @@ Function New-LMLogPartition {
         [String]$Status,
         [Parameter(Mandatory)]
         [String]$Tenant,
-        [ValidateSet("LG3", "LGE", "LG7","LG90","IP3","IPC","IP7","IP90")]
+        [ValidateSet("LG3", "LGE", "LG7", "LG90", "IP3", "IPC", "IP7", "IP90")]
         [String]$Sku
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Build header and uri
         $ResourcePath = "/log/partitions"
 
-        If (!$Sku) {
+        if (!$Sku) {
             #Get the sku from the default log partition if not specified
             $Sku = (Get-LMLogPartition -Name "default").sku
         }
 
-        Try {
-            $Data = @{
-                name        = $Name
-                description = $Description
-                retention   = $Retention
-                active      = $(If ($Status -eq "active") { $true }Else { $false })
-                tenant      = $Tenant
-                sku         = $Sku
-            }
-
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $Params
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
+        $Data = @{
+            name        = $Name
+            description = $Description
+            retention   = $Retention
+            active      = $(if ($Status -eq "active") { $true }else { $false })
+            tenant      = $Tenant
+            sku         = $Sku
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        $Data = ($Data | ConvertTo-Json)
+
+        $Message = "Name: $Name | Tenant: $Tenant"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Log Partition")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $Params
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

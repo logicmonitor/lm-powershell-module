@@ -75,10 +75,10 @@ Returns a LogicMonitor.Device object containing the updated device information.
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
-Function Set-LMDevice {
+function Set-LMDevice {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
 
@@ -121,14 +121,14 @@ Function Set-LMDevice {
         [Nullable[Int]]$LogCollectorId
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup ParentGroupName
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDevice -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
@@ -136,55 +136,55 @@ Function Set-LMDevice {
 
             #Build custom props hashtable
             $customProperties = @()
-            If ($Properties) {
-                Foreach ($Key in $Properties.Keys) {
+            if ($Properties) {
+                foreach ($Key in $Properties.Keys) {
                     $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/device/devices/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | DisplayName: $($PSItem.displayName)"
             }
-            Elseif ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
             $Data = @{
-                name                         = $NewName
-                displayName                  = $DisplayName
-                description                  = $Description
-                disableAlerting              = $DisableAlerting
-                enableNetflow                = $EnableNetFlow
-                customProperties             = $customProperties
-                preferredCollectorId         = $PreferredCollectorId
-                preferredCollectorGroupId    = $PreferredCollectorGroupId
-                autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId
-                link                         = $Link
-                netflowCollectorGroupId      = $NetflowCollectorGroupId
-                netflowCollectorId           = $NetflowCollectorId
+                name                              = $NewName
+                displayName                       = $DisplayName
+                description                       = $Description
+                disableAlerting                   = $DisableAlerting
+                enableNetflow                     = $EnableNetFlow
+                customProperties                  = $customProperties
+                preferredCollectorId              = $PreferredCollectorId
+                preferredCollectorGroupId         = $PreferredCollectorGroupId
+                autoBalancedCollectorGroupId      = $AutoBalancedCollectorGroupId
+                link                              = $Link
+                netflowCollectorGroupId           = $NetflowCollectorGroupId
+                netflowCollectorId                = $NetflowCollectorId
                 isPreferredLogCollectorConfigured = $EnableLogCollector
-                logCollectorGroupId          = $LogCollectorGroupId
-                logCollectorId               = $LogCollectorId
-                hostGroupIds                 = $HostGroupIds -join ","
+                logCollectorGroupId               = $LogCollectorGroupId
+                logCollectorId                    = $LogCollectorId
+                hostGroupIds                      = $HostGroupIds -join ","
             }
 
-            
+
             #Remove empty keys so we dont overwrite them
             $Data = Format-LMData `
-            -Data $Data `
-            -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-            -ConditionalKeep @{ 'name' = 'NewName' } `
-            -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
-            -Context @{ PropertiesMethod = $PropertiesMethod }
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                -ConditionalKeep @{ 'name' = 'NewName' } `
+                -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
+                -Context @{ PropertiesMethod = $PropertiesMethod }
 
-            If ($PSCmdlet.ShouldProcess($Message, "Set Device")) { 
-                Try {
+            if ($PSCmdlet.ShouldProcess($Message, "Set Device")) {
+                try {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
@@ -193,17 +193,17 @@ Function Set-LMDevice {
                     #Issue request using new centralized method with retry logic
                     $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
                 }
-                Catch {
-                    # Error is already displayed by Resolve-LMException, just return cleanly
+                catch {
+
                     return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

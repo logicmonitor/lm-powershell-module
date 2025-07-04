@@ -30,10 +30,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns a list of discovered Azure subscriptions.
 #>
-Function Invoke-LMAzureSubscriptionDiscovery {
+function Invoke-LMAzureSubscriptionDiscovery {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [String]$ClientId,
 
@@ -47,20 +47,20 @@ Function Invoke-LMAzureSubscriptionDiscovery {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/azure/functions/discoverSubscriptions"
 
-        #Loop through requests 
+        #Loop through requests
         $Done = $false
-        While (!$Done) {
-            Try {
+        while (!$Done) {
+            try {
                 $Data = @{
-                    clientId        = $ClientId
-                    secretKey       = $SecretKey
-                    tenantId        = $TenantId
-                    isChinaAccount  = $IsChinaAccount
+                    clientId       = $ClientId
+                    secretKey      = $SecretKey
+                    tenantId       = $TenantId
+                    isChinaAccount = $IsChinaAccount
 
                 }
 
@@ -69,25 +69,22 @@ Function Invoke-LMAzureSubscriptionDiscovery {
                     -Data $Data `
                     -UserSpecifiedKeys @()
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return $Response.items
+                return $Response.items
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

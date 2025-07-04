@@ -52,10 +52,10 @@ Returns the response from the API containing the updated SDT configuration.
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMSDT {
+function Set-LMSDT {
 
     [CmdletBinding(DefaultParameterSetName = "OneTime", SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [String]$Id,
 
@@ -101,7 +101,7 @@ Function Set-LMSDT {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Build header and uri
         $ResourcePath = "/sdt/sdts/$Id"
@@ -109,48 +109,48 @@ Function Set-LMSDT {
         $Message = "Id: $Id"
 
         $Data = @{}
-            $Data.Add('comment', $Comment)
-            $Data.Add('hour', $StartHour)
-            $Data.Add('minute', $StartMinute)
-            $Data.Add('endHour', $EndHour)
-            $Data.Add('endMinute', $EndMinute)
-            $Data.Add('weekDay', $WeekDay)
-            $Data.Add('monthDay', $DayOfMonth)
-            $Data.Add('weekOfMonth', $WeekOfMonth)
+        $Data.Add('comment', $Comment)
+        $Data.Add('hour', $StartHour)
+        $Data.Add('minute', $StartMinute)
+        $Data.Add('endHour', $EndHour)
+        $Data.Add('endMinute', $EndMinute)
+        $Data.Add('weekDay', $WeekDay)
+        $Data.Add('monthDay', $DayOfMonth)
+        $Data.Add('weekOfMonth', $WeekOfMonth)
 
-            If ($StartDate) {
-                $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
-                $Data.Add('startDateTime', [math]::Round($StartDateTime))
+        if ($StartDate) {
+            $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
+            $Data.Add('startDateTime', [math]::Round($StartDateTime))
+        }
+        if ($EndDate) {
+            $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
+            $Data.Add('endDateTime', [math]::Round($EndDateTime))
+        }
+
+        #Remove empty keys so we dont overwrite them
+        $Data = Format-LMData `
+            -Data $Data `
+            -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
+
+        if ($PSCmdlet.ShouldProcess($Message, "Set SDT")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request using new centralized method with retry logic
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return $Response
             }
-            If ($EndDate) {
-                $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
-                $Data.Add('endDateTime', [math]::Round($EndDateTime))
+            catch {
+
+                return
             }
-
-            #Remove empty keys so we dont overwrite them
-            $Data = Format-LMData `
-                -Data $Data `
-                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
-
-            If ($PSCmdlet.ShouldProcess($Message, "Set SDT")) {
-                Try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                    #Issue request using new centralized method with retry logic
-                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                    Return $Response
-                }
-                Catch {
-                    # Error is already displayed by Resolve-LMException, just return cleanly
-                    return
-                }
-            }
+        }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

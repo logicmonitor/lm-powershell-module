@@ -82,10 +82,10 @@ This function requires a valid LogicMonitor API authentication.
 It enforces strict validation rules for TestLocation parameters to prevent invalid combinations.
 #>
 
-Function Set-LMWebsite {
+function Set-LMWebsite {
 
     [CmdletBinding(DefaultParameterSetName = "Website", SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$Id,
 
@@ -105,7 +105,7 @@ Function Set-LMWebsite {
 
         [Parameter(ParameterSetName = "Website")]
         [Nullable[boolean]]$TriggerSSLStatusAlert,
-        
+
         [Parameter(ParameterSetName = "Website")]
         [Nullable[boolean]]$TriggerSSLExpirationAlert,
 
@@ -123,7 +123,7 @@ Function Set-LMWebsite {
 
         [Parameter(ParameterSetName = "Website")]
         [String[]]$SSLAlertThresholds,
-        
+
         [Parameter(ParameterSetName = "Ping")]
         [ValidateSet(5, 10, 15, 20, 30, 60)]
         [Nullable[Int]]$PingCount,
@@ -165,9 +165,9 @@ Function Set-LMWebsite {
         [Int[]]$TestLocationSmgIds
     )
 
-    Begin {
+    begin {
         # Function to validate test location parameters
-        Function ValidateTestLocationParameters {
+        function ValidateTestLocationParameters {
             param (
                 [Nullable[boolean]]$IsInternal,
                 [Nullable[boolean]]$TestLocationAll,
@@ -197,19 +197,19 @@ Function Set-LMWebsite {
             }
 
             return @{
-                IsValid = $isValid
+                IsValid      = $isValid
                 ErrorMessage = $errorMessage
             }
         }
     }
-    Process {
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Id by name
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMWebsite -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
@@ -224,40 +224,40 @@ Function Set-LMWebsite {
 
             #Build custom props hashtable
             $customProperties = @()
-            If ($Properties) {
-                Foreach ($Key in $Properties.Keys) {
+            if ($Properties) {
+                foreach ($Key in $Properties.Keys) {
                     $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/website/websites/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
-            Try {
+            try {
                 $alertExpr = $null
-                If ($SSLAlertThresholds) {
+                if ($SSLAlertThresholds) {
                     $alertExpr = "< " + $SSLAlertThresholds -join " "
                 }
 
                 # Build testLocation object based on which parameter is provided
                 $testLocation = $null
-                If ($TestLocationAll) {
+                if ($TestLocationAll) {
                     $testLocation = @{ all = $true }
                 }
-                ElseIf ($TestLocationCollectorIds) {
+                elseif ($TestLocationCollectorIds) {
                     $testLocation = @{ collectorIds = $TestLocationCollectorIds }
                 }
-                ElseIf ($TestLocationSmgIds) {
+                elseif ($TestLocationSmgIds) {
                     $testLocation = @{ smgIds = $TestLocationSmgIds }
                 }
 
@@ -289,7 +289,7 @@ Function Set-LMWebsite {
                     testLocation                = $testLocation
                 }
 
-            
+
                 #Remove empty keys so we dont overwrite them
                 $Data = Format-LMData `
                     -Data $Data `
@@ -297,28 +297,25 @@ Function Set-LMWebsite {
                     -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
                     -Context @{ PropertiesMethod = $PropertiesMethod }
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Website")) {
+                if ($PSCmdlet.ShouldProcess($Message, "Set Website")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

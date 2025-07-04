@@ -49,10 +49,10 @@ Returns a LogicMonitor.WebsiteGroup object containing the updated configuration.
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMWebsiteGroup {
+function Set-LMWebsiteGroup {
 
     [CmdletBinding(DefaultParameterSetName = 'Id-ParentGroupId', SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -79,33 +79,33 @@ Function Set-LMWebsiteGroup {
         [Parameter(ParameterSetName = 'Id-ParentGroupId')]
         [Parameter(ParameterSetName = 'Name-ParentGroupId')]
         [Nullable[Int]]$ParentGroupId,
-        
+
         [Parameter(ParameterSetName = 'Id-ParentGroupName')]
         [Parameter(ParameterSetName = 'Name-ParentGroupName')]
         [String]$ParentGroupName
     )
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup ParentGroupName
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMWebsiteGroup -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
 
             #Lookup ParentGroupName
-            If ($ParentGroupName) {
-                If ($ParentGroupName -Match "\*") {
+            if ($ParentGroupName) {
+                if ($ParentGroupName -match "\*") {
                     Write-Error "Wildcard values not supported for groups names."
                     return
                 }
                 $ParentGroupId = (Get-LMWebsiteGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-                If (!$ParentGroupId) {
+                if (!$ParentGroupId) {
                     Write-Error "Unable to find group: $ParentGroupName, please check spelling and try again."
                     return
                 }
@@ -113,22 +113,22 @@ Function Set-LMWebsiteGroup {
 
             #Build custom props hashtable
             $customProperties = @()
-            If ($Properties) {
-                Foreach ($Key in $Properties.Keys) {
+            if ($Properties) {
+                foreach ($Key in $Properties.Keys) {
                     $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/website/groups/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
@@ -149,9 +149,9 @@ Function Set-LMWebsiteGroup {
                 -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
                 -Context @{ PropertiesMethod = $PropertiesMethod }
 
-            If ($PSCmdlet.ShouldProcess($Message, "Set Website Group")) {
-                Try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+            if ($PSCmdlet.ShouldProcess($Message, "Set Website Group")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
@@ -159,17 +159,17 @@ Function Set-LMWebsiteGroup {
                     #Issue request using new centralized method with retry logic
                     $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
                 }
-                Catch {
-                    # Error is already displayed by Resolve-LMException, just return cleanly
+                catch {
+
                     return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

@@ -36,10 +36,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.DeviceProperty object.
 #>
-Function New-LMDeviceProperty {
+function New-LMDeviceProperty {
 
-    [CmdletBinding(DefaultParameterSetName = 'Id')]
-    Param (
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
@@ -52,25 +52,27 @@ Function New-LMDeviceProperty {
         [Parameter(Mandatory)]
         [String]$PropertyValue
     )
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
 
-        If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Error "Wildcard values not supported for device name." 
-                return
-            }
-            $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Error "Unable to find device with name: $Name, please check spelling and try again." 
-                return
-            }
-        }
-        
-        #Build header and uri
-        $ResourcePath = "/device/devices/$Id/properties"
+    begin {}
+    process {
+        #Check if we are logged in and have valid api creds
+        if ($Script:LMAuth.Valid) {
 
-        Try {
+            if ($Name) {
+                if ($Name -match "\*") {
+                    Write-Error "Wildcard values not supported for device name."
+                    return
+                }
+                $Id = (Get-LMDevice -Name $Name | Select-Object -First 1 ).Id
+                if (!$Id) {
+                    Write-Error "Unable to find device with name: $Name, please check spelling and try again."
+                    return
+                }
+            }
+
+            #Build header and uri
+            $ResourcePath = "/device/devices/$Id/properties"
+
             $Data = @{
                 name  = $PropertyName
                 value = $PropertyValue
@@ -78,24 +80,27 @@ Function New-LMDeviceProperty {
 
             $Data = ($Data | ConvertTo-Json)
 
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+            $Message = "PropertyName: $PropertyName | DeviceId: $Id"
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+            if ($PSCmdlet.ShouldProcess($Message, "Create Device Property")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-            Return $Response
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    return $Response
+                }
+                catch {
+                    return
+                }
             }
         }
-    }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+        else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+        }
     }
 }

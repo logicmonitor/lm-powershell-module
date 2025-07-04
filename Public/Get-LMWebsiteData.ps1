@@ -38,10 +38,10 @@ None. You cannot pipe objects to this command.
 Returns website monitoring data objects.
 #>
 
-Function Get-LMWebsiteData {
+function Get-LMWebsiteData {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
@@ -55,65 +55,60 @@ Function Get-LMWebsiteData {
         [String]$CheckpointId = 0
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
         #If using id we still need to grab a checkpoint is not specified
-        If ($Id) {
+        if ($Id) {
             $Website = Get-LMWebsite -Id $Id
             $CheckpointId = $Website.Checkpoints[0].id
         }
 
         #Lookup Id and checkpoint if supplying username
-        If ($Name) {
+        if ($Name) {
             $LookupResult = Get-LMWebsite -Name $Name
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
             $Id = $LookupResult.Id
             $Id = $LookupResult.Checkpoints[0].id
         }
-        
+
         #Build header and uri
         $ResourcePath = "/website/websites/$Id/checkpoints/$CheckpointId/data"
 
         #Convert to epoch, if not set use defaults
-        If (!$StartDate) {
+        if (!$StartDate) {
             [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddMinutes(-60)).ToUnixTimeSeconds()
         }
-        Else {
+        else {
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
         }
 
-        If (!$EndDate) {
+        if (!$EndDate) {
             [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
         }
-        Else {
+        else {
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
         #Build query params
         $QueryParams = "?size=$BatchSize&start=$StartDate&end=$EndDate"
 
-        Try {
+        try {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                
-            
-                
+
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-            Return $Response
-        
+            $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            return $Response
+
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        catch {
+            return
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

@@ -19,13 +19,13 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.LogPartitionRetention objects.
 #>
 
-Function Get-LMLogPartitionRetention {
+function Get-LMLogPartitionRetention {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
-    Param ()
+    param ()
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/log/partitions/retentions"
 
@@ -34,42 +34,39 @@ Function Get-LMLogPartitionRetention {
         $Done = $false
         $Results = @()
 
-        #Loop through requests 
-        While (!$Done) {
-            Try {
+        #Loop through requests
+        while (!$Done) {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                    
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
+                if ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartitionRetention" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartitionRetention" )
                 }
                 #Check result size and if needed loop again
-                Else {
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    if ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LogPartitionRetention" )
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LogPartitionRetention" )
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

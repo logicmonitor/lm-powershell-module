@@ -25,10 +25,10 @@ None. You cannot pipe objects to this command.
 Returns a success message with the names of imported modules.
 #>
 
-Function Import-LMRepositoryLogicModules {
+function Import-LMRepositoryLogicModule {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources")]
         [String]$Type,
@@ -38,16 +38,13 @@ Function Import-LMRepositoryLogicModules {
         [String[]]$LogicModuleNames
 
     )
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
-                
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/setting/$Type/importcore"
-
-            #Initalize vars
-            $Results = @()
 
             $Data = @{
                 importDataSources = $LogicModuleNames
@@ -58,28 +55,25 @@ Function Import-LMRepositoryLogicModules {
 
             $Data = ($Data | ConvertTo-Json)
 
-            Try {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                
-                Return "Modules imported successfully: $LogicModuleNames"
+                Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data | Out-Null
+
+                return "Modules imported successfully: $LogicModuleNames"
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
-            Return 
+            return
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

@@ -54,10 +54,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.SDT object.
 #>
-Function New-LMDeviceGroupSDT {
+function New-LMDeviceGroupSDT {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         [String]$Comment,
 
@@ -142,26 +142,21 @@ Function New-LMDeviceGroupSDT {
         [Parameter(Mandatory, ParameterSetName = 'Monthly-DeviceGroupName')]
         [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek-DeviceGroupName')]
         [Parameter(Mandatory, ParameterSetName = 'Weekly-DeviceGroupName')]
-        [String]$DeviceGroupName,
-
-        [String]$DataSourceId = "0",
-
-        [String]$DataSourceName = "All"
-
+        [String]$DeviceGroupName
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Lookup GroupId
-        If ($DeviceGroupName) {
+        if ($DeviceGroupName) {
             $LookupResult = (Get-LMDeviceGroup -Name $DeviceGroupName).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DeviceGroupName) {
-                Return
+            if (Test-LookupResult -Result $LookupResult -LookupString $DeviceGroupName) {
+                return
             }
             $DeviceGroupId = $LookupResult
         }
 
-        Switch -Wildcard ($PSCmdlet.ParameterSetName) {
+        switch -Wildcard ($PSCmdlet.ParameterSetName) {
             "OneTime-Device*" { $Occurance = "oneTime" }
             "Daily-Device*" { $Occurance = "daily" }
             "Monthly-Device*" { $Occurance = "monthly" }
@@ -172,91 +167,93 @@ Function New-LMDeviceGroupSDT {
         #Build header and uri
         $ResourcePath = "/sdt/sdts"
 
-        Try {
-            $Data = $null
+        $Data = $null
 
-            $Data = @{
-                comment       = $Comment
-                deviceGroupId = $DeviceGroupId
-                sdtType       = $Occurance
-                #timezone        = $Timezone
-                type          = "ResourceGroupSDT"
-            }
-
-            Switch ($Occurance) {
-                "onetime" {
-                    #Get UTC time based on selected timezone
-                    # $TimeZoneID = [System.TimeZoneInfo]::FindSystemTimeZoneById($Timezone)
-                    # $StartUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($StartDate.ToUniversalTime(), $TimeZoneID)
-                    # $EndUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($EndDate.ToUniversalTime(), $TimeZoneID)
-
-                    # $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
-                    # $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
-
-                    $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
-                    $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
-                    $Data.Add('endDateTime', [math]::Round($EndDateTime))
-                    $Data.Add('startDateTime', [math]::Round($StartDateTime))
-                }
-
-                "daily" {
-                    $Data.Add('hour', $StartHour)
-                    $Data.Add('minute', $StartMinute)
-                    $Data.Add('endHour', $EndHour)
-                    $Data.Add('endMinute', $EndMinute)
-                } 
-               
-                "weekly" {
-                    $Data.Add('hour', $StartHour)
-                    $Data.Add('minute', $StartMinute)
-                    $Data.Add('endHour', $EndHour)
-                    $Data.Add('endMinute', $EndMinute)
-                    $Data.Add('weekDay', $WeekDay)
-                } 
-               
-                "monthly" {
-                    $Data.Add('hour', $StartHour)
-                    $Data.Add('minute', $StartMinute)
-                    $Data.Add('endHour', $EndHour)
-                    $Data.Add('endMinute', $EndMinute)
-                    $Data.Add('monthDay', $DayOfMonth)
-                } 
-               
-                "monthlyByWeek" {
-                    $Data.Add('hour', $StartHour)
-                    $Data.Add('minute', $StartMinute)
-                    $Data.Add('endHour', $EndHour)
-                    $Data.Add('endMinute', $EndMinute)
-                    $Data.Add('weekDay', $WeekDay)
-                    $Data.Add('weekOfMonth', $WeekOfMonth)
-                } 
-
-                default {}
-            }
-
-            #Remove empty keys so we dont overwrite them
-            $Data = Format-LMData `
-                -Data $Data `
-                -UserSpecifiedKeys @()
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return $Response
+        $Data = @{
+            comment       = $Comment
+            deviceGroupId = $DeviceGroupId
+            sdtType       = $Occurance
+            #timezone        = $Timezone
+            type          = "ResourceGroupSDT"
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        switch ($Occurance) {
+            "onetime" {
+                #Get UTC time based on selected timezone
+                # $TimeZoneID = [System.TimeZoneInfo]::FindSystemTimeZoneById($Timezone)
+                # $StartUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($StartDate.ToUniversalTime(), $TimeZoneID)
+                # $EndUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($EndDate.ToUniversalTime(), $TimeZoneID)
+
+                # $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
+                # $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
+
+                $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
+                $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
+                $Data.Add('endDateTime', [math]::Round($EndDateTime))
+                $Data.Add('startDateTime', [math]::Round($StartDateTime))
+            }
+
+            "daily" {
+                $Data.Add('hour', $StartHour)
+                $Data.Add('minute', $StartMinute)
+                $Data.Add('endHour', $EndHour)
+                $Data.Add('endMinute', $EndMinute)
+            }
+
+            "weekly" {
+                $Data.Add('hour', $StartHour)
+                $Data.Add('minute', $StartMinute)
+                $Data.Add('endHour', $EndHour)
+                $Data.Add('endMinute', $EndMinute)
+                $Data.Add('weekDay', $WeekDay)
+            }
+
+            "monthly" {
+                $Data.Add('hour', $StartHour)
+                $Data.Add('minute', $StartMinute)
+                $Data.Add('endHour', $EndHour)
+                $Data.Add('endMinute', $EndMinute)
+                $Data.Add('monthDay', $DayOfMonth)
+            }
+
+            "monthlyByWeek" {
+                $Data.Add('hour', $StartHour)
+                $Data.Add('minute', $StartMinute)
+                $Data.Add('endHour', $EndHour)
+                $Data.Add('endMinute', $EndMinute)
+                $Data.Add('weekDay', $WeekDay)
+                $Data.Add('weekOfMonth', $WeekOfMonth)
+            }
+
+            default {}
+        }
+
+        #Remove empty keys so we dont overwrite them
+        $Data = Format-LMData `
+            -Data $Data `
+            -UserSpecifiedKeys @()
+
+        $Message = "Comment: $Comment | DeviceGroupId: $DeviceGroupId"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Device Group SDT")) {
+            try {
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return $Response
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

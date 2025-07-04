@@ -45,10 +45,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.WebsiteGroup object.
 #>
-Function New-LMWebsiteGroup {
+function New-LMWebsiteGroup {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         [String]$Name,
 
@@ -67,62 +67,63 @@ Function New-LMWebsiteGroup {
         [String]$ParentGroupName
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Lookup ParentGroupName
-        If ($ParentGroupName) {
-            If ($ParentGroupName -Match "\*") {
-                Write-Error "Wildcard values not supported for groups names." 
+        if ($ParentGroupName) {
+            if ($ParentGroupName -match "\*") {
+                Write-Error "Wildcard values not supported for groups names."
                 return
             }
             $ParentGroupId = (Get-LMWebsiteGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-            If (!$ParentGroupId) {
-                Write-Error "Unable to find group: $ParentGroupName, please check spelling and try again." 
+            if (!$ParentGroupId) {
+                Write-Error "Unable to find group: $ParentGroupName, please check spelling and try again."
                 return
             }
         }
 
         #Build custom props hashtable
         $customProperties = @()
-        If ($Properties) {
-            Foreach ($Key in $Properties.Keys) {
+        if ($Properties) {
+            foreach ($Key in $Properties.Keys) {
                 $customProperties += @{name = $Key; value = $Properties[$Key] }
             }
         }
-        
+
         #Build header and uri
         $ResourcePath = "/website/groups"
 
-        Try {
-            $Data = @{
-                name            = $Name
-                description     = $Description
-                disableAlerting = $DisableAlerting
-                stopMonitoring  = $StopMonitoring
-                properties      = $customProperties
-                parentId        = $ParentGroupId
-            }
-
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
+        $Data = @{
+            name            = $Name
+            description     = $Description
+            disableAlerting = $DisableAlerting
+            stopMonitoring  = $StopMonitoring
+            properties      = $customProperties
+            parentId        = $ParentGroupId
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        $Data = ($Data | ConvertTo-Json)
+
+        $Message = "Name: $Name"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Website Group")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.WebsiteGroup" )
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

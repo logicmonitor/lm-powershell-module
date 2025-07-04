@@ -51,10 +51,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.Collector object.
 #>
-Function New-LMCollector {
+function New-LMCollector {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
 
         [Parameter(Mandatory)]
         [String]$Description,
@@ -81,63 +81,63 @@ Function New-LMCollector {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Build custom props hashtable
             $customProperties = @()
-            If ($Properties) {
-                Foreach ($Key in $Properties.Keys) {
+            if ($Properties) {
+                foreach ($Key in $Properties.Keys) {
                     $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/setting/collector/collectors"
 
-            Try {
-                $Data = @{
-                    description                     = $Description
-                    backupAgentId                   = $BackupAgentId
-                    collectorGroupId                = $CollectorGroupId
-                    customProperties                = $customProperties
-                    enableFailBack                  = $EnableFailBack
-                    enableFailOverOnCollectorDevice = $EnableFailOverOnCollectorDevice
-                    escalatingChainId               = $EscalatingChainId
-                    needAutoCreateCollectorDevice   = $AutoCreateCollectorDevice
-                    suppressAlertClear              = $SuppressAlertClear
-                    resendIval                      = $ResendAlertInterval
-                    netflowCollectorId              = $NetflowCollectorId
-                    specifiedCollectorDeviceGroupId = $SpecifiedCollectorDeviceGroupId
-                }
-
-            
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys @()
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Collector" )
+            $Data = @{
+                description                     = $Description
+                backupAgentId                   = $BackupAgentId
+                collectorGroupId                = $CollectorGroupId
+                customProperties                = $customProperties
+                enableFailBack                  = $EnableFailBack
+                enableFailOverOnCollectorDevice = $EnableFailOverOnCollectorDevice
+                escalatingChainId               = $EscalatingChainId
+                needAutoCreateCollectorDevice   = $AutoCreateCollectorDevice
+                suppressAlertClear              = $SuppressAlertClear
+                resendIval                      = $ResendAlertInterval
+                netflowCollectorId              = $NetflowCollectorId
+                specifiedCollectorDeviceGroupId = $SpecifiedCollectorDeviceGroupId
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys @()
+
+            $Message = "Description: $Description"
+
+            if ($PSCmdlet.ShouldProcess($Message, "Create Collector")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Collector" )
+                }
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

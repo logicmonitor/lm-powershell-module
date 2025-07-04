@@ -52,10 +52,10 @@ This example creates a new enhanced network scan with the specified parameters.
 .NOTES
 For more information about LogicMonitor network scans, refer to the LogicMonitor documentation.
 #>
-Function New-LMEnhancedNetScan {
+function New-LMEnhancedNetScan {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
 
         [Parameter(Mandatory)]
         [String]$CollectorId,
@@ -70,7 +70,7 @@ Function New-LMEnhancedNetScan {
         [System.Collections.Generic.List[PSCustomObject]]$Filters,
 
         [String]$Description,
-        
+
         [String]$ExcludeDuplicateType = "1",
 
         [ValidateSet("enhancedScript")]
@@ -82,33 +82,33 @@ Function New-LMEnhancedNetScan {
 
         [String]$GroovyScript,
 
-        [String]$CredentialGroupId,
+        [SecureString]$CredentialGroupId,
 
-        [String]$CredentialGroupName
+        [SecureString]$CredentialGroupName
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Build header and uri
             $ResourcePath = "/setting/netscans"
 
             #Get Netscan GroupID
-            If ($NetScanGroupName) {
+            if ($NetScanGroupName) {
                 $NetScanGroupId = (Get-LMNetScanGroup -Name $NetScanGroupName).Id
             }
-            Else {
+            else {
                 $NetScanGroupId = 1
             }
 
             #Get cred group name
-            If ($CredentialGroupId -and !$CredentialGroupName) {
+            if ($CredentialGroupId -and !$CredentialGroupName) {
                 $CredentialGroupName = (Get-LMDeviceGroup -Id $CredentialGroupId).Name
             }
 
             #Get cred group name
-            If ($CredentialGroupName -and !$CredentialGroupId) {
+            if ($CredentialGroupName -and !$CredentialGroupId) {
                 $CredentialGroupName = (Get-LMDeviceGroup -Name $CredentialGroupName).Id
             }
 
@@ -132,49 +132,50 @@ Function New-LMEnhancedNetScan {
                 type       = "manual"
             }
 
-            Try {
-                $Data = @{
-                    name           = $Name
-                    collector      = $CollectorId
-                    description    = $Description
-                    duplicate      = $Duplicates
-                    method         = $Method
-                    nextStart      = $NextStart
-                    groovyScript   = $GroovyScript
-                    nextStartEpoch = $NextStartEpoch
-                    nsgId          = $NetScanGroupId
-                    credentials    = $Creds
-                    filters        = $Filters
-                    schedule       = $Schedule
-                    scriptType     = "embeded"
-                }
-
-                
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys @()
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
+            $Data = @{
+                name           = $Name
+                collector      = $CollectorId
+                description    = $Description
+                duplicate      = $Duplicates
+                method         = $Method
+                nextStart      = $NextStart
+                groovyScript   = $GroovyScript
+                nextStartEpoch = $NextStartEpoch
+                nsgId          = $NetScanGroupId
+                credentials    = $Creds
+                filters        = $Filters
+                schedule       = $Schedule
+                scriptType     = "embeded"
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys @()
+
+            $Message = "Name: $Name | CollectorId: $CollectorId"
+
+            if ($PSCmdlet.ShouldProcess($Message, "Create Enhanced Netscan")) {
+                try {
+
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
+                }
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

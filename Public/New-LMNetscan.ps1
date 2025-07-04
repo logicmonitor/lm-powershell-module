@@ -48,10 +48,10 @@ The token to use for changing the name of discovered devices. The default value 
 New-LMNetScan -CollectorId "12345" -Name "MyNetScan" -SubnetRange "192.168.0.0/24"
 Creates a new network scan with the specified collector ID, name, and subnet range.
 #>
-Function New-LMNetScan {
+function New-LMNetScan {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
 
         [Parameter(Mandatory)]
         [String]$CollectorId,
@@ -60,7 +60,7 @@ Function New-LMNetScan {
         [String]$Name,
 
         [String]$Description,
-        
+
         [String]$ExcludeDuplicateType = "1",
 
         [Nullable[boolean]]$IgnoreSystemIpDuplicates = $false,
@@ -79,27 +79,27 @@ Function New-LMNetScan {
         [Parameter(Mandatory)]
         [String]$SubnetRange,
 
-        [String]$CredentialGroupId,
+        [SecureString]$CredentialGroupId,
 
-        [String]$CredentialGroupName,
+        [SecureString]$CredentialGroupName,
 
         [String]$ChangeNameToken = "##REVERSEDNS##"
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Build header and uri
             $ResourcePath = "/setting/netscans"
 
             #Get cred group name
-            If ($CredentialGroupId -and !$CredentialGroupName) {
+            if ($CredentialGroupId -and !$CredentialGroupName) {
                 $CredentialGroupName = (Get-LMDeviceGroup -Id $CredentialGroupId).Name
             }
 
             #Get cred group name
-            If ($CredentialGroupName -and !$CredentialGroupId) {
+            if ($CredentialGroupName -and !$CredentialGroupId) {
                 $CredentialGroupName = (Get-LMDeviceGroup -Name $CredentialGroupName).Id
             }
 
@@ -125,7 +125,7 @@ Function New-LMNetScan {
                 value           = "21,22,23,25,53,69,80,81,110,123,135,143,389,443,445,631,993,1433,1521,3306,3389,5432,5672,6081,7199,8000,8080,8081,9100,10000,11211,27017"
             }
 
-            If(!$Schedule){
+            if (!$Schedule) {
                 $Schedule = @{
                     cron       = ""
                     notify     = $false
@@ -133,54 +133,56 @@ Function New-LMNetScan {
                     timezone   = "America/New_York"
                     type       = "manual"
                 }
-            } Else {
+            }
+            else {
                 Test-LMScheduleSchema -Schedule $Schedule
             }
 
-            Try {
-                $Data = @{
-                    name                      = $Name
-                    collector                 = $CollectorId
-                    description               = $Description
-                    duplicate                 = $Duplicates
-                    ignoreSystemIPsDuplicates = $IgnoreSystemIpDuplicates
-                    method                    = $Method
-                    nextStart                 = $NextStart
-                    nextStartEpoch            = $NextStartEpoch
-                    nsgId                     = $NetScanGroupId
-                    subnet                    = $SubnetRange
-                    ddr                       = $DDR
-                    credentials               = $Creds
-                    ports                     = $Ports
-                    schedule                  = $Schedule
-                }
-
-                
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys @()
-                    
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
+            $Data = @{
+                name                      = $Name
+                collector                 = $CollectorId
+                description               = $Description
+                duplicate                 = $Duplicates
+                ignoreSystemIPsDuplicates = $IgnoreSystemIpDuplicates
+                method                    = $Method
+                nextStart                 = $NextStart
+                nextStartEpoch            = $NextStartEpoch
+                nsgId                     = $NetScanGroupId
+                subnet                    = $SubnetRange
+                ddr                       = $DDR
+                credentials               = $Creds
+                ports                     = $Ports
+                schedule                  = $Schedule
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys @()
+
+            $Message = "Name: $Name | SubnetRange: $SubnetRange"
+
+            if ($PSCmdlet.ShouldProcess($Message, "Create Netscan")) {
+                try {
+
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
+                }
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

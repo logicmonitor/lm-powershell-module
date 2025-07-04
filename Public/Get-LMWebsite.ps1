@@ -40,10 +40,12 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.Website objects.
 #>
-Function Get-LMWebsite {
+function Get-LMWebsite {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
-    Param (
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Required for the FilterWizard to work')]
+
+    param (
         [Parameter(ParameterSetName = 'Id')]
         [Int]$Id,
 
@@ -64,8 +66,8 @@ Function Get-LMWebsite {
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/website/websites"
 
@@ -75,10 +77,10 @@ Function Get-LMWebsite {
         $Done = $false
         $Results = @()
 
-        #Loop through requests 
-        While (!$Done) {
+        #Loop through requests
+        while (!$Done) {
             #Build query params
-            Switch ($PSCmdlet.ParameterSetName) {
+            switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
                 "Id" { $resourcePath += "/$Id" }
                 "Type" { $QueryParams = "?filter=type:`"$Type`"&size=$BatchSize&offset=$Count&sort=+id" }
@@ -96,42 +98,39 @@ Function Get-LMWebsite {
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
             }
-            Try {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                    
-                
-                
+
+
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
+                if ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
                 }
                 #Check result size and if needed loop again
-                Else {
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    if ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Website" )
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Website" )
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

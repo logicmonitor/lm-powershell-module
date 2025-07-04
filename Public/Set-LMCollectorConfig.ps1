@@ -48,10 +48,10 @@ Returns a string indicating the status of the configuration update and restart o
 This function requires a valid LogicMonitor API authentication and will restart the collector.
 #>
 
-Function Set-LMCollectorConfig {
+function Set-LMCollectorConfig {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
 
         [Parameter(ParameterSetName = 'Id-Conf', ValueFromPipelineByPropertyName)]
         [Parameter(ParameterSetName = 'Id-SnippetConf', ValueFromPipelineByPropertyName)]
@@ -126,7 +126,7 @@ Function Set-LMCollectorConfig {
         [Parameter(ParameterSetName = 'Name-SnippetConf')]
         [Parameter(ParameterSetName = 'Id-SnippetConf')]
         [String[]]$SflowPorts,
-        
+
         [Parameter(ParameterSetName = 'Name-SnippetConf')]
         [Parameter(ParameterSetName = 'Id-SnippetConf')]
         [Nullable[Boolean]]$LMLogsSyslogEnable,
@@ -142,10 +142,11 @@ Function Set-LMCollectorConfig {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        Function Process-CollectorConfig {
-            Param (
+    begin {}
+    process {
+        function Update-CollectorConfig {
+            [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Required for the function to work')]
+            param (
                 $Config,
                 $ConfLine,
                 $Value
@@ -154,83 +155,83 @@ Function Set-LMCollectorConfig {
             $Value = $Value.toString().toLower()
 
             $ConfigArray = $Config.Split([Environment]::NewLine)
-            [int[]]$Index = [Linq.Enumerable]::Range(0, $ConfigArray.Count).Where({ Param($i) $ConfigArray[$i] -match "^$ConfLine" })
-            If (($Index | Measure-Object).Count -eq 1) {
+            [int[]]$Index = [Linq.Enumerable]::Range(0, $ConfigArray.Count).Where({ param($i) $ConfigArray[$i] -match "^$ConfLine" })
+            if (($Index | Measure-Object).Count -eq 1) {
                 Write-Information "[INFO]: Updating config parameter $ConfLine to value $Value."
                 $ConfigArray[$Index[0]] = "$ConfLine=$Value"
             }
-            Else {
-                Write-Warning "[WARN]: Multiple matches found for config parameter $ConfLine, skipping processing." 
+            else {
+                Write-Warning "[WARN]: Multiple matches found for config parameter $ConfLine, skipping processing."
             }
-            
-            Return ([string]::Join([Environment]::NewLine, $ConfigArray))
+
+            return ([string]::Join([Environment]::NewLine, $ConfigArray))
         }
-        
-        If ($Script:LMAuth.Valid) {
-            
+
+        if ($Script:LMAuth.Valid) {
+
             #Lookup Collector Name
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMCollector -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-            
-            If ($PSCmdlet.ParameterSetName -like "*Snippet*") {
+
+            if ($PSCmdlet.ParameterSetName -like "*Snippet*") {
                 $CollectorConfData = (Get-LMCollector -Id $Id).collectorConf
-                
-                If ($CollectorConfData) {
+
+                if ($CollectorConfData) {
                     $SnippetArray = [System.Collections.ArrayList]@()
                     $cmdName = $MyInvocation.InvocationName
                     $paramList = (Get-Command -Name $cmdName).Parameters
-                    Foreach ( $key in $paramList.Keys ) {
+                    foreach ( $key in $paramList.Keys ) {
                         $value = (Get-Variable $key -ErrorAction SilentlyContinue).Value
-                        If ( ($value -or $value -eq 0) -and ($key -ne "Id" -and $key -ne "Name" -and $key -ne "WaitForRestart") ) {
+                        if ( ($value -or $value -eq 0) -and ($key -ne "Id" -and $key -ne "Name" -and $key -ne "WaitForRestart") ) {
                             $SnippetArray.Add(@{$key = $value }) | Out-Null
                         }
                     }
-                    
-                    Foreach ($Key in $SnippetArray.Keys) {
-                        $CollectorConfData = Switch ($Key) {
-                            "SnmpThreadPool" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "collector.snmp.threadpool" -Value $SnippetArray.$Key }
-                            "SnmpPduTimeout" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "snmp.pdu.timeout" -Value $SnippetArray.$Key }
-                            "ScriptThreadPool" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "collector.script.threadpool" -Value $SnippetArray.$Key }
-                            "ScriptTimeout" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "collector.script.timeout" -Value $SnippetArray.$Key }
-                            "BatchScriptThreadPool" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "collector.batchscript.threadpool" -Value $SnippetArray.$Key }
-                            "BatchScriptTimeout" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "collector.batchscript.timeout" -Value $SnippetArray.$Key }
-                            "PowerShellSPSEProcessCountMin" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "powershell.spse.process.count.min" -Value $SnippetArray.$Key }
-                            "PowerShellSPSEProcessCountMax" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "powershell.spse.process.count.max" -Value $SnippetArray.$Key }
-                            "NetflowEnable" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "netflow.enable" -Value $SnippetArray.$Key }
-                            "NbarEnable" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "netflow.nbar.enabled" -Value $SnippetArray.$Key }
-                            "NetflowPorts" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "netflow.ports" -Value $SnippetArray.$Key }
-                            "SflowPorts" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "netflow.sflow.ports" -Value $SnippetArray.$Key }
-                            "LMLogsSyslogEnable" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "lmlogs.syslog.enabled" -Value $SnippetArray.$Key }
-                            "LMLogsSyslogHostnameFormat" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "lmlogs.syslog.hostname.format" -Value $SnippetArray.$Key }
-                            "LMLogsSyslogPropertyName" { Process-CollectorConfig -Config $CollectorConfData -ConfLine "lmlogs.syslog.property.name" -Value $SnippetArray.$Key }
+
+                    foreach ($Key in $SnippetArray.Keys) {
+                        $CollectorConfData = switch ($Key) {
+                            "SnmpThreadPool" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "collector.snmp.threadpool" -Value $SnippetArray.$Key }
+                            "SnmpPduTimeout" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "snmp.pdu.timeout" -Value $SnippetArray.$Key }
+                            "ScriptThreadPool" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "collector.script.threadpool" -Value $SnippetArray.$Key }
+                            "ScriptTimeout" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "collector.script.timeout" -Value $SnippetArray.$Key }
+                            "BatchScriptThreadPool" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "collector.batchscript.threadpool" -Value $SnippetArray.$Key }
+                            "BatchScriptTimeout" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "collector.batchscript.timeout" -Value $SnippetArray.$Key }
+                            "PowerShellSPSEProcessCountMin" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "powershell.spse.process.count.min" -Value $SnippetArray.$Key }
+                            "PowerShellSPSEProcessCountMax" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "powershell.spse.process.count.max" -Value $SnippetArray.$Key }
+                            "NetflowEnable" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "netflow.enable" -Value $SnippetArray.$Key }
+                            "NbarEnable" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "netflow.nbar.enabled" -Value $SnippetArray.$Key }
+                            "NetflowPorts" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "netflow.ports" -Value $SnippetArray.$Key }
+                            "SflowPorts" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "netflow.sflow.ports" -Value $SnippetArray.$Key }
+                            "LMLogsSyslogEnable" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "lmlogs.syslog.enabled" -Value $SnippetArray.$Key }
+                            "LMLogsSyslogHostnameFormat" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "lmlogs.syslog.hostname.format" -Value $SnippetArray.$Key }
+                            "LMLogsSyslogPropertyName" { Update-CollectorConfig -Config $CollectorConfData -ConfLine "lmlogs.syslog.property.name" -Value $SnippetArray.$Key }
                             default { $CollectorConfData }
                         }
                     }
                 }
             }
-            Else {
+            else {
                 $CollectorConfData = $CollectorConf
             }
-            
+
             #Build header and uri
             $ResourcePath = "/setting/collector/collectors/$Id/services/restart"
-            
-            If ($PSItem) {
+
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.hostname) | Description: $($PSItem.description)"
             }
-            Elseif ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
-            
-            Try {
+
+            try {
                 $Data = @{
                     collectorSize = $CollectorSize
                     collectorConf = $CollectorConfData
@@ -239,59 +240,56 @@ Function Set-LMCollectorConfig {
                     websiteConf   = $WebsiteConf
                     wrapperConf   = $WrapperConf
                 }
-                
-                
+
+
                 #Remove empty keys so we dont overwrite them
                 $Data = Format-LMData `
                     -Data $Data `
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
-                
-                If ($PSCmdlet.ShouldProcess($Message, "Set Collector Config ")) {  
-                    Write-Warning "[WARN]: This command will restart the targeted collector on update of the configuration" 
+
+                if ($PSCmdlet.ShouldProcess($Message, "Set Collector Config ")) {
+                    Write-Warning "[WARN]: This command will restart the targeted collector on update of the configuration"
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-                    
+
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    If ($WaitForRestart) {
+                    if ($WaitForRestart) {
                         $JobStarted = $false
                         $Tries = 0
-                        While (!$JobStarted -or $Tries -eq 5) {
+                        while (!$JobStarted -or $Tries -eq 5) {
                             #Build header and uri
                             $ResourcePath = "/setting/collector/collectors/$Id/services/restart/$Response"
                             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-        
-                            $SubmitResponse = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-                            If ($SubmitResponse.errorMessage -eq "The task is still running") {
+
+                            $SubmitResponse = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                            if ($SubmitResponse.errorMessage -eq "The task is still running") {
                                 Write-Information "[INFO]: The task is still running..."
                                 Start-Sleep -Seconds 2
                                 $Tries++
                             }
-                            Else {
+                            else {
                                 $JobStarted = $true
                             }
                         }
-                        Return "Job status code: $($SubmitResponse.jobStatus), Job message: $($SubmitResponse.jobErrmsg)"
+                        return "Job status code: $($SubmitResponse.jobStatus), Job message: $($SubmitResponse.jobErrmsg)"
                     }
-                    Else {
-                        Return "Successfully submitted restart request(jobID:$Response) with updated configurations. Collector will restart once the request has been picked up."
+                    else {
+                        return "Successfully submitted restart request(jobID:$Response) with updated configurations. Collector will restart once the request has been picked up."
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

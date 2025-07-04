@@ -10,19 +10,19 @@ function Add-ObjectTypeInfo {
         Helper function to decorate an object with
             - A TypeName
             - New properties
-            - Default parameters 
+            - Default parameters
 
     .PARAMETER InputObject
         Object to decorate. Accepts pipeline input.
 
     .PARAMETER TypeName
         Typename to insert.
-        
+
         This will show up when you use Get-Member against the resulting object.
-        
+
     .PARAMETER PropertyToAdd
         Add these noteproperties.
-        
+
         Format is a hashtable with Key (Property Name) = Value (Property Value).
 
         Example to add a One and Date property:
@@ -85,7 +85,7 @@ function Add-ObjectTypeInfo {
     .NOTES
         This breaks the 'do one thing' rule from certain perspectives...
         The goal is to decorate an object all in one shot
-   
+
         This abstraction simplifies decorating an object, with a slight trade-off in performance. For example:
 
         10,000 objects, add a property and typename:
@@ -95,8 +95,8 @@ function Add-ObjectTypeInfo {
         Initial code borrowed from Shay Levy:
         http://blogs.microsoft.co.il/scriptfanatic/2012/04/13/custom-objects-default-display-in-powershell-30/
     #>
-    [CmdletBinding()] 
-    Param (
+    [CmdletBinding()]
+    param (
         [Parameter( Mandatory = $true,
             Position = 0,
             ValueFromPipeline = $true )]
@@ -108,7 +108,7 @@ function Add-ObjectTypeInfo {
         [string]$TypeName,
 
         [Parameter( Mandatory = $false,
-            Position = 2)]    
+            Position = 2)]
         [System.Collections.Hashtable]$PropertyToAdd,
 
         [Parameter( Mandatory = $false,
@@ -119,21 +119,21 @@ function Add-ObjectTypeInfo {
 
         [boolean]$Passthru = $True
     )
-    
-    Begin {
-        If ($PSBoundParameters.ContainsKey('DefaultProperties')) {
+
+    begin {
+        if ($PSBoundParameters.ContainsKey('DefaultProperties')) {
             # define a subset of properties
             $ddps = New-Object System.Management.Automation.PSPropertySet DefaultDisplayPropertySet, $DefaultProperties
             $PSStandardMembers = [System.Management.Automation.PSMemberInfo[]]$ddps
         }
     }
-    Process {
-        Foreach ($Object in $InputObject) {
+    process {
+        foreach ($Object in $InputObject) {
             switch ($PSBoundParameters.Keys) {
                 'PropertyToAdd' {
-                    Foreach ($Key in $PropertyToAdd.Keys) {
+                    foreach ($Key in $PropertyToAdd.Keys) {
                         #Add some noteproperties. Slightly faster than Add-Member.
-                        $Object.PSObject.Properties.Add( ( New-Object PSNoteProperty($Key, $PropertyToAdd[$Key]) ) )  
+                        $Object.PSObject.Properties.Add( ( New-Object PSNoteProperty($Key, $PropertyToAdd[$Key]) ) )
                     }
                 }
                 'TypeName' {
@@ -145,7 +145,7 @@ function Add-ObjectTypeInfo {
                     Add-Member -InputObject $Object -MemberType MemberSet -Name PSStandardMembers -Value $PSStandardMembers
                 }
             }
-            If ($Passthru) {
+            if ($Passthru) {
                 $Object
             }
         }

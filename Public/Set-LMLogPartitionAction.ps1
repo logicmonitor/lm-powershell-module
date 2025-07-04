@@ -28,10 +28,10 @@ Returns a LogicMonitor.LogPartition object containing the updated log partition 
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMLogPartitionAction {
+function Set-LMLogPartitionAction {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -45,55 +45,52 @@ Function Set-LMLogPartitionAction {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
             #Lookup Log Partition Id
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMLogPartition -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/log/partitions/$Id/$Action"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | Action: $Action"
             }
-            ElseIf ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name | Action: $Action"
             }
-            Else {
+            else {
                 $Message = "Id: $Id | Action: $Action"
             }
 
-            Try {
+            try {
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Log Partition Action")) {
+                if ($PSCmdlet.ShouldProcess($Message, "Set Log Partition Action")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

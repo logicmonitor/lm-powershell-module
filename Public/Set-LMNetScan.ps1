@@ -66,10 +66,10 @@ Returns a LogicMonitor.NetScan object containing the updated scan configuration.
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
-Function Set-LMNetscan {
+function Set-LMNetscan {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
 
         [String]$CollectorId,
 
@@ -79,7 +79,7 @@ Function Set-LMNetscan {
         [String]$Id,
 
         [String]$Description,
-        
+
         [String]$ExcludeDuplicateType,
 
         [Nullable[boolean]]$IgnoreSystemIpDuplpicates,
@@ -94,9 +94,9 @@ Function Set-LMNetscan {
 
         [String]$SubnetRange,
 
-        [String]$CredentialGroupId,
+        [SecureString]$CredentialGroupId,
 
-        [String]$CredentialGroupName,
+        [SecureString]$CredentialGroupName,
 
         [PSCustomObject]$Schedule,
 
@@ -105,35 +105,35 @@ Function Set-LMNetscan {
         [String]$PortList
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Build header and uri
             $ResourcePath = "/setting/netscans/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
             #Get cred group name
-            If ($CredentialGroupId -and !$CredentialGroupName) {
+            if ($CredentialGroupId -and !$CredentialGroupName) {
                 $CredentialGroupName = (Get-LMDeviceGroup -Id $CredentialGroupId).Name
             }
 
             #Get cred group name
-            If ($CredentialGroupName -and !$CredentialGroupId) {
+            if ($CredentialGroupName -and !$CredentialGroupId) {
                 $CredentialGroupName = (Get-LMDeviceGroup -Name $CredentialGroupName).Id
             }
 
             $Duplicates = $null
-            If ($ExcludeDuplicateType) {
+            if ($ExcludeDuplicateType) {
                 $Duplicates = @{
                     collectors = @()
                     groups     = @()
@@ -142,7 +142,7 @@ Function Set-LMNetscan {
             }
 
             $DDR = $null
-            If ($ChangeNameToken) {
+            if ($ChangeNameToken) {
                 $DDR = @{
                     assignment = @()
                     changeName = $ChangeNameToken
@@ -150,7 +150,7 @@ Function Set-LMNetscan {
             }
 
             $Creds = $null
-            If ($CredentialGroupId -or $CredentialGroupName) {
+            if ($CredentialGroupId -or $CredentialGroupName) {
                 $Creds = @{
                     custom          = @()
                     deviceGroupId   = $CredentialGroupId
@@ -159,14 +159,14 @@ Function Set-LMNetscan {
             }
 
             $Ports = $null
-            If ($PortList) {
+            if ($PortList) {
                 $Ports = @{
                     isGlobalDefault = $true
                     value           = $PortList
                 }
             }
 
-            Try {
+            try {
                 $Data = @{
                     id                        = $Id
                     name                      = $Name
@@ -182,37 +182,34 @@ Function Set-LMNetscan {
                     ddr                       = $DDR
                     credentials               = $Creds
                     ports                     = $Ports
-                    schedule                  = If($Schedule){$Schedule}Else{$null}
+                    schedule                  = if ($Schedule) { $Schedule }else { $null }
                 }
 
-                
+
                 #Remove empty keys so we dont overwrite them
                 $Data = Format-LMData `
                     -Data $Data `
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set NetScan")) {
+                if ($PSCmdlet.ShouldProcess($Message, "Set NetScan")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

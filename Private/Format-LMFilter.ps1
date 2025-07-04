@@ -30,37 +30,37 @@ Write-Host $formattedFilter
 # Output: name:"MyMonitor",status:"active"
 #>
 
-Function Format-LMFilter {
+function Format-LMFilter {
     [CmdletBinding()]
-    Param (
+    param (
         [Object]$Filter,
 
         [String[]]$PropList = @("name", "id", "status", "severity", "startEpoch", "endEpoch", "cleared", "resourceTemplateName", "monitorObjectName", "customProperties", "systemProperties", "autoProperties", "displayName")
     )
     $FormatedFilter = ""
     #Keep legacy filter method for backwards compatability
-    If ($Filter -is [hashtable]) {
+    if ($Filter -is [hashtable]) {
         $FormatedFilter = Format-LMFilter-v1 -Filter $Filter -PropList $PropList
         Write-Debug "Constructed Filter-v1: $FormatedFilter"
-        Return $FormatedFilter
+        return $FormatedFilter
     }
-    Else {    
+    else {
         #Split our filters in an array based on logical operator
         $FilterArray = [regex]::Split($Filter, '(\s+-and\s+|\s+-or\s+)')
-    
-        Foreach ($Filter in $FilterArray) {
-            If ($Filter -match '\s+-and\s+') {
+
+        foreach ($Filter in $FilterArray) {
+            if ($Filter -match '\s+-and\s+') {
                 $FormatedFilter += ","
             }
-            Elseif ($Filter -match '\s+-or\s+') {
+            elseif ($Filter -match '\s+-or\s+') {
                 $FormatedFilter += "||"
             }
-            Else {
+            else {
                 $SingleFilterArray = [regex]::Split($Filter, '(\s+-eq\s+|\s+-ne\s+|\s+-gt\s+|\s+-lt\s+|\s+-ge\s+|\s+-le\s+|\s+-contains\s+|\s+-notcontains\s+)')
-                If (($SingleFilterArray | Measure-Object).Count -gt 1) {
-                    Foreach ($SingleFilter in $SingleFilterArray) {
-                        If ($SingleFilter -match '(\s+-eq\s+|\s+-ne\s+|\s+-gt\s+|\s+-lt\s+|\s+-ge\s+|\s+-le\s+|\s+-contains\s+|\s+-notcontains\s+)') {
-                            Switch -Regex ($SingleFilter) {
+                if (($SingleFilterArray | Measure-Object).Count -gt 1) {
+                    foreach ($SingleFilter in $SingleFilterArray) {
+                        if ($SingleFilter -match '(\s+-eq\s+|\s+-ne\s+|\s+-gt\s+|\s+-lt\s+|\s+-ge\s+|\s+-le\s+|\s+-contains\s+|\s+-notcontains\s+)') {
+                            switch -Regex ($SingleFilter) {
                                 '\s+-eq\s+' { $FormatedFilter += ":" }
                                 '\s+-ne\s+' { $FormatedFilter += "!:" }
                                 '\s+-gt\s+' { $FormatedFilter += ">" }
@@ -72,14 +72,14 @@ Function Format-LMFilter {
                                 default { throw "[ERROR]: Invalid filter syntax: $Filter" }
                             }
                         }
-                        Else {
+                        else {
                             $FormatedFilter += $SingleFilter.Replace("'", "`"") #replace single quotes with double quotes as reqired by LM API
                         }
                     }
                 }
-                Else {
+                else {
                     throw "[ERROR]: Invalid filter syntax: $SingleFilterArray"
-                    
+
                 }
             }
         }
@@ -97,6 +97,6 @@ Function Format-LMFilter {
         $FormatedFilter = [System.Web.HttpUtility]::UrlEncode($FormatedFilter)
 
         Write-Debug "Constructed Filter-v2: $FormatedFilter"
-        Return $FormatedFilter
+        return $FormatedFilter
     }
 }

@@ -96,4 +96,4 @@ function Format-LMData {
 
     # Convert the cleaned hashtable to JSON
     return $Data | ConvertTo-Json -Depth $JsonDepth
-} 
+}

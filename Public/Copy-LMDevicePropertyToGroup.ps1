@@ -31,13 +31,13 @@
 .NOTES
     Requires an active Logic Monitor session. Use Connect-LMAccount to log in before running this function.
 #>
-Function Copy-LMDevicePropertyToGroup {
-    [CmdletBinding(DefaultParameterSetName="SourceDevice")]
-    Param(
-        [Parameter(Mandatory,ParameterSetName="SourceDevice",ValueFromPipelineByPropertyName)]
+function Copy-LMDevicePropertyToGroup {
+    [CmdletBinding(DefaultParameterSetName = "SourceDevice")]
+    param(
+        [Parameter(Mandatory, ParameterSetName = "SourceDevice", ValueFromPipelineByPropertyName)]
         [String]$SourceDeviceId,
 
-        [Parameter(Mandatory,ParameterSetName="SourceGroup")]
+        [Parameter(Mandatory, ParameterSetName = "SourceGroup")]
         [String]$SourceGroupId,
 
         [Parameter(Mandatory)]
@@ -49,27 +49,27 @@ Function Copy-LMDevicePropertyToGroup {
         [Switch]$PassThru
     )
 
-    Begin {
-        If($Script:LMAuth.Valid){}
-        Else{
+    begin {
+        if ($Script:LMAuth.Valid) {}
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
             return
         }
     }
 
-    Process {
-        Try {
+    process {
+        try {
             # Get source device either directly or from group
-            If($PSCmdlet.ParameterSetName -eq "SourceDevice") {
+            if ($PSCmdlet.ParameterSetName -eq "SourceDevice") {
                 $sourceDevice = Get-LMDevice -Id $SourceDeviceId
-                If(!$sourceDevice) {
+                if (!$sourceDevice) {
                     Write-Error "Source device with ID $SourceDeviceId not found"
                     return
                 }
             }
-            Else {
+            else {
                 $devices = Get-LMDeviceGroupDevices -Id $SourceGroupId
-                If(!$devices) {
+                if (!$devices) {
                     Write-Error "No devices found in source group with ID $SourceGroupId"
                     return
                 }
@@ -103,16 +103,16 @@ Function Copy-LMDevicePropertyToGroup {
             )
 
             # Process each target group
-            Foreach($groupId in $TargetGroupId) {
+            foreach ($groupId in $TargetGroupId) {
                 $group = Get-LMDeviceGroup -Id $groupId
-                If(!$group) {
+                if (!$group) {
                     Write-Warning "Target group with ID $groupId not found, skipping..."
                     continue
                 }
 
                 # Build properties hashtable
                 $propertiesToCopy = @{}
-                Foreach($propName in $PropertyNames) {
+                foreach ($propName in $PropertyNames) {
                     if ($propName -like 'system.*' -or $propName -like 'auto.*') {
                         Write-Warning "Property $propName is a system or auto property and cannot be set on device groups. Skipping copy."
                         continue
@@ -130,18 +130,18 @@ Function Copy-LMDevicePropertyToGroup {
                     }
                     # Check custom properties
                     $propValue = $null
-                    If($sourceDevice.customProperties.name -contains $propName) {
+                    if ($sourceDevice.customProperties.name -contains $propName) {
                         $propValue = $sourceDevice.customProperties[$sourceDevice.customProperties.name.IndexOf($propName)].value
                     }
-                    If($propValue) {
+                    if ($propValue) {
                         $propertiesToCopy[$propName] = $propValue
                     }
-                    Else {
+                    else {
                         Write-Warning "Property $propName not found on source device $($sourceDevice.id), skipping..."
                     }
                 }
 
-                If($propertiesToCopy.Count -gt 0) {
+                if ($propertiesToCopy.Count -gt 0) {
                     Write-Information "[INFO]: Copying properties to group $($group.name) (ID: $groupId)"
                     $updatedGroup = Set-LMDeviceGroup -Id $groupId -Properties $propertiesToCopy
 
@@ -150,20 +150,20 @@ Function Copy-LMDevicePropertyToGroup {
                         Write-Information ("  {0} = {1}" -f $_.Key, $_.Value)
                     }
 
-                    If($PassThru) {
+                    if ($PassThru) {
                         $results.Add($updatedGroup) | Out-Null
                     }
                 }
             }
         }
-        Catch {
+        catch {
             Write-Error "Error copying properties: $_"
         }
     }
 
-    End {
-        If($PassThru) {
-            Return $results
+    end {
+        if ($PassThru) {
+            return $results
         }
     }
 }

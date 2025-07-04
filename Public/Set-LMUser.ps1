@@ -63,10 +63,11 @@ Returns a LogicMonitor.User object containing the updated user configuration.
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
-Function Set-LMUser {
+function Set-LMUser {
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '', Justification = 'Required for the FilterWizard to work')]
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
 
@@ -81,7 +82,7 @@ Function Set-LMUser {
 
         [Nullable[boolean]]$AcceptEULA,
 
-        [String]$Password,
+        [SecureString]$Password,
 
         [String]$FirstName,
 
@@ -112,32 +113,32 @@ Function Set-LMUser {
         [String[]]$Views
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Id if supplying username
-            If ($Username) {
+            if ($Username) {
                 $LookupResult = (Get-LMUser -Name $Username).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Username) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Username) {
                     return
                 }
                 $Id = $LookupResult
             }
-    
+
             #Build admin group props to update user group
             $AdminGroup = ""
             $AdminGroupIds = ""
-            If ($UserGroups) {
+            if ($UserGroups) {
                 $AdminGroup = @()
                 $AdminGroupIds = @()
-                Foreach ($Group in $UserGroups) {
-                    If ($Group -Match "\*") {
+                foreach ($Group in $UserGroups) {
+                    if ($Group -match "\*") {
                         Write-Error "Wildcard values not supported for groups."
                         return
                     }
                     $Group = (Get-LMUserGroup -Name $Group | Select-Object -First 1 )
-                    If (!$Group) {
+                    if (!$Group) {
                         Write-Error "Unable to find username: $Username, please check spelling and try again."
                         return
                     }
@@ -145,22 +146,22 @@ Function Set-LMUser {
                     $AdminGroupIds += $Group.id
                 }
             }
-    
+
             #Build role id list
             $Roles = @()
-            Foreach ($Role in $RoleNames) {
+            foreach ($Role in $RoleNames) {
                 $RoleId = (Get-LMRole -Name $Role | Select-Object -First 1 ).Id
-                If ($RoleId) {
+                if ($RoleId) {
                     $Roles += @{id = $RoleId }
                 }
-                Else {
-                    Write-Warning "[WARN]: Unable to locate user role named $Role, it will be skipped" 
+                else {
+                    Write-Warning "[WARN]: Unable to locate user role named $Role, it will be skipped"
                 }
             }
-    
+
             #Build view permissions hashtable
             $ViewPermission = ""
-            If ($Views) {
+            if ($Views) {
                 $ViewPermission = @{
                     Alerts     = $false
                     Dashboards = $false
@@ -171,80 +172,80 @@ Function Set-LMUser {
                     Settings   = $false
                     Websites   = $false
                 }
-    
-                Foreach ($View in $Views) {
-                    If ($View -eq "All") {
-                        Foreach ($key in $($ViewPermission.keys)) {
+
+                foreach ($View in $Views) {
+                    if ($View -eq "All") {
+                        foreach ($key in $($ViewPermission.keys)) {
                             $ViewPermission[$key] = $true
                         }
                         break
                     }
-                    Elseif ($ViewPermission.ContainsKey($View)) {
+                    elseif ($ViewPermission.ContainsKey($View)) {
                         $ViewPermission[$View] = $true
                     }
                 }
             }
-            
+
             #Build header and uri
             $ResourcePath = "/setting/admins/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Username: $($PSItem.username)"
             }
-            ElseIf ($Username) {
+            elseif ($Username) {
                 $Message = "Id: $Id | Username: $Username"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
-    
+
             $Data = @{
-                    username            = $NewUsername
-                    email               = $Email
-                    acceptEULA          = $AcceptEULA
-                    password            = $Password
-                    firstName           = $FirstName 
-                    lastName            = $LastName
-                    forcePasswordChange = $ForcePasswordChange
-                    phone               = $(If ($Phone) { "+" + $Phone.Replace("-", "") }Else { "" })
-                    note                = $Note
-                    roles               = $Roles
-                    smsEmail            = $SmsEmail
-                    smsEmailFormat      = $SmsEmailFormat
-                    status              = $Status
-                    timezone            = $Timezone
-                    twoFAEnabled        = $TwoFAEnabled
-                    viewPermission      = $ViewPermission
-                    adminGroup          = $AdminGroup
-                    adminGroupIds       = $AdminGroupIds
+                username            = $NewUsername
+                email               = $Email
+                acceptEULA          = $AcceptEULA
+                password            = $Password
+                firstName           = $FirstName
+                lastName            = $LastName
+                forcePasswordChange = $ForcePasswordChange
+                phone               = $(if ($Phone) { "+" + $Phone.Replace("-", "") }else { "" })
+                note                = $Note
+                roles               = $Roles
+                smsEmail            = $SmsEmail
+                smsEmailFormat      = $SmsEmailFormat
+                status              = $Status
+                timezone            = $Timezone
+                twoFAEnabled        = $TwoFAEnabled
+                viewPermission      = $ViewPermission
+                adminGroup          = $AdminGroup
+                adminGroupIds       = $AdminGroupIds
 
+            }
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set User")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request using new centralized method with retry logic
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
                 }
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
+                catch {
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set User")) {
-                    Try {
-                        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                        #Issue request using new centralized method with retry logic
-                        $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                        Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
-                    }
-                    Catch {
-                        # Error is already displayed by Resolve-LMException, just return cleanly
-                        return
-                    }
+                    return
                 }
             }
-        Else {
+        }
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

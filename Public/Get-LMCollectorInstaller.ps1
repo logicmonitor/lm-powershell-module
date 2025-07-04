@@ -40,9 +40,9 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns the path to the downloaded installer file.
 #>
-Function Get-LMCollectorInstaller {
+function Get-LMCollectorInstaller {
     [CmdletBinding(DefaultParameterSetName = 'Id')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = "Id")]
         [int]$Id,
 
@@ -59,51 +59,46 @@ Function Get-LMCollectorInstaller {
 
         [string]$DownloadPath = (Get-Location).Path
     )
-    
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
 
-        If ($Name) {
+    #Check if we are logged in and have valid api creds
+    if ($Script:LMAuth.Valid) {
+
+        if ($Name) {
             $LookupResult = (Get-LMCollector -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
             $Id = $LookupResult
         }
-        
+
         #Build header and uri
         $ResourcePath = "/setting/collector/collectors/$Id/installers/$OSandArch"
         $QueryParams = "?useEA=$UseEA&collectorSize=$Size"
 
-        If ($OSandArch -like "Linux*") {
+        if ($OSandArch -like "Linux*") {
             $DownloadPath += "\LogicMonitor_Collector_$OSandArch`_$Size`_$Id.bin"
         }
-        Else {
+        else {
             $DownloadPath += "\LogicMonitor_Collector_$OSandArch`_$Size`_$Id.exe"
         }
 
-        Try {
+        try {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-
-            
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
             #Issue request
-            Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] -OutFile $DownloadPath
-            
-            Return $DownloadPath
+            Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] -OutFile $DownloadPath
+
+            return $DownloadPath
 
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        catch {
+            return
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

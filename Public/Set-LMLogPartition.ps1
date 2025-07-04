@@ -37,10 +37,10 @@ Returns a LogicMonitor.LogPartition object containing the updated log partition 
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMLogPartition {
+function Set-LMLogPartition {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -52,7 +52,7 @@ Function Set-LMLogPartition {
 
         [Nullable[int]]$Retention,
 
-        [ValidateSet("LG3", "LGE", "LG7","LG90","IP3","IPC","IP7","IP90")]
+        [ValidateSet("LG3", "LGE", "LG7", "LG90", "IP3", "IPC", "IP7", "IP90")]
         [String]$Sku,
 
         [ValidateSet("active", "inactive")]
@@ -60,66 +60,63 @@ Function Set-LMLogPartition {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
             #Lookup Log Partition Id
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMLogPartition -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/log/partitions/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name)"
             }
-            ElseIf ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
-            Try {
+            try {
                 $Data = @{
                     description = $Description
                     retention   = $Retention
                     sku         = $Sku
-                    active      = If ($Status -eq "active") { $true } ElseIf ($Status -eq "inactive") { $false } Else { $null }
+                    active      = if ($Status -eq "active") { $true } elseif ($Status -eq "inactive") { $false } else { $null }
                 }
-            
+
                 #Remove empty keys so we dont overwrite them
                 $Data = Format-LMData `
                     -Data $Data `
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set Log Partition")) {
+                if ($PSCmdlet.ShouldProcess($Message, "Set Log Partition")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

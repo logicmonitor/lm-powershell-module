@@ -45,14 +45,14 @@ Returns a LogicMonitor.DeviceGroup object containing the updated group informati
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
-Function Set-LMServiceGroup {
+function Set-LMServiceGroup {
 
     [CmdletBinding(DefaultParameterSetName = "Id-ParentGroupId", SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-ParentGroupName')]
         [String]$Id,
-        
+
         [Parameter(Mandatory, ParameterSetName = 'Name-ParentGroupId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-ParentGroupName')]
         [String]$Name,
@@ -76,24 +76,24 @@ Function Set-LMServiceGroup {
         [Parameter(ParameterSetName = 'Name-ParentGroupName')]
         [String]$ParentGroupName
     )
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Group Id
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
 
             #Lookup ParentGroupId
-            If ($ParentGroupName) {
+            if ($ParentGroupName) {
                 $LookupResult = (Get-LMDeviceGroup -Name $ParentGroupName).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $ParentGroupName) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $ParentGroupName) {
                     return
                 }
                 $ParentGroupId = $LookupResult
@@ -101,22 +101,22 @@ Function Set-LMServiceGroup {
 
             #Build custom props hashtable
             $customProperties = @()
-            If ($Properties) {
-                Foreach ($Key in $Properties.Keys) {
+            if ($Properties) {
+                foreach ($Key in $Properties.Keys) {
                     $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/device/groups/$Id"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | Path: $($PSItem.fullPath)"
             }
-            Elseif ($Name) {
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
@@ -136,9 +136,9 @@ Function Set-LMServiceGroup {
                 -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
                 -Context @{ PropertiesMethod = $PropertiesMethod }
 
-            If ($PSCmdlet.ShouldProcess($Message, "Set Service Group")) { 
-                Try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+            if ($PSCmdlet.ShouldProcess($Message, "Set Service Group")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
@@ -146,17 +146,17 @@ Function Set-LMServiceGroup {
                     #Issue request using new centralized method with retry logic
                     $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroup" )
                 }
-                Catch {
-                    # Error is already displayed by Resolve-LMException, just return cleanly
+                catch {
+
                     return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

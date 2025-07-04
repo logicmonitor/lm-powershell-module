@@ -40,10 +40,11 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 None. Returns success message if account is cached successfully.
 #>
-Function New-LMCachedAccount {
+function New-LMCachedAccount {
 
-    [CmdletBinding(DefaultParameterSetName = "LMv1")]
-    Param (
+    [CmdletBinding(DefaultParameterSetName = "LMv1", SupportsShouldProcess, ConfirmImpact = 'None')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingConvertToSecureStringWithPlainText', '', Justification = 'Required for the function to work')]
+    param (
         [Parameter(Mandatory, ParameterSetName = "LMv1")]
         [String]$AccessId,
 
@@ -62,13 +63,13 @@ Function New-LMCachedAccount {
         [Boolean]$OverwriteExisting = $false
     )
 
-    Try {
+    try {
         Get-SecretVault -Name Logic.Monitor -ErrorAction Stop | Out-Null
         Write-Information "[INFO]: Existing vault Logic.Monitor already exists, skipping creation"
     }
-    Catch {
-        If ($_.Exception.Message -like "*Vault Logic.Monitor does not exist in registry*") {
-            Write-Information "[INFO]: Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor" 
+    catch {
+        if ($_.Exception.Message -like "*Vault Logic.Monitor does not exist in registry*") {
+            Write-Information "[INFO]: Credential vault for cached accounts does not currently exist, creating credential vault: Logic.Monitor"
             Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore
             Get-SecretStoreConfiguration | Out-Null
         }
@@ -76,7 +77,7 @@ Function New-LMCachedAccount {
 
     $CurrentDate = Get-Date
     #Convert to secure string
-    If ($BearerToken) {
+    if ($BearerToken) {
         $Secret = $BearerToken | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
         [Hashtable]$Metadata = @{
             Portal   = [String]$AccountName
@@ -85,7 +86,7 @@ Function New-LMCachedAccount {
             Type     = "Bearer"
         }
     }
-    Else {
+    else {
         $Secret = $AccessKey | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
         [Hashtable]$Metadata = @{
             Portal   = [String]$AccountName
@@ -94,13 +95,17 @@ Function New-LMCachedAccount {
             Type     = "LMv1"
         }
     }
-    Try {
-        Set-Secret -Name $CachedAccountName -Secret $Secret -Vault Logic.Monitor -Metadata $Metadata -NoClobber:$(!$OverwriteExisting)
-        Write-Information "[INFO]: Successfully created cached account ($CachedAccountName) secret for portal: $AccountName"
-    }
-    Catch {
-        Write-Error $_.Exception.Message
+    $Message = "CachedAccountName: $CachedAccountName | Portal: $AccountName"
+
+    if ($PSCmdlet.ShouldProcess($Message, "Create Cached Account")) {
+        try {
+            Set-Secret -Name $CachedAccountName -Secret $Secret -Vault Logic.Monitor -Metadata $Metadata -NoClobber:$(!$OverwriteExisting)
+            Write-Information "[INFO]: Successfully created cached account ($CachedAccountName) secret for portal: $AccountName"
+        }
+        catch {
+            Write-Error $_.Exception.Message
+        }
     }
 
-    Return
+    return
 }

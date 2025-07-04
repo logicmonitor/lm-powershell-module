@@ -3,7 +3,7 @@
     This function formats a filter for Logic Monitor API calls.
 
 .DESCRIPTION
-    The Format-LMFilter-v1 function takes a hashtable of filter properties and an optional array of valid properties. 
+    The Format-LMFilter-v1 function takes a hashtable of filter properties and an optional array of valid properties.
     It checks if the supplied properties are valid, removes any invalid properties, and then formats the remaining properties into a filter string.
 
 .PARAMETER Filter
@@ -26,9 +26,9 @@
 .NOTES
     If a property in the Filter parameter is not in the PropList parameter, it is simply removed from the filter.
 #>
-Function Format-LMFilter-v1 {
+function Format-LMFilter-v1 {
     [CmdletBinding()]
-    Param (
+    param (
         [Hashtable]$Filter,
 
         [String[]]$PropList
@@ -38,9 +38,9 @@ Function Format-LMFilter-v1 {
     $FilterString = ""
 
     #Check if supplied properties are valid, if no prop list then just assume valid
-    If ($PropList) {
-        Foreach ($Key in $($Filter.keys)) {
-            If ($Key -notin $PropList) {
+    if ($PropList) {
+        foreach ($Key in $($Filter.keys)) {
+            if ($Key -notin $PropList) {
                 #Remove key since its not a valid filter property
                 $filter.remove($Key)
             }
@@ -48,10 +48,10 @@ Function Format-LMFilter-v1 {
     }
 
     #Create filter string from hash table and url encode
-    Foreach ($Key in $($Filter.keys)) {
+    foreach ($Key in $($Filter.keys)) {
         $FilterString += $Key + ":" + "`"$($Filter[$Key])`"" + ","
     }
     $FilterString = $FilterString.trimend(',')
 
-    Return $FilterString
+    return $FilterString
 }

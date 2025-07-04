@@ -40,19 +40,19 @@ Creates a new resource and sends metric data for the specified instances.
 This function requires a valid API authentication. Make sure you are logged in before running any commands using Connect-LMAccount.
 
 #>
-Function Send-LMPushMetric {
-    
+function Send-LMPushMetric {
+
     [CmdletBinding()]
-    Param (
+    param (
 
         [Parameter(ParameterSetName = 'Create-DatasourceId')]
         [Parameter(ParameterSetName = 'Create-DatasourceName')]
         [String]$NewResourceHostName,
-        
+
         [Parameter(ParameterSetName = 'Create-DatasourceId')]
         [Parameter(ParameterSetName = 'Create-DatasourceName')]
         [String]$NewResourceDescription,
-        
+
         [Parameter(Mandatory)]
         [Hashtable]$ResourceIds,
 
@@ -73,20 +73,20 @@ Function Send-LMPushMetric {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             $QueryParams = $null
-            If ($NewResourceHostName) {
+            if ($NewResourceHostName) {
                 $QueryParams = "?create=true"
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/metric/ingest"
 
 
-            Try {
+            try {
                 $Data = @{
                     resourceName          = $NewResourceHostName
                     resourceDescription   = $NewResourceDescription
@@ -108,24 +108,21 @@ Function Send-LMPushMetric {
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath + $QueryParams
-                
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                Return $Response
+                return $Response
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

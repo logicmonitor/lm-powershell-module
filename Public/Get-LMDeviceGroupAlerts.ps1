@@ -35,10 +35,10 @@ System.Int32. The device group ID can be piped to this function.
 Returns alert objects for the specified device group.
 #>
 
-Function Get-LMDeviceGroupAlerts {
+function Get-LMDeviceGroupAlert {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
@@ -50,74 +50,75 @@ Function Get-LMDeviceGroupAlerts {
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
-    #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
 
-        If ($Name) {
-            $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
-                return
-            }
-            $Id = $LookupResult
-        }
-        
-        #Build header and uri
-        $ResourcePath = "/device/groups/$Id/alerts"
+    begin {}
+    process {
+        #Check if we are logged in and have valid api creds
+        if ($Script:LMAuth.Valid) {
 
-        #Initalize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
-
-        #Loop through requests 
-        While (!$Done) {
-            #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
-
-            If ($Filter) {
-                #List of allowed filter props
-                $PropList = @()
-                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
-            }
-
-            Try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                    
-                
-                
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-
-                #Stop looping if single device, no need to continue
-                If (![bool]$Response.psobject.Properties["total"]) {
-                    $Done = $true
-                    Return $Response
+            if ($Name) {
+                $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                    return
                 }
-                #Check result size and if needed loop again
-                Else {
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                $Id = $LookupResult
+            }
+
+            #Build header and uri
+            $ResourcePath = "/device/groups/$Id/alerts"
+
+            #Initalize vars
+            $QueryParams = ""
+            $Count = 0
+            $Done = $false
+            $Results = @()
+
+            #Loop through requests
+            while (!$Done) {
+                #Build query params
+                $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
+
+                if ($Filter) {
+                    #List of allowed filter props
+                    $PropList = @()
+                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                }
+
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+
+
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+
+                    #Stop looping if single device, no need to continue
+                    if (![bool]$Response.psobject.Properties["total"]) {
                         $Done = $true
+                        return $Response
+                    }
+                    #Check result size and if needed loop again
+                    else {
+                        [Int]$Total = $Response.Total
+                        [Int]$Count += ($Response.Items | Measure-Object).Count
+                        $Results += $Response.Items
+                        if ($Count -ge $Total) {
+                            $Done = $true
+                        }
                     }
                 }
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                catch {
+                    return
                 }
             }
+            return $Results
         }
-        Return $Results
-    }
-    Else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+        else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+        }
     }
 }

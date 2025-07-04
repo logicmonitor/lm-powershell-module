@@ -27,10 +27,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns mapping details object.
 #>
-Function New-LMAccessGroupMapping {
+function New-LMAccessGroupMapping {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
 
         [Parameter(Mandatory)]
         [String[]]$AccessGroupIds,
@@ -44,58 +44,60 @@ Function New-LMAccessGroupMapping {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
-                    
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
+
             #Build header and uri
             $ResourcePath = "/setting/accessgroup/mapunmap/modules"
 
             $MappingDetailsArray = New-Object -TypeName System.Collections.ArrayList
 
             $MappingDetailsArray.Add([PSCustomObject]@{
-                moduletype      = $LogicModuleType
-                moduleid        = $LogicModuleId
-                accessgroups    = $AccessGroupIds
-            }) | Out-Null
+                    moduletype   = $LogicModuleType
+                    moduleid     = $LogicModuleId
+                    accessgroups = $AccessGroupIds
+                }) | Out-Null
 
-            Try {
-                $Data = [PSCustomObject]@{
-                    mappingDetails = $MappingDetailsArray
-                }
-
-                $Data = ($Data | ConvertTo-Json -Depth 10)
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                If($Response.failure) {
-                    Foreach($Failure in $Response.failure) {
-                        Write-Warning "$Failure"
-                }
+            $Data = [PSCustomObject]@{
+                mappingDetails = $MappingDetailsArray
             }
-                If($Response.success) {
-                    Foreach($Success in $Response.success) {
-                        Write-Information "[INFO]: Successfully mapped ($LogicModuleType/$LogicModuleId) to accessgroup(s): $($AccessGroupIds -join ',')"
+
+            $Data = ($Data | ConvertTo-Json -Depth 10)
+
+            $Message = "LogicModuleType: $LogicModuleType | LogicModuleId: $LogicModuleId"
+
+            if ($PSCmdlet.ShouldProcess($Message, "Create Access Group Mapping")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    if ($Response.failure) {
+                        foreach ($Failure in $Response.failure) {
+                            Write-Warning "$Failure"
+                        }
                     }
-                }
+                    if ($Response.success) {
+                        foreach ($Success in $Response.success) {
+                            Write-Information "[INFO]: Successfully mapped ($LogicModuleType/$LogicModuleId) to accessgroup(s): $($AccessGroupIds -join ',')"
+                        }
+                    }
 
-                Return $Response.mappingDetails
-            }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
+                    return $Response.mappingDetails
+                }
+                catch {
+                    return
                 }
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

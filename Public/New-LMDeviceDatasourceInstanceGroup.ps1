@@ -40,10 +40,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.DeviceDatasourceInstanceGroup object.
 #>
-Function New-LMDeviceDatasourceInstanceGroup {
+function New-LMDeviceDatasourceInstanceGroup {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         [String]$InstanceGroupName,
 
@@ -52,16 +52,16 @@ Function New-LMDeviceDatasourceInstanceGroup {
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [String]$DatasourceName,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [Int]$DatasourceId,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId')]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Alias('DeviceId')]
         [Int]$Id,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [Alias('DeviceName')]
@@ -69,66 +69,67 @@ Function New-LMDeviceDatasourceInstanceGroup {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Lookup Device Id
-        If ($Name) {
-            If ($Name -Match "\*") {
-                Write-Error "Wildcard values not supported for device names." 
+        if ($Name) {
+            if ($Name -match "\*") {
+                Write-Error "Wildcard values not supported for device names."
                 return
             }
             $Id = (Get-LMDeviceDataSourceList -Name $Name | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Error "Unable to find assocaited host device: $Name, please check spelling and try again." 
+            if (!$Id) {
+                Write-Error "Unable to find assocaited host device: $Name, please check spelling and try again."
                 return
             }
         }
 
         #Lookup DatasourceId
-        If ($DatasourceName -or $DatasourceId) {
-            If ($DatasourceName -Match "\*") {
-                Write-Error "Wildcard values not supported for datasource names." 
+        if ($DatasourceName -or $DatasourceId) {
+            if ($DatasourceName -match "\*") {
+                Write-Error "Wildcard values not supported for datasource names."
                 return
             }
             $HdsId = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId } | Select-Object -First 1).Id
-            If (!$HdsId) {
-                Write-Error "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device" 
+            if (!$HdsId) {
+                Write-Error "Unable to find assocaited host datasource: $DatasourceId$DatasourceName, please check spelling and try again. Datasource must have an applicable appliesTo associating the datasource to the device"
                 return
             }
         }
-        
+
         #Build header and uri
         $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/groups"
 
-        Try {
-            $Data = @{
-                name        = $InstanceGroupName
-                description = $Description
-            }
-
-            #Remove empty keys so we dont overwrite them
-            $Data = Format-LMData `
-                -Data $Data `
-                -UserSpecifiedKeys @()
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return $Response
+        $Data = @{
+            name        = $InstanceGroupName
+            description = $Description
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        #Remove empty keys so we dont overwrite them
+        $Data = Format-LMData `
+            -Data $Data `
+            -UserSpecifiedKeys @()
+
+        $Message = "InstanceGroupName: $InstanceGroupName | DeviceId: $Id"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Device Datasource Instance Group")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return $Response
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

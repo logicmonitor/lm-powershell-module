@@ -32,27 +32,32 @@ None. You cannot pipe objects to this command.
 Returns a hashtable containing the recipient configuration.
 #>
 
-Function New-LMRecipient {
+function New-LMRecipient {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param(
         [Parameter(Mandatory)]
-        [ValidateSet('ADMIN','GROUP','ARBITRARY')] 
+        [ValidateSet('ADMIN', 'GROUP', 'ARBITRARY')]
         [String]$Type,
-        
+
         [Parameter(Mandatory)] [string]$Addr,
 
         [String]$Method, # Only for ADMIN
 
         [String]$Contact # Optional, for future use
     )
-    $recipient = @{
-        type = $Type
-        addr = $Addr
+    $Message = "Type: $Type | Addr: $Addr"
+
+    if ($PSCmdlet.ShouldProcess($Message, "Create Recipient")) {
+        $recipient = @{
+            type = $Type
+            addr = $Addr
+        }
+        if ($Type -ne 'GROUP') {
+            $recipient.method = $Method
+        }
+        if ($Contact) {
+            $recipient.contact = $Contact
+        }
+        return [PSCustomObject]$recipient
     }
-    if ($Type -ne 'GROUP') {
-        $recipient.method = $Method
-    }
-    if ($Contact) {
-        $recipient.contact = $Contact
-    }
-    return [PSCustomObject]$recipient
 }

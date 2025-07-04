@@ -37,10 +37,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns an array of data points for the specified device instances.
 #>
-Function Get-LMDeviceInstanceData {
+function Get-LMDeviceInstanceData {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Datetime]$StartDate,
 
         [Datetime]$EndDate,
@@ -55,8 +55,8 @@ Function Get-LMDeviceInstanceData {
         [Double]$Period = 1 #Seems like the only value here is 1, so default to 1
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/device/instances/datafetch"
 
@@ -65,17 +65,17 @@ Function Get-LMDeviceInstanceData {
         $Results = @()
 
         #Convert to epoch, if not set use defaults
-        If (!$StartDate) {
+        if (!$StartDate) {
             [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddHours(-24)).ToUnixTimeSeconds()
         }
-        Else {
+        else {
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
         }
 
-        If (!$EndDate) {
+        if (!$EndDate) {
             [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
         }
-        Else {
+        else {
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
@@ -86,24 +86,24 @@ Function Get-LMDeviceInstanceData {
         $Data = @{
             "instanceIds" = $Ids -join ","
         } | ConvertTo-Json
-        
-        Try {
+
+        try {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+            $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
             $Results = $Response.Items
         }
-        Catch [Exception] {
-            Resolve-LMException -LMException $PSItem
+        catch {
+            return
         }
 
-        Return $Results
+        return $Results
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

@@ -31,10 +31,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.DatasourceGraph object.
 #>
-Function New-LMDatasourceOverviewGraph {
+function New-LMDatasourceOverviewGraph {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         $RawObject,
 
@@ -46,12 +46,12 @@ Function New-LMDatasourceOverviewGraph {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
-        If ($DataSourceName) {
+        if ($DataSourceName) {
             $LookupResult = (Get-LMDatasource -Name $DataSourceName).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DataSourceName) {
-                Return
+            if (Test-LookupResult -Result $LookupResult -LookupString $DataSourceName) {
+                return
             }
             $DatasourceId = $LookupResult
         }
@@ -59,27 +59,28 @@ Function New-LMDatasourceOverviewGraph {
         #Build header and uri
         $ResourcePath = "/setting/datasources/$DatasourceId/ographs"
 
-        Try {
-            $Data = ($RawObject | ConvertTo-Json)
+        $Data = ($RawObject | ConvertTo-Json)
 
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+        $Message = "DatasourceId: $DatasourceId"
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+        if ($PSCmdlet.ShouldProcess($Message, "Create Datasource Overview Graph")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-            Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DatasourceGraph" )
-        }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DatasourceGraph" )
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

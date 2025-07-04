@@ -21,17 +21,17 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns a success message if the import is successful.
 #>
-Function Import-LMExchangeModule {
+function Import-LMExchangeModule {
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [String]$LMExchangeId
     )
 
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Build header and uri
             $ResourcePath = "/exchange/integrations/import"
@@ -44,7 +44,7 @@ Function Import-LMExchangeModule {
 
             $Data = ($Data | ConvertTo-Json)
 
-            Try {
+            try {
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
@@ -52,21 +52,18 @@ Function Import-LMExchangeModule {
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data | Out-Null
 
-                Return "Successfully imported LM Exchange module id: $LMExchangeId"
+                return "Successfully imported LM Exchange module id: $LMExchangeId"
 
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

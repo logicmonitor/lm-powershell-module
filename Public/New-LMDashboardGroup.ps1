@@ -37,10 +37,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns the created dashboard group object.
 #>
-Function New-LMDashboardGroup {
+function New-LMDashboardGroup {
 
-    [CmdletBinding()]
-    Param (
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    param (
         [Parameter(Mandatory)]
         [String]$Name,
 
@@ -55,60 +55,61 @@ Function New-LMDashboardGroup {
         [String]$ParentGroupName
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Lookup ParentGroupName
-        If ($ParentGroupName) {
-            If ($ParentGroupName -Match "\*") {
+        if ($ParentGroupName) {
+            if ($ParentGroupName -match "\*") {
                 Write-Error "Wildcard values not supported for groups names."
                 return
             }
             $ParentGroupId = (Get-LMDashboardGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-            If (!$ParentGroupId) {
-                Write-Error "Unable to find dashboard group: $ParentGroupName, please check spelling and try again." 
+            if (!$ParentGroupId) {
+                Write-Error "Unable to find dashboard group: $ParentGroupName, please check spelling and try again."
                 return
             }
         }
 
         #Build custom props hashtable
         $WidgetTokensArray = @()
-        If ($WidgetTokens) {
-            Foreach ($Key in $WidgetTokens.Keys) {
+        if ($WidgetTokens) {
+            foreach ($Key in $WidgetTokens.Keys) {
                 $WidgetTokensArray += @{name = $Key; value = $WidgetTokens[$Key] }
             }
         }
-        
+
         #Build header and uri
         $ResourcePath = "/dashboard/groups"
 
-        Try {
-            $Data = @{
-                name         = $Name
-                description  = $Description
-                parentId     = $ParentGroupId
-                widgetTokens = $WidgetTokensArray
-            }
-
-            $Data = ($Data | ConvertTo-Json)
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            Return $Response
+        $Data = @{
+            name         = $Name
+            description  = $Description
+            parentId     = $ParentGroupId
+            widgetTokens = $WidgetTokensArray
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
+
+        $Data = ($Data | ConvertTo-Json)
+
+        $Message = "Name: $Name"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Dashboard Group")) {
+            try {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return $Response
+            }
+            catch {
+                return
             }
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

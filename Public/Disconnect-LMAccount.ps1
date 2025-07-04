@@ -20,16 +20,16 @@ None. This command does not generate any output.
 
 
 #>
-Function Disconnect-LMAccount {
+function Disconnect-LMAccount {
     #Clear credential object from environment
-    If ($Script:LMAuth) {
-        Write-Information "[INFO]: Successfully cleared login credentials for LM account." 
+    if ($Script:LMAuth) {
+        Write-Information "[INFO]: Successfully cleared login credentials for LM account."
         Remove-Variable -Name LMAuth -Scope Script -ErrorAction SilentlyContinue
         Remove-Variable -Name LMUserData -Scope Global -ErrorAction SilentlyContinue
         Remove-Variable -Name LMDeltaId -Scope Global -ErrorAction SilentlyContinue
     }
-    Else {
-        Write-Information "[INFO]: Not currently connected to any LM account." 
+    else {
+        Write-Information "[INFO]: Not currently connected to any LM account."
     }
 
     #Reset information preference

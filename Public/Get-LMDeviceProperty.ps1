@@ -41,10 +41,10 @@ None. You cannot pipe objects to this command.
 Returns device property objects.
 #>
 
-Function Get-LMDeviceProperty {
+function Get-LMDeviceProperty {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
@@ -62,33 +62,33 @@ Function Get-LMDeviceProperty {
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
-        If ($Name) {
+        if ($Name) {
             $LookupResult = (Get-LMDevice -Name $Name).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
             $Id = $LookupResult
         }
 
-        If ($DisplayName) {
-            If ($DisplayName -Match "\*") {
-                Write-Error "Wildcard values not supported for device name." 
+        if ($DisplayName) {
+            if ($DisplayName -match "\*") {
+                Write-Error "Wildcard values not supported for device name."
                 return
             }
             $Id = (Get-LMDevice -DisplayName $DisplayName | Select-Object -First 1 ).Id
-            If (!$Id) {
-                Write-Error "Unable to find device with name: $DisplayName, please check spelling and try again." 
+            if (!$Id) {
+                Write-Error "Unable to find device with name: $DisplayName, please check spelling and try again."
                 return
             }
         }
-        
+
         #Build header and uri
-        If ($PropertyName) {
+        if ($PropertyName) {
             $ResourcePath = "/device/devices/$Id/properties/$PropertyName"
         }
-        Else {
+        else {
             $ResourcePath = "/device/devices/$Id/properties"
         }
 
@@ -98,54 +98,51 @@ Function Get-LMDeviceProperty {
         $Done = $false
         $Results = @()
 
-        #Loop through requests 
-        While (!$Done) {
+        #Loop through requests
+        while (!$Done) {
             #Build query params
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
 
-            If ($Filter) {
+            if ($Filter) {
                 #List of allowed filter props
                 $PropList = @()
                 $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
                 $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
 
-            Try {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                    
-                
-                
+
+
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
-                If (![bool]$Response.psobject.Properties["total"]) {
+                if (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true
-                    Return $Response
+                    return $Response
                 }
                 #Check result size and if needed loop again
-                Else {
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    if ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Return $Results
+        return $Results
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

@@ -31,10 +31,10 @@ Sets the properties of the access group with name "Old Access Group". The new na
 .NOTES
 This function requires you to be logged in and have valid API credentials. Use the Connect-LMAccount function to log in before running this command.
 #>
-Function Set-LMAccessGroup {
+function Set-LMAccessGroup {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
 
         [Parameter(ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
@@ -50,36 +50,36 @@ Function Set-LMAccessGroup {
 
     )
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
             #Lookup Group Id
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMAccessGroup -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
 
-            If($PSItem){
+            if ($PSItem) {
                 $Message = "Id: $Id | Name: $($PSItem.name) | Description: $($PSItem.description)"
             }
-            ElseIf($Name){
+            elseif ($Name) {
                 $Message = "Id: $Id | Name: $Name)"
             }
-            Else{
+            else {
                 $Message = "Id: $Id"
             }
-                    
+
             #Build header and uri
             $ResourcePath = "/setting/accessgroup/$Id"
 
-            Try {
+            try {
                 $Data = @{
-                    description                         = $Description
-                    name                                = $NewName
-                    tenantId                            = $Tenant
+                    description = $Description
+                    name        = $NewName
+                    tenantId    = $Tenant
                 }
 
                 #Remove empty keys so we dont overwrite them
@@ -88,28 +88,25 @@ Function Set-LMAccessGroup {
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
                     -ConditionalKeep @{ 'name' = 'NewName' }
 
-                If ($PSCmdlet.ShouldProcess($Message, "Set AccessGroup")) {  
+                if ($PSCmdlet.ShouldProcess($Message, "Set AccessGroup")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AccessGroup" )
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.AccessGroup" )
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

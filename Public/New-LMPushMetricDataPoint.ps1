@@ -45,9 +45,9 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.DataPoint object.
 #>
-Function New-LMPushMetricDataPoint {
-    [CmdletBinding()]
-    Param (
+function New-LMPushMetricDataPoint {
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = "None")]
+    param (
         [System.Collections.Generic.List[object]]$DataPointsArray,
         [Parameter(Mandatory)]
         [System.Collections.Generic.List[object]]$DataPoints, # object with datapoint name and value
@@ -59,26 +59,30 @@ Function New-LMPushMetricDataPoint {
         [Int]$PercentileValue
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        If (!$DataPointsArray) {
+    if ($Script:LMAuth.Valid) {
+        if (!$DataPointsArray) {
             $DataPointsArray = [System.Collections.Generic.List[object]]::New()
         }
-        
-        #Add each datapoint to new datapoint array
-        Foreach ($Datapoint in $DataPoints) {
-            $DataPointsArray.Add([PSCustomObject]@{
-                    dataPointName            = $Datapoint.Name
-                    dataPointType            = $DataPointType
-                    dataPointDescription     = ($Datapoint.Description -replace '“|”', '')
-                    dataPointAggregationType = $DataPointAggregationType
-                    percentileValue          = $PercentileValue
-                    values                   = @{$((Get-Date -UFormat %s).Split(".")[0]) = $Datapoint.Value }
-                })
+
+        $Message = "DataPoints: $($DataPoints.Count) items"
+
+        if ($PSCmdlet.ShouldProcess($Message, "Create Push Metric Data Point")) {
+            #Add each datapoint to new datapoint array
+            foreach ($Datapoint in $DataPoints) {
+                $DataPointsArray.Add([PSCustomObject]@{
+                        dataPointName            = $Datapoint.Name
+                        dataPointType            = $DataPointType
+                        dataPointDescription     = ($Datapoint.Description -replace '"|"', '')
+                        dataPointAggregationType = $DataPointAggregationType
+                        percentileValue          = $PercentileValue
+                        values                   = @{$((Get-Date -UFormat %s).Split(".")[0]) = $Datapoint.Value }
+                    })
+            }
+
+            return $DataPointsArray
         }
-            
-        Return $DataPointsArray
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

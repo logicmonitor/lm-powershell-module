@@ -52,28 +52,28 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns formatted monitoring data with timestamps and values.
 #>
-Function Get-LMDeviceData {
+function Get-LMDeviceData {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'dsName-deviceId-instanceId')]
         [Parameter(Mandatory, ParameterSetName = 'dsName-deviceId-instanceName')]
         [Parameter(Mandatory, ParameterSetName = 'dsName-deviceName-instanceName')]
         [Parameter(Mandatory, ParameterSetName = 'dsName-deviceName-instanceId')]
         [String]$DatasourceName,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceId-instanceId')]
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceId-instanceName')]
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceName-instanceName')]
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceName-instanceId')]
         [Int]$DatasourceId,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'dsName-deviceId-instanceId')]
         [Parameter(Mandatory, ParameterSetName = 'dsName-deviceId-instanceName')]
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceId-instanceId')]
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceId-instanceName')]
         [Int]$DeviceId,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'dsName-deviceName-instanceName')]
         [Parameter(Mandatory, ParameterSetName = 'dsName-deviceName-instanceId')]
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceName-instanceName')]
@@ -85,7 +85,7 @@ Function Get-LMDeviceData {
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceId-instanceId')]
         [Parameter(Mandatory, ParameterSetName = 'dsId-deviceName-instanceId')]
         [Int]$InstanceId,
-    
+
         [Parameter(ParameterSetName = 'dsName-deviceId-instanceName')]
         [Parameter(ParameterSetName = 'dsName-deviceName-instanceName')]
         [Parameter(ParameterSetName = 'dsId-deviceName-instanceName')]
@@ -103,52 +103,58 @@ Function Get-LMDeviceData {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Convert to epoch, if not set use defaults
-        If ($StartDate) { #If start date is provided, convert to epoch
+        if ($StartDate) {
+            #If start date is provided, convert to epoch
             [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
-        } Else { #If no start date is provided, use 7 days ago
+        }
+        else {
+            #If no start date is provided, use 7 days ago
             [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddDays(-7)).ToUnixTimeSeconds()
         }
 
-        If ($EndDate) { #If end date is provided, convert to epoch
+        if ($EndDate) {
+            #If end date is provided, convert to epoch
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
-        } Else { #If no end date is provided, use current date
+        }
+        else {
+            #If no end date is provided, use current date
             [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
         }
 
 
         #Lookup Device Id
-        If ($DeviceName) {
+        if ($DeviceName) {
             $LookupResult = (Get-LMDevice -Name $DeviceName).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $DeviceName) {
                 return
             }
             $DeviceId = $LookupResult
         }
 
         #Lookup DatasourceId
-        If ($DatasourceName -or $DatasourceId) {
+        if ($DatasourceName -or $DatasourceId) {
             $LookupResult = (Get-LMDeviceDataSourceList -Id $DeviceId | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                 return
             }
             $HdsId = $LookupResult
         }
 
         #Lookup InstanceId
-        If ($InstanceName) {
+        if ($InstanceName) {
             #Replace brakets in instance name
             $InstanceName = $InstanceName -replace "[\[\]]", "?"
 
             $LookupResult = (Get-LMDeviceDatasourceInstance -DeviceId $DeviceId -DatasourceId $DatasourceId | Where-Object { $_.displayName -eq $InstanceName -or $_.name -like "*$InstanceName" -or $_.name -eq "$InstanceName" }).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $InstanceName) {
                 return
             }
             $InstanceId = $LookupResult
         }
-        
+
         #Build header and uri
         $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId/data"
 
@@ -158,12 +164,12 @@ Function Get-LMDeviceData {
         $Done = $false
         $Results = @()
 
-        #Loop through requests 
-        While (!$Done) {
+        #Loop through requests
+        while (!$Done) {
             #Build query params
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
-            
-            If ($Filter) {
+
+            if ($Filter) {
                 #List of allowed filter props
                 $PropList = @()
                 $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
@@ -171,44 +177,41 @@ Function Get-LMDeviceData {
             }
 
             #Add time range filter if provided data ranges
-            If ($StartDate -and $EndDate) {
+            if ($StartDate -and $EndDate) {
                 $QueryParams = $QueryParams + "&start=$StartDate&end=$EndDate"
             }
-            
-            Try {
+
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-                    
-                
-                
+
+
+
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #Stop looping if single device, no need to continue
-                If (![bool]$Response.psobject.Properties["total"]) {
+                if (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true
                 }
                 #Check result size and if needed loop again
-                Else {
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) {
+                    if ($Count -ge $Total) {
                         $Done = $true
                     }
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
         #Convert results into readable format for consumption
-        If ($Response) {
+        if ($Response) {
             $DatapointResults = @($null) * ($Response.values | Measure-Object).Count
             for ($v = 0 ; $v -lt ($Response.values | Measure-Object).Count ; $v++) {
                 $DatapointResults[$v] = [PSCustomObject]@{}
@@ -221,14 +224,14 @@ Function Get-LMDeviceData {
                     $DatapointResults[$v] | Add-Member -MemberType NoteProperty -Name $Response.dataPoints[$dp] -Value $Response.values[$v][$dp]
                 }
             }
-            Return $DatapointResults
+            return $DatapointResults
         }
-        Else {
-            Return
+        else {
+            return
         }
 
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

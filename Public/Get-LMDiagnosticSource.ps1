@@ -37,9 +37,9 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.DiagnosticSource objects.
 #>
-Function Get-LMDiagnosticSource {
+function Get-LMDiagnosticSource {
     [CmdletBinding(DefaultParameterSetName = 'All')]
-    Param (
+    param (
         [Parameter(ParameterSetName = 'Id')]
         [Int]$Id,
 
@@ -56,7 +56,7 @@ Function Get-LMDiagnosticSource {
         [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         $ResourcePath = "/setting/diagnosticssources"
 
@@ -65,8 +65,8 @@ Function Get-LMDiagnosticSource {
         $Done = $false
         $Results = @()
 
-        While (!$Done) {
-            Switch ($PSCmdlet.ParameterSetName) {
+        while (!$Done) {
+            switch ($PSCmdlet.ParameterSetName) {
                 "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
                 "Id" { $resourcePath += "/$Id" }
                 "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
@@ -78,30 +78,32 @@ Function Get-LMDiagnosticSource {
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
             }
-            Try {
+            try {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
 
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
-                $Response = Invoke-RestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-                
-                If ($PSCmdlet.ParameterSetName -eq "Id") {
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+
+                if ($PSCmdlet.ParameterSetName -eq "Id") {
                     $Done = $true
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DiagnosticSource")
-                } Else {
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DiagnosticSource")
+                }
+                else {
                     [Int]$Total = $Response.Total
                     [Int]$Count += ($Response.Items | Measure-Object).Count
                     $Results += $Response.Items
-                    If ($Count -ge $Total) { $Done = $true }
+                    if ($Count -ge $Total) { $Done = $true }
                 }
-            } Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) { Return }
+            }
+            catch {
+                return
             }
         }
-        Return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DiagnosticSource")
-    } Else {
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DiagnosticSource")
+    }
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
-} 
+}

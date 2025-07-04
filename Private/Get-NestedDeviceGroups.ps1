@@ -20,29 +20,29 @@
     Retrieves all nested device groups for "Group1" and includes "Group3" in the list of previously processed group IDs.
 
 #>
-Function Get-NestedDeviceGroups {
-    Param (
+function Get-NestedDeviceGroup {
+    param (
         [String[]]$Ids,
         [String[]]$PreviousIds = @()
     )
     ##Write-Host "Function Called with Ids: $Ids"
     $AdditionalIds = @()
-    Foreach ($Id in $Ids) {
+    foreach ($Id in $Ids) {
         ##Write-Host "Processing Id: ($Id)"
         $temp = @()
         $temp += (Get-LMDeviceGroupGroups -Id $Id).Id
-        If ($temp) {
+        if ($temp) {
             $AdditionalIds += $temp
         }
     }
     ##Write-Host "Function End with Ids: $AdditionalIds"
     ##Write-Host "Function Previous Called Ids: $PreviousIds"
-    If ($AdditionalIds) {
+    if ($AdditionalIds) {
         #PreviousIds and CurrentIds get combined and AdditionalIds get passed forward
         Get-NestedDeviceGroups -Ids $AdditionalIds -PreviousIds $($Ids + $PreviousIds)
     }
-    Else {
+    else {
         ##Write-Host "Return Value: "
-        Return $($PreviousIds + $Ids)
+        return $($PreviousIds + $Ids)
     }
 }

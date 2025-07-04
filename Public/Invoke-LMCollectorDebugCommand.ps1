@@ -46,9 +46,9 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns command execution results if IncludeResult is specified.
 #>
-Function Invoke-LMCollectorDebugCommand {
+function Invoke-LMCollectorDebugCommand {
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id-Debug')]
         [Parameter(Mandatory, ParameterSetName = 'Id-Posh')]
         [Parameter(Mandatory, ParameterSetName = 'Id-Groovy')]
@@ -79,13 +79,13 @@ Function Invoke-LMCollectorDebugCommand {
     )
 
     #Check if we are logged in and have valid api creds
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
 
             #Cannot indent or it breaks here-string format
             $DefaultGroovy = @"
-!groovy 
+!groovy
 import com.santaba.agent.collector3.CollectorDb;
 def hostProps = [:];
 def instanceProps = [:];
@@ -102,20 +102,20 @@ $GroovyCommand
 
             #Cannot indent or it breaks here-string format
             $DefaultPosh = @"
-!posh 
+!posh
 
 $PoshCommand
 "@
 
             #Lookup device name
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMCollector -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
-            
+
             #Build header and uri
             $ResourcePath = "/debug"
 
@@ -123,7 +123,7 @@ $PoshCommand
             $QueryParams = "?collectorId=$Id"
 
             #Construct Body
-            Switch -Wildcard ($PSCmdlet.ParameterSetName) {
+            switch -Wildcard ($PSCmdlet.ParameterSetName) {
                 "*Debug" { $Data = @{ cmdline = $DebugCommand } }
                 "*Posh" { $Data = @{ cmdline = $DefaultPosh } }
                 "*Groovy" { $Data = @{ cmdline = $DefaultGroovy } }
@@ -131,7 +131,7 @@ $PoshCommand
 
             $Data = ($Data | ConvertTo-Json)
 
-            Try {
+            try {
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
@@ -139,41 +139,38 @@ $PoshCommand
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                 #Issue request
-                $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                If ($IncludeResult) {
+                $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                if ($IncludeResult) {
                     $CommandCompleted = $false
-                    While (!$CommandCompleted) {
+                    while (!$CommandCompleted) {
                         $CommandResult = Get-LMCollectorDebugResult -SessionId $Response.sessionId -Id $Id
-                        If ($CommandResult.errorMessage -eq "Agent has fetched the task, waiting for response") {
-                            Write-Information "[INFO]: Agent has fetched the task, waiting for response..." 
+                        if ($CommandResult.errorMessage -eq "Agent has fetched the task, waiting for response") {
+                            Write-Information "[INFO]: Agent has fetched the task, waiting for response..."
                             Start-Sleep -Seconds 5
                         }
-                        Else {
+                        else {
                             $CommandCompleted = $false
-                            Return $CommandResult
+                            return $CommandResult
                         }
                     }
                 }
-                Else {
+                else {
                     $Result = [PSCustomObject]@{
                         SessionId   = $Response.sessionId
                         CollectorId = $Id
                         Message     = "Submitted debug command task under session id $($Response.sessionId) for collector id: $($Id). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult"
                     }
-                    Return $Result
+                    return $Result
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
-            Return
+            return
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

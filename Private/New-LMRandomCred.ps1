@@ -17,10 +17,12 @@ System.String
 A randomly generated password.
 
 #>
-Function New-LMRandomCred {
+function New-LMRandomCred {
 
     [CmdletBinding()]
-    Param (
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Not needed for this function')]
+
+    param (
         [Int]$Length = 25
     )
 
@@ -30,17 +32,17 @@ Function New-LMRandomCred {
     #Generate random bytes
     $Random = New-Object System.Security.Cryptography.RNGCryptoServiceProvider
     $Bytes = New-Object Byte[]($Length)
-  
+
     #Generate character set
     $Random.GetBytes($Bytes)
     $Result = New-Object Char[]($Length)
-  
+
     #Construct randomized password
-    For ($i = 0 ; $i -lt $Length ; $i++) {
+    for ($i = 0 ; $i -lt $Length ; $i++) {
         $Result[$i] = $SymbolSet[$Bytes[$i] % $SymbolSet.Length]
     }
- 
+
     #Return result
-    Return -Join $Result
+    return -join $Result
 
 }

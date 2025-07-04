@@ -41,10 +41,10 @@ Copies the dashboard named "Old Dashboard" to a new dashboard named "New Dashboa
 .NOTES
 Ensure that you are logged in before running any commands by using the Connect-LMAccount cmdlet.
 #>
-Function Copy-LMDashboard {
+function Copy-LMDashboard {
 
     [CmdletBinding()]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [String]$Name,
 
@@ -69,25 +69,25 @@ Function Copy-LMDashboard {
         [String]$ParentGroupName
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid) {
 
         #Lookup ParentGroupName
-        If ($ParentGroupName) {
-            If ($ParentGroupName -Match "\*") {
+        if ($ParentGroupName) {
+            if ($ParentGroupName -match "\*") {
                 Write-Error "Wildcard values not supported for groups names."
                 return
             }
             $ParentGroupId = (Get-LMDashboardGroup -Name $ParentGroupName | Select-Object -First 1 ).Id
-            If (!$ParentGroupId) {
-                Write-Error "Unable to find dashboard group: $ParentGroupName, please check spelling and try again." 
+            if (!$ParentGroupId) {
+                Write-Error "Unable to find dashboard group: $ParentGroupName, please check spelling and try again."
                 return
             }
         }
 
         #Lookup Dashboard Id
-        If ($DashboardName) {
+        if ($DashboardName) {
             $LookupResult = (Get-LMDashboard -Name $DashboardName).Id
-            If (Test-LookupResult -Result $LookupResult -LookupString $DashboardName) {
+            if (Test-LookupResult -Result $LookupResult -LookupString $DashboardName) {
                 return
             }
             $DashboardId = $LookupResult
@@ -97,15 +97,15 @@ Function Copy-LMDashboard {
         $SourceDashboard = Get-LMDashboard -Id $DashboardId
 
         #Replace tokens
-        If ($DashboardTokens) {
+        if ($DashboardTokens) {
             $WidgetTokens = New-Object -TypeName System.Collections.ArrayList
-            
+
             #Build widget tokens
             $DashboardTokens.GetEnumerator() | ForEach-Object {
                 $WidgetTokens.Add( [PSCustomObject]@{
-                        type = "owned"
-                        name  = $_.Key
-                        value = $_.Value
+                        type        = "owned"
+                        name        = $_.Key
+                        value       = $_.Value
                         inheritList = @()
                     }
                 ) | Out-Null
@@ -113,41 +113,38 @@ Function Copy-LMDashboard {
             #Replace widget tokens
             $SourceDashboard.widgetTokens = $WidgetTokens
         }
-        
+
         #Build header and uri
         $ResourcePath = "/dashboard/dashboards/$DashboardId/clone"
 
-        Try {
-            $Data = @{
-                name          = $Name
-                description   = $Description
-                groupId       = $ParentGroupId
-                widgetTokens  = $SourceDashboard.widgetTokens
-                widgetsConfig = $SourceDashboard.widgetsConfig
-                widgetsOrder  = $SourceDashboard.widgetsOrder
-                sharable      = $SourceDashboard.sharable
-            }
+        $Data = @{
+            name          = $Name
+            description   = $Description
+            groupId       = $ParentGroupId
+            widgetTokens  = $SourceDashboard.widgetTokens
+            widgetsConfig = $SourceDashboard.widgetsConfig
+            widgetsOrder  = $SourceDashboard.widgetsOrder
+            sharable      = $SourceDashboard.sharable
+        }
 
-            $Data = ($Data | ConvertTo-Json -Depth 10)
+        $Data = ($Data | ConvertTo-Json -Depth 10)
 
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+        try {
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+            $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-            Return $Response
+            return $Response
         }
-        Catch [Exception] {
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+        catch {
+            return
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

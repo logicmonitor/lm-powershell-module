@@ -61,12 +61,12 @@ Returns a LogicMonitor.DeviceDatasourceInstance object containing the updated in
 This function requires a valid LogicMonitor API authentication.
 #>
 
-Function Set-LMDeviceDatasourceInstance {
+function Set-LMDeviceDatasourceInstance {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [String]$DisplayName,
-        
+
         [String]$WildValue,
 
         [String]$WildValue2,
@@ -83,23 +83,23 @@ Function Set-LMDeviceDatasourceInstance {
         [Nullable[boolean]]$DisableAlerting,
 
         [String]$InstanceGroupId,
-        
+
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
         [String]$InstanceId,
 
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [String]$DatasourceName,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [String]$DatasourceId,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Id-dsId', ValueFromPipelineByPropertyName)]
         [Parameter(Mandatory, ParameterSetName = 'Id-dsName')]
         [Alias('DeviceId')]
         [String]$Id,
-    
+
         [Parameter(Mandatory, ParameterSetName = 'Name-dsName')]
         [Parameter(Mandatory, ParameterSetName = 'Name-dsId')]
         [Alias('DeviceName')]
@@ -107,24 +107,24 @@ Function Set-LMDeviceDatasourceInstance {
 
     )
 
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Device Id
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMDevice -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
 
             #Lookup DatasourceId
-            If ($DatasourceName -or $DatasourceId) {
+            if ($DatasourceName -or $DatasourceId) {
                 $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
                     return
                 }
                 $HdsId = $LookupResult
@@ -132,64 +132,64 @@ Function Set-LMDeviceDatasourceInstance {
 
             #Build custom props hashtable
             $customProperties = @()
-            If ($Properties) {
-                Foreach ($Key in $Properties.Keys) {
+            if ($Properties) {
+                foreach ($Key in $Properties.Keys) {
                     $customProperties += @{name = $Key; value = $Properties[$Key] }
                 }
             }
-            
+
             #Build header and uri
             $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$instanceId"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "deviceDisplayName: $($PSItem.deviceDisplayName) | instanceId: $($PSItem.id) | instanceName: $($PSItem.name)"
             }
-            Elseif ($Name) {
+            elseif ($Name) {
                 $Message = "deviceDisplayName: $Name | instanceId: $InstanceId"
             }
-            Else {
+            else {
                 $Message = "instanceId: $InstanceId | Id: $Id"
             }
 
             $Data = @{
-                    displayName      = $DisplayName
-                    description      = $Description
-                    wildValue        = $WildValue
-                    wildValue2       = $WildValue2
-                    stopMonitoring   = $StopMonitoring
-                    disableAlerting  = $DisableAlerting
-                    customProperties = $customProperties
-                    groupId          = $InstanceGroupId
+                displayName      = $DisplayName
+                description      = $Description
+                wildValue        = $WildValue
+                wildValue2       = $WildValue2
+                stopMonitoring   = $StopMonitoring
+                disableAlerting  = $DisableAlerting
+                customProperties = $customProperties
+                groupId          = $InstanceGroupId
+            }
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
+                -Context @{ PropertiesMethod = $PropertiesMethod }
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set Device Datasource Instance")) {
+                try {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                    #Issue request using new centralized method with retry logic
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
                 }
+                catch {
 
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-                    -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
-                    -Context @{ PropertiesMethod = $PropertiesMethod }
-
-                If ($PSCmdlet.ShouldProcess($Message, "Set Device Datasource Instance")) { 
-                    Try {
-                        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
-                        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-                        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                        #Issue request using new centralized method with retry logic
-                        $Response = Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                        Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
-                    }
-                    Catch {
-                        # Error is already displayed by Resolve-LMException, just return cleanly
-                        return
-                    }
+                    return
                 }
             }
-        Else {
+        }
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

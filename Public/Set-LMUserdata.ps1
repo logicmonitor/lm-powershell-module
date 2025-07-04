@@ -32,9 +32,9 @@ Returns the response from the LogicMonitor API.
 This function requires a valid API authentication. Make sure you are logged in before running any commands using Connect-LMAccount.
 
 #>
-Function Set-LMUserdata {
+function Set-LMUserdatum {
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
 
@@ -45,81 +45,78 @@ Function Set-LMUserdata {
         [String]$DashboardId
     )
 
-    Begin {}
-    Process {
+    begin {}
+    process {
         #Check if we are logged in and have valid api creds
-        If ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid) {
 
             #Lookup Id if supplying AdminName
-            If ($Name) {
+            if ($Name) {
                 $LookupResult = (Get-LMUser -Name $Name).Id
-                If (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                     return
                 }
                 $Id = $LookupResult
             }
 
             #Get Dashboard JSON response
-            If ($DashboardId) {
+            if ($DashboardId) {
                 $Dashboard = Get-LMDashboard -Id $DashboardId
-                If (Test-LookupResult -Result $Dashboard -LookupString $DashboardId) {
+                if (Test-LookupResult -Result $Dashboard -LookupString $DashboardId) {
                     return
                 }
                 $Value = $Dashboard | ConvertTo-Json
             }
-            
+
             #Build header and uri
             $ResourcePath = "/setting/userdata/$Id.user.default.dashboard"
 
-            If ($PSItem) {
+            if ($PSItem) {
                 $Message = "Id: $Id | AccessId: $($PSItem.accessId)| AdminName:$($PSItem.adminName)"
             }
-            Else {
+            else {
                 $Message = "Id: $Id"
             }
 
-            Try {
+            try {
                 $Data = @{
                     id    = "$Id.user.default.dashboard"
                     value = $Value
                 }
 
-                If ($Status) {
-                    $Data.status = $(If ($Status -eq "active") { 2 }Else { 1 })
+                if ($Status) {
+                    $Data.status = $(if ($Status -eq "active") { 2 }else { 1 })
                 }
-                
+
                 #Remove empty keys so we dont overwrite them
                 $Data = Format-LMData `
                     -Data $Data `
                     -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
-                
-                If ($PSCmdlet.ShouldProcess($Message, "Set API Token")) {  
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data 
+
+                if ($PSCmdlet.ShouldProcess($Message, "Set API Token")) {
+                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    Invoke-LMRestMethod -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data | Out-Null
 
                     $Result = [PSCustomObject]@{
                         Id      = $Id
                         Message = "Successfully updated userdata for default dashboard to id: ($DashboardId)"
                     }
 
-                    Return $Result
+                    return $Result
                 }
             }
-            Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) {
-                    Return
-                }
+            catch {
+                return
             }
         }
-        Else {
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
+    end {}
 }

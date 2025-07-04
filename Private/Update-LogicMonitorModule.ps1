@@ -31,55 +31,58 @@
 
 #>
 
-Function Update-LogicMonitorModule {
-    Param (
+function Update-LogicMonitorModule {
+    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Not needed for this function')]
+
+    param (
         [String[]]$Modules = @('Logic.Monitor', 'Logic.Monitor.SE'),
         [Boolean]$UninstallFirst = $False,
         [Switch]$CheckOnly
     )
 
-    Foreach ($Module in $Modules) {
+    foreach ($Module in $Modules) {
         # Read the currently installed version
         $Installed = Get-Module -ListAvailable -Name $Module
-    
+
         # There might be multiple versions
-        If ($Installed -is [Array]) {
+        if ($Installed -is [Array]) {
             $InstalledVersion = $Installed[0].Version
         }
-        Elseif ($Installed.Version) {
+        elseif ($Installed.Version) {
             $InstalledVersion = $Installed.Version
         }
-        Else {
+        else {
             #Not installed or manually imported
             return
         }
-        
+
         # Lookup the latest version Online
         $Online = Find-Module -Name $Module -Repository PSGallery -ErrorAction Stop
-        $OnlineVersion = $Online.Version  
-    
+        $OnlineVersion = $Online.Version
+
         # Compare the versions
-        If ([System.Version]$OnlineVersion -gt [System.Version]$InstalledVersion) {
-            
+        if ([System.Version]$OnlineVersion -gt [System.Version]$InstalledVersion) {
+
             # Uninstall the old version
-            If ($CheckOnly) {
+            if ($CheckOnly) {
                 Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, please consider upgrading to the latest version ($OnlineVersion) as soon as possible. Use the -AutoUpdateModule switch next time you connect to auto upgrade to the latest version."
             }
-            Elseif ($UninstallFirst -eq $true) {
+            elseif ($UninstallFirst -eq $true) {
                 Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, uninstalling prior Module $Module version $InstalledVersion"
                 Uninstall-Module -Name $Module -Force -Verbose:$False
-    
+
                 Write-Information "[INFO]: Installing newer Module $Module version $OnlineVersion."
                 Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion
                 Update-LogicMonitorModule -CheckOnly -Modules @($Module)
             }
-            Else {
+            else {
                 Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module. Installing newer Module $Module version $OnlineVersion."
                 Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion
                 Update-LogicMonitorModule -CheckOnly -Modules @($Module)
             }
-        } 
-        Else {
+        }
+        else {
             Write-Information "[INFO]: Module $Module version $InstalledVersion is the latest version."
         }
     }

@@ -17,12 +17,12 @@
     Returns a string containing the appropriate portal URI suffix.
 #>
 
-Function Get-LMPortalURI {
+function Get-LMPortalURI {
     #Check LMAuth for GovCloud
-    If ($Script:LMAuth.GovCloud) {
-        Return "lmgov.us/santaba/rest"
+    if ($Script:LMAuth.GovCloud) {
+        return "lmgov.us/santaba/rest"
     }
-    Else {
-        Return "logicmonitor.com/santaba/rest"
+    else {
+        return "logicmonitor.com/santaba/rest"
     }
 }

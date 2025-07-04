@@ -26,37 +26,38 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.DiagnosticSource object.
 #>
-Function New-LMDiagnosticSource {
+function New-LMDiagnosticSource {
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
-    Param (
+    param (
         [Parameter(Mandatory)]
         [PSCustomObject]$DiagnosticSource
     )
-    Begin {}
-    Process {
-        If ($Script:LMAuth.Valid) {
+    begin {}
+    process {
+        if ($Script:LMAuth.Valid) {
             $ResourcePath = "/setting/diagnosticssources"
             $Message = "DiagnosticSource Name: $($DiagnosticSource.name)"
-            Try {
-                $Data = $DiagnosticSource
-                $Data = ($Data | ConvertTo-Json -Depth 10)
-                If ($PSCmdlet.ShouldProcess($Message, "New DiagnosticSource")) {
+            $Data = $DiagnosticSource
+            $Data = ($Data | ConvertTo-Json -Depth 10)
+            try {
+                if ($PSCmdlet.ShouldProcess($Message, "New DiagnosticSource")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
 
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-                    $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                    
-                    Return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DiagnosticSource")
+                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DiagnosticSource")
                 }
-            } Catch [Exception] {
-                $Proceed = Resolve-LMException -LMException $PSItem
-                If (!$Proceed) { Return }
             }
-        } Else {
+            catch {
+                return
+            }
+        }
+        else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
     }
-    End {}
-} 
+    end {}
+}

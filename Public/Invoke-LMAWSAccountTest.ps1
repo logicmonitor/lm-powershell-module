@@ -33,9 +33,10 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns test results for each AWS service.
 #>
-Function Invoke-LMAWSAccountTest {
+function Invoke-LMAWSAccountTest {
     [CmdletBinding()]
-    Param (
+
+    param (
         [Parameter(Mandatory)]
         [String]$ExternalId,
 
@@ -51,54 +52,52 @@ Function Invoke-LMAWSAccountTest {
 
     )
     #Check if we are logged in and have valid api creds
-    If ($Script:LMAuth.Valid) {
-        
+    if ($Script:LMAuth.Valid) {
+
         #Build header and uri
         $ResourcePath = "/aws/functions/testAccount"
 
-        Try {
-            $Data = @{
-                externalId      = $ExternalId
-                accountId       = $AccountId
-                assumedRoleArn  = $AssumedRoleARN
-                checkedServices = $CheckedServices
-                groupId         = $GroupId
-            }
+        $Data = @{
+            externalId      = $ExternalId
+            accountId       = $AccountId
+            assumedRoleArn  = $AssumedRoleARN
+            checkedServices = $CheckedServices
+            groupId         = $GroupId
+        }
 
-            #Remove empty keys so we dont overwrite them
-            $Data = Format-LMData `
-                -Data $Data `
-                -UserSpecifiedKeys @()
+        #Remove empty keys so we dont overwrite them
+        $Data = Format-LMData `
+            -Data $Data `
+            -UserSpecifiedKeys @()
 
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data 
+        try {
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
             #Issue request
-            $Response = Invoke-RestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-            Write-Information "All services have been tested successfully" 
-            Return
+            Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data | Out-Null
+            Write-Information "All services have been tested successfully"
+            return
         }
-        Catch [Exception] {
+        catch {
             #Handle LMCloud test account permission errors
-            If ($PSItem.Exception.Response.StatusCode.value__ -eq 400 -and $PSItem.Exception.Response.RequestMessage.RequestUri.AbsolutePath -like "*/testAccount") {
+            if ($PSItem.Exception.Response.StatusCode.value__ -eq 400 -and $PSItem.Exception.Response.RequestMessage.RequestUri.AbsolutePath -like "*/testAccount") {
                 $Result = @()
                 ($PSItem.ErrorDetails.Message | ConvertFrom-Json).errorDetail.noPermissionServices | ForEach-Object {
                     $Result += [PSCustomObject]@{
-                        Service = $PSItem
+                        Service    = $PSItem
                         TestResult = "You do not have permission to access the service"
                     }
                 }
                 return $Result
             }
-            $Proceed = Resolve-LMException -LMException $PSItem
-            If (!$Proceed) {
-                Return
-            }
+
+            return
         }
     }
-    Else {
+    else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }
