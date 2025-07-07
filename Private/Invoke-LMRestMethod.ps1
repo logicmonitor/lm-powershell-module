@@ -139,6 +139,21 @@ function Invoke-LMRestMethod {
             }
             $errorResult = Resolve-LMException @resolveParams
 
+            # Special handling for 404 errors on GET operations
+            if ($errorResult.ErrorType -eq 'NotFound' -and $Method -eq 'GET') {
+                # For GET operations, 404 might be expected behavior
+                $errorActionPreference = if ($CallerPSCmdlet) { 
+                    $CallerPSCmdlet.SessionState.PSVariable.GetValue('ErrorActionPreference') 
+                } else { 
+                    $ErrorActionPreference 
+                }
+                
+                if ($errorActionPreference -eq 'SilentlyContinue') {
+                    # Return null silently for GET + 404 + SilentlyContinue
+                    return $null
+                }
+            }
+
             # Check if we should retry
             $shouldRetry = $errorResult.ShouldRetry -and -not $NoRetry -and $retryCount -lt $MaxRetries
 
@@ -189,7 +204,7 @@ function Invoke-LMRestMethod {
                     else {
                         Write-Error -ErrorRecord $errorRecord
                     }
-                    return
+                    return $null
                 }
                 elseif ($NoRetry) {
                     if ($EnableDebugLogging) {
@@ -211,7 +226,7 @@ function Invoke-LMRestMethod {
                     else {
                         Write-Error -ErrorRecord $errorRecord
                     }
-                    return
+                    return $null
                 }
                 else {
                     # Non-retryable error
@@ -221,6 +236,7 @@ function Invoke-LMRestMethod {
                     $errorCategory = switch ($errorResult.ErrorType) {
                         'AuthenticationError' { [System.Management.Automation.ErrorCategory]::AuthenticationError }
                         'AuthorizationError' { [System.Management.Automation.ErrorCategory]::PermissionDenied }
+                        'NotFound' { [System.Management.Automation.ErrorCategory]::ObjectNotFound }
                         'ClientError' { [System.Management.Automation.ErrorCategory]::InvalidArgument }
                         'ServerError' { [System.Management.Automation.ErrorCategory]::ResourceUnavailable }
                         default { [System.Management.Automation.ErrorCategory]::InvalidOperation }
@@ -242,7 +258,7 @@ function Invoke-LMRestMethod {
                     else {
                         Write-Error -ErrorRecord $errorRecord
                     }
-                    return
+                    return $null
                 }
             }
         }

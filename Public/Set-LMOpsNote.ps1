@@ -130,8 +130,8 @@ function Set-LMOpsNote {
 
                 $Data = Format-LMData `
                     -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
-                -AlwaysKeepKeys @($(if ($ClearTags) { 'tags' } else { @() }))
+                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                    -AlwaysKeepKeys @($(if ($ClearTags) { 'tags' } else { @() }))
 
                 if ($PSCmdlet.ShouldProcess($Message, "Set Ops Note")) {
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data

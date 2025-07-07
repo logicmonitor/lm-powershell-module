@@ -171,8 +171,21 @@ function Resolve-LMException {
             return $result
         }
 
-        { $_ -in @(400, 404, 405, 409, 422) } {
-            # Bad Request, Not Found, Method Not Allowed, Conflict, Unprocessable Entity
+        404 {
+            # Not Found - for GET operations, this might be expected behavior
+            $result.ShouldRetry = $false
+            $result.ErrorType = 'NotFound'
+
+            # Try to get specific error message from response
+            $errorMessage = Get-LMExceptionMessage -LMException $LMException
+            $result.Message = if ($errorMessage) { $errorMessage } else { "Resource not found (HTTP 404)" }
+
+            # Error writing is now handled in Invoke-LMRestMethod
+            return $result
+        }
+
+        { $_ -in @(400, 405, 409, 422) } {
+            # Bad Request, Method Not Allowed, Conflict, Unprocessable Entity
             $result.ShouldRetry = $false
             $result.ErrorType = 'ClientError'
 
