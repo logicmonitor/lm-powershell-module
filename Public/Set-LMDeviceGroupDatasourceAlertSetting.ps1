@@ -139,43 +139,40 @@ function Set-LMDeviceGroupDatasourceAlertSetting {
                 $Message = "Id: $Id | DatasourceId: $DatasourceId | DatapointName: $DatapointName"
             }
 
-            try {
-                $dpConfig = @{
-                    disableAlerting              = $DisableAlerting
-                    dataPointId                  = $DatapointId
-                    dataPointName                = $DatapointName
-                    alertExprNote                = $AlertExpressionNote
-                    alertExpr                    = $AlertExpression
-                    alertClearTransitionInterval = $AlertClearTransitionInterval
-                    alertTransitionInterval      = $AlertTransitionInterval
-                    alertForNoData               = $AlertForNoData
+            
+            $dpConfig = @{
+                disableAlerting              = $DisableAlerting
+                dataPointId                  = $DatapointId
+                dataPointName                = $DatapointName
+                alertExprNote                = $AlertExpressionNote
+                alertExpr                    = $AlertExpression
+                alertClearTransitionInterval = $AlertClearTransitionInterval
+                alertTransitionInterval      = $AlertTransitionInterval
+                alertForNoData               = $AlertForNoData
 
-                }
-
-                #Remove empty keys so we dont overwrite them
-                @($dpConfig.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($dpConfig[$_]) -and $_ -ne "alertExpr" -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $dpConfig.Remove($_) } }
-
-                $Data = @{
-                    dpConfig = @($dpConfig)
-                }
-
-                $Data = ($Data | ConvertTo-Json)
-
-                if ($PSCmdlet.ShouldProcess($Message, "Set Device Group Datasource Alert Setting")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                    #Issue request
-                    $Response = (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data).dpConfig
-
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroupDatasourceAlertSetting" )
-                }
             }
-            catch {
-                return
+
+            #Remove empty keys so we dont overwrite them
+            @($dpConfig.keys) | ForEach-Object { if ([string]::IsNullOrEmpty($dpConfig[$_]) -and $_ -ne "alertExpr" -and ($_ -notin @($MyInvocation.BoundParameters.Keys))) { $dpConfig.Remove($_) } }
+
+            $Data = @{
+                dpConfig = @($dpConfig)
             }
+
+            $Data = ($Data | ConvertTo-Json)
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set Device Group Datasource Alert Setting")) {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data).dpConfig
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceGroupDatasourceAlertSetting" )
+            }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

@@ -104,26 +104,19 @@ function Import-LMLogicModule {
                 }
             }
 
-            try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $File
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $File
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $File
 
-                #Issue request
-                if ($Type -eq "oids" -or $Type -eq "functions") {
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $File
-                    return "Successfully imported LogicModule of type: $($Type)"
-                }
-                else {
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = $File }
-                    return "Successfully imported LogicModule of type: $($Response.items.type)"
-                }
-
-
+            #Issue request
+            if ($Type -eq "oids" -or $Type -eq "functions") {
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $File
+                return "Successfully imported LogicModule of type: $($Type)"
             }
-            catch {
-                return
+            else {
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = $File }
+                return "Successfully imported LogicModule of type: $($Response.items.type)"
             }
         }
         else {

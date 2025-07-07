@@ -66,26 +66,21 @@ function Remove-LMAlertRule {
             $ResourcePath = "/setting/alert/rules/$Id"
 
             if ($PSCmdlet.ShouldProcess($Message, "Remove Alert Rule")) {
-                try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                    #Issue request
-                    Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+                #Issue request
+                Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
 
-                    $Result = [PSCustomObject]@{
-                        Id      = $Id
-                        Message = "Successfully removed ($Message)"
-                    }
-
-                    return $Result
+                $Result = [PSCustomObject]@{
+                    Id      = $Id
+                    Message = "Successfully removed ($Message)"
                 }
-                catch {
 
-                    return
-                }
+                return $Result
             }
         }
         else {

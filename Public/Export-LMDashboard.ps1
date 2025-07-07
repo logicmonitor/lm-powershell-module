@@ -63,22 +63,17 @@ function Export-LMDashboard {
         #Initalize vars
         $QueryParams = "?format=file&template=true"
 
-        try {
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-            #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+        #Issue request
+        $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-            #Export to JSON
-            $Response | ConvertTo-Json -Depth 10 | Out-File -FilePath "$FilePath\$($Response.Name).json"
+        #Export to JSON
+        $Response | ConvertTo-Json -Depth 10 | Out-File -FilePath "$FilePath\$($Response.Name).json"
 
-        }
-        catch {
-            return
-        }
 
         Write-Information "[INFO]: Dashboard ($($Response.Name)) exported to $FilePath$([IO.Path]::DirectorySeparatorChar)$($Response.Name).json"
         if ($PassThru) {

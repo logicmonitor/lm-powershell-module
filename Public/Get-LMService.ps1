@@ -123,40 +123,37 @@ function Get-LMService {
             if ($Delta -and $DeltaIdResponse) {
                 $QueryParams = $QueryParams + "&deltaId=$DeltaIdResponse"
             }
-            try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
-                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            #Issue request
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-                #Store delta id if delta switch is present
-                if ($Response.deltaId -and !$DeltaIdResponse) {
-                    $DeltaIdResponse = $Response.deltaId
-                    Write-Information "[INFO]: Delta switch detected, for further queries you can use deltaId: $DeltaIdResponse to perform additional delta requests. This variable can be accessed by referencing the `$LMDeltaId "
-                    Set-Variable -Name "LMDeltaId" -Value $DeltaIdResponse -Scope global
-                }
+            #Store delta id if delta switch is present
+            if ($Response.deltaId -and !$DeltaIdResponse) {
+                $DeltaIdResponse = $Response.deltaId
+                Write-Information "[INFO]: Delta switch detected, for further queries you can use deltaId: $DeltaIdResponse to perform additional delta requests. This variable can be accessed by referencing the `$LMDeltaId "
+                Set-Variable -Name "LMDeltaId" -Value $DeltaIdResponse -Scope global
+            }
 
-                #Stop looping if single device, no need to continue
-                if ($PSCmdlet.ParameterSetName -eq "Id") {
+            #Stop looping if single device, no need to continue
+            if ($PSCmdlet.ParameterSetName -eq "Id") {
+                $Done = $true
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Service" )
+            }
+            #Check result size and if needed loop again
+            else {
+                [Int]$Total = $Response.Total
+                [Int]$Count += ($Response.Items | Measure-Object).Count
+                $Results += $Response.Items
+                if ($Count -ge $Total) {
                     $Done = $true
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Service" )
-                }
-                #Check result size and if needed loop again
-                else {
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    if ($Count -ge $Total) {
-                        $Done = $true
-                    }
                 }
             }
-            catch {
-                return
-            }
+
         }
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Service" )
     }

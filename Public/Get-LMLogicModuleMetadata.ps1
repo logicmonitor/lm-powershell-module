@@ -80,30 +80,27 @@ function Get-LMLogicModuleMetadatum {
         #Initalize vars
         $QueryParams = ""
 
-        try {
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+        
+        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-            #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+        #Issue request
+        $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-            #Perform filtering since this endpoint does not support filtering
-            $Response = $Response | Where-Object {
-                ($null -eq $isInUse -or $_.isInUse -eq $isInUse) -and
-                ([string]::IsNullOrEmpty($Type) -or $_.type -eq $Type) -and
-                ([string]::IsNullOrEmpty($Tag) -or $_.tags -contains $Tag) -and
-                ([string]::IsNullOrEmpty($Name) -or $_.name -like "*$Name*") -and
-                ([string]::IsNullOrEmpty($Status) -or $_.status -like "*$Status*") -and
-                ([string]::IsNullOrEmpty($AuthorPortalName) -or $_.authorPortalName -like "*$AuthorPortalName*")
-            }
-
+        #Perform filtering since this endpoint does not support filtering
+        $Response = $Response | Where-Object {
+            ($null -eq $isInUse -or $_.isInUse -eq $isInUse) -and
+            ([string]::IsNullOrEmpty($Type) -or $_.type -eq $Type) -and
+            ([string]::IsNullOrEmpty($Tag) -or $_.tags -contains $Tag) -and
+            ([string]::IsNullOrEmpty($Name) -or $_.name -like "*$Name*") -and
+            ([string]::IsNullOrEmpty($Status) -or $_.status -like "*$Status*") -and
+            ([string]::IsNullOrEmpty($AuthorPortalName) -or $_.authorPortalName -like "*$AuthorPortalName*")
         }
-        catch {
-            return
-        }
+
+
         if ($Response) {
             return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogicModuleMetadata" )
         }

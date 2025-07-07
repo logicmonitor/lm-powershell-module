@@ -87,40 +87,37 @@ function Get-LMDeviceInstanceList {
                 $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=-endDateTime"
             }
 
-            try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
 
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
-                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            #Issue request
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-                #If looking for count only just return total
-                if ($CountOnly) {
-                    return $Response.Total
-                }
+            #If looking for count only just return total
+            if ($CountOnly) {
+                return $Response.Total
+            }
 
-                #Stop looping if single device, no need to continue
-                if (![bool]$Response.psobject.Properties["total"]) {
+            #Stop looping if single device, no need to continue
+            if (![bool]$Response.psobject.Properties["total"]) {
+                $Done = $true
+                return $Response
+            }
+            #Check result size and if needed loop again
+            else {
+                [Int]$Total = $Response.Total
+                [Int]$Count += ($Response.Items | Measure-Object).Count
+                $Results += $Response.Items
+                if ($Count -ge $Total) {
                     $Done = $true
-                    return $Response
-                }
-                #Check result size and if needed loop again
-                else {
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    if ($Count -ge $Total) {
-                        $Done = $true
-                    }
                 }
             }
-            catch {
-                return
-            }
+
         }
         return $Results
     }

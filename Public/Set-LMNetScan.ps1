@@ -166,46 +166,43 @@ function Set-LMNetscan {
                 }
             }
 
-            try {
-                $Data = @{
-                    id                        = $Id
-                    name                      = $Name
-                    collector                 = $CollectorId
-                    description               = $Description
-                    duplicate                 = $Duplicates
-                    ignoreSystemIPsDuplicates = $IgnoreSystemIpDuplpicates
-                    method                    = $Method
-                    nextStart                 = $NextStart
-                    nextStartEpoch            = $NextStartEpoch
-                    nsgId                     = $NetScanGroupId
-                    subnet                    = $SubnetRange
-                    ddr                       = $DDR
-                    credentials               = $Creds
-                    ports                     = $Ports
-                    schedule                  = if ($Schedule) { $Schedule }else { $null }
-                }
-
-
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
-
-                if ($PSCmdlet.ShouldProcess($Message, "Set NetScan")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
-                }
+            
+            $Data = @{
+                id                        = $Id
+                name                      = $Name
+                collector                 = $CollectorId
+                description               = $Description
+                duplicate                 = $Duplicates
+                ignoreSystemIPsDuplicates = $IgnoreSystemIpDuplpicates
+                method                    = $Method
+                nextStart                 = $NextStart
+                nextStartEpoch            = $NextStartEpoch
+                nsgId                     = $NetScanGroupId
+                subnet                    = $SubnetRange
+                ddr                       = $DDR
+                credentials               = $Creds
+                ports                     = $Ports
+                schedule                  = if ($Schedule) { $Schedule }else { $null }
             }
-            catch {
-                return
+
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set NetScan")) {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.NetScan" )
             }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

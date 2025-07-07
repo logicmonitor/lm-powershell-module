@@ -70,23 +70,20 @@ function Set-LMLogPartitionAction {
                 $Message = "Id: $Id | Action: $Action"
             }
 
-            try {
+            
 
-                if ($PSCmdlet.ShouldProcess($Message, "Set Log Partition Action")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+            if ($PSCmdlet.ShouldProcess($Message, "Set Log Partition Action")) {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1]
 
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
-                }
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartition" )
             }
-            catch {
-                return
-            }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

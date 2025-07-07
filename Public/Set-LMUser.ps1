@@ -226,21 +226,17 @@ function Set-LMUser {
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
 
             if ($PSCmdlet.ShouldProcess($Message, "Set User")) {
-                try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                    #Issue request using new centralized method with retry logic
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                #Issue request using new centralized method with retry logic
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
-                }
-                catch {
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
 
-                    return
-                }
             }
         }
         else {

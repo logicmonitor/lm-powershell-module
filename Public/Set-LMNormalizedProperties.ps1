@@ -169,30 +169,27 @@ function Set-LMNormalizedProperty {
             $PropertiesCount = ($Properties | Measure-Object).Count
             $Message = "Alias: $Alias | Action: $ActionType | Properties: $PropertiesCount"
 
-            try {
-                if ($PSCmdlet.ShouldProcess($Message, "Set Normalized Properties")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+            
+            if ($PSCmdlet.ShouldProcess($Message, "Set Normalized Properties")) {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
 
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
-                    # Check for errors in the response
-                    if ($Response.errors.Count -gt 0) {
-                        foreach ($errorItem in $Response.errors) {
-                            Write-Error "Error updating normalized properties: $($errorItem.message)"
-                        }
-                        return
+                # Check for errors in the response
+                if ($Response.errors.Count -gt 0) {
+                    foreach ($errorItem in $Response.errors) {
+                        Write-Error "Error updating normalized properties: $($errorItem.message)"
                     }
-                    Write-Output "Normalized properties updated successfully"
                     return
                 }
-            }
-            catch {
+                Write-Output "Normalized properties updated successfully"
                 return
             }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

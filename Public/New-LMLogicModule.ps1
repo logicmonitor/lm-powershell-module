@@ -75,21 +75,16 @@ function New-LMLogicModule {
             $Data = ($Data | ConvertTo-Json -Depth 10)
 
             if ($PSCmdlet.ShouldProcess($Message, "New LogicModule")) {
-                try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName $ObjectType )
-                }
-                catch {
-
-                    return
-                }
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName $ObjectType )
             }
         }
         else {

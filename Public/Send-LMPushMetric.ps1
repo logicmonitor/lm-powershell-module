@@ -85,40 +85,34 @@ function Send-LMPushMetric {
             #Build header and uri
             $ResourcePath = "/metric/ingest"
 
+            $Data = @{
+                resourceName          = $NewResourceHostName
+                resourceDescription   = $NewResourceDescription
+                resourceIds           = $ResourceIds
+                resourceProperties    = $ResourceProperties
+                dataSourceId          = $DatasourceId
+                dataSource            = ($DatasourceName -replace '[#\\;=]', '_')
+                dataSourceDisplayName = ($DatasourceDisplayName -replace '[#\\;=]', '_')
+                dataSourceGroup       = $DatasourceGroup
+                instances             = $Instances
 
-            try {
-                $Data = @{
-                    resourceName          = $NewResourceHostName
-                    resourceDescription   = $NewResourceDescription
-                    resourceIds           = $ResourceIds
-                    resourceProperties    = $ResourceProperties
-                    dataSourceId          = $DatasourceId
-                    dataSource            = ($DatasourceName -replace '[#\\;=]', '_')
-                    dataSourceDisplayName = ($DatasourceDisplayName -replace '[#\\;=]', '_')
-                    dataSourceGroup       = $DatasourceGroup
-                    instances             = $Instances
-
-                }
-
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys @() `
-                    -AlwaysKeepKeys @('instances')
-
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath + $QueryParams
-
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                return $Response
             }
-            catch {
-                return
-            }
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys @() `
+                -AlwaysKeepKeys @('instances')
+
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+            $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath + $QueryParams
+
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+            #Issue request
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+            return $Response
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

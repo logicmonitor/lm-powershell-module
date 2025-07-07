@@ -243,75 +243,72 @@ function Set-LMWebsite {
                 $Message = "Id: $Id"
             }
 
-            try {
-                $alertExpr = $null
-                if ($SSLAlertThresholds) {
-                    $alertExpr = "< " + $SSLAlertThresholds -join " "
-                }
-
-                # Build testLocation object based on which parameter is provided
-                $testLocation = $null
-                if ($TestLocationAll) {
-                    $testLocation = @{ all = $true }
-                }
-                elseif ($TestLocationCollectorIds) {
-                    $testLocation = @{ collectorIds = $TestLocationCollectorIds }
-                }
-                elseif ($TestLocationSmgIds) {
-                    $testLocation = @{ smgIds = $TestLocationSmgIds }
-                }
-
-                $Data = @{
-                    name                        = $Name
-                    description                 = $Description
-                    disableAlerting             = $DisableAlerting
-                    isInternal                  = $IsInternal
-                    properties                  = $customProperties
-                    stopMonitoring              = $StopMonitoring
-                    groupId                     = $GroupId
-                    pollingInterval             = $PollingInterval
-                    overallAlertLevel           = $OverallAlertLevel
-                    individualAlertLevel        = $IndividualAlertLevel
-                    useDefaultAlertSetting      = $UseDefaultAlertSetting
-                    useDefaultLocationSetting   = $UseDefaultLocationSetting
-                    host                        = $PingAddress
-                    triggerSSLStatusAlert       = $TriggerSSLStatusAlert
-                    triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
-                    count                       = $PingCount
-                    percentPktsNotReceiveInTime = $PingPercentNotReceived
-                    timeoutInMSPktsNotReceive   = $PingTimeout
-                    transition                  = $FailedCount
-                    pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
-                    alertExpr                   = $alertExpr
-                    schema                      = $HttpType
-                    domain                      = $WebsiteDomain
-                    steps                       = $WebsiteSteps
-                    testLocation                = $testLocation
-                }
-
-
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-                    -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
-                    -Context @{ PropertiesMethod = $PropertiesMethod }
-
-                if ($PSCmdlet.ShouldProcess($Message, "Set Website")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
-
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
-                }
+            
+            $alertExpr = $null
+            if ($SSLAlertThresholds) {
+                $alertExpr = "< " + $SSLAlertThresholds -join " "
             }
-            catch {
-                return
+
+            # Build testLocation object based on which parameter is provided
+            $testLocation = $null
+            if ($TestLocationAll) {
+                $testLocation = @{ all = $true }
             }
+            elseif ($TestLocationCollectorIds) {
+                $testLocation = @{ collectorIds = $TestLocationCollectorIds }
+            }
+            elseif ($TestLocationSmgIds) {
+                $testLocation = @{ smgIds = $TestLocationSmgIds }
+            }
+
+            $Data = @{
+                name                        = $Name
+                description                 = $Description
+                disableAlerting             = $DisableAlerting
+                isInternal                  = $IsInternal
+                properties                  = $customProperties
+                stopMonitoring              = $StopMonitoring
+                groupId                     = $GroupId
+                pollingInterval             = $PollingInterval
+                overallAlertLevel           = $OverallAlertLevel
+                individualAlertLevel        = $IndividualAlertLevel
+                useDefaultAlertSetting      = $UseDefaultAlertSetting
+                useDefaultLocationSetting   = $UseDefaultLocationSetting
+                host                        = $PingAddress
+                triggerSSLStatusAlert       = $TriggerSSLStatusAlert
+                triggerSSLExpirationAlert   = $TriggerSSLExpirationAlert
+                count                       = $PingCount
+                percentPktsNotReceiveInTime = $PingPercentNotReceived
+                timeoutInMSPktsNotReceive   = $PingTimeout
+                transition                  = $FailedCount
+                pageLoadAlertTimeInMS       = $PageLoadAlertTimeInMS
+                alertExpr                   = $alertExpr
+                schema                      = $HttpType
+                domain                      = $WebsiteDomain
+                steps                       = $WebsiteSteps
+                testLocation                = $testLocation
+            }
+
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
+                -Context @{ PropertiesMethod = $PropertiesMethod }
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set Website")) {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Website" )
+            }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

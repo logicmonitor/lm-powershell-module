@@ -65,34 +65,31 @@ function New-LMNormalizedProperty {
             $Message = "Alias: $Alias"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Normalized Property")) {
-                try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
 
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
-                    # Transform the response to return just the normalized property values
-                    if ($Response.data.byId.normalizedProperties) {
-                        $normalizedProperties = $Response.data.byId.normalizedProperties
-                        $transformedProperties = @()
+                # Transform the response to return just the normalized property values
+                if ($Response.data.byId.normalizedProperties) {
+                    $normalizedProperties = $Response.data.byId.normalizedProperties
+                    $transformedProperties = @()
 
-                        # Get all property names and sort them numerically
-                        $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
+                    # Get all property names and sort them numerically
+                    $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
 
-                        # Add each property's value to the array
-                        foreach ($propName in $propertyNames) {
-                            $transformedProperties += $normalizedProperties.$propName
-                        }
-
-                        return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
+                    # Add each property's value to the array
+                    foreach ($propName in $propertyNames) {
+                        $transformedProperties += $normalizedProperties.$propName
                     }
+
+                    return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
                 }
-                catch {
-                    return
-                }
+
             }
         }
         else {

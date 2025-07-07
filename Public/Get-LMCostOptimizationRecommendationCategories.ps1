@@ -71,26 +71,23 @@ function Get-LMCostOptimizationRecommendationCategory {
                         $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                     }
                 }
-                try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+                
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-                    #Check result size and if needed loop again
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    if ($Count -ge $Total) {
-                        $Done = $true
-                    }
+                #Check result size and if needed loop again
+                [Int]$Total = $Response.Total
+                [Int]$Count += ($Response.Items | Measure-Object).Count
+                $Results += $Response.Items
+                if ($Count -ge $Total) {
+                    $Done = $true
                 }
-                catch {
-                    return
-                }
+
             }
             return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.CostOptimizationRecommendationCategory" )
         }

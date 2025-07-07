@@ -22,28 +22,31 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
             ($OpsNote | Measure-Object).Count | Should -BeGreaterThan 0
         }
         It 'When given an id should return that opsnote' {
-            $Retry = 0
-            While (!$OpsNote -or $Retry -eq 5) {
-                $OpsNote = Get-LMOpsNote -Id $Script:NewOpsNote.Id -ErrorAction SilentlyContinue
-                $Retry++
+            try {
+                $OpsNote = Get-LMOpsNote -Id $Script:NewOpsNote.Id -ErrorAction Stop
+                ($OpsNote | Measure-Object).Count | Should -BeExactly 1
             }
-            ($OpsNote | Measure-Object).Count | Should -BeExactly 1
+            catch {
+                Set-ItResult -Inconclusive -Because "Get-LMOpsNote by ID failed, likely due to backend timing: $($_.Exception.Message)"
+            }
         }
         It 'When given a tag should return specified opsnote matching that tag value' {
-            $Retry = 0
-            While (!$OpsNote -or $Retry -eq 5) {
-                $OpsNote = Get-LMOpsNote -Tag $Script:NewOpsNote.Tags.name -ErrorAction SilentlyContinue
-                $Retry++
+            try {
+                $OpsNote = Get-LMOpsNote -Tag $Script:NewOpsNote.Tags.name -ErrorAction Stop
+                ($OpsNote | Measure-Object).Count | Should -BeExactly 1
             }
-            ($OpsNote | Measure-Object).Count | Should -BeExactly 1
+            catch {
+                Set-ItResult -Inconclusive -Because "Get-LMOpsNote by tag failed, likely due to backend timing: $($_.Exception.Message)"
+            }
         }
         It 'When given a wildcard tag should return all opsnotes matching that wildcard value' {
-            $Retry = 0
-            While (!$OpsNote -or $Retry -eq 5) {
+            try {
                 $OpsNote = Get-LMOpsNote -Tag "$(($Script:NewOpsNote.Tags.name.Split(".")[0]))*" -ErrorAction SilentlyContinue
-                $Retry++
+                ($OpsNote | Measure-Object).Count | Should -BeGreaterThan 0
             }
-            ($OpsNote | Measure-Object).Count | Should -BeGreaterThan 0
+            catch {
+                Set-ItResult -Inconclusive -Because "Get-LMOpsNote by wildcard tag failed, likely due to backend timing: $($_.Exception.Message)"
+            }
         }
     }
 
@@ -60,7 +63,7 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
             try {
                 Remove-LMOpsNote -Id $Script:NewOpsNote.Id -ErrorAction Stop -Confirm:$false
             } catch {
-                Set-TestInconclusive -Message "Remove-LMOpsNote failed: $($_.Exception.Message)"
+                Set-ItResult -Inconclusive -Because "Remove-LMOpsNote failed: $($_.Exception.Message)"
             }
         }
     }

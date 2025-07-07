@@ -78,41 +78,38 @@ function Set-LMUserdatum {
                 $Message = "Id: $Id"
             }
 
-            try {
-                $Data = @{
-                    id    = "$Id.user.default.dashboard"
-                    value = $Value
-                }
-
-                if ($Status) {
-                    $Data.status = $(if ($Status -eq "active") { 2 }else { 1 })
-                }
-
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
-
-                if ($PSCmdlet.ShouldProcess($Message, "Set API Token")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                    #Issue request
-                    Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data | Out-Null
-
-                    $Result = [PSCustomObject]@{
-                        Id      = $Id
-                        Message = "Successfully updated userdata for default dashboard to id: ($DashboardId)"
-                    }
-
-                    return $Result
-                }
+            
+            $Data = @{
+                id    = "$Id.user.default.dashboard"
+                value = $Value
             }
-            catch {
-                return
+
+            if ($Status) {
+                $Data.status = $(if ($Status -eq "active") { 2 }else { 1 })
             }
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set API Token")) {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data | Out-Null
+
+                $Result = [PSCustomObject]@{
+                    Id      = $Id
+                    Message = "Successfully updated userdata for default dashboard to id: ($DashboardId)"
+                }
+
+                return $Result
+            }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

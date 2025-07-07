@@ -36,9 +36,7 @@ function Resolve-LMException {
         [Parameter(Mandatory = $true)]
         [System.Management.Automation.ErrorRecord]$LMException,
 
-        [Switch]$EnableDebugLogging,
-
-        [System.Management.Automation.PSCmdlet]$CallerPSCmdlet
+        [Switch]$EnableDebugLogging
     )
 
     # Initialize return object
@@ -224,11 +222,14 @@ function Get-LMExceptionMessage {
             $errorDetails = $LMException.ErrorDetails.Message | ConvertFrom-Json -ErrorAction Stop
             $errorMessage = if ($errorDetails.errorMessage) { 
                 $errorDetails.errorMessage 
-            } elseif ($errorDetails.message) { 
+            }
+            elseif ($errorDetails.message) { 
                 $errorDetails.message 
-            } elseif ($errorDetails.error) { 
+            }
+            elseif ($errorDetails.error) { 
                 $errorDetails.error 
-            } else { 
+            }
+            else { 
                 $null 
             }
 
@@ -254,36 +255,4 @@ function Get-LMExceptionMessage {
     }
 
     return $null
-}
-
-# Helper function to write errors consistently
-function Write-LMError {
-    [CmdletBinding()]
-    param (
-        [Parameter(Mandatory)]
-        [String]$Message,
-
-        [Int]$StatusCode,
-        
-        [System.Management.Automation.PSCmdlet]$CallerPSCmdlet
-    )
-
-    $errorMessage = if ($StatusCode) { "Failed to execute web request($StatusCode): $Message" } else { "Failed to execute web request: $Message" }
-
-    if ($CallerPSCmdlet) {
-        # Create a proper error record
-        $errorRecord = [System.Management.Automation.ErrorRecord]::new(
-            [System.Exception]::new($errorMessage),
-            "LMAPIError",
-            [System.Management.Automation.ErrorCategory]::InvalidOperation,
-            $null
-        )
-
-        # Write the error (this will respect the caller's ErrorActionPreference)
-        $CallerPSCmdlet.WriteError($errorRecord)
-    }
-    else {
-        # Fallback to Write-Error when PSCmdlet is not available
-        Write-Error $errorMessage
-    }
 }

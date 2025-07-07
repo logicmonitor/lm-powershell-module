@@ -83,31 +83,28 @@ function Set-LMPushModuleInstanceProperty {
                 $Message = "DeviceId: $DeviceId | DataSource: $DataSourceName | Instance: $InstanceName | Property: $PropertyName = $PropertyValue"
             }
 
-            try {
-                $Data = @{
-                    resourceIds        = @{"system.deviceid" = $DeviceId }
-                    instanceName       = $InstanceName
-                    dataSource         = $DataSourceName
-                    instanceProperties = @{$PropertyName = $PropertyValue }
-                }
-
-                $Data = ($Data | ConvertTo-Json)
-
-                if ($PSCmdlet.ShouldProcess($Message, "Set Push Module Instance Property")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
-
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                    return $Response
-                }
+            
+            $Data = @{
+                resourceIds        = @{"system.deviceid" = $DeviceId }
+                instanceName       = $InstanceName
+                dataSource         = $DataSourceName
+                instanceProperties = @{$PropertyName = $PropertyValue }
             }
-            catch {
-                return
+
+            $Data = ($Data | ConvertTo-Json)
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set Push Module Instance Property")) {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).logicmonitor.com/rest" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return $Response
             }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

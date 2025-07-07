@@ -112,25 +112,21 @@ function Remove-LMDeviceDatasourceInstance {
             }
 
             if ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance")) {
-                try {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+                
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                    #Issue request
-                    Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+                #Issue request
+                Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
 
-                    $Result = [PSCustomObject]@{
-                        InstanceId = $InstanceId
-                        Message    = "Successfully removed ($Message)"
-                    }
-
-                    return $Result
+                $Result = [PSCustomObject]@{
+                    InstanceId = $InstanceId
+                    Message    = "Successfully removed ($Message)"
                 }
-                catch {
-                    return
-                }
+
+                return $Result
             }
         }
         else {

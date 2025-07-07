@@ -63,36 +63,33 @@ function Get-LMNormalizedProperty {
                 }
             } | ConvertTo-Json -Depth 10
 
-            try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+            
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
-                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+            #Issue request
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
-                # Transform the response to return just the normalized property values
-                if ($Response.data.byId.normalizedProperties) {
-                    $normalizedProperties = $Response.data.byId.normalizedProperties
-                    $transformedProperties = @()
+            # Transform the response to return just the normalized property values
+            if ($Response.data.byId.normalizedProperties) {
+                $normalizedProperties = $Response.data.byId.normalizedProperties
+                $transformedProperties = @()
 
-                    # Get all property names and sort them numerically
-                    $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
+                # Get all property names and sort them numerically
+                $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
 
-                    # Add each property's value to the array
-                    foreach ($propName in $propertyNames) {
-                        $transformedProperties += $normalizedProperties.$propName
-                    }
-
-                    return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
+                # Add each property's value to the array
+                foreach ($propName in $propertyNames) {
+                    $transformedProperties += $normalizedProperties.$propName
                 }
 
-                return $Response
+                return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
             }
-            catch {
-                return
-            }
+
+            return $Response
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

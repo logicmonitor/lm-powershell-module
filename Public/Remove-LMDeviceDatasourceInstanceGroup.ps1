@@ -155,26 +155,23 @@ function Remove-LMDeviceDatasourceInstanceGroup {
 
 
         if ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance Group")) {
-            try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+            
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
-                Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+            #Issue request
+            Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "DELETE" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
 
-                # Adjusted output object to reflect correct ID used
-                $Result = [PSCustomObject]@{
-                    InstanceGroupId = $InstanceGroupId # Output the ID used for deletion
-                    Message         = "Successfully removed ($Message)"
-                }
-
-                return $Result
+            # Adjusted output object to reflect correct ID used
+            $Result = [PSCustomObject]@{
+                InstanceGroupId = $InstanceGroupId # Output the ID used for deletion
+                Message         = "Successfully removed ($Message)"
             }
-            catch {
-                return
-            }
+
+            return $Result
+
         }
     }
     else {

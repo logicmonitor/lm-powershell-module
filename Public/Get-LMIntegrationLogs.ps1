@@ -108,39 +108,36 @@ function Get-LMIntegrationLog {
                 }
             }
 
-            try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
 
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
-                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            #Issue request
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-                #Stop looping if single device, no need to continue
-                if ($PSCmdlet.ParameterSetName -eq "Id") {
+            #Stop looping if single device, no need to continue
+            if ($PSCmdlet.ParameterSetName -eq "Id") {
+                $Done = $true
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.IntegrationLog" )
+            }
+            #Check result size and if needed loop again
+            else {
+                [Int]$Total = $Response.Total
+                [Int]$Count += ($Response.Items | Measure-Object).Count
+                $Results += $Response.Items
+                if ($Count -ge $QueryLimit) {
                     $Done = $true
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.IntegrationLog" )
+                    Write-Warning "[WARN]: Reached $QueryLimit record query limitation for this endpoint"
                 }
-                #Check result size and if needed loop again
-                else {
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    if ($Count -ge $QueryLimit) {
-                        $Done = $true
-                        Write-Warning "[WARN]: Reached $QueryLimit record query limitation for this endpoint"
-                    }
-                    elseif ($Count -ge $Total -and $Total -ge 0) {
-                        $Done = $true
-                    }
+                elseif ($Count -ge $Total -and $Total -ge 0) {
+                    $Done = $true
                 }
             }
-            catch {
-                return
-            }
+
         }
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.IntegrationLog" )
     }

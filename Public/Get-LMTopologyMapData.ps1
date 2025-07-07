@@ -55,20 +55,17 @@ function Get-LMTopologyMapData {
         $ResourcePath = "/topology/topologies/$Id/data"
 
         #Loop through requests
-        try {
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+        
+        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-            #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+        #Issue request
+        $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
-            return (Add-ObjectTypeInfo -InputObject $Response.vertices -TypeName "LogicMonitor.TopologyMapData" )
-        }
-        catch {
-            return
-        }
+        return (Add-ObjectTypeInfo -InputObject $Response.vertices -TypeName "LogicMonitor.TopologyMapData" )
+
     }
     else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

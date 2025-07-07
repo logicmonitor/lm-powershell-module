@@ -131,40 +131,34 @@ $PoshCommand
 
             $Data = ($Data | ConvertTo-Json)
 
-            try {
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                #Issue request
-                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                if ($IncludeResult) {
-                    $CommandCompleted = $false
-                    while (!$CommandCompleted) {
-                        $CommandResult = Get-LMCollectorDebugResult -SessionId $Response.sessionId -Id $Id
-                        if ($CommandResult.errorMessage -eq "Agent has fetched the task, waiting for response") {
-                            Write-Information "[INFO]: Agent has fetched the task, waiting for response..."
-                            Start-Sleep -Seconds 5
-                        }
-                        else {
-                            $CommandCompleted = $false
-                            return $CommandResult
-                        }
+            #Issue request
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+            if ($IncludeResult) {
+                $CommandCompleted = $false
+                while (!$CommandCompleted) {
+                    $CommandResult = Get-LMCollectorDebugResult -SessionId $Response.sessionId -Id $Id
+                    if ($CommandResult.errorMessage -eq "Agent has fetched the task, waiting for response") {
+                        Write-Information "[INFO]: Agent has fetched the task, waiting for response..."
+                        Start-Sleep -Seconds 5
                     }
-                }
-                else {
-                    $Result = [PSCustomObject]@{
-                        SessionId   = $Response.sessionId
-                        CollectorId = $Id
-                        Message     = "Submitted debug command task under session id $($Response.sessionId) for collector id: $($Id). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult"
+                    else {
+                        $CommandCompleted = $false
+                        return $CommandResult
                     }
-                    return $Result
                 }
             }
-            catch {
-                return
+            else {
+                $Result = [PSCustomObject]@{
+                    SessionId   = $Response.sessionId
+                    CollectorId = $Id
+                    Message     = "Submitted debug command task under session id $($Response.sessionId) for collector id: $($Id). Use Get-LMCollectorDebugResult to retrieve response or resubmit request with -IncludeResult"
+                }
+                return $Result
             }
             return
         }

@@ -86,34 +86,31 @@ function Set-LMRecipientGroup {
                 $Message = "Id: $Id"
             }
 
-            try {
-                $Data = @{
-                    groupName   = $NewName
-                    description = $Description
-                    recipients  = $Recipients
-                }
-
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-                    -ConditionalKeep @{ 'name' = 'NewName' }
-
-                if ($PSCmdlet.ShouldProcess($Message, "Set Recipient Group")) {
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-                    return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.RecipientGroup")
-                }
+            
+            $Data = @{
+                groupName   = $NewName
+                description = $Description
+                recipients  = $Recipients
             }
-            catch {
-                return
+
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                -ConditionalKeep @{ 'name' = 'NewName' }
+
+            if ($PSCmdlet.ShouldProcess($Message, "Set Recipient Group")) {
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "PATCH" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.RecipientGroup")
             }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

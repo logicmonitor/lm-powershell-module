@@ -152,97 +152,94 @@ function Get-LMLogMessage {
 
         $Body = $Data | ConvertTo-Json -Depth 10
 
-        try {
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+        
+        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
+        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
 
-            # Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+        # Issue request
+        $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
-            if (!$Async) {
-                if ($Response.data.byId.logs.PSObject.Properties.Value) {
-                    return (Add-ObjectTypeInfo -InputObject $Response.data.byId.logs.PSObject.Properties.Value -TypeName "LogicMonitor.LMLogs")
-                }
-                else {
-                    Write-Information "No results found for query ($($Query))"
-                    return
-                }
-            }
-
-            # Handle async response
-            if ($Response.meta.queryId -and $Response.meta.progress -ne 1) {
-                $QueryId = $Response.meta.queryId
-                $Complete = $false
-                $Results = @()
-                $Cursor = $null
-                $Page = 0
-                # Poll for completion
-                while (!$Complete) {
-                    $CompletionPercentage = [Math]::Round($Response.meta.progress * 100, 2)
-                    Write-Information "Log message query ($($QueryId)) is running, this may take some time. First pass scan $CompletionPercentage% complete, working on page $($Page) of results."
-                    Start-Sleep -Seconds 2
-
-                    # Build the payload
-                    $Data = @{
-                        meta = @{
-                            isAsync      = $Async.ToBool()
-                            perPageCount = $BatchSize
-                            queryType    = "raw"
-                            queryId      = $QueryId
-                        }
-                    }
-                    #cursor is used to build the pagination, using the chunk path and index to build the cursor on the next bucket that needs to be scanned
-                    if ($Cursor) {
-                        $Data.meta.cursor = $Cursor
-                        $Data.meta.filter = @{
-                            query = $Query
-                            range = @{
-                                startAtMS = $StartTime
-                                endAtMS   = $EndTime
-                            }
-                        }
-                    }
-
-                    $Body = $Data | ConvertTo-Json -Depth 10
-
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
-
-                    # Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
-
-                    if ($Response.meta.progress -eq 1) {
-                        if ($Response.data.byId.logs.PSObject.Properties.Value) {
-                            $Results += $Response.data.byId.logs.PSObject.Properties.Value
-                            $Cursor = $Response.meta.cursor
-                            $Page++
-                        }
-                        if ($Response.meta.isLastPage -eq $true -or $Page -ge $MaxPages) {
-                            $Complete = $true
-                        }
-                    }
-                }
-                if ($Results) {
-                    if ($Page -eq $MaxPages) {
-                        Write-Information "Max pages reached, stopping query. If you need more results, try increasing the MaxPages parameter."
-                    }
-                    return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LMLogs")
-                }
-                else {
-                    Write-Information "No results found for query ($($QueryId))"
-                }
+        if (!$Async) {
+            if ($Response.data.byId.logs.PSObject.Properties.Value) {
+                return (Add-ObjectTypeInfo -InputObject $Response.data.byId.logs.PSObject.Properties.Value -TypeName "LogicMonitor.LMLogs")
             }
             else {
-                Write-Error "Error getting log messages: $($Response)"
+                Write-Information "No results found for query ($($Query))"
+                return
             }
         }
-        catch {
-            return
+
+        # Handle async response
+        if ($Response.meta.queryId -and $Response.meta.progress -ne 1) {
+            $QueryId = $Response.meta.queryId
+            $Complete = $false
+            $Results = @()
+            $Cursor = $null
+            $Page = 0
+            # Poll for completion
+            while (!$Complete) {
+                $CompletionPercentage = [Math]::Round($Response.meta.progress * 100, 2)
+                Write-Information "Log message query ($($QueryId)) is running, this may take some time. First pass scan $CompletionPercentage% complete, working on page $($Page) of results."
+                Start-Sleep -Seconds 2
+
+                # Build the payload
+                $Data = @{
+                    meta = @{
+                        isAsync      = $Async.ToBool()
+                        perPageCount = $BatchSize
+                        queryType    = "raw"
+                        queryId      = $QueryId
+                    }
+                }
+                #cursor is used to build the pagination, using the chunk path and index to build the cursor on the next bucket that needs to be scanned
+                if ($Cursor) {
+                    $Data.meta.cursor = $Cursor
+                    $Data.meta.filter = @{
+                        query = $Query
+                        range = @{
+                            startAtMS = $StartTime
+                            endAtMS   = $EndTime
+                        }
+                    }
+                }
+
+                $Body = $Data | ConvertTo-Json -Depth 10
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+
+                # Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+
+                if ($Response.meta.progress -eq 1) {
+                    if ($Response.data.byId.logs.PSObject.Properties.Value) {
+                        $Results += $Response.data.byId.logs.PSObject.Properties.Value
+                        $Cursor = $Response.meta.cursor
+                        $Page++
+                    }
+                    if ($Response.meta.isLastPage -eq $true -or $Page -ge $MaxPages) {
+                        $Complete = $true
+                    }
+                }
+            }
+            if ($Results) {
+                if ($Page -eq $MaxPages) {
+                    Write-Information "Max pages reached, stopping query. If you need more results, try increasing the MaxPages parameter."
+                }
+                return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LMLogs")
+            }
+            else {
+                Write-Information "No results found for query ($($QueryId))"
+            }
         }
+        else {
+            Write-Error "Error getting log messages: $($Response)"
+        }
+
     }
     else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

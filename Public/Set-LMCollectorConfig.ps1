@@ -231,61 +231,58 @@ function Set-LMCollectorConfig {
                 $Message = "Id: $Id"
             }
 
-            try {
-                $Data = @{
-                    collectorSize = $CollectorSize
-                    collectorConf = $CollectorConfData
-                    sbproxyConf   = $SbproxyConf
-                    watchdogConf  = $WatchdogConf
-                    websiteConf   = $WebsiteConf
-                    wrapperConf   = $WrapperConf
-                }
+            
+            $Data = @{
+                collectorSize = $CollectorSize
+                collectorConf = $CollectorConfData
+                sbproxyConf   = $SbproxyConf
+                watchdogConf  = $WatchdogConf
+                websiteConf   = $WebsiteConf
+                wrapperConf   = $WrapperConf
+            }
 
 
-                #Remove empty keys so we dont overwrite them
-                $Data = Format-LMData `
-                    -Data $Data `
-                    -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
+            #Remove empty keys so we dont overwrite them
+            $Data = Format-LMData `
+                -Data $Data `
+                -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
 
-                if ($PSCmdlet.ShouldProcess($Message, "Set Collector Config ")) {
-                    Write-Warning "[WARN]: This command will restart the targeted collector on update of the configuration"
-                    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+            if ($PSCmdlet.ShouldProcess($Message, "Set Collector Config ")) {
+                Write-Warning "[WARN]: This command will restart the targeted collector on update of the configuration"
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                    #Issue request
-                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
 
-                    if ($WaitForRestart) {
-                        $JobStarted = $false
-                        $Tries = 0
-                        while (!$JobStarted -or $Tries -eq 5) {
-                            #Build header and uri
-                            $ResourcePath = "/setting/collector/collectors/$Id/services/restart/$Response"
-                            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+                if ($WaitForRestart) {
+                    $JobStarted = $false
+                    $Tries = 0
+                    while (!$JobStarted -or $Tries -eq 5) {
+                        #Build header and uri
+                        $ResourcePath = "/setting/collector/collectors/$Id/services/restart/$Response"
+                        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+                        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                            $SubmitResponse = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-                            if ($SubmitResponse.errorMessage -eq "The task is still running") {
-                                Write-Information "[INFO]: The task is still running..."
-                                Start-Sleep -Seconds 2
-                                $Tries++
-                            }
-                            else {
-                                $JobStarted = $true
-                            }
+                        $SubmitResponse = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                        if ($SubmitResponse.errorMessage -eq "The task is still running") {
+                            Write-Information "[INFO]: The task is still running..."
+                            Start-Sleep -Seconds 2
+                            $Tries++
                         }
-                        return "Job status code: $($SubmitResponse.jobStatus), Job message: $($SubmitResponse.jobErrmsg)"
+                        else {
+                            $JobStarted = $true
+                        }
                     }
-                    else {
-                        return "Successfully submitted restart request(jobID:$Response) with updated configurations. Collector will restart once the request has been picked up."
-                    }
+                    return "Job status code: $($SubmitResponse.jobStatus), Job message: $($SubmitResponse.jobErrmsg)"
+                }
+                else {
+                    return "Successfully submitted restart request(jobID:$Response) with updated configurations. Collector will restart once the request has been picked up."
                 }
             }
-            catch {
-                return
-            }
+
         }
         else {
             Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

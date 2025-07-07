@@ -131,11 +131,8 @@ function Invoke-LMRestMethod {
         catch {
             # Get detailed error information from Resolve-LMException
             $resolveParams = @{
-                LMException = $PSItem
+                LMException        = $PSItem
                 EnableDebugLogging = $EnableDebugLogging
-            }
-            if ($CallerPSCmdlet) {
-                $resolveParams.CallerPSCmdlet = $CallerPSCmdlet
             }
             $errorResult = Resolve-LMException @resolveParams
 
@@ -144,7 +141,8 @@ function Invoke-LMRestMethod {
                 # For GET operations, 404 might be expected behavior
                 $errorActionPreference = if ($CallerPSCmdlet) { 
                     $CallerPSCmdlet.SessionState.PSVariable.GetValue('ErrorActionPreference') 
-                } else { 
+                }
+                else { 
                     $ErrorActionPreference 
                 }
                 

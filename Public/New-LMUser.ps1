@@ -211,33 +211,30 @@ function New-LMUser {
         $Message = "Username: $Username | Email: $Email"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create User")) {
-            try {
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+            
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
-                #Issue request
-                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-                if ($AutoGeneratePassword) {
-                    if (!$global:LMUserData) {
-                        $UserData = New-Object System.Collections.ArrayList
-                        $UserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
-                        New-Variable -Name LMUserData -Scope global -Value $UserData
-                    }
-                    else {
-                        $global:LMUserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
-                    }
-
-                    Write-Information "[INFO]: Auto generated password assigned to $Username`: $Password"
-                    Write-Information "[INFO]: Auto generated passwords are also stored in a reference variable called `$LMUserData"
+            #Issue request
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+            if ($AutoGeneratePassword) {
+                if (!$global:LMUserData) {
+                    $UserData = New-Object System.Collections.ArrayList
+                    $UserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
+                    New-Variable -Name LMUserData -Scope global -Value $UserData
+                }
+                else {
+                    $global:LMUserData.Add([PSCustomObject]@{"Username" = $Username; "Temp_Password" = $Password }) | Out-Null
                 }
 
-                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
+                Write-Information "[INFO]: Auto generated password assigned to $Username`: $Password"
+                Write-Information "[INFO]: Auto generated passwords are also stored in a reference variable called `$LMUserData"
             }
-            catch {
-                return
-            }
+
+            return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.User" )
+
         }
     }
     else {
