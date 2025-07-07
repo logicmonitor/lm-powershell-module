@@ -112,7 +112,17 @@ Describe 'Collector Testing New/Get/Set/Remove for Groups and Collectors' {
     Describe 'Get-LMCollectorInstaller' {
         It 'When given a collector id, validates installer functionality without full download' {
             # Test by starting the download but canceling it quickly to avoid bandwidth usage
-            $TempPath = Join-Path $env:TMPDIR "test_installer_$($Script:NewCollector.id).exe"
+            # Use appropriate temp directory for different environments
+            $TempDir = if ($env:RUNNER_TEMP) { 
+                $env:RUNNER_TEMP  # GitHub Actions
+            } elseif ($env:TMPDIR) { 
+                $env:TMPDIR       # macOS/Linux
+            } elseif ($env:TEMP) { 
+                $env:TEMP         # Windows
+            } else { 
+                [System.IO.Path]::GetTempPath()  # Fallback
+            }
+            $TempPath = Join-Path $TempDir "test_installer_$($Script:NewCollector.id).exe"
             
             # Use a job to start download and cancel it quickly
             $Job = Start-Job -ScriptBlock {
@@ -145,7 +155,7 @@ Describe 'Collector Testing New/Get/Set/Remove for Groups and Collectors' {
             }
             else {
                 # Fallback: just verify the expected path construction
-                $ExpectedPath = "$env:TMPDIR\LogicMonitor_Collector_Win64_medium_$($Script:NewCollector.id).exe"
+                $ExpectedPath = Join-Path $TempDir "LogicMonitor_Collector_Win64_medium_$($Script:NewCollector.id).exe"
                 $ExpectedPath | Should -Not -BeNullOrEmpty
                 Write-Host "Installer path construction validated: $ExpectedPath" -ForegroundColor Yellow
             }

@@ -6,6 +6,17 @@ Describe 'Dashboard Testing New/Get/Import/Export/Copy/Remove' {
         # Get the path to our test dashboard JSON
         $Script:TestDashboardJsonPath = Join-Path $PSScriptRoot "PesterTestDashboard.json"
         $Script:TimeNow = Get-Date -UFormat %m%d%Y-%H%M
+        
+        # Use appropriate temp directory for different environments
+        $Script:TempDir = if ($env:RUNNER_TEMP) { 
+            $env:RUNNER_TEMP  # GitHub Actions
+        } elseif ($env:TMPDIR) { 
+            $env:TMPDIR       # macOS/Linux
+        } elseif ($env:TEMP) { 
+            $env:TEMP         # Windows
+        } else { 
+            [System.IO.Path]::GetTempPath()  # Fallback
+        }
     }
     
     Describe 'New-LMDashboardGroup' {
@@ -66,11 +77,10 @@ Describe 'Dashboard Testing New/Get/Import/Export/Copy/Remove' {
 
     Describe 'Export-LMDashboard' {
         It 'When given a dashboard id, exports dashboard to JSON file' {
-            $ExportPath = $env:TMPDIR
-            $Dashboard = Export-LMDashboard -Id $Script:ImportedDashboard.id -FilePath $ExportPath -ErrorAction Stop -PassThru
+            $Dashboard = Export-LMDashboard -Id $Script:ImportedDashboard.id -FilePath $Script:TempDir -ErrorAction Stop -PassThru
             
             # Verify file was created and contains valid JSON
-            Test-Path $ExportPath | Should -Be $true
+            Test-Path $Script:TempDir | Should -Be $true
             $Dashboard.name | Should -Be $Script:ImportedDashboard.name
         }
     }
