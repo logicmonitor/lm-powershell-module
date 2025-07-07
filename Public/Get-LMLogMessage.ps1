@@ -159,7 +159,7 @@ function Get-LMLogMessage {
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
 
             # Issue request
-            $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
             if (!$Async) {
                 if ($Response.data.byId.logs.PSObject.Properties.Value) {
@@ -213,7 +213,7 @@ function Get-LMLogMessage {
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
 
                     # Issue request
-                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
 
                     if ($Response.meta.progress -eq 1) {
                         if ($Response.data.byId.logs.PSObject.Properties.Value) {

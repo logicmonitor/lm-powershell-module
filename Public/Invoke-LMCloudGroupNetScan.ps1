@@ -71,7 +71,7 @@ function Invoke-LMCloudGroupNetScan {
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+                Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
 
                 return "Scheduled LMCloud NetScan task for NetScan id: $Id."
             }

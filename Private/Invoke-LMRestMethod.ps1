@@ -82,7 +82,9 @@ function Invoke-LMRestMethod {
 
         [Switch]$NoRetry,
 
-        [Switch]$EnableDebugLogging
+        [Switch]$EnableDebugLogging,
+
+        [System.Management.Automation.PSCmdlet]$CallerPSCmdlet
     )
 
     $retryCount = 0
@@ -95,7 +97,7 @@ function Invoke-LMRestMethod {
                 Uri         = $Uri
                 Method      = $Method
                 Headers     = $Headers
-                ErrorAction = 'Stop'
+                ErrorAction = 'Stop'  # We handle errors ourselves
             }
 
             if ($WebSession) {
@@ -128,7 +130,14 @@ function Invoke-LMRestMethod {
         }
         catch {
             # Get detailed error information from Resolve-LMException
-            $errorResult = Resolve-LMException -LMException $PSItem -EnableDebugLogging:$EnableDebugLogging
+            $resolveParams = @{
+                LMException = $PSItem
+                EnableDebugLogging = $EnableDebugLogging
+            }
+            if ($CallerPSCmdlet) {
+                $resolveParams.CallerPSCmdlet = $CallerPSCmdlet
+            }
+            $errorResult = Resolve-LMException @resolveParams
 
             # Check if we should retry
             $shouldRetry = $errorResult.ShouldRetry -and -not $NoRetry -and $retryCount -lt $MaxRetries
@@ -164,25 +173,96 @@ function Invoke-LMRestMethod {
                     if ($EnableDebugLogging) {
                         Write-Debug $errorMessage
                     }
-                    throw [LMException]::new($errorMessage)
+                    $errorRecord = [System.Management.Automation.ErrorRecord]::new(
+                        [LMException]::new($errorMessage),
+                        "LMAPIError.MaxRetriesExceeded",
+                        [System.Management.Automation.ErrorCategory]::ResourceUnavailable,
+                        $Uri
+                    )
+                    
+                    if ($CallerPSCmdlet) {
+                        $CallerPSCmdlet.WriteError($errorRecord)
+                        if ($CallerPSCmdlet.SessionState.PSVariable.GetValue('ErrorActionPreference') -eq 'Stop') {
+                            $CallerPSCmdlet.ThrowTerminatingError($errorRecord)
+                        }
+                    }
+                    else {
+                        Write-Error -ErrorRecord $errorRecord
+                    }
+                    return
                 }
                 elseif ($NoRetry) {
                     if ($EnableDebugLogging) {
                         Write-Debug "Retry disabled, failing immediately: $($errorResult.Message)"
                     }
-                    throw [LMException]::new($errorResult.Message)
+                    $errorRecord = [System.Management.Automation.ErrorRecord]::new(
+                        [LMException]::new($errorResult.Message),
+                        "LMAPIError.NoRetry",
+                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                        $Uri
+                    )
+                    
+                    if ($CallerPSCmdlet) {
+                        $CallerPSCmdlet.WriteError($errorRecord)
+                        if ($CallerPSCmdlet.SessionState.PSVariable.GetValue('ErrorActionPreference') -eq 'Stop') {
+                            $CallerPSCmdlet.ThrowTerminatingError($errorRecord)
+                        }
+                    }
+                    else {
+                        Write-Error -ErrorRecord $errorRecord
+                    }
+                    return
                 }
                 else {
                     # Non-retryable error
                     if ($EnableDebugLogging) {
                         Write-Debug "Non-retryable error ($($errorResult.ErrorType)): $($errorResult.Message)"
                     }
-                    throw [LMException]::new($errorResult.Message)
+                    $errorCategory = switch ($errorResult.ErrorType) {
+                        'AuthenticationError' { [System.Management.Automation.ErrorCategory]::AuthenticationError }
+                        'AuthorizationError' { [System.Management.Automation.ErrorCategory]::PermissionDenied }
+                        'ClientError' { [System.Management.Automation.ErrorCategory]::InvalidArgument }
+                        'ServerError' { [System.Management.Automation.ErrorCategory]::ResourceUnavailable }
+                        default { [System.Management.Automation.ErrorCategory]::InvalidOperation }
+                    }
+                    
+                    $errorRecord = [System.Management.Automation.ErrorRecord]::new(
+                        [LMException]::new($errorResult.Message),
+                        "LMAPIError.$($errorResult.ErrorType)",
+                        $errorCategory,
+                        $Uri
+                    )
+                    
+                    if ($CallerPSCmdlet) {
+                        $CallerPSCmdlet.WriteError($errorRecord)
+                        if ($CallerPSCmdlet.SessionState.PSVariable.GetValue('ErrorActionPreference') -eq 'Stop') {
+                            $CallerPSCmdlet.ThrowTerminatingError($errorRecord)
+                        }
+                    }
+                    else {
+                        Write-Error -ErrorRecord $errorRecord
+                    }
+                    return
                 }
             }
         }
     }
 
     # This should never be reached, but just in case
-    throw [LMException]::new("Unexpected error: retry loop completed without success or failure")
+    $errorRecord = [System.Management.Automation.ErrorRecord]::new(
+        [LMException]::new("Unexpected error: retry loop completed without success or failure"),
+        "LMAPIError.UnexpectedError",
+        [System.Management.Automation.ErrorCategory]::InvalidResult,
+        $Uri
+    )
+    
+    if ($CallerPSCmdlet) {
+        $CallerPSCmdlet.WriteError($errorRecord)
+        if ($CallerPSCmdlet.SessionState.PSVariable.GetValue('ErrorActionPreference') -eq 'Stop') {
+            $CallerPSCmdlet.ThrowTerminatingError($errorRecord)
+        }
+    }
+    else {
+        Write-Error -ErrorRecord $errorRecord
+    }
 }

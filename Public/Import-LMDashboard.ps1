@@ -146,12 +146,12 @@ function Import-LMDashboard {
                     $Headers = @{"Authorization" = "token $GithubAccessToken" }
                 }
                 $Uri = "https://api.github.com/repos/$GithubUserRepo/git/trees/master?recursive=1"
-                $RepoData = (Invoke-LMRestMethod -Uri $Uri -Headers $Headers[0] -WebSession $Headers[1]).tree | Where-Object { $_.Path -like "*.json" -and $_.Path -notlike "Packages/LogicMonitor_Dashboards*" } | Select-Object path, url
+                $RepoData = (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Headers $Headers[0] -WebSession $Headers[1]).tree | Where-Object { $_.Path -like "*.json" -and $_.Path -notlike "Packages/LogicMonitor_Dashboards*" } | Select-Object path, url
                 if ($RepoData) {
                     $TotalItems = ($RepoData | Measure-Object).Count
                     Write-Information "[INFO]: Found $TotalItems JSON files from Github repo ($GithubUserRepo)"
                     foreach ($Item in $RepoData) {
-                        $EncodedDash = (Invoke-LMRestMethod -Uri $Item.url -Headers $Headers[0] -WebSession $Headers[1]).content
+                        $EncodedDash = (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Item.url -Headers $Headers[0] -WebSession $Headers[1]).content
                         $DashboardList += @{
                             file       = [Text.Encoding]::Utf8.GetString([Convert]::FromBase64String($EncodedDash)) | ConvertFrom-Json
                             path       = [System.IO.Path]::GetDirectoryName($Item.path)
@@ -270,7 +270,7 @@ function Import-LMDashboard {
                     Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
 
                     #Issue request
-                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
+                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
                     Write-Output "Successfully imported dashboard: $($Dashboard.file.name)"
 
                     $Results += (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Dashboard" )

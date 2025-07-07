@@ -103,7 +103,7 @@ function Invoke-LMDeviceConfigSourceCollection {
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
+                Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] | Out-Null
 
                 return "Scheduled Config collection task for device id: $Id."
             }

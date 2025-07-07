@@ -36,7 +36,9 @@ function Resolve-LMException {
         [Parameter(Mandatory = $true)]
         [System.Management.Automation.ErrorRecord]$LMException,
 
-        [Switch]$EnableDebugLogging
+        [Switch]$EnableDebugLogging,
+
+        [System.Management.Automation.PSCmdlet]$CallerPSCmdlet
     )
 
     # Initialize return object
@@ -145,7 +147,7 @@ function Resolve-LMException {
                 $result.Message = $errorMessage
             }
 
-            Write-LMError -Message $result.Message -StatusCode $statusCode
+            # Error writing is now handled in Invoke-LMRestMethod
             return $result
         }
 
@@ -155,7 +157,7 @@ function Resolve-LMException {
             $result.ErrorType = 'AuthenticationError'
             $result.Message = 'Authentication failed. Please check your API credentials and try connecting again.'
 
-            Write-LMError -Message $result.Message -StatusCode $statusCode
+            # Error writing is now handled in Invoke-LMRestMethod
             return $result
         }
 
@@ -165,7 +167,7 @@ function Resolve-LMException {
             $result.ErrorType = 'AuthorizationError'
             $result.Message = 'Access denied. Your API credentials do not have sufficient permissions for this operation.'
 
-            Write-LMError -Message $result.Message -StatusCode $statusCode
+            # Error writing is now handled in Invoke-LMRestMethod
             return $result
         }
 
@@ -178,7 +180,7 @@ function Resolve-LMException {
             $errorMessage = Get-LMExceptionMessage -LMException $LMException
             $result.Message = if ($errorMessage) { $errorMessage } else { "Client error (HTTP $statusCode)" }
 
-            Write-LMError -Message $result.Message -StatusCode $statusCode
+            # Error writing is now handled in Invoke-LMRestMethod
             return $result
         }
 
@@ -190,7 +192,7 @@ function Resolve-LMException {
             $errorMessage = Get-LMExceptionMessage -LMException $LMException
             $result.Message = if ($errorMessage) { $errorMessage } else { "Unexpected error (HTTP $statusCode)" }
 
-            Write-LMError -Message $result.Message -StatusCode $statusCode
+            # Error writing is now handled in Invoke-LMRestMethod
             return $result
         }
     }
@@ -240,22 +242,27 @@ function Write-LMError {
         [Parameter(Mandatory)]
         [String]$Message,
 
-        [Int]$StatusCode
+        [Int]$StatusCode,
+        
+        [System.Management.Automation.PSCmdlet]$CallerPSCmdlet
     )
 
     $errorMessage = if ($StatusCode) { "Failed to execute web request($StatusCode): $Message" } else { "Failed to execute web request: $Message" }
 
-    # Write to error stream (respects ErrorAction)
-    Write-Error $errorMessage -ErrorAction SilentlyContinue
+    if ($CallerPSCmdlet) {
+        # Create a proper error record
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new(
+            [System.Exception]::new($errorMessage),
+            "LMAPIError",
+            [System.Management.Automation.ErrorCategory]::InvalidOperation,
+            $null
+        )
 
-    # Write to console if not silenced
-    if ($ErrorActionPreference -ne "SilentlyContinue") {
-        try {
-            [Console]::ForegroundColor = 'Red'
-            [Console]::Error.WriteLine($errorMessage)
-        }
-        finally {
-            [Console]::ResetColor()
-        }
+        # Write the error (this will respect the caller's ErrorActionPreference)
+        $CallerPSCmdlet.WriteError($errorRecord)
+    }
+    else {
+        # Fallback to Write-Error when PSCmdlet is not available
+        Write-Error $errorMessage
     }
 }

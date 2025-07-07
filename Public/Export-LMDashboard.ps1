@@ -70,7 +70,7 @@ function Export-LMDashboard {
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
             #Issue request
-            $Response = Invoke-LMRestMethod -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
             #Export to JSON
             $Response | ConvertTo-Json -Depth 10 | Out-File -FilePath "$FilePath\$($Response.Name).json"

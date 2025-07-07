@@ -112,11 +112,11 @@ function Import-LMLogicModule {
 
                 #Issue request
                 if ($Type -eq "oids" -or $Type -eq "functions") {
-                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $File
+                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $File
                     return "Successfully imported LogicModule of type: $($Type)"
                 }
                 else {
-                    $Response = Invoke-LMRestMethod -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = $File }
+                    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = $File }
                     return "Successfully imported LogicModule of type: $($Response.items.type)"
                 }
 
