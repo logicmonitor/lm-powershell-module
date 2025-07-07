@@ -92,7 +92,7 @@ function Resolve-LMException {
 
             try {
                 $headers = $LMException.Exception.Response.Headers
-                $rateLimitWindow = [int]($headers['x-rate-limit-window'] ?? 60)
+                $rateLimitWindow = if ($headers['x-rate-limit-window']) { [int]$headers['x-rate-limit-window'] } else { 60 }
                 $rateLimitSize = $headers['x-rate-limit-limit']
 
                 $result.WaitSeconds = $rateLimitWindow
@@ -222,7 +222,15 @@ function Get-LMExceptionMessage {
     try {
         if ($LMException.ErrorDetails.Message) {
             $errorDetails = $LMException.ErrorDetails.Message | ConvertFrom-Json -ErrorAction Stop
-            $errorMessage = $errorDetails.errorMessage ?? $errorDetails.message ?? $errorDetails.error
+            $errorMessage = if ($errorDetails.errorMessage) { 
+                $errorDetails.errorMessage 
+            } elseif ($errorDetails.message) { 
+                $errorDetails.message 
+            } elseif ($errorDetails.error) { 
+                $errorDetails.error 
+            } else { 
+                $null 
+            }
 
             if ($errorMessage) {
                 # Sanitize error message to remove potential sensitive data
