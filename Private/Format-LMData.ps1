@@ -39,6 +39,7 @@ function Format-LMData {
 
         # Array of parameter names specified by the user (e.g., $MyInvocation.BoundParameters.Keys)
         [Parameter(Mandatory)]
+        [AllowEmptyCollection()]
         [string[]]$UserSpecifiedKeys,
 
         # Keys to always keep, regardless of value
