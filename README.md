@@ -73,56 +73,21 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.3.1
-### Introducing Automation Cmdlets:
+## 7.4
+### New Cmdlets:
+ - **Export-LMDashboard**: Exports dashboard information from LogicMonitor to a JSON file. This is the same file you would get from performing an export from your LM portal. (requested via @AUrhino)
 
-This version of the Logic.Monitor module brings the first of many "automation" cmdlets that utilize the core API cmdlets to perform scripted actions within a LogicMonitor portal. These initial cmdlets have been asked for by the community and we are happy to be able to include them directly in the core Logic.Monitor powershell module. As always, please provide feedback and feature requests for automation/cmdlets you would like to see added in the future.
+ ```powershell
+#Export a dashboard to a JSON file
+Export-LMDashboard -Id 123 -FilePath "C:\temp"
+```
 
-- **Invoke-LMDeviceDedupe**: Identifies and removes duplicate devices based on sysname or IP address matching. Helps clean up portals with duplicate device entries.
-  ```powershell
-  # List duplicates in a specific device group
-  Invoke-LMDeviceDedupe -ListDuplicates -DeviceGroupId 8
-  
-  # Remove duplicates from entire portal
-  Invoke-LMDeviceDedupe -RemoveDuplicates
-  ```
-
-- **Import-LMDevicesFromCSV**: Bulk imports devices from CSV file with support for custom properties and automatic device group creation.
-  ```powershell
-  # Import devices from CSV file
-  Import-LMDevicesFromCSV -FilePath "C:\Devices.csv" -CollectorId 1234
-  
-  # Generate example CSV template
-  Import-LMDevicesFromCSV -GenerateExampleCSV
-  ```
-
-- **Import-LMDeviceGroupsFromCSV**: Bulk imports device groups from CSV file with support for properties and AppliesTo logic.
-  ```powershell
-  # Import device groups from CSV
-  Import-LMDeviceGroupsFromCSV -FilePath "C:\Groups.csv" -PassThru
-  
-  # Generate example CSV template
-  Import-LMDeviceGroupsFromCSV -GenerateExampleCSV
-  ```
-
-- **Find-LMDashboardWidgets**: Searches all dashboard widgets for references to specific datasources. Useful for impact analysis before datasource changes.
-  ```powershell
-  # Find widgets using specific datasources
-  Find-LMDashboardWidgets -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCENTER_VM_PERFORMANCE")
-  ```
-
-- **Copy-LMDevicePropertyToGroup**: Copies custom properties from a device to device groups. Excludes sensitive credential properties.
-  ```powershell
-  # Copy properties from device to groups
-  Copy-LMDevicePropertyToGroup -SourceDeviceId 123 -TargetGroupId 456,457 -PropertyNames "location","department"
-  ```
-
-- **Copy-LMDevicePropertyToDevice**: Copies custom properties between devices. Excludes sensitive credential properties.
-  ```powershell
-  # Copy properties between devices
-  Copy-LMDevicePropertyToDevice -SourceDeviceId 123 -TargetDeviceId 456,457 -PropertyNames "location","department"
-  ```
-
+### Minor Changes:
+ - All payload formating is now done through a centralized *Format-LMData* function. A bug was reported where trying to refresh properties to clear a resources custom property list would resulting in the empty customProperties payload getting stripped during formating. (reported via @aggie87).
+ - An issue was discovered where rate limits could be hit without rate limit backoff being applied. As a result of this change we have over hauled the error handling in this version to ensure all cmdlets properly respect any *-ErrorAction* perferences you have specified.
+   - While we do not anticipate any issues with these changes, they do touch pretty much every cmdlet in this module, please report any issues you encounter when using this version.
+ - Increased integration testing coverage to +130 tests accross many of the different cmdlets in the suite.
+ - This version of the module cleans up a lot of the tech debt aquired over the years and aims to make the module easier to maintain and for the community to contribute to moving forward.
 
 ### Major Changes in v7:
  - **API Headers**: Updated all API request headers to use a custom User-Agent (Logic.Monitor-PowerShell-Module/Version) for usage reporting on versions deployed.

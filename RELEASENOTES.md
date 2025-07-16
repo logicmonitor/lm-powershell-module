@@ -1,4 +1,54 @@
 # Previous module release notes
+## 7.3.1
+### Introducing Automation Cmdlets:
+
+This version of the Logic.Monitor module brings the first of many "automation" cmdlets that utilize the core API cmdlets to perform scripted actions within a LogicMonitor portal. These initial cmdlets have been asked for by the community and we are happy to be able to include them directly in the core Logic.Monitor powershell module. As always, please provide feedback and feature requests for automation/cmdlets you would like to see added in the future.
+
+- **Invoke-LMDeviceDedupe**: Identifies and removes duplicate devices based on sysname or IP address matching. Helps clean up portals with duplicate device entries.
+  ```powershell
+  # List duplicates in a specific device group
+  Invoke-LMDeviceDedupe -ListDuplicates -DeviceGroupId 8
+  
+  # Remove duplicates from entire portal
+  Invoke-LMDeviceDedupe -RemoveDuplicates
+  ```
+
+- **Import-LMDevicesFromCSV**: Bulk imports devices from CSV file with support for custom properties and automatic device group creation.
+  ```powershell
+  # Import devices from CSV file
+  Import-LMDevicesFromCSV -FilePath "C:\Devices.csv" -CollectorId 1234
+  
+  # Generate example CSV template
+  Import-LMDevicesFromCSV -GenerateExampleCSV
+  ```
+
+- **Import-LMDeviceGroupsFromCSV**: Bulk imports device groups from CSV file with support for properties and AppliesTo logic.
+  ```powershell
+  # Import device groups from CSV
+  Import-LMDeviceGroupsFromCSV -FilePath "C:\Groups.csv" -PassThru
+  
+  # Generate example CSV template
+  Import-LMDeviceGroupsFromCSV -GenerateExampleCSV
+  ```
+
+- **Find-LMDashboardWidgets**: Searches all dashboard widgets for references to specific datasources. Useful for impact analysis before datasource changes.
+  ```powershell
+  # Find widgets using specific datasources
+  Find-LMDashboardWidgets -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCENTER_VM_PERFORMANCE")
+  ```
+
+- **Copy-LMDevicePropertyToGroup**: Copies custom properties from a device to device groups. Excludes sensitive credential properties.
+  ```powershell
+  # Copy properties from device to groups
+  Copy-LMDevicePropertyToGroup -SourceDeviceId 123 -TargetGroupId 456,457 -PropertyNames "location","department"
+  ```
+
+- **Copy-LMDevicePropertyToDevice**: Copies custom properties between devices. Excludes sensitive credential properties.
+  ```powershell
+  # Copy properties between devices
+  Copy-LMDevicePropertyToDevice -SourceDeviceId 123 -TargetDeviceId 456,457 -PropertyNames "location","department"
+  ```
+
 ## 7.3.0
 ### New Cmdlets:
  - **Get-LMDiagnosticSource**: Retrieves LogicMonitor Diagnostic Sources by ID, Name, DisplayName, or filter. Supports pagination and returns objects of type `LogicMonitor.DiagnosticSource`.
