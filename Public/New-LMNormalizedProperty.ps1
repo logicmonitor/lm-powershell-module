@@ -3,7 +3,7 @@
 Creates normalized properties in LogicMonitor.
 
 .DESCRIPTION
-The New-LMNormalizedProperties cmdlet creates normalized properties in LogicMonitor. Normalized properties allow you to map multiple host properties to a single alias that can be used across your environment.
+The New-LMNormalizedProperty cmdlet creates normalized properties in LogicMonitor. Normalized properties allow you to map multiple host properties to a single alias that can be used across your environment.
 
 .PARAMETER Alias
 The alias name for the normalized property.
@@ -13,7 +13,7 @@ An array of host property names to map to the alias.
 
 .EXAMPLE
 #Creates a normalized property with alias "location" mapped to multiple source properties.
-New-LMNormalizedProperties -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
+New-LMNormalizedProperty -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
 
 .NOTES
 You must run Connect-LMAccount before running this command. Reserved for internal use.

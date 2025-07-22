@@ -1,32 +1,32 @@
 <#
 .SYNOPSIS
-Retrieves devices associated with a LogicMonitor datasource.
+Retrieves devices discovered during a Netscan execution.
 
 .DESCRIPTION
-The Get-LMDatasourceAssociatedDevices function retrieves all devices that are associated with a specific datasource. It can identify the datasource by ID, name, or display name.
+The Get-LMNetscanExecutionDevice function retrieves devices discovered during a specific Netscan execution in LogicMonitor. The Netscan can be identified by either ID or name.
 
 .PARAMETER Id
-The ID of the datasource to retrieve associated devices for. This parameter is mandatory when using the Id parameter set.
+The ID of the execution to retrieve devices from. Required for Id parameter set.
 
-.PARAMETER Name
-The name of the datasource to retrieve associated devices for. Part of a mutually exclusive parameter set.
+.PARAMETER NspId
+The ID of the Netscan. Required when using Id parameter set.
 
-.PARAMETER DisplayName
-The display name of the datasource to retrieve associated devices for. Part of a mutually exclusive parameter set.
+.PARAMETER NspName
+The name of the Netscan. Required for Name parameter set.
 
 .PARAMETER Filter
-A filter object to apply when retrieving associated devices. This parameter is optional.
+A filter object to apply when retrieving devices.
 
 .PARAMETER BatchSize
 The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-#Retrieve devices associated with a datasource by ID
-Get-LMDatasourceAssociatedDevices -Id 123
+#Retrieve devices from a specific execution
+Get-LMNetscanExecutionDevice -Id 456 -NspId 123
 
 .EXAMPLE
-#Retrieve devices associated with a datasource by name
-Get-LMDatasourceAssociatedDevices -Name "CPU"
+#Retrieve devices using Netscan name
+Get-LMNetscanExecutionDevice -Id 456 -NspName "Network-Discovery"
 
 .NOTES
 You must run Connect-LMAccount before running this command.
@@ -35,21 +35,21 @@ You must run Connect-LMAccount before running this command.
 None. You cannot pipe objects to this command.
 
 .OUTPUTS
-Returns LogicMonitor.DatasourceDevice objects.
+Returns LogicMonitor.NetScanExecutionDevice objects.
 #>
 
-function Get-LMDatasourceAssociatedDevice {
+function Get-LMNetscanExecutionDevice {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
-        [String]$Name,
+        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [String]$NspId,
 
-        [Parameter(ParameterSetName = 'DisplayName')]
-        [String]$DisplayName,
+        [Parameter(Mandatory, ParameterSetName = 'Name')]
+        [String]$NspName,
 
         [Object]$Filter,
 
@@ -59,24 +59,16 @@ function Get-LMDatasourceAssociatedDevice {
     #Check if we are logged in and have valid api creds
     if ($Script:LMAuth.Valid) {
 
-        if ($Name) {
-            $LookupResult = (Get-LMDatasource -Name $Name).Id
-            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+        if ($NspName) {
+            $LookupResult = (Get-LMNetscan -Name $NspName).Id
+            if (Test-LookupResult -Result $LookupResult -LookupString $NspName) {
                 return
             }
-            $Id = $LookupResult
-        }
-
-        if ($DisplayName) {
-            $LookupResult = (Get-LMDatasource -DisplayName $DisplayName).Id
-            if (Test-LookupResult -Result $LookupResult -LookupString $DisplayName) {
-                return
-            }
-            $Id = $LookupResult
+            $NspId = $LookupResult
         }
 
         #Build header and uri
-        $ResourcePath = "/setting/datasources/$Id/devices"
+        $ResourcePath = "/setting/netscans/$NspId/executions/$Id/devices"
 
         #Initalize vars
         $QueryParams = ""
@@ -87,8 +79,6 @@ function Get-LMDatasourceAssociatedDevice {
         #Loop through requests
         while (!$Done) {
             #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
-
             if ($Filter) {
                 #List of allowed filter props
                 $PropList = @()
@@ -108,9 +98,9 @@ function Get-LMDatasourceAssociatedDevice {
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
             #Stop looping if single device, no need to continue
-            if (![bool]$Response.psobject.Properties["total"]) {
+            if ($PSCmdlet.ParameterSetName -eq "Id") {
                 $Done = $true
-                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DatasourceDevice" )
+                return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.NetScanExecutionDevice" )
             }
             #Check result size and if needed loop again
             else {
@@ -123,7 +113,7 @@ function Get-LMDatasourceAssociatedDevice {
             }
 
         }
-        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DatasourceDevice" )
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NetScanExecutionDevice" )
     }
     else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

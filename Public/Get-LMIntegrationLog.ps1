@@ -25,11 +25,11 @@ The number of results to return per request. Must be between 1 and 1000. Default
 
 .EXAMPLE
 #Retrieve logs for the last 30 days
-Get-LMIntegrationLogs
+Get-LMIntegrationLog
 
 .EXAMPLE
 #Retrieve logs with a specific search string and date range
-Get-LMIntegrationLogs -SearchString "error" -StartDate (Get-Date).AddDays(-7)
+Get-LMIntegrationLog -SearchString "error" -StartDate (Get-Date).AddDays(-7)
 
 .NOTES
 You must run Connect-LMAccount before running this command. There is a 10,000 record query limitation for this endpoint.

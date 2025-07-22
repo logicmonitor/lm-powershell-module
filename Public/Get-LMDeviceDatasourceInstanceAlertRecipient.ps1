@@ -3,7 +3,7 @@
 Retrieves alert recipients for a specific data point in a LogicMonitor device datasource instance.
 
 .DESCRIPTION
-The Get-LMDeviceDatasourceInstanceAlertRecipients function retrieves the alert recipients configured for a specific data point within a device's datasource instance. It supports identifying the device and datasource by either ID or name.
+The Get-LMDeviceDatasourceInstanceAlertRecipient function retrieves the alert recipients configured for a specific data point within a device's datasource instance. It supports identifying the device and datasource by either ID or name.
 
 .PARAMETER DatasourceName
 The name of the datasource. Required for Id-dsName and Name-dsName parameter sets.
@@ -25,11 +25,11 @@ The name of the data point to retrieve alert recipients for. This parameter is m
 
 .EXAMPLE
 #Retrieve alert recipients using names
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName "Ping" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
+Get-LMDeviceDatasourceInstanceAlertRecipient -DatasourceName "Ping" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
 
 .EXAMPLE
 #Retrieve alert recipients using IDs
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId 123 -Id 456 -InstanceName "Instance01" -DataPointName "PingLossPercent"
+Get-LMDeviceDatasourceInstanceAlertRecipient -DatasourceId 123 -Id 456 -InstanceName "Instance01" -DataPointName "PingLossPercent"
 
 .NOTES
 You must run Connect-LMAccount before running this command.

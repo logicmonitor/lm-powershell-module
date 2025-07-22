@@ -3,7 +3,7 @@
 Retrieves cloud cost optimization recommendation categories from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMCostOptimizationRecommendationCategories function retrieves cloud cost optimization recommendation categories from a connected LogicMonitor portal.
+The Get-LMCostOptimizationRecommendationCategory function retrieves cloud cost optimization recommendation categories from a connected LogicMonitor portal.
 
 .PARAMETER Filter
 A filter object to apply when retrieving cost optimization recommendation categories. Only recommendationCategory and recommendationStatus are supported for filtering using the equals operator all others are not supported at this time.
@@ -13,11 +13,11 @@ The number of results to return per request. Must be between 1 and 1000. Default
 
 .EXAMPLE
 #Retrieve all cost optimization recommendation categories
-Get-LMCostOptimizationRecommendationCategories
+Get-LMCostOptimizationRecommendationCategory
 
 .EXAMPLE
 #Retrieve cost optimization recommendation categories using a filter
-Get-LMCostOptimizationRecommendationCategories -Filter 'recommendationCategory -eq "Underutilized AWS EC2 instances"'
+Get-LMCostOptimizationRecommendationCategory -Filter 'recommendationCategory -eq "Underutilized AWS EC2 instances"'
 
 .NOTES
 You must run Connect-LMAccount before running this command. When using filters, consult the LM API docs for allowed filter fields.

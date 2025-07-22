@@ -75,14 +75,14 @@ function Invoke-LMActiveDiscovery {
                     Write-Error "Wildcard values not supported for group names."
                     return
                 }
-                $deviceList = (Get-LMDeviceGroupDevices -Name $GroupName).Id
+                $deviceList = (Get-LMDeviceGroupDevice -Name $GroupName).Id
                 if (!$deviceList) {
                     Write-Error "Unable to find devices for group: $GroupName, please check spelling and try again."
                     return
                 }
             }
             elseif ($GroupId) {
-                $deviceList = (Get-LMDeviceGroupDevices -Id $GroupId).Id
+                $deviceList = (Get-LMDeviceGroupDevice -Id $GroupId).Id
                 if (!$deviceList) {
                     Write-Error "Unable to find devices for groupId: $GroupId, please check spelling and try again."
                     return

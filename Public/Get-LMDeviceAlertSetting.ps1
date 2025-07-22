@@ -3,7 +3,7 @@
 Retrieves alert settings for a specific LogicMonitor device.
 
 .DESCRIPTION
-The Get-LMDeviceAlertSettings function retrieves the alert configuration settings for a specific device in LogicMonitor. The device can be identified by either ID or name, and the results can be filtered using custom criteria.
+The Get-LMDeviceAlertSetting function retrieves the alert configuration settings for a specific device in LogicMonitor. The device can be identified by either ID or name, and the results can be filtered using custom criteria.
 
 .PARAMETER Id
 The ID of the device to retrieve alert settings for. This parameter is mandatory when using the Id parameter set and can accept pipeline input.
@@ -19,11 +19,11 @@ The number of results to return per request. Must be between 1 and 1000. Default
 
 .EXAMPLE
 #Retrieve alert settings for a device by ID
-Get-LMDeviceAlertSettings -Id 123
+Get-LMDeviceAlertSetting -Id 123
 
 .EXAMPLE
 #Retrieve alert settings for a device by name
-Get-LMDeviceAlertSettings -Name "Production-Server"
+Get-LMDeviceAlertSetting -Name "Production-Server"
 
 .NOTES
 You must run Connect-LMAccount before running this command.

@@ -73,6 +73,12 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
+## 7.4.1
+### Bug Fixes:
+ - This version of Logic.Monitor module addresses some unintended issues introduced in the pervious version of the module. Some cmdlets had been inadvertently updated causing *cmdlet is not recognized as a name of a cmdlet, function script file or executable program* errors.
+### Updated Cmdlets:
+ - **New-LMWebsite**: If a testLocation parameter is specified the cmdlet will now default to setting the *-useDefaultLocationSetting* to *$false*. This was causing some confusion as it was previously always defaulting to $true even when specifying specific locations.
+
 ## 7.4
 ### New Cmdlets:
  - **Export-LMDashboard**: Exports dashboard information from LogicMonitor to a JSON file. This is the same file you would get from performing an export from your LM portal. (requested via @AUrhino)

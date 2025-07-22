@@ -354,7 +354,9 @@ function New-LMWebsite {
                 $testLocation = @{ all = $true }
             }
             elseif ($TestLocationCollectorIds) {
-                $testLocation = @{ collectorIds = $TestLocationCollectorIds }
+                $testLocation = @{ 
+                    collectorIds = $TestLocationCollectorIds
+                }
             }
             elseif ($TestLocationSmgIds) {
                 $testLocation = @{ smgIds = $TestLocationSmgIds }
@@ -373,6 +375,11 @@ function New-LMWebsite {
             # Add testLocation to data if it exists
             if ($testLocation) {
                 $Data.testLocation = $testLocation
+            }
+
+            # Set default based on specified testLocations
+            if($TestLocationCollectorIds -or $TestLocationSmgIds){
+                $Data.useDefaultLocationSetting = $false
             }
 
             #Remove empty keys so we dont overwrite them

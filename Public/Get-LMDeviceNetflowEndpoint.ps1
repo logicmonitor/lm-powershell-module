@@ -1,32 +1,35 @@
 <#
 .SYNOPSIS
-Retrieves devices discovered during a Netscan execution.
+Retrieves Netflow endpoint data for a LogicMonitor device.
 
 .DESCRIPTION
-The Get-LMNetscanExecutionDevices function retrieves devices discovered during a specific Netscan execution in LogicMonitor. The Netscan can be identified by either ID or name.
+The Get-LMDeviceNetflowEndpoint function retrieves Netflow endpoint information for a specified device. It supports time range filtering and can identify the device by either ID or name.
 
 .PARAMETER Id
-The ID of the execution to retrieve devices from. Required for Id parameter set.
+The ID of the device to retrieve Netflow endpoints from. Required for Id parameter set.
 
-.PARAMETER NspId
-The ID of the Netscan. Required when using Id parameter set.
-
-.PARAMETER NspName
-The name of the Netscan. Required for Name parameter set.
+.PARAMETER Name
+The name of the device to retrieve Netflow endpoints from. Required for Name parameter set.
 
 .PARAMETER Filter
-A filter object to apply when retrieving devices.
+A filter object to apply when retrieving endpoints. This parameter is optional.
+
+.PARAMETER StartDate
+The start date for retrieving Netflow data. Defaults to 24 hours ago if not specified.
+
+.PARAMETER EndDate
+The end date for retrieving Netflow data. Defaults to current time if not specified.
 
 .PARAMETER BatchSize
 The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-#Retrieve devices from a specific execution
-Get-LMNetscanExecutionDevices -Id 456 -NspId 123
+#Retrieve Netflow endpoints by device ID
+Get-LMDeviceNetflowEndpoint -Id 123
 
 .EXAMPLE
-#Retrieve devices using Netscan name
-Get-LMNetscanExecutionDevices -Id 456 -NspName "Network-Discovery"
+#Retrieve Netflow endpoints with date range
+Get-LMDeviceNetflowEndpoint -Name "Router1" -StartDate (Get-Date).AddDays(-7)
 
 .NOTES
 You must run Connect-LMAccount before running this command.
@@ -35,23 +38,24 @@ You must run Connect-LMAccount before running this command.
 None. You cannot pipe objects to this command.
 
 .OUTPUTS
-Returns LogicMonitor.NetScanExecutionDevice objects.
+Returns Netflow endpoint objects.
 #>
 
-function Get-LMNetscanExecutionDevice {
+function Get-LMDeviceNetflowEndpoint {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (
         [Parameter(Mandatory, ParameterSetName = 'Id')]
         [Int]$Id,
 
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
-        [String]$NspId,
-
-        [Parameter(Mandatory, ParameterSetName = 'Name')]
-        [String]$NspName,
+        [Parameter(ParameterSetName = 'Name')]
+        [String]$Name,
 
         [Object]$Filter,
+
+        [Datetime]$StartDate,
+
+        [Datetime]$EndDate,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -59,16 +63,31 @@ function Get-LMNetscanExecutionDevice {
     #Check if we are logged in and have valid api creds
     if ($Script:LMAuth.Valid) {
 
-        if ($NspName) {
-            $LookupResult = (Get-LMNetscan -Name $NspName).Id
-            if (Test-LookupResult -Result $LookupResult -LookupString $NspName) {
+        if ($Name) {
+            $LookupResult = (Get-LMDevice -Name $Name).Id
+            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
-            $NspId = $LookupResult
+            $Id = $LookupResult
+        }
+
+        #Convert to epoch, if not set use defaults (24 hours ago)
+        if (!$StartDate) {
+            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddHours(-24)).ToUnixTimeSeconds()
+        }
+        else {
+            [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
+        }
+
+        if (!$EndDate) {
+            [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
+        }
+        else {
+            [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
         #Build header and uri
-        $ResourcePath = "/setting/netscans/$NspId/executions/$Id/devices"
+        $ResourcePath = "/device/devices/$Id/endpoints"
 
         #Initalize vars
         $QueryParams = ""
@@ -79,11 +98,13 @@ function Get-LMNetscanExecutionDevice {
         #Loop through requests
         while (!$Done) {
             #Build query params
+            $QueryParams = "?size=$BatchSize&offset=$Count&sort=-usage&start=$StartDate&end=$EndDate"
+
             if ($Filter) {
                 #List of allowed filter props
                 $PropList = @()
                 $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=-usage"
             }
 
             
@@ -98,9 +119,9 @@ function Get-LMNetscanExecutionDevice {
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
             #Stop looping if single device, no need to continue
-            if ($PSCmdlet.ParameterSetName -eq "Id") {
+            if (![bool]$Response.psobject.Properties["total"]) {
                 $Done = $true
-                return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.NetScanExecutionDevice" )
+                return $Response
             }
             #Check result size and if needed loop again
             else {
@@ -113,7 +134,7 @@ function Get-LMNetscanExecutionDevice {
             }
 
         }
-        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NetScanExecutionDevice" )
+        return $Results
     }
     else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

@@ -3,18 +3,18 @@
 Retrieves LogicModules from the LogicMonitor repository.
 
 .DESCRIPTION
-The Get-LMRepositoryLogicModules function retrieves LogicModules from the LogicMonitor repository. It supports retrieving different types of modules including datasources, property rules, event sources, topology sources, and config sources.
+The Get-LMRepositoryLogicModule function retrieves LogicModules from the LogicMonitor repository. It supports retrieving different types of modules including datasources, property rules, event sources, topology sources, and config sources.
 
 .PARAMETER Type
 The type of LogicModule to retrieve. Valid values are "datasource", "propertyrules", "eventsource", "topologysource", "configsource". Defaults to "datasource".
 
 .EXAMPLE
 #Retrieve all datasource modules
-Get-LMRepositoryLogicModules
+Get-LMRepositoryLogicModule
 
 .EXAMPLE
 #Retrieve all event source modules
-Get-LMRepositoryLogicModules -Type "eventsource"
+Get-LMRepositoryLogicModule -Type "eventsource"
 
 .NOTES
 You must run Connect-LMAccount before running this command.

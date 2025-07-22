@@ -6,7 +6,7 @@ Find list of dashboard widgets containing mention of specified datasources
 Find list of dashboard widgets containing mention of specified datasources
 
 .EXAMPLE
-Find-LMDashboardWidgets -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCETNER_VM_PERFORMANCE")
+Find-LMDashboardWidget -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCETNER_VM_PERFORMANCE")
 
 .NOTES
 Created groups will be placed in a main group called Azure Resources by Subscription in the parent group specified by the -ParentGroupId parameter

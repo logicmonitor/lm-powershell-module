@@ -1,48 +1,45 @@
 <#
 .SYNOPSIS
-Retrieves devices belonging to a LogicMonitor device group.
+Retrieves alerts for a LogicMonitor device group.
 
 .DESCRIPTION
-The Get-LMDeviceGroupDevices function retrieves all devices that belong to a specific device group. It supports retrieving devices from subgroups and can filter the results.
+The Get-LMDeviceGroupAlert function retrieves all alerts associated with a specific device group in LogicMonitor. The device group can be identified by either ID or name, and the results can be filtered.
 
 .PARAMETER Id
-The ID of the device group. Required for Id parameter set.
+The ID of the device group to retrieve alerts for. This parameter is mandatory when using the Id parameter set and can accept pipeline input.
 
 .PARAMETER Name
-The name of the device group. Required for Name parameter set.
+The name of the device group to retrieve alerts for. Part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-A filter object to apply when retrieving devices. This parameter is optional.
-
-.PARAMETER IncludeSubGroups
-When set to true, includes devices from all subgroups of the specified group. Defaults to false.
+A filter object to apply when retrieving alerts. This parameter is optional.
 
 .PARAMETER BatchSize
 The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-#Retrieve devices from a group by ID
-Get-LMDeviceGroupDevices -Id 123
+#Retrieve alerts for a device group by ID
+Get-LMDeviceGroupAlert -Id 123
 
 .EXAMPLE
-#Retrieve devices including subgroups
-Get-LMDeviceGroupDevices -Name "Production Servers" -IncludeSubGroups $true
+#Retrieve alerts for a device group by name with filter
+Get-LMDeviceGroupAlert -Name "Production Servers" -Filter $filterObject
 
 .NOTES
 You must run Connect-LMAccount before running this command.
 
 .INPUTS
-None. You cannot pipe objects to this command.
+System.Int32. The device group ID can be piped to this function.
 
 .OUTPUTS
-Returns LogicMonitor.Device objects.
+Returns alert objects for the specified device group.
 #>
 
-function Get-LMDeviceGroupDevice {
+function Get-LMDeviceGroupAlert {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(ParameterSetName = 'Name')]
@@ -50,40 +47,31 @@ function Get-LMDeviceGroupDevice {
 
         [Object]$Filter,
 
-        [Boolean]$IncludeSubGroups = $false,
-
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
-    #Check if we are logged in and have valid api creds
-    if ($Script:LMAuth.Valid) {
 
-        if ($Name) {
-            $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
-            if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
-                return
+    begin {}
+    process {
+        #Check if we are logged in and have valid api creds
+        if ($Script:LMAuth.Valid) {
+
+            if ($Name) {
+                $LookupResult = (Get-LMDeviceGroup -Name $Name).Id
+                if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
+                    return
+                }
+                $Id = $LookupResult
             }
-            $Id = $LookupResult
-        }
-        $Ids = @()
-        if ($IncludeSubGroups) {
-            $Ids += Get-NestedDeviceGroups -Ids @($Id)
-        }
-        #Add in oringal Id to our list
-        $Ids += $Id
-
-        #Our return object
-        $Results = @()
-
-        foreach ($i in $Ids) {
 
             #Build header and uri
-            $ResourcePath = "/device/groups/$i/devices"
+            $ResourcePath = "/device/groups/$Id/alerts"
 
             #Initalize vars
             $QueryParams = ""
             $Count = 0
             $Done = $false
+            $Results = @()
 
             #Loop through requests
             while (!$Done) {
@@ -111,7 +99,7 @@ function Get-LMDeviceGroupDevice {
                 #Stop looping if single device, no need to continue
                 if (![bool]$Response.psobject.Properties["total"]) {
                     $Done = $true
-                    $Results += $Response
+                    return $Response
                 }
                 #Check result size and if needed loop again
                 else {
@@ -124,14 +112,10 @@ function Get-LMDeviceGroupDevice {
                 }
 
             }
-            #Dedupe results
+            return $Results
         }
-        if ($Results) {
-            $Results = ($Results | Sort-Object -Property Id -Unique)
+        else {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
         }
-        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Device" )
-    }
-    else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }

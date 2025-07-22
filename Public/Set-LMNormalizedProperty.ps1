@@ -3,7 +3,7 @@
 Updates normalized properties in LogicMonitor.
 
 .DESCRIPTION
-The Set-LMNormalizedProperties cmdlet updates normalized properties in LogicMonitor. Normalized properties allow you to map multiple host properties to a single alias that can be used across your environment.
+The Set-LMNormalizedProperty cmdlet updates normalized properties in LogicMonitor. Normalized properties allow you to map multiple host properties to a single alias that can be used across your environment.
 
 .PARAMETER Alias
 The alias name for the normalized property.
@@ -18,11 +18,11 @@ Indicates that properties should be removed from the existing normalized propert
 An array of host property names to map to the alias.
 
 .EXAMPLE
-Set-LMNormalizedProperties -Add -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
+Set-LMNormalizedProperty -Add -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
 Updates a normalized property with alias "location" to include the new properties.
 
 .EXAMPLE
-Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
+Set-LMNormalizedProperty -Remove -Alias "location" -Properties @("auto.meraki.location")
 Removes the "auto.meraki.location" property from the "location" alias.
 
 .INPUTS

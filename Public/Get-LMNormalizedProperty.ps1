@@ -3,14 +3,14 @@
 Gets normalized property mappings from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMNormalizedProperties function retrieves normalized property mappings that allow standardizing property names across your LogicMonitor environment. This function only supports the v4 API.
+The Get-LMNormalizedProperty function retrieves normalized property mappings that allow standardizing property names across your LogicMonitor environment. This function only supports the v4 API.
 
 .PARAMETER None
 This cmdlet has no parameters.
 
 .EXAMPLE
 #Retrieve all normalized properties
-Get-LMNormalizedProperties
+Get-LMNormalizedProperty
 
 .NOTES
 You must run Connect-LMAccount before running this command. This command is reserver for internal use only.

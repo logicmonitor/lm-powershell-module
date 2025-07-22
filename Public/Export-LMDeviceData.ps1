@@ -96,8 +96,8 @@ function Export-LMDeviceData {
             "DeviceId" { $DeviceList = Get-LMDevice -Id $DeviceId }
             "DeviceDisplayName" { $DeviceList = Get-LMDevice -DisplayName $DeviceDisplayName }
             "DeviceHostName" { $DeviceList = Get-LMDevice -Name $DeviceHostName }
-            "DeviceGroupId" { $DeviceList = Get-LMDeviceGroupDevices -Id $DeviceGroupId }
-            "DeviceGroupName" { $DeviceList = Get-LMDeviceGroupDevices -Name $DeviceGroupName }
+            "DeviceGroupId" { $DeviceList = Get-LMDeviceGroupDevice -Id $DeviceGroupId }
+            "DeviceGroupName" { $DeviceList = Get-LMDeviceGroupDevice -Name $DeviceGroupName }
         }
 
         if ($DeviceList) {

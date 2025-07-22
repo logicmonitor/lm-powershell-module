@@ -1,35 +1,29 @@
 <#
 .SYNOPSIS
-Retrieves Netflow endpoint data for a LogicMonitor device.
+Retrieves alerts for a website group from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMDeviceNetflowEndpoints function retrieves Netflow endpoint information for a specified device. It supports time range filtering and can identify the device by either ID or name.
+The Get-LMWebsiteGroupAlert function retrieves alert information for a specified website group in LogicMonitor. The group can be identified by either ID or name.
 
 .PARAMETER Id
-The ID of the device to retrieve Netflow endpoints from. Required for Id parameter set.
+The ID of the website group to retrieve alerts from. Required for Id parameter set.
 
 .PARAMETER Name
-The name of the device to retrieve Netflow endpoints from. Required for Name parameter set.
+The name of the website group to retrieve alerts from. Required for Name parameter set.
 
 .PARAMETER Filter
-A filter object to apply when retrieving endpoints. This parameter is optional.
-
-.PARAMETER StartDate
-The start date for retrieving Netflow data. Defaults to 24 hours ago if not specified.
-
-.PARAMETER EndDate
-The end date for retrieving Netflow data. Defaults to current time if not specified.
+A filter object to apply when retrieving alerts.
 
 .PARAMETER BatchSize
 The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-#Retrieve Netflow endpoints by device ID
-Get-LMDeviceNetflowEndpoints -Id 123
+#Retrieve alerts by group ID
+Get-LMWebsiteGroupAlert -Id 123
 
 .EXAMPLE
-#Retrieve Netflow endpoints with date range
-Get-LMDeviceNetflowEndpoints -Name "Router1" -StartDate (Get-Date).AddDays(-7)
+#Retrieve alerts for a specific group
+Get-LMWebsiteGroupAlert -Name "Production-Websites"
 
 .NOTES
 You must run Connect-LMAccount before running this command.
@@ -38,10 +32,10 @@ You must run Connect-LMAccount before running this command.
 None. You cannot pipe objects to this command.
 
 .OUTPUTS
-Returns Netflow endpoint objects.
+Returns website group alert objects.
 #>
 
-function Get-LMDeviceNetflowEndpoint {
+function Get-LMWebsiteGroupAlert {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (
@@ -53,10 +47,6 @@ function Get-LMDeviceNetflowEndpoint {
 
         [Object]$Filter,
 
-        [Datetime]$StartDate,
-
-        [Datetime]$EndDate,
-
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
     )
@@ -64,30 +54,15 @@ function Get-LMDeviceNetflowEndpoint {
     if ($Script:LMAuth.Valid) {
 
         if ($Name) {
-            $LookupResult = (Get-LMDevice -Name $Name).Id
+            $LookupResult = (Get-LMWebsiteGroup -Name $Name).Id
             if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
             $Id = $LookupResult
         }
 
-        #Convert to epoch, if not set use defaults (24 hours ago)
-        if (!$StartDate) {
-            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddHours(-24)).ToUnixTimeSeconds()
-        }
-        else {
-            [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
-        }
-
-        if (!$EndDate) {
-            [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
-        }
-        else {
-            [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
-        }
-
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/endpoints"
+        $ResourcePath = "/website/groups/$Id/alerts"
 
         #Initalize vars
         $QueryParams = ""
@@ -98,13 +73,13 @@ function Get-LMDeviceNetflowEndpoint {
         #Loop through requests
         while (!$Done) {
             #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=-usage&start=$StartDate&end=$EndDate"
+            $QueryParams = "?size=$BatchSize&offset=$Count&sort=-endDateTime"
 
             if ($Filter) {
                 #List of allowed filter props
                 $PropList = @()
                 $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=-usage"
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=-endDateTime"
             }
 
             

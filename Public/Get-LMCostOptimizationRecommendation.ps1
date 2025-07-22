@@ -3,7 +3,7 @@
 Retrieves cloud cost optimization recommendations from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMCostOptimizationRecommendations function retrieves cloud cost optimization recommendations from a connected LogicMonitor portal.
+The Get-LMCostOptimizationRecommendation function retrieves cloud cost optimization recommendations from a connected LogicMonitor portal.
 
 .PARAMETER Id
 The alphanumeric ID of the cost optimization recommendation to retrieve. Example: 1-2-EBS_UNATTACHED
@@ -16,11 +16,11 @@ The number of results to return per request. Must be between 1 and 1000. Default
 
 .EXAMPLE
 #Retrieve all cost optimization recommendations
-Get-LMCostOptimizationRecommendations
+Get-LMCostOptimizationRecommendation
 
 .EXAMPLE
 #Retrieve cost optimization recommendations using a filter
-Get-LMCostOptimizationRecommendations -Filter 'recommendationCategory -eq "Underutilized AWS EC2 instances"'
+Get-LMCostOptimizationRecommendation -Filter 'recommendationCategory -eq "Underutilized AWS EC2 instances"'
 
 .NOTES
 You must run Connect-LMAccount before running this command. When using filters, consult the LM API docs for allowed filter fields.

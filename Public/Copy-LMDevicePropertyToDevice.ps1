@@ -68,7 +68,7 @@ function Copy-LMDevicePropertyToDevice {
                 }
             }
             else {
-                $devices = Get-LMDeviceGroupDevices -Id $SourceGroupId
+                $devices = Get-LMDeviceGroupDevice -Id $SourceGroupId
                 if (!$devices) {
                     Write-Error "No devices found in source group with ID $SourceGroupId"
                     return

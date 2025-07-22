@@ -1,35 +1,32 @@
 <#
 .SYNOPSIS
-Retrieves Netflow port data for a LogicMonitor device.
+Retrieves devices associated with a LogicMonitor datasource.
 
 .DESCRIPTION
-The Get-LMDeviceNetflowPorts function retrieves Netflow port information for a specified device. It supports time range filtering and can identify the device by either ID or name.
+The Get-LMDatasourceAssociatedDevice function retrieves all devices that are associated with a specific datasource. It can identify the datasource by ID, name, or display name.
 
 .PARAMETER Id
-The ID of the device to retrieve Netflow ports from. Required for Id parameter set.
+The ID of the datasource to retrieve associated devices for. This parameter is mandatory when using the Id parameter set.
 
 .PARAMETER Name
-The name of the device to retrieve Netflow ports from. Required for Name parameter set.
+The name of the datasource to retrieve associated devices for. Part of a mutually exclusive parameter set.
+
+.PARAMETER DisplayName
+The display name of the datasource to retrieve associated devices for. Part of a mutually exclusive parameter set.
 
 .PARAMETER Filter
-A filter object to apply when retrieving ports. This parameter is optional.
-
-.PARAMETER StartDate
-The start date for retrieving Netflow data. Defaults to 24 hours ago if not specified.
-
-.PARAMETER EndDate
-The end date for retrieving Netflow data. Defaults to current time if not specified.
+A filter object to apply when retrieving associated devices. This parameter is optional.
 
 .PARAMETER BatchSize
 The number of results to return per request. Must be between 1 and 1000. Defaults to 1000.
 
 .EXAMPLE
-#Retrieve Netflow ports by device ID
-Get-LMDeviceNetflowPorts -Id 123
+#Retrieve devices associated with a datasource by ID
+Get-LMDatasourceAssociatedDevice -Id 123
 
 .EXAMPLE
-#Retrieve Netflow ports with date range
-Get-LMDeviceNetflowPorts -Name "Router1" -StartDate (Get-Date).AddDays(-7)
+#Retrieve devices associated with a datasource by name
+Get-LMDatasourceAssociatedDevice -Name "CPU"
 
 .NOTES
 You must run Connect-LMAccount before running this command.
@@ -38,10 +35,10 @@ You must run Connect-LMAccount before running this command.
 None. You cannot pipe objects to this command.
 
 .OUTPUTS
-Returns Netflow port objects.
+Returns LogicMonitor.DatasourceDevice objects.
 #>
 
-function Get-LMDeviceNetflowPort {
+function Get-LMDatasourceAssociatedDevice {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (
@@ -51,11 +48,10 @@ function Get-LMDeviceNetflowPort {
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
+        [Parameter(ParameterSetName = 'DisplayName')]
+        [String]$DisplayName,
+
         [Object]$Filter,
-
-        [Datetime]$StartDate,
-
-        [Datetime]$EndDate,
 
         [ValidateRange(1, 1000)]
         [Int]$BatchSize = 1000
@@ -64,30 +60,23 @@ function Get-LMDeviceNetflowPort {
     if ($Script:LMAuth.Valid) {
 
         if ($Name) {
-            $LookupResult = (Get-LMDevice -Name $Name).Id
+            $LookupResult = (Get-LMDatasource -Name $Name).Id
             if (Test-LookupResult -Result $LookupResult -LookupString $Name) {
                 return
             }
             $Id = $LookupResult
         }
 
-        #Convert to epoch, if not set use defaults (24 hours ago)
-        if (!$StartDate) {
-            [int]$StartDate = ([DateTimeOffset]$(Get-Date).AddHours(-24)).ToUnixTimeSeconds()
-        }
-        else {
-            [int]$StartDate = ([DateTimeOffset]$($StartDate)).ToUnixTimeSeconds()
-        }
-
-        if (!$EndDate) {
-            [int]$EndDate = ([DateTimeOffset]$(Get-Date)).ToUnixTimeSeconds()
-        }
-        else {
-            [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
+        if ($DisplayName) {
+            $LookupResult = (Get-LMDatasource -DisplayName $DisplayName).Id
+            if (Test-LookupResult -Result $LookupResult -LookupString $DisplayName) {
+                return
+            }
+            $Id = $LookupResult
         }
 
         #Build header and uri
-        $ResourcePath = "/device/devices/$Id/ports"
+        $ResourcePath = "/setting/datasources/$Id/devices"
 
         #Initalize vars
         $QueryParams = ""
@@ -98,13 +87,13 @@ function Get-LMDeviceNetflowPort {
         #Loop through requests
         while (!$Done) {
             #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=-usage&start=$StartDate&end=$EndDate"
+            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
 
             if ($Filter) {
                 #List of allowed filter props
                 $PropList = @()
                 $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=-usage"
+                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
 
             
@@ -121,7 +110,7 @@ function Get-LMDeviceNetflowPort {
             #Stop looping if single device, no need to continue
             if (![bool]$Response.psobject.Properties["total"]) {
                 $Done = $true
-                return $Response
+                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DatasourceDevice" )
             }
             #Check result size and if needed loop again
             else {
@@ -134,7 +123,7 @@ function Get-LMDeviceNetflowPort {
             }
 
         }
-        return $Results
+        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DatasourceDevice" )
     }
     else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

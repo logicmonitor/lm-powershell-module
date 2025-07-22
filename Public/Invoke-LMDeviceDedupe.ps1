@@ -43,7 +43,7 @@ function Invoke-LMDeviceDedupe {
             $SysNameExclusionList += @("(none)", "N/A", "none", "blank", "empty", "")
 
             if ($DeviceGroupId) {
-                $DeviceList = Get-LMDeviceGroupDevices -Id $DeviceGroupId
+                $DeviceList = Get-LMDeviceGroupDevice -Id $DeviceGroupId
             }
             else {
                 $DeviceList = Get-LMDevice

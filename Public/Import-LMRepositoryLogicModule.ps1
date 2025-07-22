@@ -3,7 +3,7 @@
 Imports LogicMonitor repository logic modules.
 
 .DESCRIPTION
-The Import-LMRepositoryLogicModules function imports specified logic modules from the LogicMonitor repository into your portal.
+The Import-LMRepositoryLogicModule function imports specified logic modules from the LogicMonitor repository into your portal.
 
 .PARAMETER Type
 The type of logic modules to import. Valid values are "datasources", "propertyrules", "eventsources", "topologysources", "configsources".
@@ -13,7 +13,7 @@ An array of logic module names to import.
 
 .EXAMPLE
 #Import specific datasources
-Import-LMRepositoryLogicModules -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"
+Import-LMRepositoryLogicModule -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"
 
 .NOTES
 You must run Connect-LMAccount before running this command.

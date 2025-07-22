@@ -3,7 +3,7 @@
 Retrieves audit logs from LogicMonitor.
 
 .DESCRIPTION
-The Get-LMAuditLogs function retrieves audit logs from LogicMonitor based on the specified parameters. It supports retrieving logs by ID, by date range, or by applying filters. The function can retrieve up to 10000 logs in a single query.
+The Get-LMAuditLog function retrieves audit logs from LogicMonitor based on the specified parameters. It supports retrieving logs by ID, by date range, or by applying filters. The function can retrieve up to 10000 logs in a single query.
 
 .PARAMETER Id
 The ID of the specific audit log to retrieve. This parameter is part of a mutually exclusive parameter set.
@@ -25,11 +25,11 @@ The number of results to return per request. Must be between 1 and 1000. Default
 
 .EXAMPLE
 #Retrieve audit logs from the last week
-Get-LMAuditLogs -StartDate (Get-Date).AddDays(-7)
+Get-LMAuditLog -StartDate (Get-Date).AddDays(-7)
 
 .EXAMPLE
 #Search for specific audit logs
-Get-LMAuditLogs -SearchString "login" -StartDate (Get-Date).AddDays(-30)
+Get-LMAuditLog -SearchString "login" -StartDate (Get-Date).AddDays(-30)
 
 .NOTES
 You must run Connect-LMAccount before running this command. Maximum of 10000 logs can be retrieved in a single query.

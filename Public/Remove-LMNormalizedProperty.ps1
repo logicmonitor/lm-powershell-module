@@ -3,13 +3,13 @@
 Removes normalized properties from LogicMonitor.
 
 .DESCRIPTION
-The Remove-LMNormalizedProperties cmdlet removes normalized properties from LogicMonitor.
+The Remove-LMNormalizedProperty cmdlet removes normalized properties from LogicMonitor.
 
 .PARAMETER Alias
 The alias name of the normalized property to remove.
 
 .EXAMPLE
-Remove-LMNormalizedProperties -Alias "location"
+Remove-LMNormalizedProperty -Alias "location"
 Removes the normalized property with alias "location".
 
 .INPUTS
