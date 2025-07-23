@@ -39,7 +39,7 @@ $wrapperFunctionNames = @(
     'Set-LMNormalizedProperties','Remove-LMNormalizedProperties','New-LMNormalizedProperties','Import-LMRepositoryLogicModules',
     'Get-LMWebsiteGroupAlerts','Get-LMWebsiteAlerts','Get-LMUsageMetrics','Get-LMRepositoryLogicModules','Get-LMNormalizedProperties',
     'Get-LMNetscanExecutionDevices','Get-LMIntegrationLogs','Get-LMDeviceNetflowPorts','Get-LMDeviceNetflowFlows','Get-LMDeviceNetflowEndpoints',
-    'Get-LMDeviceGroupDevices','Get-LMDeviceGroupAlerts','Get-LMDeviceDatasourceInstanceAlertRecipients','Get-LMDeviceAlertSettings',
+    'Get-LMDeviceGroupDevices','Get-LMDeviceGroupGroups','Get-LMDeviceGroupAlerts','Get-LMDeviceDatasourceInstanceAlertRecipients','Get-LMDeviceAlertSettings',
     'Get-LMDatasourceAssociatedDevices','Get-LMCostOptimizationRecommendations','Get-LMCostOptimizationRecommendationCategories',
     'Get-LMAuditLogs','Find-LMDashboardWidgets'
 )

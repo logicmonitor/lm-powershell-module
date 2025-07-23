@@ -74,6 +74,39 @@ Connect-LMAccount -UseCachedCredential
 # Change List
 
 ## 7.4.2
+
+### Cmdlet Naming Update:
+- **Plural-to-Singular Standardization:**  
+  To align with PowerShell best practices and the rest of the module, the following cmdlets have been renamed from plural nouns to singular nouns:
+  - `Get-LMAuditLogs` → `Get-LMAuditLog`
+  - `Set-LMNormalizedProperties` → `Set-LMNormalizedProperty`
+  - `Remove-LMNormalizedProperties` → `Remove-LMNormalizedProperty`
+  - `New-LMNormalizedProperties` → `New-LMNormalizedProperty`
+  - `Import-LMRepositoryLogicModules` → `Import-LMRepositoryLogicModule`
+  - `Get-LMWebsiteGroupAlerts` → `Get-LMWebsiteGroupAlert`
+  - `Get-LMWebsiteAlerts` → `Get-LMWebsiteAlert`
+  - `Get-LMUsageMetrics` → `Get-LMUsageMetric`
+  - `Get-LMRepositoryLogicModules` → `Get-LMRepositoryLogicModule`
+  - `Get-LMNormalizedProperties` → `Get-LMNormalizedProperty`
+  - `Get-LMNetscanExecutionDevices` → `Get-LMNetscanExecutionDevice`
+  - `Get-LMIntegrationLogs` → `Get-LMIntegrationLog`
+  - `Get-LMDeviceNetflowPorts` → `Get-LMDeviceNetflowPort`
+  - `Get-LMDeviceNetflowFlows` → `Get-LMDeviceNetflowFlow`
+  - `Get-LMDeviceNetflowEndpoints` → `Get-LMDeviceNetflowEndpoint`
+  - `Get-LMDeviceGroupDevices` → `Get-LMDeviceGroupDevice`
+  - `Get-LMDeviceGroupGroups` → `Get-LMDeviceGroupGroup`
+  - `Get-LMDeviceGroupAlerts` → `Get-LMDeviceGroupAlert`
+  - `Get-LMDeviceDatasourceInstanceAlertRecipients` → `Get-LMDeviceDatasourceInstanceAlertRecipient`
+  - `Get-LMDeviceAlertSettings` → `Get-LMDeviceAlertSetting`
+  - `Get-LMDatasourceAssociatedDevices` → `Get-LMDatasourceAssociatedDevice`
+  - `Get-LMCostOptimizationRecommendations` → `Get-LMCostOptimizationRecommendation`
+  - `Get-LMCostOptimizationRecommendationCategories` → `Get-LMCostOptimizationRecommendationCategory`
+  - `Find-LMDashboardWidgets` → `Find-LMDashboardWidget`
+
+- **Backward Compatibility:**  
+  Wrapper functions for the previous plural-noun cmdlet names have been included for backward compatibility.  
+  **Note:** These plural-noun wrappers are considered deprecated and will be removed in a future major release. Please update your scripts to use the new singular-noun cmdlet names.
+
 ### Bug Fixes:
  - This version of Logic.Monitor module addresses some unintended issues introduced in the pervious version of the module. Some cmdlets had been inadvertently updated causing *cmdlet is not recognized as a name of a cmdlet, function script file or executable program* errors.
 ### Updated Cmdlets:
