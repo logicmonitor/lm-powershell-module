@@ -44,6 +44,7 @@ $wrapperFunctionNames = @(
     'Get-LMAuditLogs','Find-LMDashboardWidgets'
 )
 
+# Export function names and wrapper functions
 If ((Test-Path -Path $publicFuncFolderPath) -and ($publicFunctionNames = Get-ChildItem -Path $publicFuncFolderPath -Filter '*.ps1' | Select-Object -ExpandProperty BaseName)) {
     $allFunctionNames = $publicFunctionNames + $wrapperFunctionNames
     $funcStrings = "'$($allFunctionNames -join "','")'"
