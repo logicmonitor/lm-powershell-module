@@ -12,30 +12,30 @@ Foreach ($import in @($Public + $Private)) {
     }
 }
 
-# Plural function wrappers for backward compatibility +7.4
-function Set-LMNormalizedProperties      { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Set-LMNormalizedProperty @Args }
-function Remove-LMNormalizedProperties   { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Remove-LMNormalizedProperty @Args }
-function New-LMNormalizedProperties      { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) New-LMNormalizedProperty @Args }
-function Import-LMRepositoryLogicModules { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Import-LMRepositoryLogicModule @Args }
-function Get-LMWebsiteGroupAlerts        { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMWebsiteGroupAlert @Args }
-function Get-LMWebsiteAlerts             { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMWebsiteAlert @Args }
-function Get-LMUsageMetrics              { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMUsageMetric @Args }
-function Get-LMRepositoryLogicModules    { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMRepositoryLogicModule @Args }
-function Get-LMNormalizedProperties      { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMNormalizedProperty @Args }
-function Get-LMNetscanExecutionDevices   { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMNetscanExecutionDevice @Args }
-function Get-LMIntegrationLogs           { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMIntegrationLog @Args }
-function Get-LMDeviceNetflowPorts        { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMDeviceNetflowPort @Args }
-function Get-LMDeviceNetflowFlows        { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMDeviceNetflowFlow @Args }
-function Get-LMDeviceNetflowEndpoints    { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMDeviceNetflowEndpoint @Args }
-function Get-LMDeviceGroupDevices        { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMDeviceGroupDevice @Args }
-function Get-LMDeviceGroupAlerts         { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMDeviceGroupAlert @Args }
-function Get-LMDeviceDatasourceInstanceAlertRecipients { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMDeviceDatasourceInstanceAlertRecipient @Args }
-function Get-LMDeviceAlertSettings       { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMDeviceAlertSetting @Args }
-function Get-LMDatasourceAssociatedDevices { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMDatasourceAssociatedDevice @Args }
-function Get-LMCostOptimizationRecommendations { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMCostOptimizationRecommendation @Args }
-function Get-LMCostOptimizationRecommendationCategories { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMCostOptimizationRecommendationCategory @Args }
-function Get-LMAuditLogs                 { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Get-LMAuditLog @Args }
-function Find-LMDashboardWidgets         { [CmdletBinding()] param([Parameter(ValueFromRemainingArguments = $true)][Object[]]$Args) Find-LMDashboardWidget @Args }
+# Plural aliases for backward compatibility +7.4
+Set-Alias -Name Set-LMNormalizedProperties -Value Set-LMNormalizedProperty
+Set-Alias -Name Remove-LMNormalizedProperties -Value Remove-LMNormalizedProperty
+Set-Alias -Name New-LMNormalizedProperties -Value New-LMNormalizedProperty
+Set-Alias -Name Import-LMRepositoryLogicModules -Value Import-LMRepositoryLogicModule
+Set-Alias -Name Get-LMWebsiteGroupAlerts -Value Get-LMWebsiteGroupAlert
+Set-Alias -Name Get-LMWebsiteAlerts -Value Get-LMWebsiteAlert
+Set-Alias -Name Get-LMUsageMetrics -Value Get-LMUsageMetric
+Set-Alias -Name Get-LMRepositoryLogicModules -Value Get-LMRepositoryLogicModule
+Set-Alias -Name Get-LMNormalizedProperties -Value Get-LMNormalizedProperty
+Set-Alias -Name Get-LMNetscanExecutionDevices -Value Get-LMNetscanExecutionDevice
+Set-Alias -Name Get-LMIntegrationLogs -Value Get-LMIntegrationLog
+Set-Alias -Name Get-LMDeviceNetflowPorts -Value Get-LMDeviceNetflowPort
+Set-Alias -Name Get-LMDeviceNetflowFlows -Value Get-LMDeviceNetflowFlow
+Set-Alias -Name Get-LMDeviceNetflowEndpoints -Value Get-LMDeviceNetflowEndpoint
+Set-Alias -Name Get-LMDeviceGroupDevices -Value Get-LMDeviceGroupDevice
+Set-Alias -Name Get-LMDeviceGroupAlerts -Value Get-LMDeviceGroupAlert
+Set-Alias -Name Get-LMDeviceDatasourceInstanceAlertRecipients -Value Get-LMDeviceDatasourceInstanceAlertRecipient
+Set-Alias -Name Get-LMDeviceAlertSettings -Value Get-LMDeviceAlertSetting
+Set-Alias -Name Get-LMDatasourceAssociatedDevices -Value Get-LMDatasourceAssociatedDevice
+Set-Alias -Name Get-LMCostOptimizationRecommendations -Value Get-LMCostOptimizationRecommendation
+Set-Alias -Name Get-LMCostOptimizationRecommendationCategories -Value Get-LMCostOptimizationRecommendationCategory
+Set-Alias -Name Get-LMAuditLogs -Value Get-LMAuditLog
+Set-Alias -Name Find-LMDashboardWidgets -Value Find-LMDashboardWidget
 
 # Export both singular and plural names
 $AllCmdlets = $Public | ForEach-Object { $_.BaseName }
@@ -49,4 +49,4 @@ $Plural = @(
 ) | ForEach-Object { [string]$_ }
 $Singular = $AllCmdlets | Where-Object { $Plural -notcontains $_ } | ForEach-Object { [string]$_ }
 
-Export-ModuleMember -Function ($Singular + $Plural)
+Export-ModuleMember -Function $Singular -Alias $Plural

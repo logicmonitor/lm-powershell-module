@@ -104,8 +104,8 @@ Connect-LMAccount -UseCachedCredential
   - `Find-LMDashboardWidgets` → `Find-LMDashboardWidget`
 
 - **Backward Compatibility:**  
-  Wrapper functions for the previous plural-noun cmdlet names have been included for backward compatibility.  
-  **Note:** These plural-noun wrappers are considered deprecated and will be removed in a future major release. Please update your scripts to use the new singular-noun cmdlet names.
+  Alias functions for the previous plural-noun cmdlet names have been included for backward compatibility.  
+  **Note:** These plural-noun alias are considered deprecated and will be removed in a future major release. Please update your scripts to use the new singular-noun cmdlet names.
 
 ### Bug Fixes:
  - This version of Logic.Monitor module addresses some unintended issues introduced in the pervious version of the module. Some cmdlets had been inadvertently updated causing *cmdlet is not recognized as a name of a cmdlet, function script file or executable program* errors.
