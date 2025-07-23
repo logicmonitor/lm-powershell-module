@@ -3,7 +3,7 @@
 Retrieves subgroups of a LogicMonitor device group.
 
 .DESCRIPTION
-The Get-LMDeviceGroupGroups function retrieves all subgroups that belong to a specified device group in LogicMonitor. The parent group can be identified by either ID or name, and the results can be filtered.
+The Get-LMDeviceGroupGroup function retrieves all subgroups that belong to a specified device group in LogicMonitor. The parent group can be identified by either ID or name, and the results can be filtered.
 
 .PARAMETER Id
 The ID of the device group to retrieve subgroups from. Required for Id parameter set.
@@ -19,11 +19,11 @@ The number of results to return per request. Must be between 1 and 1000. Default
 
 .EXAMPLE
 #Retrieve subgroups by parent group ID
-Get-LMDeviceGroupGroups -Id 123
+Get-LMDeviceGroupGroup -Id 123
 
 .EXAMPLE
 #Retrieve filtered subgroups by parent group name
-Get-LMDeviceGroupGroups -Name "Production" -Filter $filterObject
+Get-LMDeviceGroupGroup -Name "Production" -Filter $filterObject
 
 .NOTES
 You must run Connect-LMAccount before running this command.

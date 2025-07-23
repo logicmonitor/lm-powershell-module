@@ -73,11 +73,13 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.4.1
+## 7.4.2
 ### Bug Fixes:
  - This version of Logic.Monitor module addresses some unintended issues introduced in the pervious version of the module. Some cmdlets had been inadvertently updated causing *cmdlet is not recognized as a name of a cmdlet, function script file or executable program* errors.
 ### Updated Cmdlets:
  - **New-LMWebsite**: If a testLocation parameter is specified the cmdlet will now default to setting the *-useDefaultLocationSetting* to *$false*. This was causing some confusion as it was previously always defaulting to $true even when specifying specific locations.
+ - **Get-LMAccountStatus**: Added AccessId to the returned LMAuth object.
+ - **New/Set-LMDeviceGroup**: Added parameters for setting *-DefaultCollectorId*, *-DefaultAutoBalancedCollectorGroupId* and *-DefaultCollectorGroupId*.
 
 ## 7.4
 ### New Cmdlets:

@@ -69,6 +69,12 @@ function Set-LMDeviceGroup {
 
         [Hashtable]$Properties,
 
+        [Nullable[Int]]$DefaultCollectorId,
+
+        [Nullable[Int]]$DefaultAutoBalancedCollectorGroupId,
+
+        [Nullable[Int]]$DefaultCollectorGroupId,
+
         [ValidateSet("Add", "Replace", "Refresh")] # Add will append to existing prop, Replace will update existing props if specified and add new props, refresh will replace existing props with new
         [String]$PropertiesMethod = "Replace",
 
@@ -135,6 +141,9 @@ function Set-LMDeviceGroup {
                 description      = $Description
                 appliesTo        = $AppliesTo
                 disableAlerting  = $DisableAlerting
+                defaultAutoBalancedCollectorGroupId = $DefaultAutoBalancedCollectorGroupId
+                defaultCollectorGroupId             = $DefaultCollectorGroupId
+                defaultCollectorId                  = $DefaultCollectorId
                 enableNetflow    = $EnableNetFlow
                 customProperties = $customProperties
                 parentId         = $ParentGroupId

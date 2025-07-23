@@ -54,7 +54,7 @@ function Set-LMNormalizedProperty {
     process {
         if ($Script:LMAuth.Valid) {
             #Get existing normalized properties as all updates have to be done via bulk
-            $ExistingProperties = Get-LMNormalizedProperties
+            $ExistingProperties = Get-LMNormalizedProperty
 
             #Build header and uri
             $ResourcePath = "/normalizedProperties/bulk"

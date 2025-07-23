@@ -59,6 +59,12 @@ function New-LMDeviceGroup {
 
         [Hashtable]$Properties,
 
+        [Int]$DefaultCollectorId = 0,
+
+        [Int]$DefaultAutoBalancedCollectorGroupId = 0,
+
+        [Int]$DefaultCollectorGroupId = 0,
+
         [Boolean]$DisableAlerting = $false,
 
         [Boolean]$EnableNetFlow = $false,
@@ -106,9 +112,9 @@ function New-LMDeviceGroup {
             enableNetflow                       = $EnableNetFlow
             customProperties                    = $customProperties
             parentId                            = $ParentGroupId
-            defaultAutoBalancedCollectorGroupId = 0
-            defaultCollectorGroupId             = 0
-            defaultCollectorId                  = 0
+            defaultAutoBalancedCollectorGroupId = $DefaultAutoBalancedCollectorGroupId
+            defaultCollectorGroupId             = $DefaultCollectorGroupId
+            defaultCollectorId                  = $DefaultCollectorId
         }
 
         $Data = ($Data | ConvertTo-Json)

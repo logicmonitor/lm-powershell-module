@@ -27,6 +27,7 @@ function Get-LMAccountStatus {
             Valid    = $Script:LMAuth.Valid
             Logging  = $Script:LMAuth.Logging
             Type     = $Script:LMAuth.Type
+            Id = $Script:LMAuth.Id
             GovCloud = $Script:LMAuth.GovCloud
         }
         return $Result

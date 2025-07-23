@@ -34,10 +34,20 @@ If (!(Get-Module PwshSpectreConsole -ListAvailable)) {
 
 $manifestContent = (Get-Content -Path $manifestPath -Raw) -replace '<ModuleVersion>', $buildVersion
 
+# Add this before you build $funcStrings
+$wrapperFunctionNames = @(
+    'Set-LMNormalizedProperties','Remove-LMNormalizedProperties','New-LMNormalizedProperties','Import-LMRepositoryLogicModules',
+    'Get-LMWebsiteGroupAlerts','Get-LMWebsiteAlerts','Get-LMUsageMetrics','Get-LMRepositoryLogicModules','Get-LMNormalizedProperties',
+    'Get-LMNetscanExecutionDevices','Get-LMIntegrationLogs','Get-LMDeviceNetflowPorts','Get-LMDeviceNetflowFlows','Get-LMDeviceNetflowEndpoints',
+    'Get-LMDeviceGroupDevices','Get-LMDeviceGroupAlerts','Get-LMDeviceDatasourceInstanceAlertRecipients','Get-LMDeviceAlertSettings',
+    'Get-LMDatasourceAssociatedDevices','Get-LMCostOptimizationRecommendations','Get-LMCostOptimizationRecommendationCategories',
+    'Get-LMAuditLogs','Find-LMDashboardWidgets'
+)
+
 If ((Test-Path -Path $publicFuncFolderPath) -and ($publicFunctionNames = Get-ChildItem -Path $publicFuncFolderPath -Filter '*.ps1' | Select-Object -ExpandProperty BaseName)) {
-    $funcStrings = "'$($publicFunctionNames -join "','")'"
-}
-Else {
+    $allFunctionNames = $publicFunctionNames + $wrapperFunctionNames
+    $funcStrings = "'$($allFunctionNames -join "','")'"
+} else {
     $funcStrings = $null
 }
 

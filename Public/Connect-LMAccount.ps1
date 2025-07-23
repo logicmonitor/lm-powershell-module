@@ -251,6 +251,7 @@ function Connect-LMAccount {
         Portal      = $AccountName
         Valid       = $true
         Type        = $Type
+        Logging     = !$DisableConsoleLogging.IsPresent
         GovCloud    = $GovCloud.IsPresent
     }
 

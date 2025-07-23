@@ -28,6 +28,8 @@ jobs:
         run: |
           ./Build.ps1
 
+          Get-Command -Module Logic.Monitor
+
           $Data = @{
             AccessId="$env:LM_ACCESS_ID"
             AccessKey="$env:LM_ACCESS_KEY"
