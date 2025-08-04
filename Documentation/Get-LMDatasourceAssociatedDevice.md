@@ -5,48 +5,54 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceGroupAlerts
+# Get-LMDatasourceAssociatedDevice
 
 ## SYNOPSIS
-Retrieves alerts for a LogicMonitor device group.
+Retrieves devices associated with a LogicMonitor datasource.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Get-LMDeviceGroupAlerts -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMDatasourceAssociatedDevice -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceGroupAlerts [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMDatasourceAssociatedDevice [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
+```
+
+### DisplayName
+```
+Get-LMDatasourceAssociatedDevice [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceGroupAlerts function retrieves all alerts associated with a specific device group in LogicMonitor.
-The device group can be identified by either ID or name, and the results can be filtered.
+The Get-LMDatasourceAssociatedDevice function retrieves all devices that are associated with a specific datasource.
+It can identify the datasource by ID, name, or display name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve alerts for a device group by ID
-Get-LMDeviceGroupAlerts -Id 123
+#Retrieve devices associated with a datasource by ID
+Get-LMDatasourceAssociatedDevice -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve alerts for a device group by name with filter
-Get-LMDeviceGroupAlerts -Name "Production Servers" -Filter $filterObject
+#Retrieve devices associated with a datasource by name
+Get-LMDatasourceAssociatedDevice -Name "CPU"
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the device group to retrieve alerts for.
-This parameter is mandatory when using the Id parameter set and can accept pipeline input.
+The ID of the datasource to retrieve associated devices for.
+This parameter is mandatory when using the Id parameter set.
 
 ```yaml
 Type: Int32
@@ -56,12 +62,12 @@ Aliases:
 Required: True
 Position: Named
 Default value: 0
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the device group to retrieve alerts for.
+The name of the datasource to retrieve associated devices for.
 Part of a mutually exclusive parameter set.
 
 ```yaml
@@ -76,8 +82,24 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DisplayName
+The display name of the datasource to retrieve associated devices for.
+Part of a mutually exclusive parameter set.
+
+```yaml
+Type: String
+Parameter Sets: DisplayName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Filter
-A filter object to apply when retrieving alerts.
+A filter object to apply when retrieving associated devices.
 This parameter is optional.
 
 ```yaml
@@ -129,10 +151,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32. The device group ID can be piped to this function.
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns alert objects for the specified device group.
+### Returns LogicMonitor.DatasourceDevice objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
 

@@ -67,7 +67,7 @@ function Get-LMDeviceGroupDevice {
         }
         $Ids = @()
         if ($IncludeSubGroups) {
-            $Ids += Get-NestedDeviceGroups -Ids @($Id)
+            $Ids += Get-NestedDeviceGroup -Ids @($Id)
         }
         #Add in oringal Id to our list
         $Ids += $Id

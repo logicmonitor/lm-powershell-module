@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMNormalizedProperties
+# Get-LMNormalizedProperty
 
 ## SYNOPSIS
 Gets normalized property mappings from LogicMonitor.
@@ -13,11 +13,11 @@ Gets normalized property mappings from LogicMonitor.
 ## SYNTAX
 
 ```
-Get-LMNormalizedProperties [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMNormalizedProperty [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMNormalizedProperties function retrieves normalized property mappings that allow standardizing property names across your LogicMonitor environment.
+The Get-LMNormalizedProperty function retrieves normalized property mappings that allow standardizing property names across your LogicMonitor environment.
 This function only supports the v4 API.
 
 ## EXAMPLES
@@ -25,7 +25,7 @@ This function only supports the v4 API.
 ### EXAMPLE 1
 ```
 #Retrieve all normalized properties
-Get-LMNormalizedProperties
+Get-LMNormalizedProperty
 ```
 
 ## PARAMETERS

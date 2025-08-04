@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMNetscanExecutionDevices
+# Get-LMNetscanExecutionDevice
 
 ## SYNOPSIS
 Retrieves devices discovered during a Netscan execution.
@@ -14,18 +14,18 @@ Retrieves devices discovered during a Netscan execution.
 
 ### Id (Default)
 ```
-Get-LMNetscanExecutionDevices -Id <Int32> -NspId <String> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMNetscanExecutionDevice -Id <Int32> -NspId <String> [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMNetscanExecutionDevices -NspName <String> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMNetscanExecutionDevice -NspName <String> [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMNetscanExecutionDevices function retrieves devices discovered during a specific Netscan execution in LogicMonitor.
+The Get-LMNetscanExecutionDevice function retrieves devices discovered during a specific Netscan execution in LogicMonitor.
 The Netscan can be identified by either ID or name.
 
 ## EXAMPLES
@@ -33,13 +33,13 @@ The Netscan can be identified by either ID or name.
 ### EXAMPLE 1
 ```
 #Retrieve devices from a specific execution
-Get-LMNetscanExecutionDevices -Id 456 -NspId 123
+Get-LMNetscanExecutionDevice -Id 456 -NspId 123
 ```
 
 ### EXAMPLE 2
 ```
 #Retrieve devices using Netscan name
-Get-LMNetscanExecutionDevices -Id 456 -NspName "Network-Discovery"
+Get-LMNetscanExecutionDevice -Id 456 -NspName "Network-Discovery"
 ```
 
 ## PARAMETERS

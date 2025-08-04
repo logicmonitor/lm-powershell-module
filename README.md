@@ -73,6 +73,14 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
+## 7.4.3
+
+### Bug Fixes/Changes
+- Added -Form support to Invoke-LMRestMethod to support cmdlets that required form data.
+- Added missing alias:
+  - `Get-LMDeviceGroupGroups` → `Get-LMDeviceGroupGroup`
+- Fixed missing private function Get-NestedDeviceGroup
+
 ## 7.4.2
 
 ### Cmdlet Naming Update:
@@ -94,7 +102,6 @@ Connect-LMAccount -UseCachedCredential
   - `Get-LMDeviceNetflowFlows` → `Get-LMDeviceNetflowFlow`
   - `Get-LMDeviceNetflowEndpoints` → `Get-LMDeviceNetflowEndpoint`
   - `Get-LMDeviceGroupDevices` → `Get-LMDeviceGroupDevice`
-  - `Get-LMDeviceGroupGroups` → `Get-LMDeviceGroupGroup`
   - `Get-LMDeviceGroupAlerts` → `Get-LMDeviceGroupAlert`
   - `Get-LMDeviceDatasourceInstanceAlertRecipients` → `Get-LMDeviceDatasourceInstanceAlertRecipient`
   - `Get-LMDeviceAlertSettings` → `Get-LMDeviceAlertSetting`

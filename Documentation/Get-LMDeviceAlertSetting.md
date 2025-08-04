@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceAlertSettings
+# Get-LMDeviceAlertSetting
 
 ## SYNOPSIS
 Retrieves alert settings for a specific LogicMonitor device.
@@ -14,18 +14,18 @@ Retrieves alert settings for a specific LogicMonitor device.
 
 ### Id (Default)
 ```
-Get-LMDeviceAlertSettings -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMDeviceAlertSetting -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceAlertSettings [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMDeviceAlertSetting [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceAlertSettings function retrieves the alert configuration settings for a specific device in LogicMonitor.
+The Get-LMDeviceAlertSetting function retrieves the alert configuration settings for a specific device in LogicMonitor.
 The device can be identified by either ID or name, and the results can be filtered using custom criteria.
 
 ## EXAMPLES
@@ -33,13 +33,13 @@ The device can be identified by either ID or name, and the results can be filter
 ### EXAMPLE 1
 ```
 #Retrieve alert settings for a device by ID
-Get-LMDeviceAlertSettings -Id 123
+Get-LMDeviceAlertSetting -Id 123
 ```
 
 ### EXAMPLE 2
 ```
 #Retrieve alert settings for a device by name
-Get-LMDeviceAlertSettings -Name "Production-Server"
+Get-LMDeviceAlertSetting -Name "Production-Server"
 ```
 
 ## PARAMETERS

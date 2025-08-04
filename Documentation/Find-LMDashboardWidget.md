@@ -5,58 +5,56 @@ online version:
 schema: 2.0.0
 ---
 
-# New-LMNormalizedProperties
+# Find-LMDashboardWidget
 
 ## SYNOPSIS
-Creates normalized properties in LogicMonitor.
+Find list of dashboard widgets containing mention of specified datasources
 
 ## SYNTAX
 
 ```
-New-LMNormalizedProperties [-Alias] <String> [-Properties] <Array> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Find-LMDashboardWidget [-DatasourceNames] <String[]> [[-GroupPathSearchString] <String>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The New-LMNormalizedProperties cmdlet creates normalized properties in LogicMonitor.
-Normalized properties allow you to map multiple host properties to a single alias that can be used across your environment.
+Find list of dashboard widgets containing mention of specified datasources
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Creates a normalized property with alias "location" mapped to multiple source properties.
-New-LMNormalizedProperties -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
+Find-LMDashboardWidget -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCETNER_VM_PERFORMANCE")
 ```
 
 ## PARAMETERS
 
-### -Alias
-The alias name for the normalized property.
+### -DatasourceNames
+{{ Fill DatasourceNames Description }}
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: DatasourceName
+
+Required: True
+Position: 1
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -GroupPathSearchString
+{{ Fill GroupPathSearchString Description }}
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Properties
-An array of host property names to map to the alias.
-
-```yaml
-Type: Array
-Parameter Sets: (All)
-Aliases:
-
-Required: True
+Required: False
 Position: 2
-Default value: None
+Default value: *
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -81,12 +79,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to this command.
+### DatasourceNames in an array. You can also pipe datasource names to this widget.
 ## OUTPUTS
 
-### Returns LogicMonitor.NormalizedProperties object.
 ## NOTES
-You must run Connect-LMAccount before running this command.
-Reserved for internal use.
+Created groups will be placed in a main group called Azure Resources by Subscription in the parent group specified by the -ParentGroupId parameter
 
 ## RELATED LINKS

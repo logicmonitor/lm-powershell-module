@@ -5,41 +5,28 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-LMNormalizedProperties
+# New-LMNormalizedProperty
 
 ## SYNOPSIS
-Updates normalized properties in LogicMonitor.
+Creates normalized properties in LogicMonitor.
 
 ## SYNTAX
 
-### Add
 ```
-Set-LMNormalizedProperties -Alias <String> [-Add] -Properties <Array> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
-```
-
-### Remove
-```
-Set-LMNormalizedProperties -Alias <String> [-Remove] -Properties <Array> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+New-LMNormalizedProperty [-Alias] <String> [-Properties] <Array> [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Set-LMNormalizedProperties cmdlet updates normalized properties in LogicMonitor.
+The New-LMNormalizedProperty cmdlet creates normalized properties in LogicMonitor.
 Normalized properties allow you to map multiple host properties to a single alias that can be used across your environment.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Set-LMNormalizedProperties -Add -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
-Updates a normalized property with alias "location" to include the new properties.
-```
-
-### EXAMPLE 2
-```
-Set-LMNormalizedProperties -Remove -Alias "location" -Properties @("auto.meraki.location")
-Removes the "auto.meraki.location" property from the "location" alias.
+#Creates a normalized property with alias "location" mapped to multiple source properties.
+New-LMNormalizedProperty -Alias "location" -Properties @("location", "snmp.sysLocation", "auto.meraki.location")
 ```
 
 ## PARAMETERS
@@ -53,38 +40,8 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Add
-Indicates that properties should be added to the existing normalized property.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Add
-Aliases:
-
-Required: True
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Remove
-Indicates that properties should be removed from the existing normalized property.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Remove
-Aliases:
-
-Required: True
-Position: Named
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -98,6 +55,37 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: 2
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -124,11 +112,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None.
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns a message indicating the success of the operation.
+### Returns LogicMonitor.NormalizedProperties object.
 ## NOTES
-This function requires a valid LogicMonitor API authentication and uses API v4.
+You must run Connect-LMAccount before running this command.
+Reserved for internal use.
 
 ## RELATED LINKS

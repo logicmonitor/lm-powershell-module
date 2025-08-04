@@ -5,74 +5,58 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDatasourceAssociatedDevices
+# Get-LMAuditLog
 
 ## SYNOPSIS
-Retrieves devices associated with a LogicMonitor datasource.
+Retrieves audit logs from LogicMonitor.
 
 ## SYNTAX
 
-### Id (Default)
+### Range (Default)
 ```
-Get-LMDatasourceAssociatedDevices -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMAuditLog [-SearchString <String>] [-StartDate <DateTime>] [-EndDate <DateTime>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### Name
+### Id
 ```
-Get-LMDatasourceAssociatedDevices [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMAuditLog [-Id <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### DisplayName
+### Filter
 ```
-Get-LMDatasourceAssociatedDevices [-DisplayName <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMAuditLog [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDatasourceAssociatedDevices function retrieves all devices that are associated with a specific datasource.
-It can identify the datasource by ID, name, or display name.
+The Get-LMAuditLog function retrieves audit logs from LogicMonitor based on the specified parameters.
+It supports retrieving logs by ID, by date range, or by applying filters.
+The function can retrieve up to 10000 logs in a single query.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve devices associated with a datasource by ID
-Get-LMDatasourceAssociatedDevices -Id 123
+#Retrieve audit logs from the last week
+Get-LMAuditLog -StartDate (Get-Date).AddDays(-7)
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve devices associated with a datasource by name
-Get-LMDatasourceAssociatedDevices -Name "CPU"
+#Search for specific audit logs
+Get-LMAuditLog -SearchString "login" -StartDate (Get-Date).AddDays(-30)
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the datasource to retrieve associated devices for.
-This parameter is mandatory when using the Id parameter set.
-
-```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-The name of the datasource to retrieve associated devices for.
-Part of a mutually exclusive parameter set.
+The ID of the specific audit log to retrieve.
+This parameter is part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: Id
 Aliases:
 
 Required: False
@@ -82,13 +66,45 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DisplayName
-The display name of the datasource to retrieve associated devices for.
-Part of a mutually exclusive parameter set.
+### -SearchString
+A string to filter audit logs by.
+Only logs containing this string will be returned.
 
 ```yaml
 Type: String
-Parameter Sets: DisplayName
+Parameter Sets: Range
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StartDate
+The start date for retrieving audit logs.
+Defaults to 30 days ago if not specified.
+
+```yaml
+Type: DateTime
+Parameter Sets: Range
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndDate
+The end date for retrieving audit logs.
+Defaults to current time if not specified.
+
+```yaml
+Type: DateTime
+Parameter Sets: Range
 Aliases:
 
 Required: False
@@ -99,12 +115,12 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving associated devices.
-This parameter is optional.
+A filter object to apply when retrieving audit logs.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
-Parameter Sets: (All)
+Parameter Sets: Filter
 Aliases:
 
 Required: False
@@ -154,8 +170,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns LogicMonitor.DatasourceDevice objects.
+### Returns LogicMonitor.AuditLog objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
+Maximum of 10000 logs can be retrieved in a single query.
 
 ## RELATED LINKS

@@ -28,6 +28,7 @@ Set-Alias -Name Get-LMDeviceNetflowPorts -Value Get-LMDeviceNetflowPort
 Set-Alias -Name Get-LMDeviceNetflowFlows -Value Get-LMDeviceNetflowFlow
 Set-Alias -Name Get-LMDeviceNetflowEndpoints -Value Get-LMDeviceNetflowEndpoint
 Set-Alias -Name Get-LMDeviceGroupDevices -Value Get-LMDeviceGroupDevice
+Set-Alias -Name Get-LMDeviceGroupGroups -Value Get-LMDeviceGroupGroup
 Set-Alias -Name Get-LMDeviceGroupAlerts -Value Get-LMDeviceGroupAlert
 Set-Alias -Name Get-LMDeviceDatasourceInstanceAlertRecipients -Value Get-LMDeviceDatasourceInstanceAlertRecipient
 Set-Alias -Name Get-LMDeviceAlertSettings -Value Get-LMDeviceAlertSetting

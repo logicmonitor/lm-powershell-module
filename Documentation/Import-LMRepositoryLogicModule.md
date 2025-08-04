@@ -5,51 +5,59 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMRepositoryLogicModules
+# Import-LMRepositoryLogicModule
 
 ## SYNOPSIS
-Retrieves LogicModules from the LogicMonitor repository.
+Imports LogicMonitor repository logic modules.
 
 ## SYNTAX
 
 ```
-Get-LMRepositoryLogicModules [[-Type] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Import-LMRepositoryLogicModule [-Type] <String> [-LogicModuleNames] <String[]>
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMRepositoryLogicModules function retrieves LogicModules from the LogicMonitor repository.
-It supports retrieving different types of modules including datasources, property rules, event sources, topology sources, and config sources.
+The Import-LMRepositoryLogicModule function imports specified logic modules from the LogicMonitor repository into your portal.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve all datasource modules
-Get-LMRepositoryLogicModules
-```
-
-### EXAMPLE 2
-```
-#Retrieve all event source modules
-Get-LMRepositoryLogicModules -Type "eventsource"
+#Import specific datasources
+Import-LMRepositoryLogicModule -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"
 ```
 
 ## PARAMETERS
 
 ### -Type
-The type of LogicModule to retrieve.
-Valid values are "datasource", "propertyrules", "eventsource", "topologysource", "configsource".
-Defaults to "datasource".
+The type of logic modules to import.
+Valid values are "datasources", "propertyrules", "eventsources", "topologysources", "configsources".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: False
+Required: True
 Position: 1
-Default value: Datasource
+Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LogicModuleNames
+An array of logic module names to import.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: Name
+
+Required: True
+Position: 2
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -76,7 +84,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns LogicMonitor.RepositoryLogicModules objects.
+### Returns a success message with the names of imported modules.
 ## NOTES
 You must run Connect-LMAccount before running this command.
 

@@ -5,34 +5,33 @@ online version:
 schema: 2.0.0
 ---
 
-# Import-LMRepositoryLogicModules
+# Remove-LMNormalizedProperty
 
 ## SYNOPSIS
-Imports LogicMonitor repository logic modules.
+Removes normalized properties from LogicMonitor.
 
 ## SYNTAX
 
 ```
-Import-LMRepositoryLogicModules [-Type] <String> [-LogicModuleNames] <String[]>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Remove-LMNormalizedProperty [-Alias] <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Import-LMRepositoryLogicModules function imports specified logic modules from the LogicMonitor repository into your portal.
+The Remove-LMNormalizedProperty cmdlet removes normalized properties from LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Import specific datasources
-Import-LMRepositoryLogicModules -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"
+Remove-LMNormalizedProperty -Alias "location"
+Removes the normalized property with alias "location".
 ```
 
 ## PARAMETERS
 
-### -Type
-The type of logic modules to import.
-Valid values are "datasources", "propertyrules", "eventsources", "topologysources", "configsources".
+### -Alias
+The alias name of the normalized property to remove.
 
 ```yaml
 Type: String
@@ -46,18 +45,34 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -LogicModuleNames
-An array of logic module names to import.
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
-Type: String[]
+Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: Name
+Aliases: wi
 
-Required: True
-Position: 2
+Required: False
+Position: Named
 Default value: None
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -81,11 +96,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to this command.
+### None.
 ## OUTPUTS
 
-### Returns a success message with the names of imported modules.
+### Returns the response from the API after removing the normalized property.
 ## NOTES
-You must run Connect-LMAccount before running this command.
+This function requires valid API credentials to be logged in.
+Use Connect-LMAccount to log in before running this command.
 
 ## RELATED LINKS

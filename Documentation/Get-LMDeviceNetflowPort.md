@@ -5,104 +5,68 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMIntegrationLogs
+# Get-LMDeviceNetflowPort
 
 ## SYNOPSIS
-Retrieves integration audit logs from LogicMonitor.
+Retrieves Netflow port data for a LogicMonitor device.
 
 ## SYNTAX
 
-### Range (Default)
+### Id (Default)
 ```
-Get-LMIntegrationLogs [-SearchString <String>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+Get-LMDeviceNetflowPort -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
-### Id
+### Name
 ```
-Get-LMIntegrationLogs [-Id <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
-```
-
-### Filter
-```
-Get-LMIntegrationLogs [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-LMDeviceNetflowPort [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMIntegrationLogs function retrieves integration audit logs from LogicMonitor.
-It supports retrieving logs by ID, date range, search string, or filter criteria.
+The Get-LMDeviceNetflowPort function retrieves Netflow port information for a specified device.
+It supports time range filtering and can identify the device by either ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve logs for the last 30 days
-Get-LMIntegrationLogs
+#Retrieve Netflow ports by device ID
+Get-LMDeviceNetflowPort -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve logs with a specific search string and date range
-Get-LMIntegrationLogs -SearchString "error" -StartDate (Get-Date).AddDays(-7)
+#Retrieve Netflow ports with date range
+Get-LMDeviceNetflowPort -Name "Router1" -StartDate (Get-Date).AddDays(-7)
 ```
 
 ## PARAMETERS
 
 ### -Id
-The specific integration log ID to retrieve.
+The ID of the device to retrieve Netflow ports from.
+Required for Id parameter set.
 
 ```yaml
-Type: String
+Type: Int32
 Parameter Sets: Id
 Aliases:
 
-Required: False
+Required: True
 Position: Named
-Default value: None
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SearchString
-A string to search for within the integration logs.
+### -Name
+The name of the device to retrieve Netflow ports from.
+Required for Name parameter set.
 
 ```yaml
 Type: String
-Parameter Sets: Range
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartDate
-The start date for retrieving logs.
-Defaults to 30 days ago if not specified.
-
-```yaml
-Type: DateTime
-Parameter Sets: Range
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-The end date for retrieving logs.
-Defaults to current time if not specified.
-
-```yaml
-Type: DateTime
-Parameter Sets: Range
+Parameter Sets: Name
 Aliases:
 
 Required: False
@@ -113,11 +77,44 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving logs.
+A filter object to apply when retrieving ports.
+This parameter is optional.
 
 ```yaml
 Type: Object
-Parameter Sets: Filter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StartDate
+The start date for retrieving Netflow data.
+Defaults to 24 hours ago if not specified.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndDate
+The end date for retrieving Netflow data.
+Defaults to current time if not specified.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -167,9 +164,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns LogicMonitor.IntegrationLog objects.
+### Returns Netflow port objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
-There is a 10,000 record query limitation for this endpoint.
 
 ## RELATED LINKS

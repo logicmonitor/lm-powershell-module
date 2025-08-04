@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceDatasourceInstanceAlertRecipients
+# Get-LMDeviceDatasourceInstanceAlertRecipient
 
 ## SYNOPSIS
 Retrieves alert recipients for a specific data point in a LogicMonitor device datasource instance.
@@ -14,30 +14,30 @@ Retrieves alert recipients for a specific data point in a LogicMonitor device da
 
 ### Name-dsName
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName <String> -Name <String> -InstanceName <String>
+Get-LMDeviceDatasourceInstanceAlertRecipient -DatasourceName <String> -Name <String> -InstanceName <String>
  -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsName
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName <String> -Id <Int32> -InstanceName <String>
+Get-LMDeviceDatasourceInstanceAlertRecipient -DatasourceName <String> -Id <Int32> -InstanceName <String>
  -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name-dsId
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId <Int32> -Name <String> -InstanceName <String>
+Get-LMDeviceDatasourceInstanceAlertRecipient -DatasourceId <Int32> -Name <String> -InstanceName <String>
  -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId <Int32> -Id <Int32> -InstanceName <String>
+Get-LMDeviceDatasourceInstanceAlertRecipient -DatasourceId <Int32> -Id <Int32> -InstanceName <String>
  -DataPointName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceDatasourceInstanceAlertRecipients function retrieves the alert recipients configured for a specific data point within a device's datasource instance.
+The Get-LMDeviceDatasourceInstanceAlertRecipient function retrieves the alert recipients configured for a specific data point within a device's datasource instance.
 It supports identifying the device and datasource by either ID or name.
 
 ## EXAMPLES
@@ -45,13 +45,13 @@ It supports identifying the device and datasource by either ID or name.
 ### EXAMPLE 1
 ```
 #Retrieve alert recipients using names
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceName "Ping" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
+Get-LMDeviceDatasourceInstanceAlertRecipient -DatasourceName "Ping" -Name "Server01" -InstanceName "Instance01" -DataPointName "PingLossPercent"
 ```
 
 ### EXAMPLE 2
 ```
 #Retrieve alert recipients using IDs
-Get-LMDeviceDatasourceInstanceAlertRecipients -DatasourceId 123 -Id 456 -InstanceName "Instance01" -DataPointName "PingLossPercent"
+Get-LMDeviceDatasourceInstanceAlertRecipient -DatasourceId 123 -Id 456 -InstanceName "Instance01" -DataPointName "PingLossPercent"
 ```
 
 ## PARAMETERS

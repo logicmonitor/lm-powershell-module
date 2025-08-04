@@ -5,47 +5,47 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceNetflowPorts
+# Get-LMDeviceNetflowFlow
 
 ## SYNOPSIS
-Retrieves Netflow port data for a LogicMonitor device.
+Retrieves Netflow flow data for a LogicMonitor device.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Get-LMDeviceNetflowPorts -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+Get-LMDeviceNetflowFlow -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceNetflowPorts [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+Get-LMDeviceNetflowFlow [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
  [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceNetflowPorts function retrieves Netflow port information for a specified device.
+The Get-LMDeviceNetflowFlow function retrieves Netflow flow information for a specified device.
 It supports time range filtering and can identify the device by either ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve Netflow ports by device ID
-Get-LMDeviceNetflowPorts -Id 123
+#Retrieve Netflow flows by device ID
+Get-LMDeviceNetflowFlow -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve Netflow ports with date range
-Get-LMDeviceNetflowPorts -Name "Router1" -StartDate (Get-Date).AddDays(-7)
+#Retrieve Netflow flows with date range
+Get-LMDeviceNetflowFlow -Name "Router1" -StartDate (Get-Date).AddDays(-7)
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the device to retrieve Netflow ports from.
+The ID of the device to retrieve Netflow flows from.
 Required for Id parameter set.
 
 ```yaml
@@ -61,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the device to retrieve Netflow ports from.
+The name of the device to retrieve Netflow flows from.
 Required for Name parameter set.
 
 ```yaml
@@ -77,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving ports.
+A filter object to apply when retrieving flows.
 This parameter is optional.
 
 ```yaml
@@ -164,7 +164,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns Netflow port objects.
+### Returns Netflow flow objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
 

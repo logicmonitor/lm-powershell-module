@@ -46,7 +46,7 @@ Returns LogicMonitor.LogicModuleMetadata objects.
 #>
 
 
-function Get-LMLogicModuleMetadatum {
+function Get-LMLogicModuleMetadata {
 
     [CmdletBinding()]
     param (

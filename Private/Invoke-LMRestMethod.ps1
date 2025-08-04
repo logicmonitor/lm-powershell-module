@@ -84,6 +84,8 @@ function Invoke-LMRestMethod {
 
         [Switch]$EnableDebugLogging,
 
+        [System.Object]$Form,
+
         [System.Management.Automation.PSCmdlet]$CallerPSCmdlet
     )
 
@@ -108,6 +110,10 @@ function Invoke-LMRestMethod {
             }
             if ($OutFile) {
                 $params.OutFile = $OutFile
+            }
+
+            if ($Form) {
+                $params.Form = $Form
             }
 
             # Log debug information if enabled

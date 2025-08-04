@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceGroupDevices
+# Get-LMDeviceGroupDevice
 
 ## SYNOPSIS
 Retrieves devices belonging to a LogicMonitor device group.
@@ -14,18 +14,18 @@ Retrieves devices belonging to a LogicMonitor device group.
 
 ### Id (Default)
 ```
-Get-LMDeviceGroupDevices -Id <Int32> [-Filter <Object>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
+Get-LMDeviceGroupDevice -Id <Int32> [-Filter <Object>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceGroupDevices [-Name <String>] [-Filter <Object>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
+Get-LMDeviceGroupDevice [-Name <String>] [-Filter <Object>] [-IncludeSubGroups <Boolean>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceGroupDevices function retrieves all devices that belong to a specific device group.
+The Get-LMDeviceGroupDevice function retrieves all devices that belong to a specific device group.
 It supports retrieving devices from subgroups and can filter the results.
 
 ## EXAMPLES
@@ -33,13 +33,13 @@ It supports retrieving devices from subgroups and can filter the results.
 ### EXAMPLE 1
 ```
 #Retrieve devices from a group by ID
-Get-LMDeviceGroupDevices -Id 123
+Get-LMDeviceGroupDevice -Id 123
 ```
 
 ### EXAMPLE 2
 ```
 #Retrieve devices including subgroups
-Get-LMDeviceGroupDevices -Name "Production Servers" -IncludeSubGroups $true
+Get-LMDeviceGroupDevice -Name "Production Servers" -IncludeSubGroups $true
 ```
 
 ## PARAMETERS

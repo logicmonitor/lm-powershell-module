@@ -5,47 +5,53 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMCostOptimizationRecommendationCategories
+# Get-LMCollectorVersion
 
 ## SYNOPSIS
-Retrieves cloud cost optimization recommendation categories from LogicMonitor.
+Retrieves available LogicMonitor collector versions.
 
 ## SYNTAX
 
 ### All (Default)
 ```
-Get-LMCostOptimizationRecommendationCategories [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-LMCollectorVersion [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMCostOptimizationRecommendationCategories [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMCollectorVersion [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
+```
+
+### Top
+```
+Get-LMCollectorVersion [-TopVersions] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMCostOptimizationRecommendationCategories function retrieves cloud cost optimization recommendation categories from a connected LogicMonitor portal.
+The Get-LMCollectorVersions function retrieves information about available LogicMonitor collector versions.
+It can return all versions, top versions only, or versions filtered by specific criteria.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve all cost optimization recommendation categories
-Get-LMCostOptimizationRecommendationCategories
+#Retrieve all collector versions
+Get-LMCollectorVersions
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve cost optimization recommendation categories using a filter
-Get-LMCostOptimizationRecommendationCategories -Filter 'recommendationCategory -eq "Underutilized AWS EC2 instances"'
+#Retrieve only top versions
+Get-LMCollectorVersions -TopVersions
 ```
 
 ## PARAMETERS
 
 ### -Filter
-A filter object to apply when retrieving cost optimization recommendation categories.
-Only recommendationCategory and recommendationStatus are supported for filtering using the equals operator all others are not supported at this time.
+A filter object to apply when retrieving collector versions.
+This parameter is part of a mutually exclusive parameter set.
 
 ```yaml
 Type: Object
@@ -59,10 +65,26 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -TopVersions
+Switch to retrieve only the top versions of collectors.
+This parameter is part of a mutually exclusive parameter set.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: Top
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -BatchSize
 The number of results to return per request.
 Must be between 1 and 1000.
-Defaults to 50.
+Defaults to 1000.
 
 ```yaml
 Type: Int32
@@ -71,7 +93,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 50
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -96,12 +118,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### No input is accepted.
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns LogicMonitor.CostOptimizationRecommendationCategory objects.
+### Returns an array of collector version objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
-When using filters, consult the LM API docs for allowed filter fields.
 
 ## RELATED LINKS

@@ -5,47 +5,47 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceNetflowFlows
+# Get-LMWebsiteGroupAlert
 
 ## SYNOPSIS
-Retrieves Netflow flow data for a LogicMonitor device.
+Retrieves alerts for a website group from LogicMonitor.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Get-LMDeviceNetflowFlows -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMWebsiteGroupAlert -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceNetflowFlows [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMWebsiteGroupAlert [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceNetflowFlows function retrieves Netflow flow information for a specified device.
-It supports time range filtering and can identify the device by either ID or name.
+The Get-LMWebsiteGroupAlert function retrieves alert information for a specified website group in LogicMonitor.
+The group can be identified by either ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve Netflow flows by device ID
-Get-LMDeviceNetflowFlows -Id 123
+#Retrieve alerts by group ID
+Get-LMWebsiteGroupAlert -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve Netflow flows with date range
-Get-LMDeviceNetflowFlows -Name "Router1" -StartDate (Get-Date).AddDays(-7)
+#Retrieve alerts for a specific group
+Get-LMWebsiteGroupAlert -Name "Production-Websites"
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the device to retrieve Netflow flows from.
+The ID of the website group to retrieve alerts from.
 Required for Id parameter set.
 
 ```yaml
@@ -61,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the device to retrieve Netflow flows from.
+The name of the website group to retrieve alerts from.
 Required for Name parameter set.
 
 ```yaml
@@ -77,43 +77,10 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving flows.
-This parameter is optional.
+A filter object to apply when retrieving alerts.
 
 ```yaml
 Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartDate
-The start date for retrieving Netflow data.
-Defaults to 24 hours ago if not specified.
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-The end date for retrieving Netflow data.
-Defaults to current time if not specified.
-
-```yaml
-Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
@@ -164,7 +131,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns Netflow flow objects.
+### Returns website group alert objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
 

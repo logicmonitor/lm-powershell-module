@@ -5,47 +5,47 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMWebsiteAlerts
+# Get-LMDeviceNetflowEndpoint
 
 ## SYNOPSIS
-Retrieves alerts for a specific website from LogicMonitor.
+Retrieves Netflow endpoint data for a LogicMonitor device.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Get-LMWebsiteAlerts -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-LMDeviceNetflowEndpoint -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMWebsiteAlerts [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceNetflowEndpoint [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMWebsiteAlerts function retrieves alert information for a specified website in LogicMonitor.
-The website can be identified by either ID or name.
+The Get-LMDeviceNetflowEndpoint function retrieves Netflow endpoint information for a specified device.
+It supports time range filtering and can identify the device by either ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve alerts by website ID
-Get-LMWebsiteAlerts -Id 123
+#Retrieve Netflow endpoints by device ID
+Get-LMDeviceNetflowEndpoint -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve alerts for a specific website
-Get-LMWebsiteAlerts -Name "www.example.com"
+#Retrieve Netflow endpoints with date range
+Get-LMDeviceNetflowEndpoint -Name "Router1" -StartDate (Get-Date).AddDays(-7)
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the website to retrieve alerts from.
+The ID of the device to retrieve Netflow endpoints from.
 Required for Id parameter set.
 
 ```yaml
@@ -61,7 +61,7 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the website to retrieve alerts from.
+The name of the device to retrieve Netflow endpoints from.
 Required for Name parameter set.
 
 ```yaml
@@ -77,10 +77,43 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving alerts.
+A filter object to apply when retrieving endpoints.
+This parameter is optional.
 
 ```yaml
 Type: Object
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StartDate
+The start date for retrieving Netflow data.
+Defaults to 24 hours ago if not specified.
+
+```yaml
+Type: DateTime
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -EndDate
+The end date for retrieving Netflow data.
+Defaults to current time if not specified.
+
+```yaml
+Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
@@ -131,7 +164,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns website alert objects.
+### Returns Netflow endpoint objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
 

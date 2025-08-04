@@ -5,54 +5,53 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMAuditLogs
+# Get-LMIntegrationLog
 
 ## SYNOPSIS
-Retrieves audit logs from LogicMonitor.
+Retrieves integration audit logs from LogicMonitor.
 
 ## SYNTAX
 
 ### Range (Default)
 ```
-Get-LMAuditLogs [-SearchString <String>] [-StartDate <DateTime>] [-EndDate <DateTime>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMIntegrationLog [-SearchString <String>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+ [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMAuditLogs [-Id <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMIntegrationLog [-Id <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMAuditLogs [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+Get-LMIntegrationLog [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMAuditLogs function retrieves audit logs from LogicMonitor based on the specified parameters.
-It supports retrieving logs by ID, by date range, or by applying filters.
-The function can retrieve up to 10000 logs in a single query.
+The Get-LMIntegrationLogs function retrieves integration audit logs from LogicMonitor.
+It supports retrieving logs by ID, date range, search string, or filter criteria.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve audit logs from the last week
-Get-LMAuditLogs -StartDate (Get-Date).AddDays(-7)
+#Retrieve logs for the last 30 days
+Get-LMIntegrationLog
 ```
 
 ### EXAMPLE 2
 ```
-#Search for specific audit logs
-Get-LMAuditLogs -SearchString "login" -StartDate (Get-Date).AddDays(-30)
+#Retrieve logs with a specific search string and date range
+Get-LMIntegrationLog -SearchString "error" -StartDate (Get-Date).AddDays(-7)
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the specific audit log to retrieve.
-This parameter is part of a mutually exclusive parameter set.
+The specific integration log ID to retrieve.
 
 ```yaml
 Type: String
@@ -67,8 +66,7 @@ Accept wildcard characters: False
 ```
 
 ### -SearchString
-A string to filter audit logs by.
-Only logs containing this string will be returned.
+A string to search for within the integration logs.
 
 ```yaml
 Type: String
@@ -83,7 +81,7 @@ Accept wildcard characters: False
 ```
 
 ### -StartDate
-The start date for retrieving audit logs.
+The start date for retrieving logs.
 Defaults to 30 days ago if not specified.
 
 ```yaml
@@ -99,7 +97,7 @@ Accept wildcard characters: False
 ```
 
 ### -EndDate
-The end date for retrieving audit logs.
+The end date for retrieving logs.
 Defaults to current time if not specified.
 
 ```yaml
@@ -115,8 +113,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving audit logs.
-Part of a mutually exclusive parameter set.
+A filter object to apply when retrieving logs.
 
 ```yaml
 Type: Object
@@ -170,9 +167,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns LogicMonitor.AuditLog objects.
+### Returns LogicMonitor.IntegrationLog objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
-Maximum of 10000 logs can be retrieved in a single query.
+There is a 10,000 record query limitation for this endpoint.
 
 ## RELATED LINKS

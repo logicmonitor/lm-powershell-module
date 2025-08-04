@@ -5,41 +5,50 @@ online version:
 schema: 2.0.0
 ---
 
-# Remove-LMNormalizedProperties
+# Get-LMRepositoryLogicModule
 
 ## SYNOPSIS
-Removes normalized properties from LogicMonitor.
+Retrieves LogicModules from the LogicMonitor repository.
 
 ## SYNTAX
 
 ```
-Remove-LMNormalizedProperties [-Alias] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMRepositoryLogicModule [[-Type] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Remove-LMNormalizedProperties cmdlet removes normalized properties from LogicMonitor.
+The Get-LMRepositoryLogicModule function retrieves LogicModules from the LogicMonitor repository.
+It supports retrieving different types of modules including datasources, property rules, event sources, topology sources, and config sources.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Remove-LMNormalizedProperties -Alias "location"
-Removes the normalized property with alias "location".
+#Retrieve all datasource modules
+Get-LMRepositoryLogicModule
+```
+
+### EXAMPLE 2
+```
+#Retrieve all event source modules
+Get-LMRepositoryLogicModule -Type "eventsource"
 ```
 
 ## PARAMETERS
 
-### -Alias
-The alias name of the normalized property to remove.
+### -Type
+The type of LogicModule to retrieve.
+Valid values are "datasource", "propertyrules", "eventsource", "topologysource", "configsource".
+Defaults to "datasource".
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: 1
-Default value: None
+Default value: Datasource
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -64,12 +73,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None.
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns the response from the API after removing the normalized property.
+### Returns LogicMonitor.RepositoryLogicModules objects.
 ## NOTES
-This function requires valid API credentials to be logged in.
-Use Connect-LMAccount to log in before running this command.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

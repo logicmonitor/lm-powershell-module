@@ -5,48 +5,48 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceNetflowEndpoints
+# Get-LMDeviceGroupAlert
 
 ## SYNOPSIS
-Retrieves Netflow endpoint data for a LogicMonitor device.
+Retrieves alerts for a LogicMonitor device group.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Get-LMDeviceNetflowEndpoints -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceGroupAlert -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceNetflowEndpoints [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceGroupAlert [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceNetflowEndpoints function retrieves Netflow endpoint information for a specified device.
-It supports time range filtering and can identify the device by either ID or name.
+The Get-LMDeviceGroupAlert function retrieves all alerts associated with a specific device group in LogicMonitor.
+The device group can be identified by either ID or name, and the results can be filtered.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve Netflow endpoints by device ID
-Get-LMDeviceNetflowEndpoints -Id 123
+#Retrieve alerts for a device group by ID
+Get-LMDeviceGroupAlert -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve Netflow endpoints with date range
-Get-LMDeviceNetflowEndpoints -Name "Router1" -StartDate (Get-Date).AddDays(-7)
+#Retrieve alerts for a device group by name with filter
+Get-LMDeviceGroupAlert -Name "Production Servers" -Filter $filterObject
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the device to retrieve Netflow endpoints from.
-Required for Id parameter set.
+The ID of the device group to retrieve alerts for.
+This parameter is mandatory when using the Id parameter set and can accept pipeline input.
 
 ```yaml
 Type: Int32
@@ -56,13 +56,13 @@ Aliases:
 Required: True
 Position: Named
 Default value: 0
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the device to retrieve Netflow endpoints from.
-Required for Name parameter set.
+The name of the device group to retrieve alerts for.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -77,43 +77,11 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving endpoints.
+A filter object to apply when retrieving alerts.
 This parameter is optional.
 
 ```yaml
 Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartDate
-The start date for retrieving Netflow data.
-Defaults to 24 hours ago if not specified.
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-The end date for retrieving Netflow data.
-Defaults to current time if not specified.
-
-```yaml
-Type: DateTime
 Parameter Sets: (All)
 Aliases:
 
@@ -161,10 +129,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to this command.
+### System.Int32. The device group ID can be piped to this function.
 ## OUTPUTS
 
-### Returns Netflow endpoint objects.
+### Returns alert objects for the specified device group.
 ## NOTES
 You must run Connect-LMAccount before running this command.
 

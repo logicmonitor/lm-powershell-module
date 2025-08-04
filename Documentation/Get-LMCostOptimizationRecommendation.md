@@ -5,68 +5,57 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMWebsiteGroupAlerts
+# Get-LMCostOptimizationRecommendation
 
 ## SYNOPSIS
-Retrieves alerts for a website group from LogicMonitor.
+Retrieves cloud cost optimization recommendations from LogicMonitor.
 
 ## SYNTAX
 
-### Id (Default)
+### All (Default)
 ```
-Get-LMWebsiteGroupAlerts -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMCostOptimizationRecommendation [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
-### Name
+### Id
 ```
-Get-LMWebsiteGroupAlerts [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMCostOptimizationRecommendation [-Id <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
+```
+
+### Filter
+```
+Get-LMCostOptimizationRecommendation [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMWebsiteGroupAlerts function retrieves alert information for a specified website group in LogicMonitor.
-The group can be identified by either ID or name.
+The Get-LMCostOptimizationRecommendation function retrieves cloud cost optimization recommendations from a connected LogicMonitor portal.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve alerts by group ID
-Get-LMWebsiteGroupAlerts -Id 123
+#Retrieve all cost optimization recommendations
+Get-LMCostOptimizationRecommendation
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve alerts for a specific group
-Get-LMWebsiteGroupAlerts -Name "Production-Websites"
+#Retrieve cost optimization recommendations using a filter
+Get-LMCostOptimizationRecommendation -Filter 'recommendationCategory -eq "Underutilized AWS EC2 instances"'
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the website group to retrieve alerts from.
-Required for Id parameter set.
-
-```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-The name of the website group to retrieve alerts from.
-Required for Name parameter set.
+The alphanumeric ID of the cost optimization recommendation to retrieve.
+Example: 1-2-EBS_UNATTACHED
 
 ```yaml
 Type: String
-Parameter Sets: Name
+Parameter Sets: Id
 Aliases:
 
 Required: False
@@ -77,11 +66,11 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving alerts.
+A filter object to apply when retrieving cost optimization recommendations.
 
 ```yaml
 Type: Object
-Parameter Sets: (All)
+Parameter Sets: Filter
 Aliases:
 
 Required: False
@@ -94,7 +83,7 @@ Accept wildcard characters: False
 ### -BatchSize
 The number of results to return per request.
 Must be between 1 and 1000.
-Defaults to 1000.
+Defaults to 50.
 
 ```yaml
 Type: Int32
@@ -103,7 +92,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: 1000
+Default value: 50
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -128,11 +117,12 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None. You cannot pipe objects to this command.
+### No input is accepted.
 ## OUTPUTS
 
-### Returns website group alert objects.
+### Returns LogicMonitor.CostOptimizationRecommendations objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
+When using filters, consult the LM API docs for allowed filter fields.
 
 ## RELATED LINKS
