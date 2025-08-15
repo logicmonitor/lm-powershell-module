@@ -66,6 +66,8 @@ function New-LMPushMetricDataPoint {
 
         $Message = "DataPoints: $($DataPoints.Count) items"
 
+        $UnixTimestamp = [DateTimeOffset]::UtcNow.ToUnixTimeSeconds().ToString()
+
         if ($PSCmdlet.ShouldProcess($Message, "Create Push Metric Data Point")) {
             #Add each datapoint to new datapoint array
             foreach ($Datapoint in $DataPoints) {
@@ -75,7 +77,7 @@ function New-LMPushMetricDataPoint {
                         dataPointDescription     = ($Datapoint.Description -replace '"|"', '')
                         dataPointAggregationType = $DataPointAggregationType
                         percentileValue          = $PercentileValue
-                        values                   = @{$((Get-Date -UFormat %s).Split(".")[0]) = $Datapoint.Value }
+                        values                   = @{$UnixTimestamp = $Datapoint.Value }
                     })
             }
 
