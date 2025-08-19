@@ -13,7 +13,7 @@ This cmdlet has no parameters.
 Get-LMNormalizedProperty
 
 .NOTES
-You must run Connect-LMAccount before running this command. This command is reserver for internal use only.
+You must run Connect-LMAccount before running this command. This command is reserved for internal use only.
 
 .INPUTS
 None. You cannot pipe objects to this command.
