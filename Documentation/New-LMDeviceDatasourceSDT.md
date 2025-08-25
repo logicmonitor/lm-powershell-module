@@ -15,34 +15,35 @@ Creates a new device datasource SDT (Scheduled Downtime) in Logic Monitor.
 ### OneTime
 ```
 New-LMDeviceDatasourceSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime>
- -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Weekly
 ```
 New-LMDeviceDatasourceSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
  -EndMinute <Int32> -WeekDay <String> -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### MonthlyByWeek
 ```
 New-LMDeviceDatasourceSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
  -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> -DeviceDataSourceId <String>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Monthly
 ```
 New-LMDeviceDatasourceSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
  -EndMinute <Int32> -DayOfMonth <Int32> -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Daily
 ```
 New-LMDeviceDatasourceSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ -EndMinute <Int32> -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -250,6 +251,36 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

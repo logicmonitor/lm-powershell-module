@@ -18,7 +18,8 @@ Set-LMUser -Id <String> [-NewUsername <String>] [-Email <String>] [-UserGroups <
  [-AcceptEULA <Boolean>] [-Password <String>] [-FirstName <String>] [-LastName <String>]
  [-ForcePasswordChange <Boolean>] [-Phone <String>] [-Note <String>] [-RoleNames <String[]>]
  [-SmsEmail <String>] [-SmsEmailFormat <String>] [-Status <String>] [-Timezone <String>]
- [-TwoFAEnabled <Boolean>] [-Views <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-TwoFAEnabled <Boolean>] [-Views <String[]>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Username
@@ -27,7 +28,8 @@ Set-LMUser -Username <String> [-NewUsername <String>] [-Email <String>] [-UserGr
  [-AcceptEULA <Boolean>] [-Password <String>] [-FirstName <String>] [-LastName <String>]
  [-ForcePasswordChange <Boolean>] [-Phone <String>] [-Note <String>] [-RoleNames <String[]>]
  [-SmsEmail <String>] [-SmsEmailFormat <String>] [-Status <String>] [-Timezone <String>]
- [-TwoFAEnabled <Boolean>] [-Views <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-TwoFAEnabled <Boolean>] [-Views <String[]>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -322,6 +324,36 @@ Valid values: "Alerts", "Dashboards", "Logs", "Maps", "Reports", "Resources", "S
 Type: String[]
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

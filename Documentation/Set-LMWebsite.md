@@ -22,7 +22,7 @@ Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Descriptio
  [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-Properties <Hashtable>]
  [-PropertiesMethod <String>] [-PollingInterval <Int32>] [-WebsiteSteps <String[]>]
  [-TestLocationAll <Boolean>] [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Ping
@@ -33,7 +33,7 @@ Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Descriptio
  [-PingTimeout <Int32>] [-PingPercentNotReceived <Int32>] [-FailedCount <Int32>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-Properties <Hashtable>] [-PropertiesMethod <String>]
  [-PollingInterval <Int32>] [-TestLocationAll <Boolean>] [-TestLocationCollectorIds <Int32[]>]
- [-TestLocationSmgIds <Int32[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-TestLocationSmgIds <Int32[]>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -485,6 +485,36 @@ Available collector group IDs correspond to LogicMonitor regions:
 Type: Int32[]
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

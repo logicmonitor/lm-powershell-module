@@ -34,7 +34,7 @@ None. You cannot pipe objects to this command.
 .OUTPUTS
 Returns LogicMonitor.DeviceDatasourceList objects.
 #>
-function Get-LMDeviceDatasourceList {
+function Get-LMDeviceDataSourceList {
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

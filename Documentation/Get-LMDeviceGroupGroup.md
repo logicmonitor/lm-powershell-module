@@ -5,48 +5,48 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceAlerts
+# Get-LMDeviceGroupGroup
 
 ## SYNOPSIS
-Retrieves alerts for a specific LogicMonitor device.
+Retrieves subgroups of a LogicMonitor device group.
 
 ## SYNTAX
 
 ### Id (Default)
 ```
-Get-LMDeviceAlerts -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+Get-LMDeviceGroupGroup -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceAlerts [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMDeviceGroupGroup [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Get-LMDeviceAlerts function retrieves all alerts associated with a specific device in LogicMonitor.
-The device can be identified by either ID or name, and the results can be filtered using custom criteria.
+The Get-LMDeviceGroupGroup function retrieves all subgroups that belong to a specified device group in LogicMonitor.
+The parent group can be identified by either ID or name, and the results can be filtered.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-#Retrieve alerts for a device by ID
-Get-LMDeviceAlerts -Id 123
+#Retrieve subgroups by parent group ID
+Get-LMDeviceGroupGroup -Id 123
 ```
 
 ### EXAMPLE 2
 ```
-#Retrieve alerts for a device by name with filtering
-Get-LMDeviceAlerts -Name "Production-Server" -Filter $filterObject
+#Retrieve filtered subgroups by parent group name
+Get-LMDeviceGroupGroup -Name "Production" -Filter $filterObject
 ```
 
 ## PARAMETERS
 
 ### -Id
-The ID of the device to retrieve alerts for.
-This parameter is mandatory when using the Id parameter set and can accept pipeline input.
+The ID of the device group to retrieve subgroups from.
+Required for Id parameter set.
 
 ```yaml
 Type: Int32
@@ -56,13 +56,13 @@ Aliases:
 Required: True
 Position: Named
 Default value: 0
-Accept pipeline input: True (ByPropertyName)
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Name
-The name of the device to retrieve alerts for.
-Part of a mutually exclusive parameter set.
+The name of the device group to retrieve subgroups from.
+Required for Name parameter set.
 
 ```yaml
 Type: String
@@ -77,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -Filter
-A filter object to apply when retrieving alerts.
+A filter object to apply when retrieving subgroups.
 This parameter is optional.
 
 ```yaml
@@ -129,10 +129,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### System.Int32. The device ID can be piped to this function.
+### None. You cannot pipe objects to this command.
 ## OUTPUTS
 
-### Returns LogicMonitor.Alert objects.
+### Returns LogicMonitor.DeviceGroup objects.
 ## NOTES
 You must run Connect-LMAccount before running this command.
 

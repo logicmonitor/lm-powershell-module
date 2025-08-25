@@ -15,14 +15,14 @@ Updates a Scheduled Down Time (SDT) entry in LogicMonitor.
 ### OneTime (Default)
 ```
 Set-LMSDT -Id <String> [-Comment <String>] [-StartDate <DateTime>] [-EndDate <DateTime>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Recurring
 ```
 Set-LMSDT -Id <String> [-Comment <String>] [-StartHour <Int32>] [-StartMinute <Int32>] [-EndHour <Int32>]
  [-EndMinute <Int32>] [-WeekDay <String>] [-WeekOfMonth <String>] [-DayOfMonth <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -196,6 +196,36 @@ Specifies the day of the month (1-31) for recurring SDT.
 Type: Int32
 Parameter Sets: Recurring
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

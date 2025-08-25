@@ -17,7 +17,7 @@ Creates a new instance of a LogicMonitor device datasource.
 New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
  [-InstanceGroupId <String>] -DatasourceName <String> -Name <String> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsName
@@ -25,7 +25,7 @@ New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildV
 New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
  [-InstanceGroupId <String>] -DatasourceName <String> -Id <Int32> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-dsId
@@ -33,15 +33,15 @@ New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildV
 New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
  [-InstanceGroupId <String>] -DatasourceId <Int32> -Name <String> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsId
 ```
 New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildValue2 <String>]
  [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -DatasourceId <Int32> -Id <Int32> [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [-InstanceGroupId <String>] -DatasourceId <Int32> -Id <Int32> [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -239,6 +239,36 @@ Parameter Sets: Name-dsName, Name-dsId
 Aliases: DeviceName
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

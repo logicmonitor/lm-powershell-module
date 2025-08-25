@@ -14,7 +14,7 @@ Updates a LogicMonitor role configuration.
 
 ### Default (Default)
 ```
-Set-LMRole [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Set-LMRole [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-Default
@@ -26,14 +26,15 @@ Set-LMRole -Id <String> [-NewName <String>] [-CustomHelpLabel <String>] [-Custom
  [-SavedMapsPermission <String>] [-ReportsPermission <String>] [-SettingsPermission <String>]
  [-CreatePrivateDashboards] [-AllowWidgetSharing] [-ConfigTabRequiresManagePermission] [-AllowedToViewMapsTab]
  [-AllowedToManageResourceDashboards] [-ViewTraces] [-ViewSupport] [-EnableRemoteSessionForResources]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-Custom
 ```
 Set-LMRole -Id <String> [-NewName <String>] [-CustomHelpLabel <String>] [-CustomHelpURL <String>]
  [-Description <String>] [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>]
- -CustomPrivilegesObject <PSObject> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ -CustomPrivilegesObject <PSObject> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Name-Default
@@ -45,14 +46,15 @@ Set-LMRole -Name <String> [-NewName <String>] [-CustomHelpLabel <String>] [-Cust
  [-SavedMapsPermission <String>] [-ReportsPermission <String>] [-SettingsPermission <String>]
  [-CreatePrivateDashboards] [-AllowWidgetSharing] [-ConfigTabRequiresManagePermission] [-AllowedToViewMapsTab]
  [-AllowedToManageResourceDashboards] [-ViewTraces] [-ViewSupport] [-EnableRemoteSessionForResources]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-Custom
 ```
 Set-LMRole -Name <String> [-NewName <String>] [-CustomHelpLabel <String>] [-CustomHelpURL <String>]
  [-Description <String>] [-RequireEULA] [-TwoFARequired] [-RoleGroupId <String>]
- -CustomPrivilegesObject <PSObject> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ -CustomPrivilegesObject <PSObject> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -470,6 +472,36 @@ Parameter Sets: Id-Custom, Name-Custom
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

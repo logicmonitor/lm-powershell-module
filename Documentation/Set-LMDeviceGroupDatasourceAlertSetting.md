@@ -17,7 +17,7 @@ Updates alert settings for a LogicMonitor device group datasource.
 Set-LMDeviceGroupDatasourceAlertSetting -DatasourceName <String> -Name <String> -DatapointName <String>
  [-DisableAlerting <Boolean>] [-AlertExpressionNote <String>] -AlertExpression <String>
  -AlertClearTransitionInterval <Int32> -AlertTransitionInterval <Int32> -AlertForNoData <Int32>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsName
@@ -25,7 +25,7 @@ Set-LMDeviceGroupDatasourceAlertSetting -DatasourceName <String> -Name <String> 
 Set-LMDeviceGroupDatasourceAlertSetting -DatasourceName <String> -Id <Int32> -DatapointName <String>
  [-DisableAlerting <Boolean>] [-AlertExpressionNote <String>] -AlertExpression <String>
  -AlertClearTransitionInterval <Int32> -AlertTransitionInterval <Int32> -AlertForNoData <Int32>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-dsId
@@ -33,7 +33,7 @@ Set-LMDeviceGroupDatasourceAlertSetting -DatasourceName <String> -Id <Int32> -Da
 Set-LMDeviceGroupDatasourceAlertSetting -DatasourceId <Int32> -Name <String> -DatapointName <String>
  [-DisableAlerting <Boolean>] [-AlertExpressionNote <String>] -AlertExpression <String>
  -AlertClearTransitionInterval <Int32> -AlertTransitionInterval <Int32> -AlertForNoData <Int32>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsId
@@ -41,7 +41,7 @@ Set-LMDeviceGroupDatasourceAlertSetting -DatasourceId <Int32> -Name <String> -Da
 Set-LMDeviceGroupDatasourceAlertSetting -DatasourceId <Int32> -Id <Int32> -DatapointName <String>
  [-DisableAlerting <Boolean>] [-AlertExpressionNote <String>] -AlertExpression <String>
  -AlertClearTransitionInterval <Int32> -AlertTransitionInterval <Int32> -AlertForNoData <Int32>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -223,6 +223,36 @@ Aliases:
 Required: True
 Position: Named
 Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

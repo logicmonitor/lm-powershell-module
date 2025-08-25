@@ -14,16 +14,20 @@ Creates a new LogicMonitor device group.
 
 ### GroupId
 ```
-New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable>] [-DisableAlerting <Boolean>]
- [-EnableNetFlow <Boolean>] -ParentGroupId <Int32> [-AppliesTo <String>] [-ProgressAction <ActionPreference>]
+New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable>]
+ [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
+ [-DefaultCollectorGroupId <Int32>] [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>]
+ -ParentGroupId <Int32> [-AppliesTo <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
 ### GroupName
 ```
-New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable>] [-DisableAlerting <Boolean>]
- [-EnableNetFlow <Boolean>] -ParentGroupName <String> [-AppliesTo <String>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable>]
+ [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
+ [-DefaultCollectorGroupId <Int32>] [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>]
+ -ParentGroupName <String> [-AppliesTo <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -90,6 +94,51 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DefaultCollectorId
+{{ Fill DefaultCollectorId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DefaultAutoBalancedCollectorGroupId
+{{ Fill DefaultAutoBalancedCollectorGroupId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -DefaultCollectorGroupId
+{{ Fill DefaultCollectorGroupId Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: 0
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -165,6 +214,36 @@ The applies to value for the device group.
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

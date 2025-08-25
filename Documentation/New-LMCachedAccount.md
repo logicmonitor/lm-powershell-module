@@ -15,13 +15,13 @@ Creates a cached LogicMonitor account connection.
 ### LMv1 (Default)
 ```
 New-LMCachedAccount -AccessId <String> -AccessKey <String> -AccountName <String> [-CachedAccountName <String>]
- [-OverwriteExisting <Boolean>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-OverwriteExisting <Boolean>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Bearer
 ```
 New-LMCachedAccount -AccountName <String> -BearerToken <String> [-CachedAccountName <String>]
- [-OverwriteExisting <Boolean>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-OverwriteExisting <Boolean>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -131,6 +131,36 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

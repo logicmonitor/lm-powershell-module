@@ -5,47 +5,55 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-LMLogPartitionAction
+# Get-LMDeviceAlert
 
 ## SYNOPSIS
-Updates a LogicMonitor Log Partition configuration to either pause or resume log ingestion.
+Retrieves alerts for a specific LogicMonitor device.
 
 ## SYNTAX
 
-### Id
+### Id (Default)
 ```
-Set-LMLogPartitionAction [-Id <Int32>] -Action <String> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Get-LMDeviceAlert -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ### Name
 ```
-Set-LMLogPartitionAction [-Name <String>] -Action <String> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Get-LMDeviceAlert [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Set-LMLogPartitionAction function modifies an existing log partition action in LogicMonitor.
+The Get-LMDeviceAlerts function retrieves all alerts associated with a specific device in LogicMonitor.
+The device can be identified by either ID or name, and the results can be filtered using custom criteria.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Set-LMLogPartitionAction -Id 123 -Action "pause"
-Updates the log partition with ID 123 to pause log ingestion.
+#Retrieve alerts for a device by ID
+Get-LMDeviceAlerts -Id 123
+```
+
+### EXAMPLE 2
+```
+#Retrieve alerts for a device by name with filtering
+Get-LMDeviceAlerts -Name "Production-Server" -Filter $filterObject
 ```
 
 ## PARAMETERS
 
 ### -Id
-Specifies the ID of the log partition action to modify.
+The ID of the device to retrieve alerts for.
+This parameter is mandatory when using the Id parameter set and can accept pipeline input.
 
 ```yaml
 Type: Int32
 Parameter Sets: Id
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: 0
 Accept pipeline input: True (ByPropertyName)
@@ -53,7 +61,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the current name of the log partition to modify.
+The name of the device to retrieve alerts for.
+Part of a mutually exclusive parameter set.
 
 ```yaml
 Type: String
@@ -67,30 +76,15 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Action
-Specifies the new action for the log partition.
-Possible values are "pause" or "resume".
+### -Filter
+A filter object to apply when retrieving alerts.
+This parameter is optional.
 
 ```yaml
-Type: String
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
 Required: False
 Position: Named
 Default value: None
@@ -98,17 +92,19 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
+### -BatchSize
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
-Type: SwitchParameter
+Type: Int32
 Parameter Sets: (All)
-Aliases: cf
+Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: 1000
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -133,11 +129,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None.
+### System.Int32. The device ID can be piped to this function.
 ## OUTPUTS
 
-### Returns a LogicMonitor.LogPartition object containing the updated log partition information.
+### Returns LogicMonitor.Alert objects.
 ## NOTES
-This function requires a valid LogicMonitor API authentication.
+You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS

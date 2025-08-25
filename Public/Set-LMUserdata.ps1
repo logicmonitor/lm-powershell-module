@@ -32,7 +32,7 @@ Returns the response from the LogicMonitor API.
 This function requires a valid API authentication. Make sure you are logged in before running any commands using Connect-LMAccount.
 
 #>
-function Set-LMUserdatum {
+function Set-LMUserdata {
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]

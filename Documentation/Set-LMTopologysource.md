@@ -16,14 +16,14 @@ Updates a LogicMonitor topology source configuration.
 ```
 Set-LMTopologysource -Id <String> [-NewName <String>] [-Description <String>] [-appliesTo <String>]
  [-TechNotes <String>] [-PollingIntervalInSeconds <Int32>] [-Group <String>] [-ScriptType <String>]
- [-Script <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-Script <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMTopologysource -Name <String> [-NewName <String>] [-Description <String>] [-appliesTo <String>]
  [-TechNotes <String>] [-PollingIntervalInSeconds <Int32>] [-Group <String>] [-ScriptType <String>]
- [-Script <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-Script <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -183,6 +183,36 @@ Specifies the script content.
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

@@ -52,7 +52,7 @@ This example creates a new enhanced network scan with the specified parameters.
 .NOTES
 For more information about LogicMonitor network scans, refer to the LogicMonitor documentation.
 #>
-function New-LMEnhancedNetScan {
+function New-LMEnhancedNetscan {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
@@ -82,9 +82,9 @@ function New-LMEnhancedNetScan {
 
         [String]$GroovyScript,
 
-        [SecureString]$CredentialGroupId,
+        [String]$CredentialGroupId,
 
-        [SecureString]$CredentialGroupName
+        [String]$CredentialGroupName
     )
     #Check if we are logged in and have valid api creds
     begin {}

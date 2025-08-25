@@ -48,7 +48,7 @@ The token to use for changing the name of discovered devices. The default value 
 New-LMNetScan -CollectorId "12345" -Name "MyNetScan" -SubnetRange "192.168.0.0/24"
 Creates a new network scan with the specified collector ID, name, and subnet range.
 #>
-function New-LMNetScan {
+function New-LMNetscan {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
@@ -79,9 +79,9 @@ function New-LMNetScan {
         [Parameter(Mandatory)]
         [String]$SubnetRange,
 
-        [SecureString]$CredentialGroupId,
+        [String]$CredentialGroupId,
 
-        [SecureString]$CredentialGroupName,
+        [String]$CredentialGroupName,
 
         [String]$ChangeNameToken = "##REVERSEDNS##"
     )

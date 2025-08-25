@@ -38,13 +38,28 @@ PS C:\> {{ Add example code here }}
 
 ## PARAMETERS
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+{{ Fill Id Description }}
 
 ```yaml
 Type: Int32
-Parameter Sets: (All)
-Aliases:
+Parameter Sets: Id
+Aliases: DeviceId
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Name
+{{ Fill Name Description }}
+
+```yaml
+Type: String
+Parameter Sets: Name
+Aliases: DeviceName
 
 Required: False
 Position: Named
@@ -68,28 +83,13 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Id
-{{ Fill Id Description }}
+### -BatchSize
+{{ Fill BatchSize Description }}
 
 ```yaml
 Type: Int32
-Parameter Sets: Id
-Aliases: DeviceId
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases: DeviceName
+Parameter Sets: (All)
+Aliases:
 
 Required: False
 Position: Named

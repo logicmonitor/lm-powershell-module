@@ -15,13 +15,13 @@ Updates a LogicMonitor Log Partition configuration.
 ### Id
 ```
 Set-LMLogPartition [-Id <Int32>] [-Description <String>] [-Retention <Int32>] [-Sku <String>]
- [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-Status <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMLogPartition [-Name <String>] [-Description <String>] [-Retention <Int32>] [-Sku <String>]
- [-Status <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-Status <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -120,6 +120,36 @@ Possible values are "active" or "inactive".
 Type: String
 Parameter Sets: (All)
 Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
 
 Required: False
 Position: Named

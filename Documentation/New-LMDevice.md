@@ -17,8 +17,8 @@ New-LMDevice [-Name] <String> [-DisplayName] <String> [[-Description] <String>] 
  [[-PreferredCollectorGroupId] <Int32>] [[-AutoBalancedCollectorGroupId] <Int32>] [[-DeviceType] <Int32>]
  [[-Properties] <Hashtable>] [[-HostGroupIds] <String[]>] [[-Link] <String>] [[-DisableAlerting] <Boolean>]
  [[-EnableNetFlow] <Boolean>] [[-NetflowCollectorGroupId] <Int32>] [[-NetflowCollectorId] <Int32>]
- [[-LogCollectorGroupId] <Int32>] [[-LogCollectorId] <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+ [[-LogCollectorGroupId] <Int32>] [[-LogCollectorId] <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -274,6 +274,36 @@ Aliases:
 
 Required: False
 Position: 16
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

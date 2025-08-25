@@ -18,7 +18,8 @@ New-LMEnhancedNetScan [-CollectorId] <String> [-Name] <String> [[-NetScanGroupNa
  [[-Filters] <System.Collections.Generic.List`1[System.Management.Automation.PSObject]>]
  [[-Description] <String>] [[-ExcludeDuplicateType] <String>] [[-Method] <String>] [[-NextStart] <String>]
  [[-NextStartEpoch] <String>] [[-GroovyScript] <String>] [[-CredentialGroupId] <String>]
- [[-CredentialGroupName] <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-CredentialGroupName] <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -230,6 +231,36 @@ Aliases:
 
 Required: False
 Position: 13
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

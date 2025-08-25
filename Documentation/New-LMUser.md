@@ -17,7 +17,7 @@ New-LMUser [-Username] <String> [-Email] <String> [[-AcceptEULA] <Boolean>] [[-P
  [[-UserGroups] <String[]>] [[-FirstName] <String>] [[-LastName] <String>] [[-ForcePasswordChange] <Boolean>]
  [[-Phone] <String>] [[-Note] <String>] [[-RoleNames] <String[]>] [[-SmsEmail] <String>]
  [[-SmsEmailFormat] <String>] [[-Status] <String>] [[-Timezone] <String>] [[-TwoFAEnabled] <Boolean>]
- [[-Views] <String[]>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [[-Views] <String[]>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -297,6 +297,36 @@ Aliases:
 Required: False
 Position: 17
 Default value: @("All")
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

@@ -80,7 +80,6 @@
     # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
     AliasesToExport = @('Set-LMNormalizedProperties','Remove-LMNormalizedProperties','New-LMNormalizedProperties','Import-LMRepositoryLogicModules','Get-LMWebsiteGroupAlerts','Get-LMWebsiteAlerts','Get-LMUsageMetrics','Get-LMRepositoryLogicModules','Get-LMNormalizedProperties','Get-LMNetscanExecutionDevices','Get-LMIntegrationLogs','Get-LMDeviceNetflowPorts','Get-LMDeviceNetflowFlows','Get-LMDeviceNetflowEndpoints','Get-LMDeviceGroupDevices','Get-LMDeviceGroupGroups','Get-LMDeviceGroupAlerts','Get-LMDeviceDatasourceInstanceAlertRecipients','Get-LMDeviceAlertSettings','Get-LMDatasourceAssociatedDevices','Get-LMCostOptimizationRecommendations','Get-LMCostOptimizationRecommendationCategories','Get-LMAuditLogs','Find-LMDashboardWidgets')
 
-
     # DSC resources to export from this module
     # DscResourcesToExport = @()
 

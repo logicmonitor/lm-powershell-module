@@ -84,7 +84,7 @@ function New-LMUser {
 
         [Boolean]$AcceptEULA = $false,
 
-        [SecureString]$Password,
+        [String]$Password,
 
         [String[]]$UserGroups,
 

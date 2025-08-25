@@ -66,7 +66,7 @@ Returns a LogicMonitor.NetScan object containing the updated scan configuration.
 .NOTES
 This function requires a valid LogicMonitor API authentication.
 #>
-function Set-LMNetscan {
+function Set-LMNetScan {
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
@@ -94,9 +94,9 @@ function Set-LMNetscan {
 
         [String]$SubnetRange,
 
-        [SecureString]$CredentialGroupId,
+        [String]$CredentialGroupId,
 
-        [SecureString]$CredentialGroupName,
+        [String]$CredentialGroupName,
 
         [PSCustomObject]$Schedule,
 

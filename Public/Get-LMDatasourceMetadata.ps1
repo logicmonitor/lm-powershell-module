@@ -35,7 +35,7 @@ None. You cannot pipe objects to this command.
 Returns metadata information for the specified datasource.
 #>
 
-function Get-LMDatasourceMetadatum {
+function Get-LMDatasourceMetadata {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

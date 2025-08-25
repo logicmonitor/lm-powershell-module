@@ -15,13 +15,13 @@ Creates a new LogicMonitor dashboard group.
 ### GroupId
 ```
 New-LMDashboardGroup -Name <String> [-Description <String>] [-WidgetTokens <Hashtable>] -ParentGroupId <Int32>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### GroupName
 ```
 New-LMDashboardGroup -Name <String> [-Description <String>] [-WidgetTokens <Hashtable>]
- -ParentGroupName <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+ -ParentGroupName <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -116,6 +116,36 @@ Parameter Sets: GroupName
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

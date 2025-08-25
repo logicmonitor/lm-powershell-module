@@ -82,7 +82,7 @@ function Set-LMUser {
 
         [Nullable[boolean]]$AcceptEULA,
 
-        [SecureString]$Password,
+        [String]$Password,
 
         [String]$FirstName,
 
