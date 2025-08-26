@@ -1,4 +1,67 @@
 # Previous module release notes
+## 7.4.3
+### Bug Fixes/Changes
+- Added -Form support to Invoke-LMRestMethod to support cmdlets that required form data.
+- Added missing alias:
+  - `Get-LMDeviceGroupGroups` → `Get-LMDeviceGroupGroup`
+- Fixed missing private function Get-NestedDeviceGroup
+
+## 7.4.2
+
+### Cmdlet Naming Update:
+- **Plural-to-Singular Standardization:**  
+  To align with PowerShell best practices and the rest of the module, the following cmdlets have been renamed from plural nouns to singular nouns:
+  - `Get-LMAuditLogs` → `Get-LMAuditLog`
+  - `Set-LMNormalizedProperties` → `Set-LMNormalizedProperty`
+  - `Remove-LMNormalizedProperties` → `Remove-LMNormalizedProperty`
+  - `New-LMNormalizedProperties` → `New-LMNormalizedProperty`
+  - `Import-LMRepositoryLogicModules` → `Import-LMRepositoryLogicModule`
+  - `Get-LMWebsiteGroupAlerts` → `Get-LMWebsiteGroupAlert`
+  - `Get-LMWebsiteAlerts` → `Get-LMWebsiteAlert`
+  - `Get-LMUsageMetrics` → `Get-LMUsageMetric`
+  - `Get-LMRepositoryLogicModules` → `Get-LMRepositoryLogicModule`
+  - `Get-LMNormalizedProperties` → `Get-LMNormalizedProperty`
+  - `Get-LMNetscanExecutionDevices` → `Get-LMNetscanExecutionDevice`
+  - `Get-LMIntegrationLogs` → `Get-LMIntegrationLog`
+  - `Get-LMDeviceNetflowPorts` → `Get-LMDeviceNetflowPort`
+  - `Get-LMDeviceNetflowFlows` → `Get-LMDeviceNetflowFlow`
+  - `Get-LMDeviceNetflowEndpoints` → `Get-LMDeviceNetflowEndpoint`
+  - `Get-LMDeviceGroupDevices` → `Get-LMDeviceGroupDevice`
+  - `Get-LMDeviceGroupAlerts` → `Get-LMDeviceGroupAlert`
+  - `Get-LMDeviceDatasourceInstanceAlertRecipients` → `Get-LMDeviceDatasourceInstanceAlertRecipient`
+  - `Get-LMDeviceAlertSettings` → `Get-LMDeviceAlertSetting`
+  - `Get-LMDatasourceAssociatedDevices` → `Get-LMDatasourceAssociatedDevice`
+  - `Get-LMCostOptimizationRecommendations` → `Get-LMCostOptimizationRecommendation`
+  - `Get-LMCostOptimizationRecommendationCategories` → `Get-LMCostOptimizationRecommendationCategory`
+  - `Find-LMDashboardWidgets` → `Find-LMDashboardWidget`
+
+- **Backward Compatibility:**  
+  Alias functions for the previous plural-noun cmdlet names have been included for backward compatibility.  
+  **Note:** These plural-noun alias are considered deprecated and will be removed in a future major release. Please update your scripts to use the new singular-noun cmdlet names.
+
+### Bug Fixes:
+ - This version of Logic.Monitor module addresses some unintended issues introduced in the pervious version of the module. Some cmdlets had been inadvertently updated causing *cmdlet is not recognized as a name of a cmdlet, function script file or executable program* errors.
+### Updated Cmdlets:
+ - **New-LMWebsite**: If a testLocation parameter is specified the cmdlet will now default to setting the *-useDefaultLocationSetting* to *$false*. This was causing some confusion as it was previously always defaulting to $true even when specifying specific locations.
+ - **Get-LMAccountStatus**: Added AccessId to the returned LMAuth object.
+ - **New/Set-LMDeviceGroup**: Added parameters for setting *-DefaultCollectorId*, *-DefaultAutoBalancedCollectorGroupId* and *-DefaultCollectorGroupId*.
+
+## 7.4
+### New Cmdlets:
+ - **Export-LMDashboard**: Exports dashboard information from LogicMonitor to a JSON file. This is the same file you would get from performing an export from your LM portal. (requested via @AUrhino)
+
+ ```powershell
+#Export a dashboard to a JSON file
+Export-LMDashboard -Id 123 -FilePath "C:\temp"
+```
+
+### Minor Changes:
+ - All payload formating is now done through a centralized *Format-LMData* function. A bug was reported where trying to refresh properties to clear a resources custom property list would resulting in the empty customProperties payload getting stripped during formating. (reported via @aggie87).
+ - An issue was discovered where rate limits could be hit without rate limit backoff being applied. As a result of this change we have over hauled the error handling in this version to ensure all cmdlets properly respect any *-ErrorAction* perferences you have specified.
+   - While we do not anticipate any issues with these changes, they do touch pretty much every cmdlet in this module, please report any issues you encounter when using this version.
+ - Increased integration testing coverage to +130 tests accross many of the different cmdlets in the suite.
+ - This version of the module cleans up a lot of the tech debt aquired over the years and aims to make the module easier to maintain and for the community to contribute to moving forward.
+
 ## 7.3.1
 ### Introducing Automation Cmdlets:
 
