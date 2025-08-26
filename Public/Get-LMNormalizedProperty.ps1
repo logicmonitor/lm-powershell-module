@@ -13,7 +13,7 @@ This cmdlet has no parameters.
 Get-LMNormalizedProperty
 
 .NOTES
-You must run Connect-LMAccount before running this command. This command is reserver for internal use only.
+You must run Connect-LMAccount before running this command. This command is reserved for internal use only.
 
 .INPUTS
 None. You cannot pipe objects to this command.
@@ -29,7 +29,7 @@ function Get-LMNormalizedProperty {
     #Check if we are logged in and have valid api creds
     begin {}
     process {
-        if ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid -and $Script:LMAuth.Type -eq "SessionSync") {
 
             #Build header and uri
             $ResourcePath = "/normalizedProperties/filter"
@@ -92,7 +92,7 @@ function Get-LMNormalizedProperty {
 
         }
         else {
-            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+             Write-Error "This cmdlet is for internal use only at this time does not support LMv1 or Bearer auth. Use Connect-LMAccount to login with the correct auth type and try again"
         }
     }
     end {}

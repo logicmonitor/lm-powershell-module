@@ -52,7 +52,7 @@ function Set-LMNormalizedProperty {
     #Check if we are logged in and have valid api creds
     begin {}
     process {
-        if ($Script:LMAuth.Valid) {
+        if ($Script:LMAuth.Valid -and $Script:LMAuth.Type -eq "SessionSync") {
             #Get existing normalized properties as all updates have to be done via bulk
             $ExistingProperties = Get-LMNormalizedProperty
 
@@ -192,7 +192,7 @@ function Set-LMNormalizedProperty {
 
         }
         else {
-            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+             Write-Error "This cmdlet is for internal use only at this time does not support LMv1 or Bearer auth. Use Connect-LMAccount to login with the correct auth type and try again"
         }
     }
     end {}

@@ -73,7 +73,7 @@ function Get-LMLogMessage {
         [Switch]$Async
     )
     #Check if we are logged in and have valid api creds
-    if ($Script:LMAuth.Valid) {
+    if ($Script:LMAuth.Valid -and $Script:LMAuth.Type -eq "SessionSync") {
 
         #Build header and uri
         $ResourcePath = "/log/search"
@@ -242,6 +242,6 @@ function Get-LMLogMessage {
 
     }
     else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+        Write-Error "This cmdlet is for internal use only at this time does not support LMv1 or Bearer auth. Use Connect-LMAccount to login with the correct auth type and try again"
     }
 }
