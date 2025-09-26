@@ -15,7 +15,7 @@ X-Version header. Supported monitor types include:
 .PARAMETER Name
 Specifies the device name. Required for every parameter set.
 
-.PARAMETER GroupIds
+.PARAMETER HostGroupIds
 Specifies one or more device group identifiers to assign to the Uptime device.
 
 .PARAMETER Description
@@ -107,22 +107,22 @@ Specifies synthetic monitoring group identifiers for external checks.
 Indicates that all public locations should be used for external checks.
 
 .EXAMPLE
-New-LMUptimeDevice -Name "web-int-01" -GroupIds 17 -Domain "app.example.com" -TestLocationCollectorIds 12
+New-LMUptimeDevice -Name "web-int-01" -HostGroupIds 17 -Domain "app.example.com" -TestLocationCollectorIds 12
 
 Creates a new internal web uptime check against app.example.com using collector 12.
 
 .EXAMPLE
-New-LMUptimeDevice -Name "web-ext-01" -GroupIds 17 -Domain "app.example.com" -TestLocationSmgIds 2,3,4
+New-LMUptimeDevice -Name "web-ext-01" -HostGroupIds 17 -Domain "app.example.com" -TestLocationSmgIds 2,3,4
 
 Creates a new external web uptime check using the specified public locations.
 
 .EXAMPLE
-New-LMUptimeDevice -Name "ping-int-01" -GroupIds 17 -Host "intranet.local" -TestLocationCollectorIds 5
+New-LMUptimeDevice -Name "ping-int-01" -HostGroupIds 17 -Host "intranet.local" -TestLocationCollectorIds 5
 
 Creates an internal ping uptime check that targets intranet.local.
 
 .EXAMPLE
-New-LMUptimeDevice -Name "ping-ext-01" -GroupIds 17 -Host "api.example.net" -TestLocationSmgIds 2,4
+New-LMUptimeDevice -Name "ping-ext-01" -HostGroupIds 17 -Host "api.example.net" -TestLocationSmgIds 2,4
 
 Creates an external ping uptime check using the provided public locations.
 
@@ -149,7 +149,7 @@ function New-LMUptimeDevice {
         [Parameter(Mandatory, ParameterSetName = 'PingInternal')]
         [Parameter(Mandatory, ParameterSetName = 'PingExternal')]
         [ValidateNotNullOrEmpty()]
-        [String[]]$GroupIds,
+        [String[]]$HostGroupIds,
 
         [String]$Description,
 
@@ -389,7 +389,7 @@ function New-LMUptimeDevice {
             id                        = 0
             name                      = $Name
             description               = $Description
-            groupIds                  = @($GroupIds | ForEach-Object { [String]$_ })
+            groupIds                  = @($HostGroupIds | ForEach-Object { [String]$_ })
             isInternal                = $isInternal
             individualSmAlertEnable   = [bool]$IndividualSmAlertEnable
             individualAlertLevel      = $IndividualAlertLevel

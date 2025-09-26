@@ -20,7 +20,7 @@ Determines how custom properties are applied when supplied. Valid values are Add
 .PARAMETER Description
 Updates the description of the Uptime device.
 
-.PARAMETER GroupIds
+.PARAMETER HostGroupIds
 Sets the group identifiers assigned to the Uptime device.
 
 .PARAMETER PollingInterval
@@ -135,7 +135,7 @@ function Set-LMUptimeDevice {
 
         [String]$Description,
 
-        [String[]]$GroupIds,
+        [String[]]$HostGroupIds,
 
         [ValidateSet(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)]
         [Nullable[Int]]$PollingInterval,
@@ -310,7 +310,7 @@ function Set-LMUptimeDevice {
         foreach ($key in $PSBoundParameters.Keys) {
             switch ($key) {
                 'Description' { $payload.description = $Description }
-                'GroupIds' { $payload.groupIds = @($GroupIds | ForEach-Object { [String]$_ }) }
+                'HostGroupIds' { $payload.hostGroupIds = @($HostGroupIds | ForEach-Object { [String]$_ }) }
                 'PollingInterval' { $payload.pollingInterval = $PollingInterval }
                 'AlertTriggerInterval' { $payload.transition = $AlertTriggerInterval }
                 'GlobalSmAlertCond' {

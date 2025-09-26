@@ -14,7 +14,7 @@ Creates a LogicMonitor Uptime device using the v3 device endpoint.
 
 ### WebInternal (Default)
 ```
-New-LMUptimeDevice -Name <String> -GroupIds <String[]> [-Description <String>] [-PollingInterval <Int32>]
+New-LMUptimeDevice -Name <String> -HostGroupIds <String[]> [-Description <String>] [-PollingInterval <Int32>]
  [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
  [-UseDefaultAlertSetting <Boolean>] [-Properties <Object>] [-Template <String>] -Domain <String>
@@ -26,7 +26,7 @@ New-LMUptimeDevice -Name <String> -GroupIds <String[]> [-Description <String>] [
 
 ### PingExternal
 ```
-New-LMUptimeDevice -Name <String> -GroupIds <String[]> [-Description <String>] [-PollingInterval <Int32>]
+New-LMUptimeDevice -Name <String> -HostGroupIds <String[]> [-Description <String>] [-PollingInterval <Int32>]
  [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
  [-UseDefaultAlertSetting <Boolean>] [-Properties <Object>] [-Template <String>] -Hostname <String>
@@ -37,7 +37,7 @@ New-LMUptimeDevice -Name <String> -GroupIds <String[]> [-Description <String>] [
 
 ### PingInternal
 ```
-New-LMUptimeDevice -Name <String> -GroupIds <String[]> [-Description <String>] [-PollingInterval <Int32>]
+New-LMUptimeDevice -Name <String> -HostGroupIds <String[]> [-Description <String>] [-PollingInterval <Int32>]
  [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
  [-UseDefaultAlertSetting <Boolean>] [-Properties <Object>] [-Template <String>] -Hostname <String>
@@ -48,7 +48,7 @@ New-LMUptimeDevice -Name <String> -GroupIds <String[]> [-Description <String>] [
 
 ### WebExternal
 ```
-New-LMUptimeDevice -Name <String> -GroupIds <String[]> [-Description <String>] [-PollingInterval <Int32>]
+New-LMUptimeDevice -Name <String> -HostGroupIds <String[]> [-Description <String>] [-PollingInterval <Int32>]
  [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>]
  [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
  [-UseDefaultAlertSetting <Boolean>] [-Properties <Object>] [-Template <String>] -Domain <String>
@@ -74,28 +74,28 @@ Supported monitor types include:
 
 ### EXAMPLE 1
 ```
-New-LMUptimeDevice -Name "web-int-01" -GroupIds 17 -Domain "app.example.com" -TestLocationCollectorIds 12
+New-LMUptimeDevice -Name "web-int-01" -HostGroupIds 17 -Domain "app.example.com" -TestLocationCollectorIds 12
 ```
 
 Creates a new internal web uptime check against app.example.com using collector 12.
 
 ### EXAMPLE 2
 ```
-New-LMUptimeDevice -Name "web-ext-01" -GroupIds 17 -Domain "app.example.com" -TestLocationSmgIds 2,3,4
+New-LMUptimeDevice -Name "web-ext-01" -HostGroupIds 17 -Domain "app.example.com" -TestLocationSmgIds 2,3,4
 ```
 
 Creates a new external web uptime check using the specified public locations.
 
 ### EXAMPLE 3
 ```
-New-LMUptimeDevice -Name "ping-int-01" -GroupIds 17 -Host "intranet.local" -TestLocationCollectorIds 5
+New-LMUptimeDevice -Name "ping-int-01" -HostGroupIds 17 -Host "intranet.local" -TestLocationCollectorIds 5
 ```
 
 Creates an internal ping uptime check that targets intranet.local.
 
 ### EXAMPLE 4
 ```
-New-LMUptimeDevice -Name "ping-ext-01" -GroupIds 17 -Host "api.example.net" -TestLocationSmgIds 2,4
+New-LMUptimeDevice -Name "ping-ext-01" -HostGroupIds 17 -Host "api.example.net" -TestLocationSmgIds 2,4
 ```
 
 Creates an external ping uptime check using the provided public locations.
@@ -118,7 +118,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GroupIds
+### -HostGroupIds
 Specifies one or more device group identifiers to assign to the Uptime device.
 
 ```yaml

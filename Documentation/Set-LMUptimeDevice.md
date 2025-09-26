@@ -14,7 +14,7 @@ Updates an existing LogicMonitor Uptime device using the v3 device endpoint.
 
 ### IdGeneral (Default)
 ```
-Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-GroupIds <String[]>]
+Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-HostGroupIds <String[]>]
  [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
  [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
  [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
@@ -24,7 +24,7 @@ Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <Strin
 
 ### IdPing
 ```
-Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-GroupIds <String[]>]
+Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-HostGroupIds <String[]>]
  [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
  [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
  [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
@@ -35,7 +35,7 @@ Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <Strin
 
 ### IdWeb
 ```
-Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-GroupIds <String[]>]
+Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-HostGroupIds <String[]>]
  [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
  [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
  [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
@@ -48,35 +48,37 @@ Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <Strin
 
 ### NamePing
 ```
-Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>] [-GroupIds <String[]>]
- [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
- [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
- [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
- [-Template <String>] [-Hostname <String>] [-Count <Int32>] [-PercentPktsNotReceiveInTime <Int32>]
- [-TimeoutInMSPktsNotReceive <Int32>] [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>]
- [-TestLocationAll] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>]
+ [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
+ [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
+ [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
+ [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>] [-Template <String>] [-Hostname <String>]
+ [-Count <Int32>] [-PercentPktsNotReceiveInTime <Int32>] [-TimeoutInMSPktsNotReceive <Int32>]
+ [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>] [-TestLocationAll]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### NameWeb
 ```
-Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>] [-GroupIds <String[]>]
- [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
- [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
- [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
- [-Template <String>] [-Domain <String>] [-Schema <String>] [-IgnoreSSL <Boolean>]
- [-PageLoadAlertTimeInMS <Int32>] [-AlertExpr <String>] [-TriggerSSLStatusAlert <Boolean>]
- [-TriggerSSLExpirationAlert <Boolean>] [-Steps <Hashtable[]>] [-TestLocationCollectorIds <Int32[]>]
- [-TestLocationSmgIds <Int32[]>] [-TestLocationAll] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>]
+ [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
+ [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
+ [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
+ [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>] [-Template <String>] [-Domain <String>]
+ [-Schema <String>] [-IgnoreSSL <Boolean>] [-PageLoadAlertTimeInMS <Int32>] [-AlertExpr <String>]
+ [-TriggerSSLStatusAlert <Boolean>] [-TriggerSSLExpirationAlert <Boolean>] [-Steps <Hashtable[]>]
+ [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>] [-TestLocationAll]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### NameGeneral
 ```
-Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>] [-GroupIds <String[]>]
- [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
- [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
- [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
- [-Template <String>] [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>] [-TestLocationAll]
+Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>]
+ [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
+ [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
+ [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
+ [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>] [-Template <String>]
+ [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>] [-TestLocationAll]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -168,7 +170,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -GroupIds
+### -HostGroupIds
 Sets the group identifiers assigned to the Uptime device.
 
 ```yaml

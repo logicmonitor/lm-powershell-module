@@ -95,7 +95,7 @@ Connect-LMAccount -UseCachedCredential
 ### Examples
 ```powershell
 # Create a new external web uptime check
-New-LMUptimeDevice -Name "shop.example.com" -GroupIds '123' -Domain 'shop.example.com' -TestLocationAll
+New-LMUptimeDevice -Name "shop.example.com" -HostGroupIds '123' -Domain 'shop.example.com' -TestLocationAll
 
 # Update an existing uptime device by name
 Set-LMUptimeDevice -Name "shop.example.com" -Description "Updated uptime monitor" -GlobalSmAlertCond half
