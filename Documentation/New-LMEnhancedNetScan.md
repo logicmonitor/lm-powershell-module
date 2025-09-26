@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# New-LMEnhancedNetScan
+# New-LMEnhancedNetscan
 
 ## SYNOPSIS
 Creates a new enhanced network scan in LogicMonitor.
@@ -13,7 +13,7 @@ Creates a new enhanced network scan in LogicMonitor.
 ## SYNTAX
 
 ```
-New-LMEnhancedNetScan [-CollectorId] <String> [-Name] <String> [[-NetScanGroupName] <String>]
+New-LMEnhancedNetscan [-CollectorId] <String> [-Name] <String> [[-NetScanGroupName] <String>]
  [[-CustomCredentials] <System.Collections.Generic.List`1[System.Management.Automation.PSObject]>]
  [[-Filters] <System.Collections.Generic.List`1[System.Management.Automation.PSObject]>]
  [[-Description] <String>] [[-ExcludeDuplicateType] <String>] [[-Method] <String>] [[-NextStart] <String>]

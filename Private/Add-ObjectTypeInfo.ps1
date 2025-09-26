@@ -129,6 +129,7 @@ function Add-ObjectTypeInfo {
     }
     process {
         foreach ($Object in $InputObject) {
+            if ($null -eq $Object) { continue }
             switch ($PSBoundParameters.Keys) {
                 'PropertyToAdd' {
                     foreach ($Key in $PropertyToAdd.Keys) {

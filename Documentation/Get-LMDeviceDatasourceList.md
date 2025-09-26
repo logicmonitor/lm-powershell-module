@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Get-LMDeviceDatasourceList
+# Get-LMDeviceDataSourceList
 
 ## SYNOPSIS
 {{ Fill in the Synopsis }}
@@ -14,13 +14,13 @@ schema: 2.0.0
 
 ### Id (Default)
 ```
-Get-LMDeviceDatasourceList -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMDeviceDataSourceList -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMDeviceDatasourceList [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
+Get-LMDeviceDataSourceList [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 

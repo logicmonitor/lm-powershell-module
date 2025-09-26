@@ -1,4 +1,18 @@
 # Previous module release notes
+## 7.5
+
+### New Cmdlets
+- **Get-LMServiceTemplate**: Cmdlet to retrieve service template information.
+- **New-LMServiceTemplate**: Cmdlet to create service templates. 
+- **Remove-LMServiceTemplate**: Cmdlet to remove service templates. 
+
+*Note: These cmdlets are currently for internal use/testing only and do not support LMv1 or BearerToken. When a v3 variant is supported they will be updated to support those auth methods.*
+
+### Bug Fixes/Changes
+- **Get-LMDeviceProperty**: Fix bug with cmdlet that caused cmdlet to continuously loop when no matching property was found.
+- **New-LMPushMetricDataPoint**: Fix bug caused by using users local time when deriving the datapoint timestamps instead of UTC.
+- Fixed a few missing cmdlet alias changes and updated the documentation site to reflect all currently active cmdlets.
+
 ## 7.4.3
 ### Bug Fixes/Changes
 - Added -Form support to Invoke-LMRestMethod to support cmdlets that required form data.

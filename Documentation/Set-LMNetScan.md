@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# Set-LMNetscan
+# Set-LMNetScan
 
 ## SYNOPSIS
 Updates a LogicMonitor NetScan configuration.
@@ -13,7 +13,7 @@ Updates a LogicMonitor NetScan configuration.
 ## SYNTAX
 
 ```
-Set-LMNetscan [[-CollectorId] <String>] [[-Name] <String>] [-Id] <String> [[-Description] <String>]
+Set-LMNetScan [[-CollectorId] <String>] [[-Name] <String>] [-Id] <String> [[-Description] <String>]
  [[-ExcludeDuplicateType] <String>] [[-IgnoreSystemIpDuplpicates] <Boolean>] [[-Method] <String>]
  [[-NextStart] <String>] [[-NextStartEpoch] <String>] [[-NetScanGroupId] <String>] [[-SubnetRange] <String>]
  [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>] [[-Schedule] <PSObject>]

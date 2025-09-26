@@ -5,7 +5,7 @@ online version:
 schema: 2.0.0
 ---
 
-# New-LMNetScan
+# New-LMNetscan
 
 ## SYNOPSIS
 Creates a new network scan in LogicMonitor.
@@ -13,7 +13,7 @@ Creates a new network scan in LogicMonitor.
 ## SYNTAX
 
 ```
-New-LMNetScan [-CollectorId] <String> [-Name] <String> [[-Description] <String>]
+New-LMNetscan [-CollectorId] <String> [-Name] <String> [[-Description] <String>]
  [[-ExcludeDuplicateType] <String>] [[-IgnoreSystemIpDuplicates] <Boolean>] [[-Method] <String>]
  [[-NextStart] <String>] [[-NextStartEpoch] <String>] [[-NetScanGroupId] <String>] [[-Schedule] <PSObject>]
  [-SubnetRange] <String> [[-CredentialGroupId] <String>] [[-CredentialGroupName] <String>]

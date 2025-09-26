@@ -1453,6 +1453,58 @@
             </TableRowEntries>
          </TableControl>
       </View>
+            <View>
+         <Name>LogicMonitorLMUptimeDevice</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.LMUptimeDevice</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>displayName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>currentCollectorId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>hostStatus</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>displayName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>currentCollectorId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>hostStatus</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
       <!-- New View LogicMonitor.DatasourceDevice-->
       <View>
          <Name>LogicMonitorDatasourceDevice</Name>
