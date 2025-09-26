@@ -12,7 +12,7 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
         It 'When given mandatory parameters, returns a created uptime device with matching values' {
             $script:NewUptimeDevice = New-LMUptimeDevice `
                 -Name $script:UptimeDeviceName `
-                -GroupIds @('4982') ` #All devices group
+                -GroupIds @('1') `
                 -Domain $script:UptimeDomain `
                 -Description 'BuildUptimeTest' `
                 -TestLocationAll `
