@@ -14,7 +14,7 @@ Describe 'ConvertTo-LMUptimeDevice Testing' {
 
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -BeExactly ($script:SourceWebsite.name + '-uptime')
-            $result.hostGroupIds | Should -Contain '4982' #Dynamic group for Uptime Devices
+            $result.hostGroupIds.split(',') | Should -Contain '4982' #Dynamic group for Uptime Devices
 
             # Cleanup created uptime device
             Try { Remove-LMUptimeDevice -Id $result.id -Confirm:$false -HardDelete $true -ErrorAction Stop } Catch { }
