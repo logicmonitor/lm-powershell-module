@@ -14,10 +14,10 @@ Describe 'ConvertTo-LMUptimeDevice Testing' {
 
             $result | Should -Not -BeNullOrEmpty
             $result.Name | Should -BeExactly ($script:SourceWebsite.name + '-uptime')
-            $result.groupIds | Should -Contain '1'
+            $result.hostGroupIds | Should -Contain '1'
 
             # Cleanup created uptime device
-            Try { Remove-LMUptimeDevice -Id $result.id -Confirm:$false -ErrorAction Stop } Catch { }
+            Try { Remove-LMUptimeDevice -Id $result.id -Confirm:$false -HardDelete $true -ErrorAction Stop } Catch { }
         }
 
         It 'Disables the source website when DisableSourceAlerting is specified' {
@@ -31,7 +31,7 @@ Describe 'ConvertTo-LMUptimeDevice Testing' {
             $updatedSite = Get-LMWebsite -Id $script:SourceWebsite.Id
             $updatedSite.disableAlerting | Should -BeTrue
 
-            Try { Remove-LMUptimeDevice -Id $result.id -Confirm:$false -ErrorAction Stop } Catch { }
+            Try { Remove-LMUptimeDevice -Id $result.id -Confirm:$false -HardDelete $true -ErrorAction Stop } Catch { }
         }
     }
 

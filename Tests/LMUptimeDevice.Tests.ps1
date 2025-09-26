@@ -65,14 +65,14 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMUptimeDevice' {
         It 'When given an id, removes the uptime device from LogicMonitor' {
-            { Remove-LMUptimeDevice -Id $script:NewUptimeDevice.id -Confirm:$false -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMUptimeDevice -Id $script:NewUptimeDevice.id -Confirm:$false -HardDelete $true -ErrorAction Stop } | Should -Not -Throw
             $script:NewUptimeDevice = $null
         }
     }
 
     AfterAll {
         if ($script:NewUptimeDevice) {
-            try { Remove-LMUptimeDevice -Id $script:NewUptimeDevice.id -Confirm:$false -ErrorAction Stop } catch { }
+            try { Remove-LMUptimeDevice -Id $script:NewUptimeDevice.id -Confirm:$false -HardDelete $true -ErrorAction Stop } catch { }
         }
         Disconnect-LMAccount
     }
