@@ -142,6 +142,10 @@ function Get-LMDevice {
             #Stop looping if single device, no need to continue
             if ($PSCmdlet.ParameterSetName -eq "Id") {
                 $Done = $true
+
+                #Filter out uptime devices
+                #$Response = $Response | Where-Object { $_.deviceType -ne '18' -and $_.deviceType -ne '19' }
+
                 return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
             }
             #Check result size and if needed loop again
@@ -153,8 +157,11 @@ function Get-LMDevice {
                     $Done = $true
                 }
             }
-
+            
         }
+        #Filter out uptime devices
+        #$Results = $Results | Where-Object { $_.deviceType -ne '18' -and $_.deviceType -ne '19' }
+
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Device" )
     }
     else {

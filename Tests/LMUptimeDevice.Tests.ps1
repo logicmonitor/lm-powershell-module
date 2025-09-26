@@ -42,9 +42,16 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
             $device[0].name | Should -BeExactly $script:NewUptimeDevice.name
         }
 
-        It 'When given a type parameter should return only matching devices' {
+        It 'When given a webcheck type parameter should return only matching devices' {
             $devices = Get-LMUptimeDevice -Type webcheck
-            ($devices | Where-Object { $_.type -ne 'webcheck' } | Measure-Object).Count | Should -BeExactly 0
+            ($devices | Where-Object { $_.deviceType -ne '18' } | Measure-Object).Count | Should -BeExactly 0
+            ($devices | Where-Object { $_.deviceType -eq '18' } | Measure-Object).Count | Should -BeGreaterThan 1
+        }
+
+        It 'When given a pingcheck type parameter should return only matching devices' {
+            $devices = Get-LMUptimeDevice -Type pingcheck
+            ($devices | Where-Object { $_.deviceType -ne '19' } | Measure-Object).Count | Should -BeExactly 0
+            ($devices | Where-Object { $_.deviceType -eq '19' } | Measure-Object).Count | Should -BeGreaterThan 1
         }
     }
 
