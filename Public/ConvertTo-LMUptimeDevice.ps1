@@ -246,13 +246,20 @@ function ConvertTo-LMUptimeDevice {
         }
 
         if ($PSCmdlet.ShouldProcess($targetName, 'Create LM Uptime Device')) {
+            $commonParams = @{}
+            foreach ($commonParam in 'Debug','Verbose','WhatIf','Confirm') {
+                if ($PSBoundParameters.ContainsKey($commonParam)) {
+                    $commonParams[$commonParam] = $PSBoundParameters[$commonParam]
+                }
+            }
+
             try {
                 Write-Verbose "Creating Uptime device '$targetName' with parameters: $($parameters | ConvertTo-Json -Compress)"
-                $result = New-LMUptimeDevice @parameters -Debug:$($PSCmdlet.MyInvocation.BoundParameters['Debug'].IsPresent)
+                $result = New-LMUptimeDevice @parameters @commonParams
                 if ($result -and $DisableSourceAlerting.IsPresent) {
                     try {
                         $setWebsiteParams = @{ Id = $Website.id; DisableAlerting = $true }
-                        Set-LMWebsite @setWebsiteParams -Debug:$($PSCmdlet.MyInvocation.BoundParameters['Debug'].IsPresent) | Out-Null
+                        Set-LMWebsite @setWebsiteParams @commonParams | Out-Null
                     }
                     catch {
                         Write-Warning "Uptime device created but failed to disable alerting on website '$($Website.name)': $_"
