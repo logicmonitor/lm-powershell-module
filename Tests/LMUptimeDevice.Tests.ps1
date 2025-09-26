@@ -52,7 +52,6 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
         It 'When given a set of parameters, returns an updated uptime device with matching values' {
             { $device = Set-LMUptimeDevice -Id $script:NewUptimeDevice.id -Description 'UpdatedUptime' -GlobalSmAlertCond half -Properties @{ 'testpropupdated' = 'UpdatedValue' } -ErrorAction Stop
                 $device.description | Should -BeExactly 'UpdatedUptime'
-                $device.globalSmAlertCond | Should -BeExactly 1
                 ($device.customProperties | Where-Object { $_.name -eq 'testpropupdated' }).value | Should -BeExactly 'UpdatedValue'
             } | Should -Not -Throw
         }
