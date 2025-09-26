@@ -147,7 +147,7 @@ function ConvertTo-LMUptimeDevice {
 
         $parameters = @{
             Name        = $targetName
-            GroupIds    = $TargetHostGroupIds
+            HostGroupIds    = $TargetHostGroupIds
             Description = $Website.description
         }
 
