@@ -4,7 +4,7 @@ Describe 'ConvertTo-LMUptimeDevice Testing' {
         Import-Module $Module -Force
         Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
 
-        $script:SourceWebsite = New-LMWebsite -Name ("Website.Uptime.Migration." + ([guid]::NewGuid().ToString('N').Substring(0, 8))) -Webcheck -WebsiteDomain 'migration.example.com' -Description 'MigrationTest' -Properties @{ 'migrate' = 'true' } -TestLocationCollectorIds @($PreferredCollectorId)
+        $script:SourceWebsite = New-LMWebsite -Name ("Website.Uptime.Migration." + ([guid]::NewGuid().ToString('N').Substring(0, 8))) -IsInternal $true -Webcheck -WebsiteDomain 'migration.example.com' -Description 'MigrationTest' -Properties @{ 'migrate' = 'true' } -TestLocationCollectorIds @($PreferredCollectorId)
     }
 
     Describe 'ConvertTo-LMUptimeDevice' {

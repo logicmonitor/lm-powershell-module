@@ -20,7 +20,7 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
 
             $script:NewUptimeDevice | Should -Not -BeNullOrEmpty
             $script:NewUptimeDevice.description | Should -BeExactly 'BuildUptimeTest'
-            ($script:NewUptimeDevice.properties | Where-Object { $_.name -eq 'testprop' }).value | Should -BeExactly 'BuildTest'
+            ($script:NewUptimeDevice.customProperties | Where-Object { $_.name -eq 'testprop' }).value | Should -BeExactly 'BuildTest'
         }
     }
 
@@ -53,7 +53,7 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
             { $device = Set-LMUptimeDevice -Id $script:NewUptimeDevice.id -Description 'UpdatedUptime' -GlobalSmAlertCond half -Properties @{ 'testpropupdated' = 'UpdatedValue' } -ErrorAction Stop
                 $device.description | Should -BeExactly 'UpdatedUptime'
                 $device.globalSmAlertCond | Should -BeExactly 1
-                ($device.properties | Where-Object { $_.name -eq 'testpropupdated' }).value | Should -BeExactly 'UpdatedValue'
+                ($device.customProperties | Where-Object { $_.name -eq 'testpropupdated' }).value | Should -BeExactly 'UpdatedValue'
             } | Should -Not -Throw
         }
     }
