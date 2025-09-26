@@ -287,8 +287,8 @@ function New-LMUptimeWebStep {
     if ($PostDataEditType) { $step.postDataEditType = $PostDataEditType }
 
     if ($parameterSet -eq 'Internal' -and $RequestType -eq 'script') {
-        $step.reqScript = $RequestScript ?? ''
-         $step.respScript = $ResponseScript ?? ''
+        $step.reqScript = if ($null -ne $RequestScript) { $RequestScript } else { '' }
+        $step.respScript = if ($null -ne $ResponseScript) { $ResponseScript } else { '' }
     }
 
     foreach ($key in @($step.Keys)) {

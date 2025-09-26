@@ -77,6 +77,7 @@ Connect-LMAccount -UseCachedCredential
 
 ### New Cmdlets
 - **New-LMUptimeDevice**: Create LogicMonitor Uptime monitors (web or ping) using the v3 device endpoint.
+- **New-LMUptimeWebStep**: Helper cmdlet to create a properly formated step for use with *New-LMUptimedevice*
 - **Get-LMUptimeDevice**: Retrieve existing Uptime devices with support for filtering by type or internal/external status.
 - **Set-LMUptimeDevice**: Update Uptime device configuration, including alert thresholds, locations, and scripted steps.
 - **Remove-LMUptimeDevice**: Delete Uptime devices individually.

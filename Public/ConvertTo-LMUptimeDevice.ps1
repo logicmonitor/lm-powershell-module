@@ -136,7 +136,7 @@ function ConvertTo-LMUptimeDevice {
         
         if (-not $Website) { return }
 
-        $type = ($Website.type ?? '').ToString().ToLowerInvariant()
+        $type = if ($null -ne $Website.type) { $Website.type } else { '' }
         if ($type -notin @('webcheck', 'pingcheck')) {
             Write-Warning "Skipping resource '$($Website.name)' because type '$type' is not supported."
             return
