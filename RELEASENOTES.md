@@ -1,4 +1,39 @@
 # Previous module release notes
+
+## 7.6
+
+### New Cmdlets
+- **New-LMUptimeDevice**: Create LogicMonitor Uptime monitors (web or ping) using the v3 device endpoint.
+- **New-LMUptimeWebStep**: Helper cmdlet to create a properly formated step for use with *New-LMUptimedevice*
+- **Get-LMUptimeDevice**: Retrieve existing Uptime devices with support for filtering by type or internal/external status.
+- **Set-LMUptimeDevice**: Update Uptime device configuration, including alert thresholds, locations, and scripted steps.
+- **Remove-LMUptimeDevice**: Delete Uptime devices individually.
+
+### New Helper Cmdlets
+- **ConvertTo-LMUptimeDevice** Migration cmdlet relies will take a provided set of WebChecks/PingChecks and convert them to LMUptime Resources.
+
+### Bug Fixes/Changes
+- Added reusable helper functions to normalise global alert condition inputs and location validation for Uptime cmdlets.
+
+### Notes
+- API calls for LM Uptime will only work on LM portals running v228 or later.
+- LMUptime resources with show under normal **\*-LMDevice** cmdlets but modification to them should be handled by the new **\*-LMUptimeDevice** cmdlets.
+
+### Examples
+```powershell
+# Create a new external web uptime check
+New-LMUptimeDevice -Name "shop.example.com" -HostGroupIds '123' -Domain 'shop.example.com' -TestLocationAll
+
+# Update an existing uptime device by name
+Set-LMUptimeDevice -Name "shop.example.com" -Description "Updated uptime monitor" -GlobalSmAlertCond half
+
+# Remove an uptime device
+Remove-LMUptimeDevice -Name "shop.example.com"
+
+# Migrate legacy websites to uptime and disable their alerting
+Get-LMWebsite -Type Webcheck | ConvertTo-LMUptimeDevice -TargetHostGroupIds '123' -DisableSourceAlerting
+```
+
 ## 7.5
 
 ### New Cmdlets

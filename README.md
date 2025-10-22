@@ -73,24 +73,15 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.6
+## 7.6.1
 
 ### New Cmdlets
-- **New-LMUptimeDevice**: Create LogicMonitor Uptime monitors (web or ping) using the v3 device endpoint.
-- **New-LMUptimeWebStep**: Helper cmdlet to create a properly formated step for use with *New-LMUptimedevice*
-- **Get-LMUptimeDevice**: Retrieve existing Uptime devices with support for filtering by type or internal/external status.
-- **Set-LMUptimeDevice**: Update Uptime device configuration, including alert thresholds, locations, and scripted steps.
-- **Remove-LMUptimeDevice**: Delete Uptime devices individually.
+- **Send-LMWebhookMessage**: Send a webhook message to LM Logs.
+- **Get-LMAWSExternalId**: Generate an ExternalID for AWS onboarding.
 
-### New Helper Cmdlets
-- **ConvertTo-LMUptimeDevice** Migration cmdlet relies will take a provided set of WebChecks/PingChecks and convert them to LMUptime Resources.
-
-### Bug Fixes/Changes
-- Added reusable helper functions to normalise global alert condition inputs and location validation for Uptime cmdlets.
-
-### Notes
-- API calls for LM Uptime will only work on LM portals running v228 or later.
-- LMUptime resources with show under normal **\*-LMDevice** cmdlets but modification to them should be handled by the new **\*-LMUptimeDevice** cmdlets.
+### Updated Cmdlets
+-  **Set-LMDeviceGroup**: Added *-Extra* field which takes a PSCustomObject for specifying extra cloud settings for LM Cloud resource groups.
+-  **New-LMDeviceGroup**: Added *-Extra* field which takes a PSCustomObject for specifying extra cloud settings for LM Cloud resource groups.
 
 ### Examples
 ```powershell

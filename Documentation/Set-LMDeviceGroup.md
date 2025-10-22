@@ -15,7 +15,7 @@ Updates a LogicMonitor device group configuration.
 ### Id-ParentGroupId (Default)
 ```
 Set-LMDeviceGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
+ [-Extra <Object>] [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
  [-DefaultCollectorGroupId <Int32>] [-PropertiesMethod <String>] [-DisableAlerting <Boolean>]
  [-EnableNetFlow <Boolean>] [-AppliesTo <String>] [-ParentGroupId <Int32>] [-ProgressAction <ActionPreference>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -24,7 +24,7 @@ Set-LMDeviceGroup -Id <String> [-NewName <String>] [-Description <String>] [-Pro
 ### Id-ParentGroupName
 ```
 Set-LMDeviceGroup -Id <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
+ [-Extra <Object>] [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
  [-DefaultCollectorGroupId <Int32>] [-PropertiesMethod <String>] [-DisableAlerting <Boolean>]
  [-EnableNetFlow <Boolean>] [-AppliesTo <String>] [-ParentGroupName <String>]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -33,7 +33,7 @@ Set-LMDeviceGroup -Id <String> [-NewName <String>] [-Description <String>] [-Pro
 ### Name-ParentGroupName
 ```
 Set-LMDeviceGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
+ [-Extra <Object>] [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
  [-DefaultCollectorGroupId <Int32>] [-PropertiesMethod <String>] [-DisableAlerting <Boolean>]
  [-EnableNetFlow <Boolean>] [-AppliesTo <String>] [-ParentGroupName <String>]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -42,7 +42,7 @@ Set-LMDeviceGroup -Name <String> [-NewName <String>] [-Description <String>] [-P
 ### Name-ParentGroupId
 ```
 Set-LMDeviceGroup -Name <String> [-NewName <String>] [-Description <String>] [-Properties <Hashtable>]
- [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
+ [-Extra <Object>] [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
  [-DefaultCollectorGroupId <Int32>] [-PropertiesMethod <String>] [-DisableAlerting <Boolean>]
  [-EnableNetFlow <Boolean>] [-AppliesTo <String>] [-ParentGroupId <Int32>] [-ProgressAction <ActionPreference>]
  [-WhatIf] [-Confirm] [<CommonParameters>]
@@ -138,6 +138,21 @@ Specifies a hashtable of custom properties for the device group.
 
 ```yaml
 Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Extra
+Specifies a object of extra properties for the device group. Used for LM Cloud resource groups
+
+```yaml
+Type: Object
 Parameter Sets: (All)
 Aliases:
 

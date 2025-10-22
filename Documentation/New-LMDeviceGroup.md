@@ -14,7 +14,7 @@ Creates a new LogicMonitor device group.
 
 ### GroupId
 ```
-New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable>]
+New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable>] [-Extra <Object>]
  [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
  [-DefaultCollectorGroupId <Int32>] [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>]
  -ParentGroupId <Int32> [-AppliesTo <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
@@ -23,7 +23,7 @@ New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable
 
 ### GroupName
 ```
-New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable>]
+New-LMDeviceGroup -Name <String> [-Description <String>] [-Properties <Hashtable>] [-Extra <Object>]
  [-DefaultCollectorId <Int32>] [-DefaultAutoBalancedCollectorGroupId <Int32>]
  [-DefaultCollectorGroupId <Int32>] [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>]
  -ParentGroupName <String> [-AppliesTo <String>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
@@ -88,6 +88,21 @@ A hashtable of custom properties for the device group.
 
 ```yaml
 Type: Hashtable
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Extra
+Specifies a object of extra properties for the device group. Used for LM Cloud resource groups
+
+```yaml
+Type: Object
 Parameter Sets: (All)
 Aliases:
 
