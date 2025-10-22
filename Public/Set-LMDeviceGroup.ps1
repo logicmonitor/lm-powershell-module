@@ -38,6 +38,9 @@ Specifies the ID of the parent group.
 .PARAMETER ParentGroupName
 Specifies the name of the parent group.
 
+.PARAMETER Extra
+Specifies a object of extra properties for the device group. Used for LM Cloud resource groups
+
 .EXAMPLE
 Set-LMDeviceGroup -Id 123 -NewName "Updated Group" -Description "New description"
 Updates the device group with ID 123 with a new name and description.
@@ -68,6 +71,8 @@ function Set-LMDeviceGroup {
         [String]$Description,
 
         [Hashtable]$Properties,
+
+        [Object]$Extra,
 
         [Nullable[Int]]$DefaultCollectorId,
 
@@ -147,6 +152,7 @@ function Set-LMDeviceGroup {
                 enableNetflow    = $EnableNetFlow
                 customProperties = $customProperties
                 parentId         = $ParentGroupId
+                extra            = $Extra
             }
 
             #Remove empty keys so we dont overwrite them

@@ -14,6 +14,9 @@ The description of the device group.
 .PARAMETER Properties
 A hashtable of custom properties for the device group.
 
+.PARAMETER Extra
+Specifies a object of extra properties for the device group. Used for LM Cloud resource groups
+
 .PARAMETER DisableAlerting
 Specifies whether alerting is disabled for the device group. The default value is $false.
 
@@ -58,6 +61,8 @@ function New-LMDeviceGroup {
         [String]$Description,
 
         [Hashtable]$Properties,
+
+        [Object]$Extra,
 
         [Int]$DefaultCollectorId = 0,
 
@@ -115,6 +120,7 @@ function New-LMDeviceGroup {
             defaultAutoBalancedCollectorGroupId = $DefaultAutoBalancedCollectorGroupId
             defaultCollectorGroupId             = $DefaultCollectorGroupId
             defaultCollectorId                  = $DefaultCollectorId
+            extra                               = $Extra
         }
 
         $Data = ($Data | ConvertTo-Json)
