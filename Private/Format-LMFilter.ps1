@@ -73,7 +73,16 @@ function Format-LMFilter {
                             }
                         }
                         else {
-                            $FormatedFilter += $SingleFilter.Replace("'", "`"") #replace single quotes with double quotes as reqired by LM API
+                            if ($SingleFilter -match "^(\s*)'(.*)'(\s*)$") {
+                                $Leading = $Matches[1]
+                                $Value = $Matches[2]
+                                $Trailing = $Matches[3]
+                                $EscapedValue = $Value.Replace('"', '\"')
+                                $FormatedFilter += $Leading + '"' + $EscapedValue + '"' + $Trailing
+                            }
+                            else {
+                                $FormatedFilter += $SingleFilter
+                            }
                         }
                     }
                 }
