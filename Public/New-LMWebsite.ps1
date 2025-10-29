@@ -51,7 +51,7 @@ Specifies the domain of the website to check.
 Specifies the HTTP type to use for the website check. The valid values are "http" and "https". The default value is "https".
 
 .PARAMETER SSLAlertThresholds
-Specifies the SSL alert thresholds for the website check.
+Specifies the SSL alert thresholds for the website check. This is an alias for the alertExpr parameter.
 
 .PARAMETER PingCount
 Specifies the number of pings to send for the ping check. The valid values are 5, 10, 15, 20, 30, and 60.
@@ -164,6 +164,7 @@ function New-LMWebsite {
         [String]$HttpType = "https",
 
         [Parameter(ParameterSetName = "Website")]
+        [Alias("alertExpr")]
         [String[]]$SSLAlertThresholds,
 
         [Parameter(ParameterSetName = "Ping")]
