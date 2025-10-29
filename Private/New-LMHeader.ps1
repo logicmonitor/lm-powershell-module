@@ -130,5 +130,8 @@ function New-LMHeader {
     $Header.Add("Content-Type", $ContentType)
     $Header.Add("X-Version", $Version)
 
+    # Store HTTP method for diagnostics; removed prior to request dispatch
+    $Header.Add("__LMMethod", $Method)
+
     return @($Header, $Session)
 }

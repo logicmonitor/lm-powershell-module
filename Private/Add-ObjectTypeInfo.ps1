@@ -101,6 +101,7 @@ function Add-ObjectTypeInfo {
             Position = 0,
             ValueFromPipeline = $true )]
 
+        [AllowNull()]
         $InputObject,
 
         [Parameter( Mandatory = $false,

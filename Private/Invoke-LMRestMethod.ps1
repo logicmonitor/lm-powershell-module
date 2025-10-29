@@ -94,6 +94,10 @@ function Invoke-LMRestMethod {
 
     while (-not $success -and $retryCount -le $MaxRetries) {
         try {
+            if ($Headers.ContainsKey('__LMMethod')) {
+                $Headers.Remove('__LMMethod') | Out-Null
+            }
+
             # Build parameters for Invoke-RestMethod
             $params = @{
                 Uri         = $Uri

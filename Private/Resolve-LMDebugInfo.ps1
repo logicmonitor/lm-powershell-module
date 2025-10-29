@@ -43,13 +43,35 @@ function Resolve-LMDebugInfo {
     # Add timestamp for correlation
     $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss.fff"
 
-    # Extract HTTP method from headers or default to GET
-    $HttpMethod = if ($Headers.ContainsKey('Content-Type') -and $Payload) {
-        if ($Payload -match '".*":\s*null|".*":\s*""') { "PATCH" } else { "POST" }
+    $HttpMethod = $null
+
+    if ($Headers.ContainsKey('__LMMethod')) {
+        $HttpMethod = $Headers['__LMMethod']
+        $Headers.Remove('__LMMethod') | Out-Null
     }
-    elseif ($Url -match '/\d+$' -and !$Payload) { "GET" }
-    elseif (!$Payload) { "DELETE" }
-    else { "POST" }
+
+    if (-not $HttpMethod) {
+        $CommandName = $Command.MyCommand.Name
+        switch -Regex ($CommandName) {
+            '^(Get|Find|Search|Test|Resolve|Format|Measure|Show)-' { $HttpMethod = 'GET'; break }
+            '^(Remove|Uninstall|Disconnect|Stop|Clear|Delete)-' { $HttpMethod = 'DELETE'; break }
+            '^(Set|Update|Enable|Disable|Rename|Move|Merge|Patch|Edit)-' { $HttpMethod = 'PATCH'; break }
+            '^(New|Add|Copy|Send|Import|Invoke|Start|Publish|Submit|Approve)-' { $HttpMethod = 'POST'; break }
+        }
+    }
+
+    if (-not $HttpMethod) {
+        if ($Headers.ContainsKey('Content-Type') -and $Payload) {
+            if ($Payload -match '".*":\s*null|".*":\s*""') { $HttpMethod = 'PATCH' }
+            else { $HttpMethod = 'POST' }
+        }
+        elseif ($Payload) {
+            $HttpMethod = 'POST'
+        }
+        else {
+            $HttpMethod = 'GET'
+        }
+    }
 
     Write-Debug "============ LogicMonitor API Debug Info =============="
     Write-Debug "Command: $($Command.MyCommand) | Method: $HttpMethod | Timestamp: $Timestamp"
