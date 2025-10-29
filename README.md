@@ -71,7 +71,6 @@ Connect-LMAccount -UseCachedCredential
 #Connected to LM portal portalnamesandbox using account
 ```
 
-
 # Change List
 
 ## 7.7.0
