@@ -41,6 +41,8 @@ function Update-LogicMonitorModule {
         [Switch]$CheckOnly
     )
 
+    $psGalleryAvailable = $null
+
     foreach ($Module in $Modules) {
         try {
             # Read the currently installed version
@@ -63,13 +65,43 @@ function Update-LogicMonitorModule {
                 continue
             }
 
+            if ($null -eq $psGalleryAvailable) {
+                try {
+                    $repository = Get-PSRepository -Name 'PSGallery' -ErrorAction Stop
+                    if (-not $repository) {
+                        $psGalleryAvailable = $false
+                    }
+                    else {
+                        try {
+                            $probeUri = 'https://www.powershellgallery.com/api/v2/Packages?$top=1&$skip=0'
+                            Invoke-RestMethod -Uri $probeUri -Method Get -TimeoutSec 5 -ErrorAction Stop | Out-Null
+                            $psGalleryAvailable = $true
+                        }
+                        catch {
+                            Write-Verbose "Unable to reach PSGallery endpoint ($probeUri). $_"
+                            $psGalleryAvailable = $false
+                        }
+                    }
+                }
+                catch {
+                    Write-Verbose "PSGallery repository is not registered on this host. $_"
+                    $psGalleryAvailable = $false
+                }
+            }
+
+            if (-not $psGalleryAvailable) {
+                Write-Verbose "PSGallery repository is unavailable; skipping update check for module $Module."
+                continue
+            }
+
             # Lookup the latest version online
             try {
-                $Online = Find-Module -Name $Module -Repository PSGallery -ErrorAction Stop
+                $Online = Find-Module -Name $Module -Repository 'PSGallery' -ErrorAction Stop
                 $OnlineVersion = $Online.Version
             }
             catch {
                 Write-Verbose "Unable to query online version for module $Module. $_"
+                $psGalleryAvailable = $false
                 continue
             }
 
@@ -99,10 +131,11 @@ function Update-LogicMonitorModule {
 
             Write-Information "[INFO]: Installing newer Module $Module version $OnlineVersion."
             try {
-                Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion -ErrorAction Stop
+                Install-Module -Name $Module -Repository 'PSGallery' -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion -ErrorAction Stop
             }
             catch {
                 Write-Verbose "Failed to install module $Module version $OnlineVersion. $_"
+                $psGalleryAvailable = $false
                 continue
             }
 
