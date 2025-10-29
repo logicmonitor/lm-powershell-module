@@ -73,29 +73,30 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.6.1
+## 7.7.0
 
 ### New Cmdlets
-- **Send-LMWebhookMessage**: Send a webhook message to LM Logs.
-- **Get-LMAWSExternalId**: Generate an ExternalID for AWS onboarding.
+- **Get-LMRecentlyDeleted**: Retrieve recycle-bin entries with optional date, resource type, and deleted-by filters.
+- **Restore-LMRecentlyDeleted**: Batch restore recycle-bin items by recycle identifier.
+- **Remove-LMRecentlyDeleted**: Permanently delete recycle-bin entries in bulk.
 
 ### Updated Cmdlets
--  **Set-LMDeviceGroup**: Added *-Extra* field which takes a PSCustomObject for specifying extra cloud settings for LM Cloud resource groups.
--  **New-LMDeviceGroup**: Added *-Extra* field which takes a PSCustomObject for specifying extra cloud settings for LM Cloud resource groups.
+- **Update-LogicMonitorModule**: Hardened for non-blocking version checks; failures are logged via `Write-Verbose` and never terminate connecting cmdlets.
+- **Export-LMDeviceData**: CSV exports now expand datapoints into individual rows and JSON exports capture deeper datapoint structures.
 
 ### Examples
 ```powershell
-# Create a new external web uptime check
-New-LMUptimeDevice -Name "shop.example.com" -HostGroupIds '123' -Domain 'shop.example.com' -TestLocationAll
+# Retrieve all recently deleted devices for the past seven days
+Get-LMRecentlyDeleted -ResourceType device -DeletedBy "lmsupport" -Verbose
 
-# Update an existing uptime device by name
-Set-LMUptimeDevice -Name "shop.example.com" -Description "Updated uptime monitor" -GlobalSmAlertCond half
+# Restore a previously deleted device and confirm the operation
+Get-LMRecentlyDeleted -ResourceType device | Select-Object -First 1 -ExpandProperty id | Restore-LMRecentlyDeleted -Confirm:$false
 
-# Remove an uptime device
-Remove-LMUptimeDevice -Name "shop.example.com"
+# Permanently remove stale recycle-bin entries
+Get-LMRecentlyDeleted -DeletedAfter (Get-Date).AddMonths(-1) | Select-Object -ExpandProperty id | Remove-LMRecentlyDeleted -Confirm:$false
 
-# Migrate legacy websites to uptime and disable their alerting
-Get-LMWebsite -Type Webcheck | ConvertTo-LMUptimeDevice -TargetHostGroupIds '123' -DisableSourceAlerting
+# Export device datapoints to CSV with flattened datapoint rows
+Export-LMDeviceData -DeviceId 12345 -StartDate (Get-Date).AddHours(-6) -ExportFormat csv -ExportPath "C:\\Exports"
 ```
 
 

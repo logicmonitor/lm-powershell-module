@@ -1,5 +1,30 @@
 # Previous module release notes
 
+## 7.6.1
+
+### New Cmdlets
+- **Send-LMWebhookMessage**: Send a webhook message to LM Logs.
+- **Get-LMAWSExternalId**: Generate an ExternalID for AWS onboarding.
+
+### Updated Cmdlets
+- **Set-LMDeviceGroup**: Added *-Extra* field which takes a PSCustomObject for specifying extra cloud settings for LM Cloud resource groups.
+- **New-LMDeviceGroup**: Added *-Extra* field which takes a PSCustomObject for specifying extra cloud settings for LM Cloud resource groups.
+
+### Examples
+```powershell
+# Create a new external web uptime check
+New-LMUptimeDevice -Name "shop.example.com" -HostGroupIds '123' -Domain 'shop.example.com' -TestLocationAll
+
+# Update an existing uptime device by name
+Set-LMUptimeDevice -Name "shop.example.com" -Description "Updated uptime monitor" -GlobalSmAlertCond half
+
+# Remove an uptime device
+Remove-LMUptimeDevice -Name "shop.example.com"
+
+# Migrate legacy websites to uptime and disable their alerting
+Get-LMWebsite -Type Webcheck | ConvertTo-LMUptimeDevice -TargetHostGroupIds '123' -DisableSourceAlerting
+```
+
 ## 7.6
 
 ### New Cmdlets
