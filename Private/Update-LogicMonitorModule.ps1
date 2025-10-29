@@ -42,48 +42,79 @@ function Update-LogicMonitorModule {
     )
 
     foreach ($Module in $Modules) {
-        # Read the currently installed version
-        $Installed = Get-Module -ListAvailable -Name $Module
+        try {
+            # Read the currently installed version
+            $Installed = Get-Module -ListAvailable -Name $Module -ErrorAction SilentlyContinue
 
-        # There might be multiple versions
-        if ($Installed -is [Array]) {
-            $InstalledVersion = $Installed[0].Version
-        }
-        elseif ($Installed.Version) {
-            $InstalledVersion = $Installed.Version
-        }
-        else {
-            #Not installed or manually imported
-            return
-        }
-
-        # Lookup the latest version Online
-        $Online = Find-Module -Name $Module -Repository PSGallery -ErrorAction Stop
-        $OnlineVersion = $Online.Version
-
-        # Compare the versions
-        if ([System.Version]$OnlineVersion -gt [System.Version]$InstalledVersion) {
-
-            # Uninstall the old version
-            if ($CheckOnly) {
-                Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, please consider upgrading to the latest version ($OnlineVersion) as soon as possible. Use the -AutoUpdateModule switch next time you connect to auto upgrade to the latest version."
+            if (-not $Installed) {
+                Write-Verbose "Module $Module is not installed; skipping update check."
+                continue
             }
-            elseif ($UninstallFirst -eq $true) {
-                Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module, uninstalling prior Module $Module version $InstalledVersion"
-                Uninstall-Module -Name $Module -Force -Verbose:$False
 
-                Write-Information "[INFO]: Installing newer Module $Module version $OnlineVersion."
-                Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion
-                Update-LogicMonitorModule -CheckOnly -Modules @($Module)
+            # There might be multiple versions
+            if ($Installed -is [Array]) {
+                $InstalledVersion = $Installed[0].Version
+            }
+            elseif ($Installed.Version) {
+                $InstalledVersion = $Installed.Version
             }
             else {
-                Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module. Installing newer Module $Module version $OnlineVersion."
-                Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion
+                Write-Verbose "Unable to determine installed version for module $Module; skipping update check."
+                continue
+            }
+
+            # Lookup the latest version online
+            try {
+                $Online = Find-Module -Name $Module -Repository PSGallery -ErrorAction Stop
+                $OnlineVersion = $Online.Version
+            }
+            catch {
+                Write-Verbose "Unable to query online version for module $Module. $_"
+                continue
+            }
+
+            # Compare the versions
+            if ([System.Version]$OnlineVersion -le [System.Version]$InstalledVersion) {
+                Write-Information "[INFO]: Module $Module version $InstalledVersion is the latest version."
+                continue
+            }
+
+            Write-Information "[INFO]: You are currently using an outdated version ($InstalledVersion) of $Module."
+
+            if ($CheckOnly) {
+                Write-Information "[INFO]: Please consider upgrading to the latest version ($OnlineVersion) of $Module as soon as possible. Use the -AutoUpdateModule switch next time you connect to auto upgrade to the latest version."
+                continue
+            }
+
+            if ($UninstallFirst -eq $true) {
+                Write-Information "[INFO]: Uninstalling prior Module $Module version $InstalledVersion."
+                try {
+                    Uninstall-Module -Name $Module -Force -Verbose:$False -ErrorAction Stop
+                }
+                catch {
+                    Write-Verbose "Failed to uninstall module $Module version $InstalledVersion. $_"
+                    continue
+                }
+            }
+
+            Write-Information "[INFO]: Installing newer Module $Module version $OnlineVersion."
+            try {
+                Install-Module -Name $Module -Force -AllowClobber -Verbose:$False -MinimumVersion $OnlineVersion -ErrorAction Stop
+            }
+            catch {
+                Write-Verbose "Failed to install module $Module version $OnlineVersion. $_"
+                continue
+            }
+
+            try {
                 Update-LogicMonitorModule -CheckOnly -Modules @($Module)
             }
+            catch {
+                Write-Verbose "Post-installation verification failed for module $Module. $_"
+            }
         }
-        else {
-            Write-Information "[INFO]: Module $Module version $InstalledVersion is the latest version."
+        catch {
+            Write-Verbose "Unexpected error encountered while updating module $Module. $_"
         }
     }
 }

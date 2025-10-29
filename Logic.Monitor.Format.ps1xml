@@ -1453,6 +1453,59 @@
             </TableRowEntries>
          </TableControl>
       </View>
+      <!-- New View LogicMonitor.RecentlyDeleted-->
+      <View>
+         <Name>LogicMonitorRecentlyDeleted</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.RecentlyDeleted</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>resourceType</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>resourceName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>deletedOn</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>deletedBy</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>resourceId</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>resourceType</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>resourceName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>deletedOn</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>deletedBy</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>resourceId</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
             <View>
          <Name>LogicMonitorLMUptimeDevice</Name>
          <ViewSelectedBy>
