@@ -110,7 +110,6 @@ Resolves the ID from the device name and updates external web check locations an
 
 .NOTES
 You must run Connect-LMAccount before invoking this cmdlet. Requests are issued to
-/device/devices/{id} with X-Version 3 and return LogicMonitor.LMUptimeDevice objects.
 
 .OUTPUTS
 LogicMonitor.LMUptimeDevice
