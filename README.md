@@ -85,6 +85,7 @@ Connect-LMAccount -UseCachedCredential
 - **Invoke-LMReportExecution**: Trigger on-demand execution of LogicMonitor reports with optional admin impersonation and custom email recipients.
 - **Get-LMReportExecutionTask**: Check the status and retrieve results of previously triggered report executions.
 - **Invoke-LMAPIRequest**: Universal API request cmdlet for advanced users to access any LogicMonitor API endpoint with custom payloads while leveraging module authentication, retry logic, and debug utilities.
+- **Import-LMLogicModuleFromFile**: Import LogicModules using the new XML and JSON import endpoints with enhanced features including field preservation and conflict handling options. Supports datasources, configsources, eventsources, batchjobs, logsources, oids, topologysources, functions, and diagnosticsources.
 
 ### Updated Cmdlets
 - **Update-LogicMonitorModule**: Hardened for non-blocking version checks; failures are logged via `Write-Verbose` and never terminate connecting cmdlets.
@@ -92,6 +93,7 @@ Connect-LMAccount -UseCachedCredential
 - **Set-LMWebsite**: Added `alertExpr` alias for `SSLAlertThresholds` parameter for improved API compatibility. Updated synopsis to reflect enhanced parameter validation.
 - **New-LMWebsite**: Added `alertExpr` alias for `SSLAlertThresholds` parameter for improved API compatibility.
 - **Format-LMFilter**: Enhanced filter string escaping to properly handle special characters like parentheses, dollar signs, ampersands, and brackets in filter expressions.
+- **Import-LMLogicModule**: Marked as deprecated with warnings. Users should migrate to `Import-LMLogicModuleFromFile` for access to newer API endpoints and features.
 
 ### Bug Fixes
 - **Add-ObjectTypeInfo**: Fixed "Cannot bind argument to parameter 'InputObject' because it is null" error by adding `[AllowNull()]` attribute to handle successful but null API responses.
@@ -139,6 +141,16 @@ $customData = @{
     )
 }
 Invoke-LMAPIRequest -ResourcePath "/device/devices" -Method POST -Data $customData -Version 3
+
+# Import a LogicModule from file with the new endpoint
+Import-LMLogicModuleFromFile -FilePath "C:\LogicModules\datasource.json" -Type datasources -Format json
+
+# Import with conflict handling and field preservation
+Import-LMLogicModuleFromFile -FilePath "C:\LogicModules\datasource.json" -Type datasources -Format json -HandleConflict FORCE_OVERWRITE -FieldsToPreserve NAME
+
+# Import from file data variable
+$fileContent = Get-Content -Path "C:\LogicModules\eventsource.xml" -Raw
+Import-LMLogicModuleFromFile -File $fileContent -Type eventsources -Format xml
 ```
 
 
