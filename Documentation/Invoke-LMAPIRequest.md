@@ -16,14 +16,16 @@ Executes a custom LogicMonitor API request with full control over endpoint and p
 ```
 Invoke-LMAPIRequest -ResourcePath <String> -Method <String> [-QueryParams <Hashtable>] [-Data <Hashtable>]
  [-Version <Int32>] [-ContentType <String>] [-MaxRetries <Int32>] [-NoRetry] [-OutFile <String>]
- [-TypeName <String>] [-AsHashtable] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-TypeName <String>] [-AsHashtable] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### RawBody
 ```
 Invoke-LMAPIRequest -ResourcePath <String> -Method <String> [-QueryParams <Hashtable>] [-RawBody <String>]
  [-Version <Int32>] [-ContentType <String>] [-MaxRetries <Int32>] [-NoRetry] [-OutFile <String>]
- [-TypeName <String>] [-AsHashtable] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-TypeName <String>] [-AsHashtable] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -135,7 +137,6 @@ The HTTP method to use. Valid values: GET, POST, PATCH, PUT, DELETE.
 Type: String
 Parameter Sets: (All)
 Aliases:
-Accepted values: GET, POST, PATCH, PUT, DELETE
 
 Required: True
 Position: Named
@@ -322,6 +323,21 @@ Prompts you for confirmation before running the cmdlet.
 Type: SwitchParameter
 Parameter Sets: (All)
 Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProgressAction
+{{ Fill ProgressAction Description }}
+
+```yaml
+Type: ActionPreference
+Parameter Sets: (All)
+Aliases: proga
 
 Required: False
 Position: Named

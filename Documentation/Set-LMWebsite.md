@@ -265,7 +265,7 @@ Accept wildcard characters: False
 ```yaml
 Type: String[]
 Parameter Sets: Website
-Aliases:
+Aliases: alertExpr
 
 Required: False
 Position: Named
