@@ -79,10 +79,23 @@ Connect-LMAccount -UseCachedCredential
 - **Get-LMRecentlyDeleted**: Retrieve recycle-bin entries with optional date, resource type, and deleted-by filters.
 - **Restore-LMRecentlyDeleted**: Batch restore recycle-bin items by recycle identifier.
 - **Remove-LMRecentlyDeleted**: Permanently delete recycle-bin entries in bulk.
+- **Get-LMIntegration**: Retrieve integration configurations from LogicMonitor.
+- **Remove-LMIntegration**: Remove integrations by ID or name.
+- **Remove-LMEscalationChain**: Remove escalation chains by ID or name.
+- **Invoke-LMReportExecution**: Trigger on-demand execution of LogicMonitor reports with optional admin impersonation and custom email recipients.
+- **Get-LMReportExecutionTask**: Check the status and retrieve results of previously triggered report executions.
 
 ### Updated Cmdlets
 - **Update-LogicMonitorModule**: Hardened for non-blocking version checks; failures are logged via `Write-Verbose` and never terminate connecting cmdlets.
 - **Export-LMDeviceData**: CSV exports now expand datapoints into individual rows and JSON exports capture deeper datapoint structures.
+- **Set-LMWebsite**: Added `alertExpr` alias for `SSLAlertThresholds` parameter for improved API compatibility. Updated synopsis to reflect enhanced parameter validation.
+- **New-LMWebsite**: Added `alertExpr` alias for `SSLAlertThresholds` parameter for improved API compatibility.
+- **Format-LMFilter**: Enhanced filter string escaping to properly handle special characters like parentheses, dollar signs, ampersands, and brackets in filter expressions.
+
+### Bug Fixes
+- **Add-ObjectTypeInfo**: Fixed "Cannot bind argument to parameter 'InputObject' because it is null" error by adding `[AllowNull()]` attribute to handle successful but null API responses.
+- **Resolve-LMDebugInfo**: Improved HTTP method detection logic to correctly identify request types (GET, POST, PATCH, DELETE) based on cmdlet naming conventions and headers, fixing incorrect debug output.
+- **Invoke-LMRestMethod**: Added cleanup of internal `__LMMethod` diagnostic header before dispatching requests to prevent API errors.
 
 ### Examples
 ```powershell
@@ -97,6 +110,19 @@ Get-LMRecentlyDeleted -DeletedAfter (Get-Date).AddMonths(-1) | Select-Object -Ex
 
 # Export device datapoints to CSV with flattened datapoint rows
 Export-LMDeviceData -DeviceId 12345 -StartDate (Get-Date).AddHours(-6) -ExportFormat csv -ExportPath "C:\\Exports"
+
+# Retrieve all integrations
+Get-LMIntegration
+
+# Remove an integration by name
+Remove-LMIntegration -Name "Slack-Integration"
+
+# Remove an escalation chain by ID
+Remove-LMEscalationChain -Id 123
+
+# Trigger a report execution and check its status
+$task = Invoke-LMReportExecution -Name "Monthly Availability" -WithAdminId 101 -ReceiveEmails "ops@example.com"
+Get-LMReportExecutionTask -ReportName "Monthly Availability" -TaskId $task.taskId
 ```
 
 
