@@ -135,9 +135,48 @@ function Export-LMDeviceData {
                 }
             }
 
+            $csvExportList = @()
+            if ($ExportFormat -eq 'csv') {
+                foreach ($ExportItem in $DataExportList) {
+                    if (-not $ExportItem.dataPoints) {
+                        $row = [ordered]@{
+                            deviceId       = $ExportItem.deviceId
+                            deviceName     = $ExportItem.deviceName
+                            datasourceName = $ExportItem.datasourceName
+                            instanceName   = $ExportItem.instanceName
+                            instanceGroup  = $ExportItem.instanceGroup
+                        }
+                        $csvExportList += [PSCustomObject]$row
+                        continue
+                    }
+
+                    foreach ($Datapoint in @($ExportItem.dataPoints)) {
+                        $row = [ordered]@{
+                            deviceId       = $ExportItem.deviceId
+                            deviceName     = $ExportItem.deviceName
+                            datasourceName = $ExportItem.datasourceName
+                            instanceName   = $ExportItem.instanceName
+                            instanceGroup  = $ExportItem.instanceGroup
+                        }
+
+                        foreach ($Property in $Datapoint.PSObject.Properties) {
+                            $row[$Property.Name] = $Property.Value
+                        }
+
+                        $csvExportList += [PSCustomObject]$row
+                    }
+                }
+            }
+
             switch ($ExportFormat) {
-                "json" { $DataExportList | ConvertTo-Json -Depth 3 | Out-File -FilePath "$ExportPath\LMDeviceDataExport.json" ; return }
-                "csv" { $DataExportList | Export-Csv -NoTypeInformation -Path "$ExportPath\LMDeviceDataExport.csv" ; return }
+                "json" {
+                    $DataExportList | ConvertTo-Json -Depth 5 | Out-File -FilePath (Join-Path -Path $ExportPath -ChildPath 'LMDeviceDataExport.json')
+                    return
+                }
+                "csv" {
+                    $csvExportList | Export-Csv -NoTypeInformation -Path (Join-Path -Path $ExportPath -ChildPath 'LMDeviceDataExport.csv')
+                    return
+                }
                 default { return $DataExportList }
             }
         }

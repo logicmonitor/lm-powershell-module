@@ -48,6 +48,9 @@ Specifies how to handle properties. Valid values: "Add", "Replace", "Refresh".
 .PARAMETER PollingInterval
 Specifies the polling interval. Valid values: 1-10, 30, 60.
 
+.PARAMETER SSLAlertThresholds
+Specifies the SSL alert thresholds for the website check. This is an alias for the alertExpr parameter.
+
 .PARAMETER TestLocationAll
 Indicates whether to test from all locations. Cannot be used with TestLocationCollectorIds or TestLocationSmgIds.
 
@@ -122,6 +125,7 @@ function Set-LMWebsite {
         [String]$HttpType,
 
         [Parameter(ParameterSetName = "Website")]
+        [Alias("alertExpr")]
         [String[]]$SSLAlertThresholds,
 
         [Parameter(ParameterSetName = "Ping")]

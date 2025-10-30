@@ -1,8 +1,11 @@
 <#
 .SYNOPSIS
-Imports a LogicModule into LogicMonitor.
+[DEPRECATED] Imports a LogicModule into LogicMonitor using legacy endpoints.
 
 .DESCRIPTION
+DEPRECATED: This function uses legacy import endpoints and will be removed in a future version. 
+Please use Import-LMLogicModuleFromFile instead, which uses the newer XML/JSON import endpoints with better error handling and additional features.
+
 The Import-LMLogicModule function imports a LogicModule from a file path or file data. Supports various module types including datasource, propertyrules, eventsource, topologysource, configsource, logsource, functions, and oids.
 
 .PARAMETER FilePath
@@ -26,6 +29,8 @@ Import-LMLogicModule -FilePath "C:\LogicModules\datasource.xml" -Type "datasourc
 Import-LMLogicModule -File $fileData -Type "propertyrules"
 
 .NOTES
+DEPRECATED: This cmdlet will be removed in a future version. Use Import-LMLogicModuleFromFile instead.
+
 You must run Connect-LMAccount before running this command. Requires PowerShell version 6.1 or higher.
 
 .INPUTS
@@ -50,7 +55,9 @@ function Import-LMLogicModule {
     )
 
     #Check if we are logged in and have valid api creds
-    begin {}
+    begin {
+        Write-Warning "Import-LMLogicModule is deprecated and will be removed in a future version. Please use Import-LMLogicModuleFromFile instead."
+    }
     process {
         if ($Script:LMAuth.Valid) {
 

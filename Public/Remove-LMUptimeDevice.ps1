@@ -29,7 +29,6 @@ Resolves the device ID by name and removes the corresponding Uptime device.
 
 .NOTES
 You must run Connect-LMAccount before invoking this cmdlet. Requests target
-/device/devices/{id}?deleteHard={bool} with X-Version 3.
 
 .OUTPUTS
 System.Management.Automation.PSCustomObject

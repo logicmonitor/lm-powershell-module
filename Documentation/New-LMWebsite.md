@@ -313,7 +313,7 @@ Specifies the SSL alert thresholds for the website check.
 ```yaml
 Type: String[]
 Parameter Sets: Website
-Aliases:
+Aliases: alertExpr
 
 Required: False
 Position: Named

@@ -73,29 +73,84 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.6.1
+## 7.7.0
 
 ### New Cmdlets
-- **Send-LMWebhookMessage**: Send a webhook message to LM Logs.
-- **Get-LMAWSExternalId**: Generate an ExternalID for AWS onboarding.
+- **Get-LMRecentlyDeleted**: Retrieve recycle-bin entries with optional date, resource type, and deleted-by filters.
+- **Restore-LMRecentlyDeleted**: Batch restore recycle-bin items by recycle identifier.
+- **Remove-LMRecentlyDeleted**: Permanently delete recycle-bin entries in bulk.
+- **Get-LMIntegration**: Retrieve integration configurations from LogicMonitor.
+- **Remove-LMIntegration**: Remove integrations by ID or name.
+- **Remove-LMEscalationChain**: Remove escalation chains by ID or name.
+- **Invoke-LMReportExecution**: Trigger on-demand execution of LogicMonitor reports with optional admin impersonation and custom email recipients.
+- **Get-LMReportExecutionTask**: Check the status and retrieve results of previously triggered report executions.
+- **Invoke-LMAPIRequest**: Universal API request cmdlet for advanced users to access any LogicMonitor API endpoint with custom payloads while leveraging module authentication, retry logic, and debug utilities.
+- **Import-LMLogicModuleFromFile**: Import LogicModules using the new XML and JSON import endpoints with enhanced features including field preservation and conflict handling options. Supports datasources, configsources, eventsources, batchjobs, logsources, oids, topologysources, functions, and diagnosticsources.
 
 ### Updated Cmdlets
--  **Set-LMDeviceGroup**: Added *-Extra* field which takes a PSCustomObject for specifying extra cloud settings for LM Cloud resource groups.
--  **New-LMDeviceGroup**: Added *-Extra* field which takes a PSCustomObject for specifying extra cloud settings for LM Cloud resource groups.
+- **Update-LogicMonitorModule**: Hardened for non-blocking version checks; failures are logged via `Write-Verbose` and never terminate connecting cmdlets.
+- **Export-LMDeviceData**: CSV exports now expand datapoints into individual rows and JSON exports capture deeper datapoint structures.
+- **Set-LMWebsite**: Added `alertExpr` alias for `SSLAlertThresholds` parameter for improved API compatibility. Updated synopsis to reflect enhanced parameter validation.
+- **New-LMWebsite**: Added `alertExpr` alias for `SSLAlertThresholds` parameter for improved API compatibility.
+- **Format-LMFilter**: Enhanced filter string escaping to properly handle special characters like parentheses, dollar signs, ampersands, and brackets in filter expressions.
+- **Import-LMLogicModule**: Marked as deprecated with warnings. Users should migrate to `Import-LMLogicModuleFromFile` for access to newer API endpoints and features.
+
+### Bug Fixes
+- **Add-ObjectTypeInfo**: Fixed "Cannot bind argument to parameter 'InputObject' because it is null" error by adding `[AllowNull()]` attribute to handle successful but null API responses.
+- **Resolve-LMDebugInfo**: Improved HTTP method detection logic to correctly identify request types (GET, POST, PATCH, DELETE) based on cmdlet naming conventions and headers, fixing incorrect debug output.
+- **Invoke-LMRestMethod**: Added cleanup of internal `__LMMethod` diagnostic header before dispatching requests to prevent API errors.
 
 ### Examples
 ```powershell
-# Create a new external web uptime check
-New-LMUptimeDevice -Name "shop.example.com" -HostGroupIds '123' -Domain 'shop.example.com' -TestLocationAll
+# Retrieve all recently deleted devices for the past seven days
+Get-LMRecentlyDeleted -ResourceType device -DeletedBy "lmsupport" -Verbose
 
-# Update an existing uptime device by name
-Set-LMUptimeDevice -Name "shop.example.com" -Description "Updated uptime monitor" -GlobalSmAlertCond half
+# Restore a previously deleted device and confirm the operation
+Get-LMRecentlyDeleted -ResourceType device | Select-Object -First 1 -ExpandProperty id | Restore-LMRecentlyDeleted -Confirm:$false
 
-# Remove an uptime device
-Remove-LMUptimeDevice -Name "shop.example.com"
+# Permanently remove stale recycle-bin entries
+Get-LMRecentlyDeleted -DeletedAfter (Get-Date).AddMonths(-1) | Select-Object -ExpandProperty id | Remove-LMRecentlyDeleted -Confirm:$false
 
-# Migrate legacy websites to uptime and disable their alerting
-Get-LMWebsite -Type Webcheck | ConvertTo-LMUptimeDevice -TargetHostGroupIds '123' -DisableSourceAlerting
+# Export device datapoints to CSV with flattened datapoint rows
+Export-LMDeviceData -DeviceId 12345 -StartDate (Get-Date).AddHours(-6) -ExportFormat csv -ExportPath "C:\\Exports"
+
+# Retrieve all integrations
+Get-LMIntegration
+
+# Remove an integration by name
+Remove-LMIntegration -Name "Slack-Integration"
+
+# Remove an escalation chain by ID
+Remove-LMEscalationChain -Id 123
+
+# Trigger a report execution and check its status
+$task = Invoke-LMReportExecution -Name "Monthly Availability" -WithAdminId 101 -ReceiveEmails "ops@example.com"
+Get-LMReportExecutionTask -ReportName "Monthly Availability" -TaskId $task.taskId
+
+# Use the universal API request cmdlet for endpoints
+Invoke-LMAPIRequest -ResourcePath "/setting/integrations" -Method GET -QueryParams @{ size = 500 }
+
+# Create a device with full control
+$customData = @{
+    name = "1.1.1.1"
+    displayName = "Custom Device"
+    preferredCollectorId = 76
+    deviceType = 0
+    customProperties = @(
+        @{name="propname";value="value"}
+    )
+}
+Invoke-LMAPIRequest -ResourcePath "/device/devices" -Method POST -Data $customData -Version 3
+
+# Import a LogicModule from file with the new endpoint
+Import-LMLogicModuleFromFile -FilePath "C:\LogicModules\datasource.json" -Type datasources -Format json
+
+# Import with conflict handling and field preservation
+Import-LMLogicModuleFromFile -FilePath "C:\LogicModules\datasource.json" -Type datasources -Format json -HandleConflict FORCE_OVERWRITE -FieldsToPreserve NAME
+
+# Import from file data variable
+$fileContent = Get-Content -Path "C:\LogicModules\eventsource.xml" -Raw
+Import-LMLogicModuleFromFile -File $fileContent -Type eventsources -Format xml
 ```
 
 
