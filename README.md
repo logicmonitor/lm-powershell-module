@@ -84,6 +84,7 @@ Connect-LMAccount -UseCachedCredential
 - **Remove-LMEscalationChain**: Remove escalation chains by ID or name.
 - **Invoke-LMReportExecution**: Trigger on-demand execution of LogicMonitor reports with optional admin impersonation and custom email recipients.
 - **Get-LMReportExecutionTask**: Check the status and retrieve results of previously triggered report executions.
+- **Invoke-LMAPIRequest**: Universal API request cmdlet for advanced users to access any LogicMonitor API endpoint with custom payloads while leveraging module authentication, retry logic, and debug utilities.
 
 ### Updated Cmdlets
 - **Update-LogicMonitorModule**: Hardened for non-blocking version checks; failures are logged via `Write-Verbose` and never terminate connecting cmdlets.
@@ -123,6 +124,21 @@ Remove-LMEscalationChain -Id 123
 # Trigger a report execution and check its status
 $task = Invoke-LMReportExecution -Name "Monthly Availability" -WithAdminId 101 -ReceiveEmails "ops@example.com"
 Get-LMReportExecutionTask -ReportName "Monthly Availability" -TaskId $task.taskId
+
+# Use the universal API request cmdlet for endpoints
+Invoke-LMAPIRequest -ResourcePath "/setting/integrations" -Method GET -QueryParams @{ size = 500 }
+
+# Create a device with full control
+$customData = @{
+    name = "1.1.1.1"
+    displayName = "Custom Device"
+    preferredCollectorId = 76
+    deviceType = 0
+    customProperties = @(
+        @{name="propname";value="value"}
+    )
+}
+Invoke-LMAPIRequest -ResourcePath "/device/devices" -Method POST -Data $customData -Version 3
 ```
 
 
