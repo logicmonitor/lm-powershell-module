@@ -153,7 +153,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### System.Management.Automation.PSCustomObject
 ## NOTES
 You must run Connect-LMAccount before invoking this cmdlet.
-Requests target
-/device/devices/{id}?deleteHard={bool} with X-Version 3.
 
 ## RELATED LINKS

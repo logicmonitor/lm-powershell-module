@@ -616,7 +616,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### LogicMonitor.LMUptimeDevice
 ## NOTES
 You must run Connect-LMAccount before invoking this cmdlet.
-Requests are issued to
-/device/devices/{id} with X-Version 3 and return LogicMonitor.LMUptimeDevice objects.
 
 ## RELATED LINKS
