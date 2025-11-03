@@ -73,6 +73,12 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
+## 7.7.1
+### Hotfixes
+- Fix bug with **ConvertTo-LMUpdateDevice** when trying to migrate Websites using an packet count of 50.
+- Add missing parameter descriptions to 17 cmdlets.
+- Automate future help/doc generation when a new release is published.
+
 ## 7.7.0
 
 ### New Cmdlets
