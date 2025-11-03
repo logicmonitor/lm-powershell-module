@@ -32,6 +32,9 @@ The next start time epoch for the network scan. The default value is "0".
 .PARAMETER NetScanGroupId
 The ID of the network scan group to assign the network scan to. The default value is "1".
 
+.PARAMETER Schedule
+PSCustomObject containing schedule configuration for the netscan. If not provided, defaults to manual execution.
+
 .PARAMETER SubnetRange
 The subnet range to scan. This parameter is mandatory.
 

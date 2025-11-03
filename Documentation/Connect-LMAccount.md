@@ -192,7 +192,7 @@ Accept wildcard characters: False
 ```
 
 ### -AutoUpdateModuleVersion
-{{ Fill AutoUpdateModuleVersion Description }}
+Automatically update the Logic.Monitor module to the latest version if available
 
 ```yaml
 Type: SwitchParameter
@@ -207,7 +207,7 @@ Accept wildcard characters: False
 ```
 
 ### -SkipVersionCheck
-{{ Fill SkipVersionCheck Description }}
+Skip checking for newer versions of the Logic.Monitor module
 
 ```yaml
 Type: SwitchParameter

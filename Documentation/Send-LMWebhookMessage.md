@@ -49,7 +49,8 @@ Accept wildcard characters: False
 ```
 
 ### -Messages
-{{ Fill Messages Description }}
+Specifies the collection of messages/events to send.
+Each item may be a hashtable, PSCustomObject, or simple value.
 
 ```yaml
 Type: Object[]
@@ -79,7 +80,7 @@ Accept wildcard characters: False
 ```
 
 ### -PassThru
-{{ Fill PassThru Description }}
+Returns PSCustomObject entries containing status, payload, and optional error details for each attempted message.
 
 ```yaml
 Type: SwitchParameter

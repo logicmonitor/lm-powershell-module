@@ -238,7 +238,9 @@ Accept wildcard characters: False
 ```
 
 ### -LMXToolBoxPermission
-{{ Fill LMXToolBoxPermission Description }}
+Specifies LMX ToolBox permissions.
+Valid values: "view", "manage", "commit", "publish", "none".
+Default is "none".
 
 ```yaml
 Type: String
@@ -253,7 +255,9 @@ Accept wildcard characters: False
 ```
 
 ### -LMXPermission
-{{ Fill LMXPermission Description }}
+Specifies LMX permissions.
+Valid values: "view", "install", "none".
+Default is "none".
 
 ```yaml
 Type: String
@@ -268,7 +272,9 @@ Accept wildcard characters: False
 ```
 
 ### -LogsPermission
-{{ Fill LogsPermission Description }}
+Specifies logs permissions.
+Valid values: "view", "manage", "none".
+Default is "none".
 
 ```yaml
 Type: String
@@ -283,7 +289,9 @@ Accept wildcard characters: False
 ```
 
 ### -WebsitesPermission
-{{ Fill WebsitesPermission Description }}
+Specifies websites permissions.
+Valid values: "view", "manage", "none".
+Default is "none".
 
 ```yaml
 Type: String
@@ -298,7 +306,9 @@ Accept wildcard characters: False
 ```
 
 ### -SavedMapsPermission
-{{ Fill SavedMapsPermission Description }}
+Specifies saved maps permissions.
+Valid values: "view", "manage", "none".
+Default is "none".
 
 ```yaml
 Type: String
@@ -313,7 +323,9 @@ Accept wildcard characters: False
 ```
 
 ### -ReportsPermission
-{{ Fill ReportsPermission Description }}
+Specifies reports permissions.
+Valid values: "view", "manage", "none".
+Default is "none".
 
 ```yaml
 Type: String
@@ -344,7 +356,7 @@ Accept wildcard characters: False
 ```
 
 ### -CreatePrivateDashboards
-{{ Fill CreatePrivateDashboards Description }}
+Indicates whether the role can create private dashboards.
 
 ```yaml
 Type: SwitchParameter
@@ -359,7 +371,7 @@ Accept wildcard characters: False
 ```
 
 ### -AllowWidgetSharing
-{{ Fill AllowWidgetSharing Description }}
+Indicates whether the role can share widgets.
 
 ```yaml
 Type: SwitchParameter
@@ -374,7 +386,7 @@ Accept wildcard characters: False
 ```
 
 ### -ConfigTabRequiresManagePermission
-{{ Fill ConfigTabRequiresManagePermission Description }}
+Indicates whether the config tab requires manage permission.
 
 ```yaml
 Type: SwitchParameter
@@ -389,7 +401,7 @@ Accept wildcard characters: False
 ```
 
 ### -AllowedToViewMapsTab
-{{ Fill AllowedToViewMapsTab Description }}
+Indicates whether the role is allowed to view the maps tab.
 
 ```yaml
 Type: SwitchParameter
@@ -404,7 +416,7 @@ Accept wildcard characters: False
 ```
 
 ### -AllowedToManageResourceDashboards
-{{ Fill AllowedToManageResourceDashboards Description }}
+Indicates whether the role is allowed to manage resource dashboards.
 
 ```yaml
 Type: SwitchParameter
@@ -419,7 +431,7 @@ Accept wildcard characters: False
 ```
 
 ### -ViewTraces
-{{ Fill ViewTraces Description }}
+Indicates whether the role can view traces.
 
 ```yaml
 Type: SwitchParameter
@@ -434,7 +446,7 @@ Accept wildcard characters: False
 ```
 
 ### -ViewSupport
-{{ Fill ViewSupport Description }}
+Indicates whether the role can view support options.
 
 ```yaml
 Type: SwitchParameter
@@ -449,7 +461,7 @@ Accept wildcard characters: False
 ```
 
 ### -EnableRemoteSessionForResources
-{{ Fill EnableRemoteSessionForResources Description }}
+Indicates whether remote sessions are enabled for resources.
 
 ```yaml
 Type: SwitchParameter
@@ -479,7 +491,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter

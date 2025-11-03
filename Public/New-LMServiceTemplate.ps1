@@ -38,6 +38,15 @@ The membership evaluation interval in minutes. Default is 30.
 .PARAMETER FilterType
 The filter type. Default is "2".
 
+.PARAMETER ResourceGroupRecords
+Array of resource group records for the service template. Default is @().
+
+.PARAMETER Criticality
+Array of criticality configurations for the service template. Default is @().
+
+.PARAMETER StaticGroup
+Array of static group configurations for the service template. Default is @().
+
 .EXAMPLE
 New-LMServiceTemplate -Name "Application Services by Site" -Description "Default LM service template for application services"
 

@@ -44,6 +44,48 @@ Specifies resource permissions. Valid values: "view", "manage", "none".
 .PARAMETER SettingsPermission
 Specifies settings permissions. Valid values: "view", "manage", "none", "manage-collectors", "view-collectors".
 
+.PARAMETER LMXToolBoxPermission
+Specifies LMX ToolBox permissions. Valid values: "view", "manage", "commit", "publish", "none". Default is "none".
+
+.PARAMETER LMXPermission
+Specifies LMX permissions. Valid values: "view", "install", "none". Default is "none".
+
+.PARAMETER LogsPermission
+Specifies logs permissions. Valid values: "view", "manage", "none". Default is "none".
+
+.PARAMETER WebsitesPermission
+Specifies websites permissions. Valid values: "view", "manage", "none". Default is "none".
+
+.PARAMETER SavedMapsPermission
+Specifies saved maps permissions. Valid values: "view", "manage", "none". Default is "none".
+
+.PARAMETER ReportsPermission
+Specifies reports permissions. Valid values: "view", "manage", "none". Default is "none".
+
+.PARAMETER CreatePrivateDashboards
+Indicates whether the role can create private dashboards.
+
+.PARAMETER AllowWidgetSharing
+Indicates whether the role can share widgets.
+
+.PARAMETER ConfigTabRequiresManagePermission
+Indicates whether the config tab requires manage permission.
+
+.PARAMETER AllowedToViewMapsTab
+Indicates whether the role is allowed to view the maps tab.
+
+.PARAMETER AllowedToManageResourceDashboards
+Indicates whether the role is allowed to manage resource dashboards.
+
+.PARAMETER ViewTraces
+Indicates whether the role can view traces.
+
+.PARAMETER ViewSupport
+Indicates whether the role can view support options.
+
+.PARAMETER EnableRemoteSessionForResources
+Indicates whether remote sessions are enabled for resources.
+
 .EXAMPLE
 Set-LMRole -Id 123 -NewName "Updated Role" -Description "New description" -DashboardsPermission "view"
 Updates the role with new name, description, and dashboard permissions.

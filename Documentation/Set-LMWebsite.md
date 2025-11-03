@@ -8,7 +8,7 @@ schema: 2.0.0
 # Set-LMWebsite
 
 ## SYNOPSIS
-Updates a LogicMonitor website monitoring configuration.
+Updates a LogicMonitor website monitoring configuration with improved parameter validation.
 
 ## SYNTAX
 
@@ -38,6 +38,7 @@ Set-LMWebsite -Id <String> [-Name <String>] [-IsInternal <Boolean>] [-Descriptio
 
 ## DESCRIPTION
 The Set-LMWebsite function modifies an existing website monitoring configuration in LogicMonitor.
+It includes intelligent validation of test location parameters to ensure valid combinations are used.
 
 ## EXAMPLES
 
@@ -45,6 +46,12 @@ The Set-LMWebsite function modifies an existing website monitoring configuration
 ```
 Set-LMWebsite -Id 123 -Name "Updated Site" -Description "New description" -DisableAlerting $false
 Updates the website with new name, description, and enables alerting.
+```
+
+### EXAMPLE 2
+```
+Set-LMWebsite -Id 123 -TestLocationAll $true
+Updates the website to test from all locations.
 ```
 
 ## PARAMETERS
@@ -260,7 +267,8 @@ Accept wildcard characters: False
 ```
 
 ### -SSLAlertThresholds
-{{ Fill SSLAlertThresholds Description }}
+Specifies the SSL alert thresholds for the website check.
+This is an alias for the alertExpr parameter.
 
 ```yaml
 Type: String[]
@@ -442,7 +450,8 @@ Accept wildcard characters: False
 ```
 
 ### -TestLocationAll
-Indicates whether to test from all locations. Cannot be used with TestLocationCollectorIds or TestLocationSmgIds.
+Indicates whether to test from all locations.
+Cannot be used with TestLocationCollectorIds or TestLocationSmgIds.
 
 ```yaml
 Type: Boolean
@@ -457,7 +466,9 @@ Accept wildcard characters: False
 ```
 
 ### -TestLocationCollectorIds
-Array of collector IDs to use for testing. Cannot be used with TestLocationAll or TestLocationSmgIds.
+Array of collector IDs to use for testing.
+Can only be used when IsInternal is true.
+Cannot be used with TestLocationAll or TestLocationSmgIds.
 
 ```yaml
 Type: Int32[]
@@ -472,8 +483,9 @@ Accept wildcard characters: False
 ```
 
 ### -TestLocationSmgIds
-Array of collector group IDs to use for testing. Can only be used when IsInternal is false. Cannot be used with TestLocationAll or TestLocationCollectorIds.
-
+Array of collector group IDs to use for testing.
+Can only be used when IsInternal is false.
+Cannot be used with TestLocationAll or TestLocationCollectorIds.
 Available collector group IDs correspond to LogicMonitor regions:
 - 2 = US - Washington DC
 - 3 = Europe - Dublin
@@ -494,7 +506,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
@@ -549,5 +562,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### Returns a LogicMonitor.Website object containing the updated configuration.
 ## NOTES
 This function requires a valid LogicMonitor API authentication.
+It enforces strict validation rules for TestLocation parameters to prevent invalid combinations.
 
 ## RELATED LINKS

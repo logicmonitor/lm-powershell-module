@@ -44,8 +44,20 @@ Specifies a note for the user.
 .PARAMETER RoleNames
 Specifies an array of role names to assign to the user.
 
+.PARAMETER SmsEmail
+Specifies the SMS email address for the user.
+
+.PARAMETER SmsEmailFormat
+Specifies the SMS email format. Valid values: "sms", "fulltext".
+
 .PARAMETER Status
 Specifies the user's status. Valid values: "active", "suspended".
+
+.PARAMETER Timezone
+Specifies the user's timezone. Must be a valid timezone string.
+
+.PARAMETER TwoFAEnabled
+Indicates whether two-factor authentication is enabled for the user.
 
 .PARAMETER Views
 Specifies the views the user has access to. Valid values: "Alerts", "Dashboards", "Logs", "Maps", "Reports", "Resources", "Settings", "Websites", "All".

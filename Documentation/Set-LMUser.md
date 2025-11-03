@@ -241,7 +241,7 @@ Accept wildcard characters: False
 ```
 
 ### -SmsEmail
-{{ Fill SmsEmail Description }}
+Specifies the SMS email address for the user.
 
 ```yaml
 Type: String
@@ -256,7 +256,8 @@ Accept wildcard characters: False
 ```
 
 ### -SmsEmailFormat
-{{ Fill SmsEmailFormat Description }}
+Specifies the SMS email format.
+Valid values: "sms", "fulltext".
 
 ```yaml
 Type: String
@@ -287,7 +288,8 @@ Accept wildcard characters: False
 ```
 
 ### -Timezone
-{{ Fill Timezone Description }}
+Specifies the user's timezone.
+Must be a valid timezone string.
 
 ```yaml
 Type: String
@@ -302,7 +304,7 @@ Accept wildcard characters: False
 ```
 
 ### -TwoFAEnabled
-{{ Fill TwoFAEnabled Description }}
+Indicates whether two-factor authentication is enabled for the user.
 
 ```yaml
 Type: Boolean
@@ -333,7 +335,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter

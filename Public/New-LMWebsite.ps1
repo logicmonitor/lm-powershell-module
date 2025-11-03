@@ -54,7 +54,7 @@ Specifies the HTTP type to use for the website check. The valid values are "http
 Specifies the SSL alert thresholds for the website check. This is an alias for the alertExpr parameter.
 
 .PARAMETER PingCount
-Specifies the number of pings to send for the ping check. The valid values are 5, 10, 15, 20, 30, and 60.
+Specifies the number of pings to send for the ping check. The valid values are 5, 10, 15, 20, 30, and 50.
 
 .PARAMETER PingTimeout
 Specifies the timeout for the ping check.
@@ -168,7 +168,7 @@ function New-LMWebsite {
         [String[]]$SSLAlertThresholds,
 
         [Parameter(ParameterSetName = "Ping")]
-        [ValidateSet(5, 10, 15, 20, 30, 60)]
+        [ValidateSet(5, 10, 15, 20, 30, 50)]
         [Nullable[Int]]$PingCount,
 
         [Parameter(ParameterSetName = "Ping")]

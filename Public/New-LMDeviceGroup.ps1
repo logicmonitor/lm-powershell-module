@@ -17,6 +17,15 @@ A hashtable of custom properties for the device group.
 .PARAMETER Extra
 Specifies a object of extra properties for the device group. Used for LM Cloud resource groups
 
+.PARAMETER DefaultCollectorId
+Specifies the default collector ID for the device group. Default is 0.
+
+.PARAMETER DefaultAutoBalancedCollectorGroupId
+Specifies the default auto-balanced collector group ID for the device group. Default is 0.
+
+.PARAMETER DefaultCollectorGroupId
+Specifies the default collector group ID for the device group. Default is 0.
+
 .PARAMETER DisableAlerting
 Specifies whether alerting is disabled for the device group. The default value is $false.
 

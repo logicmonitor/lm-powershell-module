@@ -29,6 +29,12 @@ Name of cached account you wish to connect to. This parameter is optional and ca
 .PARAMETER SessionSync
 Use session sync capability instead of api key
 
+.PARAMETER AutoUpdateModuleVersion
+Automatically update the Logic.Monitor module to the latest version if available
+
+.PARAMETER SkipVersionCheck
+Skip checking for newer versions of the Logic.Monitor module
+
 .PARAMETER GovCloud
 Connect using the LM GovCloud portal
 

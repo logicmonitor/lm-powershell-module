@@ -86,7 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -NewName
-{{ Fill NewName Description }}
+Specifies the new name for the alert rule.
 
 ```yaml
 Type: String

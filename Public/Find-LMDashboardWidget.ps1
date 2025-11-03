@@ -5,6 +5,12 @@ Find list of dashboard widgets containing mention of specified datasources
 .DESCRIPTION
 Find list of dashboard widgets containing mention of specified datasources
 
+.PARAMETER DatasourceNames
+Array of datasource names to search for in dashboard widgets. Can also use the alias DatasourceName.
+
+.PARAMETER GroupPathSearchString
+Wildcard search string to filter dashboards by group path. Defaults to "*" (all dashboards).
+
 .EXAMPLE
 Find-LMDashboardWidget -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCETNER_VM_PERFORMANCE")
 

@@ -179,7 +179,8 @@ Accept wildcard characters: False
 ```
 
 ### -Schedule
-{{ Fill Schedule Description }}
+PSCustomObject containing schedule configuration for the netscan.
+If not provided, defaults to manual execution.
 
 ```yaml
 Type: PSObject
@@ -256,7 +257,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter

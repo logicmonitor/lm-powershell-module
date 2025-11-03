@@ -20,6 +20,9 @@ Specifies the ID of the escalation chain to use.
 .PARAMETER EscalationInterval
 Specifies the escalation interval in minutes.
 
+.PARAMETER NewName
+Specifies the new name for the alert rule.
+
 .PARAMETER ResourceProperties
 Specifies resource properties to filter on.
 

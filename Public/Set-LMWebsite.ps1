@@ -129,7 +129,7 @@ function Set-LMWebsite {
         [String[]]$SSLAlertThresholds,
 
         [Parameter(ParameterSetName = "Ping")]
-        [ValidateSet(5, 10, 15, 20, 30, 60)]
+        [ValidateSet(5, 10, 15, 20, 30, 50)]
         [Nullable[Int]]$PingCount,
 
         [Parameter(ParameterSetName = "Ping")]

@@ -29,10 +29,53 @@ Specifies the website configuration file content.
 .PARAMETER WrapperConf
 Specifies the wrapper configuration file content.
 
+.PARAMETER SnmpThreadPool
+Specifies the SNMP thread pool size for snippet configuration.
+
+.PARAMETER SnmpPduTimeout
+Specifies the SNMP PDU timeout in milliseconds for snippet configuration.
+
+.PARAMETER ScriptThreadPool
+Specifies the script thread pool size for snippet configuration.
+
+.PARAMETER ScriptTimeout
+Specifies the script timeout in seconds for snippet configuration.
+
+.PARAMETER BatchScriptThreadPool
+Specifies the batch script thread pool size for snippet configuration.
+
+.PARAMETER BatchScriptTimeout
+Specifies the batch script timeout in seconds for snippet configuration.
+
+.PARAMETER PowerShellSPSEProcessCountMin
+Specifies the minimum PowerShell SPSE process count for snippet configuration.
+
+.PARAMETER PowerShellSPSEProcessCountMax
+Specifies the maximum PowerShell SPSE process count for snippet configuration.
+
+.PARAMETER NetflowEnable
+Indicates whether Netflow is enabled for snippet configuration.
+
+.PARAMETER NbarEnable
+Indicates whether NBAR is enabled for snippet configuration.
+
+.PARAMETER NetflowPorts
+Specifies the Netflow ports for snippet configuration.
+
+.PARAMETER SflowPorts
+Specifies the sFlow ports for snippet configuration.
+
+.PARAMETER LMLogsSyslogEnable
+Indicates whether LM Logs syslog is enabled for snippet configuration.
+
+.PARAMETER LMLogsSyslogHostnameFormat
+Specifies the hostname format for LM Logs syslog. Valid values: "IP", "FQDN", "HOSTNAME".
+
+.PARAMETER LMLogsSyslogPropertyName
+Specifies the property name for LM Logs syslog configuration.
+
 .PARAMETER WaitForRestart
 Indicates whether to wait for the collector restart to complete.
-
-[Additional parameters for snippet configuration omitted for brevity]
 
 .EXAMPLE
 Set-LMCollectorConfig -Id 123 -CollectorSize "medium" -WaitForRestart

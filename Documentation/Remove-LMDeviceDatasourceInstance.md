@@ -101,7 +101,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceId
-{{ Fill DeviceId Description }}
+Specifies the ID of the device.
+This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
 
 ```yaml
 Type: Int32
@@ -128,7 +129,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceName
-{{ Fill DeviceName Description }}
+Specifies the name of the device.
+This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
 
 ```yaml
 Type: String
@@ -158,7 +160,8 @@ Accept wildcard characters: False
 ```
 
 ### -InstanceId
-{{ Fill InstanceId Description }}
+Specifies the instance ID.
+Can also use the alias Id.
 
 ```yaml
 Type: Int32

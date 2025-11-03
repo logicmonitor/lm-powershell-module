@@ -206,7 +206,8 @@ Accept wildcard characters: False
 ```
 
 ### -ResourceGroupRecords
-{{ Fill ResourceGroupRecords Description }}
+Array of resource group records for the service template.
+Default is @().
 
 ```yaml
 Type: Array
@@ -221,7 +222,8 @@ Accept wildcard characters: False
 ```
 
 ### -Criticality
-{{ Fill Criticality Description }}
+Array of criticality configurations for the service template.
+Default is @().
 
 ```yaml
 Type: Array
@@ -236,7 +238,8 @@ Accept wildcard characters: False
 ```
 
 ### -StaticGroup
-{{ Fill StaticGroup Description }}
+Array of static group configurations for the service template.
+Default is @().
 
 ```yaml
 Type: Array

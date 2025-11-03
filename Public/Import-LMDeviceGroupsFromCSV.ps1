@@ -5,6 +5,15 @@ Imports list of device groups based on specified CSV file.
 .DESCRIPTION
 Imports list of device groups based on specified CSV file. You can generate a sample of the CSV file by specifying the -GenerateExampleCSV parameter.
 
+.PARAMETER FilePath
+Path to the CSV file containing device groups to import. Required for Import parameter set.
+
+.PARAMETER GenerateExampleCSV
+Generates a sample CSV file to use as a template for importing device groups.
+
+.PARAMETER PassThru
+Returns the imported device group objects. By default, no output is returned.
+
 .EXAMPLE
 Import-LMDeviceGroupsFromCSV -FilePath ./ImportList.csv -PassThru
 

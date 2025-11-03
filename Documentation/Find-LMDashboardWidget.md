@@ -30,7 +30,8 @@ Find-LMDashboardWidget -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCET
 ## PARAMETERS
 
 ### -DatasourceNames
-{{ Fill DatasourceNames Description }}
+Array of datasource names to search for in dashboard widgets.
+Can also use the alias DatasourceName.
 
 ```yaml
 Type: String[]
@@ -45,7 +46,8 @@ Accept wildcard characters: False
 ```
 
 ### -GroupPathSearchString
-{{ Fill GroupPathSearchString Description }}
+Wildcard search string to filter dashboards by group path.
+Defaults to "*" (all dashboards).
 
 ```yaml
 Type: String

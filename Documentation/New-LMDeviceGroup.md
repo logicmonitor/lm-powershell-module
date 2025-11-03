@@ -99,7 +99,8 @@ Accept wildcard characters: False
 ```
 
 ### -Extra
-Specifies a object of extra properties for the device group. Used for LM Cloud resource groups
+Specifies a object of extra properties for the device group.
+Used for LM Cloud resource groups
 
 ```yaml
 Type: Object
@@ -114,7 +115,8 @@ Accept wildcard characters: False
 ```
 
 ### -DefaultCollectorId
-{{ Fill DefaultCollectorId Description }}
+Specifies the default collector ID for the device group.
+Default is 0.
 
 ```yaml
 Type: Int32
@@ -129,7 +131,8 @@ Accept wildcard characters: False
 ```
 
 ### -DefaultAutoBalancedCollectorGroupId
-{{ Fill DefaultAutoBalancedCollectorGroupId Description }}
+Specifies the default auto-balanced collector group ID for the device group.
+Default is 0.
 
 ```yaml
 Type: Int32
@@ -144,7 +147,8 @@ Accept wildcard characters: False
 ```
 
 ### -DefaultCollectorGroupId
-{{ Fill DefaultCollectorGroupId Description }}
+Specifies the default collector group ID for the device group.
+Default is 0.
 
 ```yaml
 Type: Int32
@@ -238,7 +242,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter

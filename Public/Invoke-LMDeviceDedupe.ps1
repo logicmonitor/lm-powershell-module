@@ -5,6 +5,24 @@ List and/or remove duplicte devices from a portal based on a specified device gr
 .DESCRIPTION
 List and/or remove duplicte devices from a portal based on a specified device group and set of exclusion criteria.
 
+.PARAMETER ListDuplicates
+Lists duplicate devices found based on the specified criteria. Required for List parameter set.
+
+.PARAMETER RemoveDuplicates
+Removes duplicate devices found based on the specified criteria. Required for Remove parameter set.
+
+.PARAMETER DeviceGroupId
+Specifies the device group ID to search for duplicates. If not specified, all devices will be checked.
+
+.PARAMETER IpExclusionList
+Array of IP addresses to exclude from duplicate comparison.
+
+.PARAMETER SysNameExclusionList
+Array of system names to exclude from duplicate comparison.
+
+.PARAMETER ExcludeDeviceType
+Array of device type IDs to exclude from duplicate comparison. Default is @(8) which excludes K8s resources.
+
 .EXAMPLE
 Invoke-LMDeviceDedupe -ListDuplicates -DeviceGroupId 8
 

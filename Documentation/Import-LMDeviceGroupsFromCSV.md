@@ -37,7 +37,8 @@ Import-LMDeviceGroupsFromCSV -FilePath ./ImportList.csv -PassThru
 ## PARAMETERS
 
 ### -FilePath
-{{ Fill FilePath Description }}
+Path to the CSV file containing device groups to import.
+Required for Import parameter set.
 
 ```yaml
 Type: String
@@ -52,7 +53,7 @@ Accept wildcard characters: False
 ```
 
 ### -GenerateExampleCSV
-{{ Fill GenerateExampleCSV Description }}
+Generates a sample CSV file to use as a template for importing device groups.
 
 ```yaml
 Type: SwitchParameter
@@ -67,7 +68,8 @@ Accept wildcard characters: False
 ```
 
 ### -PassThru
-{{ Fill PassThru Description }}
+Returns the imported device group objects.
+By default, no output is returned.
 
 ```yaml
 Type: SwitchParameter

@@ -41,6 +41,15 @@ Specifies the name of the parent group.
 .PARAMETER Extra
 Specifies a object of extra properties for the device group. Used for LM Cloud resource groups
 
+.PARAMETER DefaultCollectorId
+Specifies the default collector ID for the device group.
+
+.PARAMETER DefaultAutoBalancedCollectorGroupId
+Specifies the default auto-balanced collector group ID for the device group.
+
+.PARAMETER DefaultCollectorGroupId
+Specifies the default collector group ID for the device group.
+
 .EXAMPLE
 Set-LMDeviceGroup -Id 123 -NewName "Updated Group" -Description "New description"
 Updates the device group with ID 123 with a new name and description.

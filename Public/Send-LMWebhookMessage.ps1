@@ -14,6 +14,12 @@ Specifies the collection of events to send. Each item may be a hashtable, PSCust
 .PARAMETER Properties
 Specifies additional key/value pairs that are merged into every event payload before sending.
 
+.PARAMETER Messages
+Specifies the collection of messages/events to send. Each item may be a hashtable, PSCustomObject, or simple value.
+
+.PARAMETER PassThru
+Returns PSCustomObject entries containing status, payload, and optional error details for each attempted message.
+
 .EXAMPLE
 Send-LMWebhookMessage -SourceName "Meraki_CustomerA" -Events $Messages -Properties @{ accountId = '12345' }
 Sends each event in `$Messages` to the Meraki webhook LogSource, appending the `accountId` property to every payload.

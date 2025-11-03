@@ -184,7 +184,7 @@ Accept wildcard characters: False
 ```
 
 ### -SnmpThreadPool
-{{ Fill SnmpThreadPool Description }}
+Specifies the SNMP thread pool size for snippet configuration.
 
 ```yaml
 Type: Int32
@@ -199,7 +199,7 @@ Accept wildcard characters: False
 ```
 
 ### -SnmpPduTimeout
-{{ Fill SnmpPduTimeout Description }}
+Specifies the SNMP PDU timeout in milliseconds for snippet configuration.
 
 ```yaml
 Type: Int32
@@ -214,7 +214,7 @@ Accept wildcard characters: False
 ```
 
 ### -ScriptThreadPool
-{{ Fill ScriptThreadPool Description }}
+Specifies the script thread pool size for snippet configuration.
 
 ```yaml
 Type: Int32
@@ -229,7 +229,7 @@ Accept wildcard characters: False
 ```
 
 ### -ScriptTimeout
-{{ Fill ScriptTimeout Description }}
+Specifies the script timeout in seconds for snippet configuration.
 
 ```yaml
 Type: Int32
@@ -244,7 +244,7 @@ Accept wildcard characters: False
 ```
 
 ### -BatchScriptThreadPool
-{{ Fill BatchScriptThreadPool Description }}
+Specifies the batch script thread pool size for snippet configuration.
 
 ```yaml
 Type: Int32
@@ -259,7 +259,7 @@ Accept wildcard characters: False
 ```
 
 ### -BatchScriptTimeout
-{{ Fill BatchScriptTimeout Description }}
+Specifies the batch script timeout in seconds for snippet configuration.
 
 ```yaml
 Type: Int32
@@ -274,7 +274,7 @@ Accept wildcard characters: False
 ```
 
 ### -PowerShellSPSEProcessCountMin
-{{ Fill PowerShellSPSEProcessCountMin Description }}
+Specifies the minimum PowerShell SPSE process count for snippet configuration.
 
 ```yaml
 Type: Int32
@@ -289,7 +289,7 @@ Accept wildcard characters: False
 ```
 
 ### -PowerShellSPSEProcessCountMax
-{{ Fill PowerShellSPSEProcessCountMax Description }}
+Specifies the maximum PowerShell SPSE process count for snippet configuration.
 
 ```yaml
 Type: Int32
@@ -304,7 +304,7 @@ Accept wildcard characters: False
 ```
 
 ### -NetflowEnable
-{{ Fill NetflowEnable Description }}
+Indicates whether Netflow is enabled for snippet configuration.
 
 ```yaml
 Type: Boolean
@@ -319,7 +319,7 @@ Accept wildcard characters: False
 ```
 
 ### -NbarEnable
-{{ Fill NbarEnable Description }}
+Indicates whether NBAR is enabled for snippet configuration.
 
 ```yaml
 Type: Boolean
@@ -334,7 +334,7 @@ Accept wildcard characters: False
 ```
 
 ### -NetflowPorts
-{{ Fill NetflowPorts Description }}
+Specifies the Netflow ports for snippet configuration.
 
 ```yaml
 Type: String[]
@@ -349,7 +349,7 @@ Accept wildcard characters: False
 ```
 
 ### -SflowPorts
-{{ Fill SflowPorts Description }}
+Specifies the sFlow ports for snippet configuration.
 
 ```yaml
 Type: String[]
@@ -364,7 +364,7 @@ Accept wildcard characters: False
 ```
 
 ### -LMLogsSyslogEnable
-{{ Fill LMLogsSyslogEnable Description }}
+Indicates whether LM Logs syslog is enabled for snippet configuration.
 
 ```yaml
 Type: Boolean
@@ -379,7 +379,8 @@ Accept wildcard characters: False
 ```
 
 ### -LMLogsSyslogHostnameFormat
-{{ Fill LMLogsSyslogHostnameFormat Description }}
+Specifies the hostname format for LM Logs syslog.
+Valid values: "IP", "FQDN", "HOSTNAME".
 
 ```yaml
 Type: String
@@ -394,7 +395,7 @@ Accept wildcard characters: False
 ```
 
 ### -LMLogsSyslogPropertyName
-{{ Fill LMLogsSyslogPropertyName Description }}
+Specifies the property name for LM Logs syslog configuration.
 
 ```yaml
 Type: String
@@ -410,8 +411,6 @@ Accept wildcard characters: False
 
 ### -WaitForRestart
 Indicates whether to wait for the collector restart to complete.
-
-\[Additional parameters for snippet configuration omitted for brevity\]
 
 ```yaml
 Type: SwitchParameter

@@ -59,22 +59,6 @@ This example creates a new LogicMonitor ping check for the IP address "192.168.1
 It sends 5 pings with a timeout of 1000 milliseconds.
 It assigns the check to the group with ID "12345" and sets the overall alert level and individual alert level to "warn".
 
-### EXAMPLE 3
-```
-New-LMWebsite -WebCheck -Name "External Website" -WebsiteDomain "example.com" -IsInternal $false -TestLocationSmgIds @(2, 3, 4)
-```
-
-This example creates a new LogicMonitor website check for an external website "example.com".
-It configures the check to test from specific LogicMonitor regions (US - Washington DC, Europe - Dublin, and US - Oregon).
-
-### EXAMPLE 4
-```
-New-LMWebsite -WebCheck -Name "Internal Website" -WebsiteDomain "internal.example.com" -IsInternal $true -TestLocationCollectorIds @(1, 2, 3)
-```
-
-This example creates a new LogicMonitor website check for an internal website "internal.example.com".
-It configures the check to test from specific collectors with IDs 1, 2, and 3.
-
 ## PARAMETERS
 
 ### -WebCheck
@@ -309,6 +293,7 @@ Accept wildcard characters: False
 
 ### -SSLAlertThresholds
 Specifies the SSL alert thresholds for the website check.
+This is an alias for the alertExpr parameter.
 
 ```yaml
 Type: String[]
@@ -324,7 +309,7 @@ Accept wildcard characters: False
 
 ### -PingCount
 Specifies the number of pings to send for the ping check.
-The valid values are 5, 10, 15, 20, 30, and 60.
+The valid values are 5, 10, 15, 20, 30, and 50.
 
 ```yaml
 Type: Int32
@@ -509,7 +494,8 @@ Accept wildcard characters: False
 ```
 
 ### -CheckPoints
-Specifies the check points for the check. This is a legacy parameter and has been replaced with the TestLocation* parameters and may be removed in a future version.
+Specifies the check points for the check.
+This is a legacy parameter and will be deprecated in a future release.
 
 ```yaml
 Type: Object[]
@@ -524,7 +510,8 @@ Accept wildcard characters: False
 ```
 
 ### -TestLocationAll
-Specifies whether to test from all locations. This parameter is only valid for external checks and cannot be used with TestLocationCollectorIds or TestLocationSmgIds.
+Specifies whether to test all locations.
+This parameter is only valid for external checks.
 
 ```yaml
 Type: Boolean
@@ -539,7 +526,7 @@ Accept wildcard characters: False
 ```
 
 ### -TestLocationCollectorIds
-Specifies the collector IDs to use for testing. Can only be used when IsInternal is true. Cannot be used with TestLocationAll or TestLocationSmgIds.
+Specifies the collector IDs for the test locations.
 
 ```yaml
 Type: Int32[]
@@ -554,13 +541,7 @@ Accept wildcard characters: False
 ```
 
 ### -TestLocationSmgIds
-Specifies the collector group IDs to use for testing. Can only be used when IsInternal is false. Cannot be used with TestLocationAll or TestLocationCollectorIds.
-Available collector group IDs correspond to LogicMonitor regions:
-- 2 = US - Washington DC
-- 3 = Europe - Dublin
-- 4 = US - Oregon
-- 5 = Asia - Singapore
-- 6 = Australia - Sydney
+Specifies the SMG IDs for the test locations.
 
 ```yaml
 Type: Int32[]
@@ -575,7 +556,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter

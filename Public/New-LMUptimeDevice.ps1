@@ -22,10 +22,10 @@ Specifies one or more device group identifiers to assign to the Uptime device.
 Provides an optional description for the device.
 
 .PARAMETER PollingInterval
-Sets the polling interval in minutes. Valid values are 1-10, 30, or 60.
+Sets the polling interval in minutes. Valid values are 1-10, 30 or 60.
 
-.PARAMETER Transition
-Specifies the number of consecutive failures required to trigger an alert.
+.PARAMETER AlertTriggerInterval
+Specifies the number of consecutive failures required to trigger an alert. Valid values are 1-10, 30, 60. Default is 1.
 
 .PARAMETER GlobalSmAlertCond
 Defines the global synthetic alert condition threshold.
@@ -89,7 +89,7 @@ Specifies the folder path to use for web checks. Defaults to empty string.
 Specifies the host or IP for ping checks. Required for ping parameter sets.
 
 .PARAMETER Count
-Specifies ping attempts per collection for ping checks. Valid values: 5, 10, 15, 20, 30, 60.
+Specifies ping attempts per collection for ping checks. Valid values: 5, 10, 15, 20, 30, 50.
 
 .PARAMETER PercentPktsNotReceiveInTime
 Defines the packet loss percentage threshold for ping checks.
@@ -232,7 +232,7 @@ function New-LMUptimeDevice {
 
         [Parameter(ParameterSetName = 'PingInternal')]
         [Parameter(ParameterSetName = 'PingExternal')]
-        [ValidateSet(5, 10, 15, 20, 30, 60)]
+        [ValidateSet(5, 10, 15, 20, 30, 50)]
         [Int]$Count = 5,
 
         [Parameter(ParameterSetName = 'PingInternal')]

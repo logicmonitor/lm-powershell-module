@@ -11,14 +11,17 @@ Specifies the name of the datasource. This parameter is mandatory when using the
 .PARAMETER DatasourceId
 Specifies the ID of the datasource. This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
 
-.PARAMETER Id
+.PARAMETER DeviceId
 Specifies the ID of the device. This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
 
-.PARAMETER Name
+.PARAMETER DeviceName
 Specifies the name of the device. This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
 
 .PARAMETER WildValue
 Specifies the wildcard value associated with the datasource instance.
+
+.PARAMETER InstanceId
+Specifies the instance ID. Can also use the alias Id.
 
 .EXAMPLE
 Remove-LMDeviceDatasourceInstance -Name "MyDevice" -DatasourceName "MyDatasource" -WildValue "12345"

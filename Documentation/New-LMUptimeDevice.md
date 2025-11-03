@@ -150,7 +150,7 @@ Accept wildcard characters: False
 
 ### -PollingInterval
 Sets the polling interval in minutes.
-Valid values are 1-10, 30, or 60.
+Valid values are 1-10, 30 or 60.
 
 ```yaml
 Type: Int32
@@ -165,7 +165,9 @@ Accept wildcard characters: False
 ```
 
 ### -AlertTriggerInterval
-{{ Fill AlertTriggerInterval Description }}
+Specifies the number of consecutive failures required to trigger an alert.
+Valid values are 1-10, 30, 60.
+Default is 1.
 
 ```yaml
 Type: Int32
@@ -495,7 +497,7 @@ Accept wildcard characters: False
 
 ### -Count
 Specifies ping attempts per collection for ping checks.
-Valid values: 5, 10, 15, 20, 30, 60.
+Valid values: 5, 10, 15, 20, 30, 50.
 
 ```yaml
 Type: Int32

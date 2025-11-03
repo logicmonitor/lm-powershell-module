@@ -39,7 +39,8 @@ Invoke-LMDeviceDedupe -ListDuplicates -DeviceGroupId 8
 ## PARAMETERS
 
 ### -ListDuplicates
-{{ Fill ListDuplicates Description }}
+Lists duplicate devices found based on the specified criteria.
+Required for List parameter set.
 
 ```yaml
 Type: SwitchParameter
@@ -54,7 +55,8 @@ Accept wildcard characters: False
 ```
 
 ### -RemoveDuplicates
-{{ Fill RemoveDuplicates Description }}
+Removes duplicate devices found based on the specified criteria.
+Required for Remove parameter set.
 
 ```yaml
 Type: SwitchParameter
@@ -69,7 +71,8 @@ Accept wildcard characters: False
 ```
 
 ### -DeviceGroupId
-{{ Fill DeviceGroupId Description }}
+Specifies the device group ID to search for duplicates.
+If not specified, all devices will be checked.
 
 ```yaml
 Type: String
@@ -84,7 +87,7 @@ Accept wildcard characters: False
 ```
 
 ### -IpExclusionList
-{{ Fill IpExclusionList Description }}
+Array of IP addresses to exclude from duplicate comparison.
 
 ```yaml
 Type: String[]
@@ -99,7 +102,7 @@ Accept wildcard characters: False
 ```
 
 ### -SysNameExclusionList
-{{ Fill SysNameExclusionList Description }}
+Array of system names to exclude from duplicate comparison.
 
 ```yaml
 Type: String[]
@@ -114,7 +117,8 @@ Accept wildcard characters: False
 ```
 
 ### -ExcludeDeviceType
-Exclude K8s resources by default
+Array of device type IDs to exclude from duplicate comparison.
+Default is @(8) which excludes K8s resources.
 
 ```yaml
 Type: String[]
