@@ -149,11 +149,9 @@ foreach ($endpoint in $EndpointToSchema.Keys | Sort-Object) {
     $properties = $EndpointToSchema[$endpoint].Properties
     $schema = $EndpointToSchema[$endpoint].Schema
     
-    # Add special property fields that are always valid for filtering
-    $specialProperties = @('customProperties', 'systemProperties', 'autoProperties', 'inheritedProperties')
-    $allProperties = @($properties) + $specialProperties | Sort-Object -Unique
-    
-    $Config[$endpoint] = $allProperties
+    # Only include properties that actually exist in the schema
+    # Don't add special properties if they're not defined in the API
+    $Config[$endpoint] = $properties | Sort-Object -Unique
     
     Write-Verbose "Endpoint: $endpoint -> Schema: $schema -> Properties: $($properties.Count)"
 }

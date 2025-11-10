@@ -91,17 +91,10 @@ function Test-LMFilterField {
 
     # Validate each field
     $InvalidFields = @()
-    $PropertyFields = @('customProperties', 'systemProperties', 'autoProperties', 'inheritedProperties')
 
     Write-Debug "Extracted $($FilterFields.Count) field(s) to validate: $($FilterFields -join ', ')"
 
     foreach ($Field in $FilterFields) {
-        # Skip property-based filters as they're always valid
-        if ($Field -in $PropertyFields) {
-            Write-Debug "Skipping validation for property field: $Field"
-            continue
-        }
-
         # Check if field is valid (case-sensitive)
         if ($ValidFields -cnotcontains $Field) {
             Write-Debug "Field '$Field' is NOT in valid fields list"
