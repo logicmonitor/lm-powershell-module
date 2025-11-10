@@ -3,15 +3,23 @@
 Builds a filter expression for Logic Monitor API queries.
 
 .DESCRIPTION
-The Build-LMFilter function creates a filter expression by interactively prompting for conditions and operators. It supports basic filtering for single fields and advanced filtering for property-based queries. Multiple conditions can be combined using AND/OR operators.
+The Build-LMFilter function creates a filter expression by interactively prompting for conditions and operators. It supports basic filtering for single fields and advanced filtering for property-based queries. Multiple conditions can be combined using AND/OR operators. When a ResourcePath is provided, the wizard validates field names and provides suggestions.
 
 .PARAMETER PassThru
 When specified, returns the filter expression as a string instead of displaying it in a panel.
+
+.PARAMETER ResourcePath
+Optional. The API endpoint path (e.g., '/device/devices') to provide field validation and suggestions.
 
 .EXAMPLE
 #Build a basic filter expression
 Build-LMFilter
 This example launches the interactive filter builder wizard.
+
+.EXAMPLE
+#Build a filter with field validation for devices
+Build-LMFilter -ResourcePath "/device/devices"
+This example launches the wizard with field validation and suggestions for the device endpoint.
 
 .EXAMPLE
 #Build a filter and return the expression
@@ -20,6 +28,7 @@ This example builds a filter and returns the expression as a string.
 
 .NOTES
 The filter expression is saved to the global $LMFilter variable.
+When ResourcePath is provided, field names are validated against the API schema.
 
 .INPUTS
 None. You cannot pipe objects to this command.
@@ -32,7 +41,9 @@ function Build-LMFilter {
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Required for the function to work')]
     param(
-        [Switch]$PassThru
+        [Switch]$PassThru,
+        
+        [String]$ResourcePath
     )
 
     # Helper function for getting user selection
@@ -101,12 +112,29 @@ function Build-LMFilter {
         }
     }
 
-    # $Caller = $null
-    # #Check if called by another function, will be used to determine available fields in the future
-    # $CallStack = Get-PSCallStack
-    # if ($CallStack.Count -gt 1) {
-    #     $Caller = $CallStack[1].FunctionName
-    # }
+    # Load validation config if ResourcePath is provided
+    $ValidFields = @()
+    $ValidationEnabled = $false
+    
+    if ($ResourcePath) {
+        $ConfigPath = Join-Path $PSScriptRoot "../Private/LMFilterValidationConfig.psd1"
+        if (Test-Path $ConfigPath) {
+            try {
+                $ValidationConfig = Import-PowerShellDataFile -Path $ConfigPath
+                $NormalizedPath = $ResourcePath -replace '/\{[^}]+\}', '/{id}'
+                
+                if ($ValidationConfig.ContainsKey($NormalizedPath)) {
+                    $ValidFields = $ValidationConfig[$NormalizedPath] | Where-Object { $_ -notin @('customProperties', 'systemProperties', 'autoProperties', 'inheritedProperties') }
+                    $ValidationEnabled = $true
+                    Write-Host "Field validation enabled for endpoint: $ResourcePath" -ForegroundColor Green
+                    Write-Host "Available fields: $($ValidFields.Count)" -ForegroundColor Gray
+                }
+            }
+            catch {
+                Write-Warning "Could not load validation config: $_"
+            }
+        }
+    }
 
     $conditions = @()
     $operators = @(
@@ -157,7 +185,96 @@ function Build-LMFilter {
         # Get property name based on filter type
         switch ($keyChar) {
             "B" {
-                $property = Read-Host "Enter attribute name"
+                # Show available fields if validation is enabled
+                if ($ValidationEnabled -and $ValidFields.Count -gt 0) {
+                    Write-Host ""
+                    Write-Host "Available fields for this endpoint ($($ValidFields.Count) total):" -ForegroundColor Cyan
+                    
+                    # Calculate column width based on longest field name
+                    $maxFieldLength = ($ValidFields | Measure-Object -Property Length -Maximum).Maximum
+                    $columnWidth = $maxFieldLength + 4  # Add padding between columns
+                    
+                    # Calculate how many columns fit in the terminal width
+                    $terminalWidth = $Host.UI.RawUI.WindowSize.Width
+                    $columnsPerRow = [Math]::Floor(($terminalWidth - 4) / $columnWidth)
+                    if ($columnsPerRow -lt 1) { $columnsPerRow = 1 }
+                    if ($columnsPerRow -gt 4) { $columnsPerRow = 4 }  # Cap at 4 columns for readability
+                    
+                    $currentColumn = 0
+                    $line = "  "
+                    
+                    foreach ($field in $ValidFields) {
+                        $paddedField = $field.PadRight($columnWidth)
+                        $line += $paddedField
+                        $currentColumn++
+                        
+                        if ($currentColumn -ge $columnsPerRow) {
+                            Write-Host $line -ForegroundColor Gray
+                            $line = "  "
+                            $currentColumn = 0
+                        }
+                    }
+                    
+                    # Print remaining fields if any
+                    if ($currentColumn -gt 0) {
+                        Write-Host $line -ForegroundColor Gray
+                    }
+                    
+                    Write-Host ""
+                }
+                
+                $validInput = $false
+                do {
+                    $property = Read-Host "Enter attribute name"
+                    
+                    # Validate field if validation is enabled
+                    if ($ValidationEnabled -and $property -and $ValidFields.Count -gt 0) {
+                        if ($ValidFields -ccontains $property) {
+                            Write-Host "  ✓ Valid field" -ForegroundColor Green
+                            $validInput = $true
+                        }
+                        else {
+                            Write-Host "  ✗ Invalid field: '$property'" -ForegroundColor Red
+                            
+                            # Try to find similar fields
+                            $suggestions = @()
+                            
+                            # Case-insensitive match
+                            $caseMatch = $ValidFields | Where-Object { $_ -ieq $property }
+                            if ($caseMatch) {
+                                $suggestions += $caseMatch
+                            }
+                            else {
+                                # Starts with
+                                $startsWith = $ValidFields | Where-Object { $_ -like "$property*" }
+                                if ($startsWith) {
+                                    $suggestions += $startsWith | Select-Object -First 3
+                                }
+                                else {
+                                    # Contains
+                                    $contains = $ValidFields | Where-Object { $_ -like "*$property*" }
+                                    if ($contains) {
+                                        $suggestions += $contains | Select-Object -First 3
+                                    }
+                                }
+                            }
+                            
+                            if ($suggestions.Count -gt 0) {
+                                Write-Host "  Did you mean: $($suggestions -join ', ')?" -ForegroundColor Yellow
+                            }
+                            
+                            $retry = Read-Host "  Try again? (y/n) [y]"
+                            if ($retry -eq 'n') {
+                                Write-Host "  Warning: Using unvalidated field name" -ForegroundColor Yellow
+                                $validInput = $true
+                            }
+                        }
+                    }
+                    else {
+                        $validInput = $true
+                    }
+                } while (-not $validInput)
+                
                 # Get operator
                 $selectedOperator = Get-UserSelection `
                     -Prompt "Select operator:" `

@@ -129,15 +129,12 @@ function Get-LMAlert {
                 "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
                 "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
                 "Filter" {
-                    #List of allowed filter props
-                    $PropList = @()
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=$Sort"
                 }
                 "FilterWizard" {
-                    $PropList = @()
-                    $Filter = Build-LMFilter -PassThru
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $Filter = Build-LMFilter -PassThru -ResourcePath $ResourcePath
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=$Sort"
                 }
             }

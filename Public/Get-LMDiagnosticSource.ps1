@@ -72,9 +72,7 @@ function Get-LMDiagnosticSource {
                 "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Filter" {
-                    #List of allowed filter props
-                    $PropList = @()
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
             }

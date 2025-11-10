@@ -100,9 +100,7 @@ function Get-LMAuditLog {
                 "Range" { $QueryParams = "?filter=happenedOn%3E%3A`"$StartDate`"%2ChappenedOn%3C%3A`"$EndDate`"%2C_all~`"*$SearchString*`"&size=$BatchSize&offset=$Count&sort=+happenedOn" }
                 "Id" { $resourcePath += "/$Id" }
                 "Filter" {
-                    #List of allowed filter props
-                    $PropList = @()
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+happenedOn"
                 }
             }

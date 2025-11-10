@@ -1,51 +1,37 @@
 <#
 .SYNOPSIS
-    This function formats a filter for Logic Monitor API calls.
+    This function formats a filter for Logic Monitor API calls (legacy v1 format).
 
 .DESCRIPTION
-    The Format-LMFilter-v1 function takes a hashtable of filter properties and an optional array of valid properties.
-    It checks if the supplied properties are valid, removes any invalid properties, and then formats the remaining properties into a filter string.
+    The Format-LMFilter-v1 function takes a hashtable of filter properties and formats them into a filter string.
+    This is the legacy format for hashtable-based filters. Field validation is performed by the parent Format-LMFilter function.
 
 .PARAMETER Filter
     A hashtable of filter properties. This is a mandatory parameter.
 
-.PARAMETER PropList
-    An array of valid properties. If this parameter is provided, the function checks the properties in the Filter parameter against this list and removes any that are not valid.
-
 .EXAMPLE
-    Format-LMFilter-v1 -Filter $Filter -PropList $PropList
+    Format-LMFilter-v1 -Filter @{name='test'; displayName='Test Device'}
 
-    This command formats the filter properties represented by the $Filter hashtable into a filter string, removing any properties that are not in the $PropList array.
+    This command formats the filter properties represented by the $Filter hashtable into a filter string.
 
 .INPUTS
-    System.Collections.Hashtable, System.String[]. You can pipe a hashtable of filter properties and an array of valid properties to Format-LMFilter-v1.
+    System.Collections.Hashtable. You can pipe a hashtable of filter properties to Format-LMFilter-v1.
 
 .OUTPUTS
     System.String. The function returns a string that represents the formatted filter.
 
 .NOTES
-    If a property in the Filter parameter is not in the PropList parameter, it is simply removed from the filter.
+    This function is called internally by Format-LMFilter for hashtable filters.
+    Field validation is performed before this function is called.
 #>
 function Format-LMFilter-v1 {
     [CmdletBinding()]
     param (
-        [Hashtable]$Filter,
-
-        [String[]]$PropList
+        [Hashtable]$Filter
     )
 
     #Initalize variable for final filter string
     $FilterString = ""
-
-    #Check if supplied properties are valid, if no prop list then just assume valid
-    if ($PropList) {
-        foreach ($Key in $($Filter.keys)) {
-            if ($Key -notin $PropList) {
-                #Remove key since its not a valid filter property
-                $filter.remove($Key)
-            }
-        }
-    }
 
     #Create filter string from hash table and url encode
     foreach ($Key in $($Filter.keys)) {

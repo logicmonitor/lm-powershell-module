@@ -91,9 +91,7 @@ function Get-LMAPIToken {
                 "AccessId" { $QueryParams = "?filter=accessId:`"$AccessId`"&size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
                 "AdminId" { $resourcePath = "/setting/admins/$AdminId/apitokens$BearerParam" }
                 "Filter" {
-                    #List of allowed filter props
-                    $PropList = @()
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id$BearerParam"
                 }
             }

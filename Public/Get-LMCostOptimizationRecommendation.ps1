@@ -65,15 +65,12 @@ function Get-LMCostOptimizationRecommendation {
                     "All" { $QueryParams = "?size=$BatchSize&offset=$Count" }
                     "Id" { $ResourcePath += "/$Id" }
                     "Filter" {
-                        #List of allowed filter props
-                        $PropList = @()
-                        $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                         $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                     }
                     "FilterWizard" {
-                        $PropList = @()
-                        $Filter = Build-LMFilter -PassThru
-                        $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $Filter = Build-LMFilter -PassThru -ResourcePath $ResourcePath
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                         $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                     }
                 }

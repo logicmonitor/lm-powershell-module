@@ -130,9 +130,7 @@ function Get-LMDeviceDatasourceInstanceAlertSetting {
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
 
             if ($Filter) {
-                #List of allowed filter props
-                $PropList = @()
-                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                 $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
             }
 

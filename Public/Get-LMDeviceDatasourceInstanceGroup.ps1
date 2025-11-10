@@ -119,9 +119,7 @@ function Get-LMDeviceDatasourceInstanceGroup {
             $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
 
             if ($Filter) {
-                #List of allowed filter props
-                $PropList = @()
-                $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                 if ($InstanceGroupName) {
                     $InstanceGroupName = $InstanceGroupName.Replace("&", "%26").Replace("'", "%27") #Escape special characters
                     $ValidFilter = $ValidFilter + ",name:`"$InstanceGroupName`""

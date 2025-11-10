@@ -128,7 +128,6 @@ function Get-LMUptimeDevice {
             }
             'Filter' {
                 $filterInput = $Filter
-                $propList = @()
 
                 if ($Filter -is [hashtable]) {
                     $filterInput = @{}
@@ -138,7 +137,7 @@ function Get-LMUptimeDevice {
                     $filterInput = "($Filter)"
                 }
 
-                $validFilter = Format-LMFilter -Filter $filterInput -PropList $propList
+                $validFilter = Format-LMFilter -Filter $filterInput -ResourcePath $resourcePath
                 if ($validFilter) {
                     if ($validFilter -notlike '*deviceType%22*') {
                         $validFilter = "$validFilter,$deviceTypeCombinedClause"
@@ -151,12 +150,11 @@ function Get-LMUptimeDevice {
                 $queryParams = "?filter=$validFilter&size=$BatchSize&offset=$count&sort=+id"
             }
             'FilterWizard' {
-                $propList = @()
-                $filterObject = Build-LMFilter -PassThru
+                $filterObject = Build-LMFilter -PassThru -ResourcePath $resourcePathRoot
                 if (-not $filterObject) {
                     return
                 }
-                $validFilter = Format-LMFilter -Filter $filterObject -PropList $propList
+                $validFilter = Format-LMFilter -Filter $filterObject -ResourcePath $resourcePathRoot
                 if ($validFilter) {
                     if ($validFilter -notlike '*deviceType%22*') {
                         $validFilter = "$validFilter,$deviceTypeCombinedClause"

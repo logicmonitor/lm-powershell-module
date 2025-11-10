@@ -3,13 +3,13 @@
 Formats the LogicMonitor filter for API requests.
 
 .DESCRIPTION
-The Format-LMFilter function is used to format the LogicMonitor filter for API requests. It takes an input filter object and an optional list of properties to include in the formatted filter. The function supports both legacy and new filter formats.
+The Format-LMFilter function is used to format the LogicMonitor filter for API requests. It takes an input filter object and validates the field names against the API schema before formatting. The function supports both legacy hashtable and new string filter formats.
 
 .PARAMETER Filter
 The input filter object. It can be a hashtable or a string.
 
-.PARAMETER PropList
-An optional list of properties to include in the formatted filter. The default value is an array containing the following properties: "name", "id", "status", "severity", "startEpoch", "endEpoch", "cleared", "resourceTemplateName", "monitorObjectName", "customProperties", "systemProperties", "autoProperties", "displayName".
+.PARAMETER ResourcePath
+The API endpoint path (e.g., '/device/devices') used to validate filter fields against the schema.
 
 .OUTPUTS
 The formatted filter string.
@@ -19,28 +19,33 @@ $filter = @{
     name = "MyMonitor"
     status = "active"
 }
-$formattedFilter = Format-LMFilter -Filter $filter
+$formattedFilter = Format-LMFilter -Filter $filter -ResourcePath "/device/devices"
 Write-Host $formattedFilter
 # Output: name:"MyMonitor",status:"active"
 
 .EXAMPLE
-$filter = "name -eq 'MyMonitor' -and status -eq 'active'"
-$formattedFilter = Format-LMFilter -Filter $filter
+$filter = "name -eq 'MyMonitor' -and displayName -eq 'active'"
+$formattedFilter = Format-LMFilter -Filter $filter -ResourcePath "/device/devices"
 Write-Host $formattedFilter
-# Output: name:"MyMonitor",status:"active"
+# Output: name:"MyMonitor",displayName:"active"
 #>
 
 function Format-LMFilter {
     [CmdletBinding()]
     param (
+        [Parameter(Mandatory)]
         [Object]$Filter,
 
-        [String[]]$PropList = @("name", "id", "status", "severity", "startEpoch", "endEpoch", "cleared", "resourceTemplateName", "monitorObjectName", "customProperties", "systemProperties", "autoProperties", "displayName")
+        [Parameter(Mandatory)]
+        [String]$ResourcePath
     )
+    # Validate filter fields before formatting
+    Test-LMFilterField -Filter $Filter -ResourcePath $ResourcePath
+    
     $FormatedFilter = ""
     #Keep legacy filter method for backwards compatability
     if ($Filter -is [hashtable]) {
-        $FormatedFilter = Format-LMFilter-v1 -Filter $Filter -PropList $PropList
+        $FormatedFilter = Format-LMFilter-v1 -Filter $Filter
         Write-Debug "Constructed Filter-v1: $FormatedFilter"
         return $FormatedFilter
     }

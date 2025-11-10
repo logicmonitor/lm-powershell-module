@@ -100,15 +100,12 @@ function Get-LMDashboard {
                 "SubGroups" { $QueryParams = "?filter=groupFullPath~`"$GroupPathSearchString`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
                 "Filter" {
-                    #List of allowed filter props
-                    $PropList = @()
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
                 "FilterWizard" {
-                    $PropList = @()
-                    $Filter = Build-LMFilter -PassThru
-                    $ValidFilter = Format-LMFilter -Filter $Filter -PropList $PropList
+                    $Filter = Build-LMFilter -PassThru -ResourcePath $ResourcePath
+                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
                 }
             }
