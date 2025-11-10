@@ -230,11 +230,11 @@ function Build-LMFilter {
                     # Validate field if validation is enabled
                     if ($ValidationEnabled -and $property -and $ValidFields.Count -gt 0) {
                         if ($ValidFields -ccontains $property) {
-                            Write-Host "  ✓ Valid field" -ForegroundColor Green
+                            Write-Host "  [VALID] Field accepted" -ForegroundColor Green
                             $validInput = $true
                         }
                         else {
-                            Write-Host "  ✗ Invalid field: '$property'" -ForegroundColor Red
+                            Write-Host "  [INVALID] Field not found: '$property'" -ForegroundColor Red
                             
                             # Try to find similar fields
                             $suggestions = @()
