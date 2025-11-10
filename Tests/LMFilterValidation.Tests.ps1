@@ -243,11 +243,14 @@ Describe 'Filter Validation Config Generator' {
         It 'Should have arrays of field names for each endpoint' {
             $Config = Import-PowerShellDataFile "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
             foreach ($endpoint in $Config.Keys) {
-                $Config[$endpoint] | Should -BeOfType [array]
-                $Config[$endpoint].Count | Should -BeGreaterThan 0
+                # PowerShell data files with single items may be strings, so ensure it's an array
+                $fields = @($Config[$endpoint])
+                $fields | Should -Not -BeNullOrEmpty
+                $fields.Count | Should -BeGreaterThan 0
             }
         }
     }
 }
+
 
 
