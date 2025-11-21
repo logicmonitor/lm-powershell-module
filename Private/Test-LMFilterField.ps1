@@ -80,9 +80,9 @@ function Test-LMFilterField {
         # String filter (v2 format) - extract field names before operators
         # Pattern: field_name followed by -eq, -ne, -gt, -lt, -ge, -le, -contains, -notcontains
         $Pattern = '(?:^|\s+)([a-zA-Z_][a-zA-Z0-9_\.]*)\s+(?:-eq|-ne|-gt|-lt|-ge|-le|-contains|-notcontains)\s+'
-        $Matches = [regex]::Matches($Filter, $Pattern)
+        $PatternMatches = [regex]::Matches($Filter, $Pattern)
         
-        foreach ($Match in $Matches) {
+        foreach ($Match in $PatternMatches) {
             if ($Match.Groups.Count -ge 2) {
                 $FilterFields += $Match.Groups[1].Value
             }

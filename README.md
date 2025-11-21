@@ -73,6 +73,32 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
+## 7.7.2
+### Hotfixes
+- **Send-LMWebhookMessage**: Fixed payload formatting when sending webhook messages to LM Logs:
+  - JSON strings are now automatically detected and parsed into structured data, preventing escaped JSON in payloads
+  - Plain text messages are properly encapsulated in a `message` property for consistent parsing
+  - Removed unnecessary payload wrapping that caused ingestion issues
+- **Resolve-LMDebugInfo**: Fix bug where BearerTokens were not being obfuscated when running commands with the -Debug parameter.
+
+```powershell
+#Sends multiple PSCustomObject events with additional properties merged into each payload.
+$events = @(
+    [PSCustomObject]@{ eventType = "login"; user = "john.doe"; status = "success" }
+    [PSCustomObject]@{ eventType = "logout"; user = "jane.smith"; status = "success" }
+)
+Send-LMWebhookMessage -SourceName "AuthEvents" -Messages $events -Properties @{ source = "AD"; region = "us-east-1" }
+
+#Sends a hashtable as a structured event and returns the result with status information.
+$event = @{
+    eventType = "deployment"
+    version = "1.2.3"
+    environment = "production"
+    timestamp = (Get-Date).ToString("o")
+}
+Send-LMWebhookMessage -SourceName "Deployments" -Messages @($event) -PassThru
+```
+
 ## 7.7.1
 ### Hotfixes
 - Fix bug with **ConvertTo-LMUpdateDevice** when trying to migrate Websites using an packet count of 50.

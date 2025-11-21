@@ -93,7 +93,7 @@ function Resolve-LMDebugInfo {
     Write-Debug "Portal: $($UriObj.Host)"
 
     # Display headers with partial redaction for identification
-    $SensitiveHeaders = @('accessKey', 'bearerToken', 'cookie', 'X-CSRF-Token')
+    $SensitiveHeaders = @('accessKey', 'bearerToken', 'cookie', 'X-CSRF-Token', 'Authorization')
     $HeaderInfo = $Headers.GetEnumerator() | ForEach-Object {
         $Value = if ($SensitiveHeaders -contains $_.Key) {
             if ($_.Value.Length -gt 25) {
