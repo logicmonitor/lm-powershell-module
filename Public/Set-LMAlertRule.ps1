@@ -92,11 +92,12 @@ function Set-LMAlertRule {
 
         [String[]]$DeviceGroups,
 
-        [String]$DataSource,
+        [String]$Datasource,
 
-        [String]$DataSourceInstanceName,
+        [Alias("DataSourceInstanceName")]
+        [String]$Instance,
 
-        [String]$DataPoint,
+        [String]$Datapoint,
 
         [Boolean]$SuppressAlertClear,
 
@@ -137,9 +138,9 @@ function Set-LMAlertRule {
             if ($ResourceProperties) { $Data.Add("resourceProperties", $ResourceProperties) }
             if ($Devices) { $Data.Add("devices", $Devices) }
             if ($DeviceGroups) { $Data.Add("deviceGroups", $DeviceGroups) }
-            if ($DataSource) { $Data.Add("dataSource", $DataSource) }
-            if ($DataSourceInstanceName) { $Data.Add("dataSourceInstanceName", $DataSourceInstanceName) }
-            if ($DataPoint) { $Data.Add("dataPoint", $DataPoint) }
+            if ($DataSource) { $Data.Add("datasource", $DataSource) }
+            if ($Instance) { $Data.Add("instance", $Instance) }
+            if ($DataPoint) { $Data.Add("datapoint", $DataPoint) }
             if ($PSBoundParameters.ContainsKey("SuppressAlertClear")) { $Data.Add("suppressAlertClear", $SuppressAlertClear) }
             if ($PSBoundParameters.ContainsKey("SuppressAlertAckSdt")) { $Data.Add("suppressAlertAckSdt", $SuppressAlertAckSdt) }
             if ($LevelStr) { $Data.Add("levelStr", $LevelStr) }
