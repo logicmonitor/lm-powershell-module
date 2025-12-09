@@ -73,6 +73,10 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
+## 7.7.4
+### Hotfixes
+- **Invoke-LMCollectorDebugCommand**: Fixed bug where *-GroovyCommand* would fail to execute when given an inline groovy snippet.
+
 ## 7.7.3
 ### Hotfixes
 - **New-LMAlertRule**: Fixed bug where datapoint, instance and datasource where not properly being set due to a change in the field names.
