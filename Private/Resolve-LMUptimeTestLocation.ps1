@@ -66,11 +66,23 @@ function Resolve-LMUptimeTestLocation {
     }
 
     if ($collectorSpecified) {
-        $testLocation.collectorIds = @($TestLocationCollectorIds)
+        # Ensure it's always an array, even with a single item
+        if ($TestLocationCollectorIds) {
+            $testLocation.collectorIds = @($TestLocationCollectorIds)
+        }
+        else {
+            $testLocation.collectorIds = @()
+        }
     }
 
     if ($smgSpecified) {
-        $testLocation.smgIds = @($TestLocationSmgIds)
+        # Ensure it's always an array, even with a single item
+        if ($TestLocationSmgIds) {
+            $testLocation.smgIds = @($TestLocationSmgIds)
+        }
+        else {
+            $testLocation.smgIds = @()
+        }
     }
 
     if ($allSpecified) {

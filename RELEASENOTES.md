@@ -1,4 +1,13 @@
 # Previous module release notes
+## 7.7.4
+### Hotfixes
+- **Invoke-LMCollectorDebugCommand**: Fixed bug where *-GroovyCommand* would fail to execute when given an inline groovy snippet.
+
+## 7.7.3
+### Hotfixes
+- **New-LMAlertRule**: Fixed bug where datapoint, instance and datasource where not properly being set due to a change in the field names.
+- **Set-LMAlertRule**: Fixed bug where datapoint, instance and datasource where not properly being set due to a change in the field names.
+
 ## 7.7.2
 ### Hotfixes
 - **Send-LMWebhookMessage**: Fixed payload formatting when sending webhook messages to LM Logs:
