@@ -36,8 +36,8 @@ Comma separated list of datapoints to retrieve. If not provided, all datapoints 
 A filter object to apply when retrieving data. This parameter is optional.
 
 .EXAMPLE
-#Retrieve data using IDs
-Get-LMDeviceData -DeviceId 123 -DatasourceId 456 -InstanceId 789
+#Retrieve data using IDs for datapoints "cpu" and "memory"
+Get-LMDeviceData -DeviceId 123 -DatasourceId 456 -InstanceId 789 -Datapoints "cpu,memory"
 
 .EXAMPLE
 #Retrieve data using names with time range
