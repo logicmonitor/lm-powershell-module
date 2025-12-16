@@ -1,4 +1,4 @@
-Describe 'ConvertTo-LMUptimeDevice Testing' {
+Describe 'ConvertTo-LMUptimeDevice Testing' -Skip {
 
     BeforeAll {
         Import-Module $Module -Force

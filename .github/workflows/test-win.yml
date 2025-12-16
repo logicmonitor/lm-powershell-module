@@ -43,7 +43,7 @@ jobs:
           Write-Host "Powershell version: $Version"
 
           $Container = New-PesterContainer -Path ./Tests/ -Data $Data
-          $Result = Invoke-Pester -Container $Container -Output Detailed -PassThru -ExcludePath "*LMUptime*"
+          $Result = Invoke-Pester -Container $Container -Output Detailed -PassThru
 
           #Write OpsNote to test portal indicating test status
           Connect-LMAccount -AccessId $env:LM_ACCESS_ID -AccessKey $env:LM_ACCESS_KEY -AccountName $env:LM_PORTAL -DisableConsoleLogging
