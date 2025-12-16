@@ -1,4 +1,4 @@
-Describe 'Uptime Device Testing New/Get/Set/Remove' {
+Describe 'Uptime Device Testing New/Get/Set/Remove' -Skip {
 
     BeforeAll {
         Import-Module $Module -Force

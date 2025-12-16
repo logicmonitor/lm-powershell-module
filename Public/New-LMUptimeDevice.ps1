@@ -382,14 +382,45 @@ function New-LMUptimeDevice {
         $deviceType = if ($isWeb) { 18 } else { 19 }
         $deviceKind = if ($isWeb) { 'webcheck' } else { 'pingcheck' }
 
+        # Ensure groupIds is always an array (even with single item)
+        $groupIdsArray = @()
+        if ($HostGroupIds) {
+            $groupIdsArray = @($HostGroupIds | ForEach-Object { [String]$_ })
+        }
+
+        # Ensure testLocation arrays are properly formatted
+        if ($testLocation) {
+            if ($null -eq $testLocation.collectorIds) {
+                $testLocation.collectorIds = @()
+            }
+            else {
+                $testLocation.collectorIds = @($testLocation.collectorIds)
+            }
+
+            if ($null -eq $testLocation.collectors) {
+                $testLocation.collectors = @()
+            }
+            else {
+                $testLocation.collectors = @($testLocation.collectors)
+            }
+
+            if ($null -eq $testLocation.smgIds) {
+                $testLocation.smgIds = @()
+            }
+            else {
+                $testLocation.smgIds = @($testLocation.smgIds)
+            }
+        }
+
         $payload = @{
             type                      = $deviceKind
             model                     = 'websiteDevice'
             deviceType                = $deviceType
             id                        = 0
             name                      = $Name
+            displayName               = $Name
             description               = $Description
-            groupIds                  = @($HostGroupIds | ForEach-Object { [String]$_ })
+            groupIds                  = $groupIdsArray
             isInternal                = $isInternal
             individualSmAlertEnable   = [bool]$IndividualSmAlertEnable
             individualAlertLevel      = $IndividualAlertLevel
@@ -429,6 +460,19 @@ function New-LMUptimeDevice {
             if ($null -eq $payload[$key]) {
                 $payload.Remove($key)
             }
+        }
+
+        # Ensure testLocation nested arrays are preserved during JSON conversion
+        if ($payload.testLocation) {
+            # Force arrays to be recognized as arrays by PowerShell's JSON serializer
+            $payload.testLocation.collectorIds = [Array]$payload.testLocation.collectorIds
+            $payload.testLocation.collectors = [Array]$payload.testLocation.collectors
+            $payload.testLocation.smgIds = [Array]$payload.testLocation.smgIds
+        }
+
+        # Ensure groupIds is recognized as an array
+        if ($payload.groupIds) {
+            $payload.groupIds = [Array]$payload.groupIds
         }
 
         $jsonPayload = Format-LMData -Data $payload -UserSpecifiedKeys @() -AlwaysKeepKeys @('groupIds', 'properties', 'steps', 'testLocation') -JsonDepth 20

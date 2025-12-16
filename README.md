@@ -73,15 +73,16 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.7.4
-### Hotfixes
-- **Invoke-LMCollectorDebugCommand**: Fixed bug where *-GroovyCommand* would fail to execute when given an inline groovy snippet.
+## 7.7.5
+### Cmdlet Changes
+- **Get-LMDeviceData**: Fixed a bug that used the incorrect pagination logic when trying to enumerate additional pages of result data.
+- **Get-LMDeviceData**: Added a new parameter *-Datapoints* which allows for filtering which datapoints are returned as part of the data export.
 
-## 7.7.3
-### Hotfixes
-- **New-LMAlertRule**: Fixed bug where datapoint, instance and datasource where not properly being set due to a change in the field names.
-- **Set-LMAlertRule**: Fixed bug where datapoint, instance and datasource where not properly being set due to a change in the field names.
+### New Cmdlets
+- **Set-LMDeviceGroupDatasource**: This cmdlet modifies an existing device group datasource in LogicMonitor, allowing updates to monitoring state. This cmdlet provides control over the "Enable" checkbox (stopMonitoring) for a datasource applied to a device group. For alert settings use *Set-LMDeviceGroupDatasourceAlertSetting*.
 
+### Important Notes
+- **LM Uptime Removal**: Due to issues with the v3 api endpoints for LM Uptime, they are being temporarily removed from the module. As soon as they are officially supported in the LM Swagger guide they will be reintroduced along with the Website->Uptime conversion cmdlet. For previous versions of the module that still have access to these cmdlets it is recommended that you wait until the official swagger endpoints are released.
 ---
 
 ### Major Changes in v7:

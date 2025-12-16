@@ -15,56 +15,56 @@ Retrieves monitoring data for a LogicMonitor device.
 ### dsName-deviceName-instanceId
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceName <String> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-Datapoints <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### dsName-deviceName-instanceName
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceName <String> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-Datapoints <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### dsName-deviceId-instanceName
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceId <Int32> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-Datapoints <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### dsName-deviceId-instanceId
 ```
 Get-LMDeviceData -DatasourceName <String> -DeviceId <Int32> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-Datapoints <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### dsId-deviceName-instanceId
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceName <String> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-Datapoints <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### dsId-deviceName-instanceName
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceName <String> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-Datapoints <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### dsId-deviceId-instanceName
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceId <Int32> [-InstanceName <String>] [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-Datapoints <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### dsId-deviceId-instanceId
 ```
 Get-LMDeviceData -DatasourceId <Int32> -DeviceId <Int32> -InstanceId <Int32> [-StartDate <DateTime>]
- [-EndDate <DateTime>] [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+ [-EndDate <DateTime>] [-Filter <Object>] [-Datapoints <String>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
@@ -76,8 +76,8 @@ It supports various combinations of identifying the device, datasource, and inst
 
 ### EXAMPLE 1
 ```
-#Retrieve data using IDs
-Get-LMDeviceData -DeviceId 123 -DatasourceId 456 -InstanceId 789
+#Retrieve data using IDs for datapoints "cpu" and "memory"
+Get-LMDeviceData -DeviceId 123 -DatasourceId 456 -InstanceId 789 -Datapoints "cpu,memory"
 ```
 
 ### EXAMPLE 2
@@ -232,19 +232,18 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -BatchSize
-The number of results to return per request.
-Must be between 1 and 1000.
-Defaults to 1000.
+### -Datapoints
+Comma separated list of datapoints to retrieve.
+If not provided, all datapoints will be retrieved.
 
 ```yaml
-Type: Int32
+Type: String
 Parameter Sets: (All)
 Aliases:
 
 Required: False
 Position: Named
-Default value: 1000
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
