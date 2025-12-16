@@ -80,6 +80,9 @@ Connect-LMAccount -UseCachedCredential
 
 ### New Cmdlets
 - **Set-LMDeviceGroupDatasource**: This cmdlet modifies an existing device group datasource in LogicMonitor, allowing updates to monitoring state. This cmdlet provides control over the "Enable" checkbox (stopMonitoring) for a datasource applied to a device group. For alert settings use *Set-LMDeviceGroupDatasourceAlertSetting*.
+
+### Important Notes
+- **LM Uptime Removal**: Due to issues with the v3 api endpoints for LM Uptime, they are being temporarily removed from the module. As soon as they are officially supported in the LM Swagger guide they will be reintroduced along with the Website->Uptime conversion cmdlet. For previous versions of the module that still have access to these cmdlets it is recommended that you wait until the official swagger endpoints are released.
 ---
 
 ### Major Changes in v7:
