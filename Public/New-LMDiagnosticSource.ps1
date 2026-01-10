@@ -35,7 +35,7 @@ function New-LMDiagnosticSource {
     begin {}
     process {
         if ($Script:LMAuth.Valid) {
-            $ResourcePath = "/setting/diagnosticssources"
+            $ResourcePath = "/setting/diagnosticsources"
             $Message = "DiagnosticSource Name: $($DiagnosticSource.name)"
             $Data = $DiagnosticSource
             $Data = ($Data | ConvertTo-Json -Depth 10)

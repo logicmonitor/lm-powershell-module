@@ -58,7 +58,7 @@ function Get-LMDiagnosticSource {
     #Check if we are logged in and have valid api creds
     if ($Script:LMAuth.Valid) {
 
-        $ResourcePath = "/setting/diagnosticssources"
+        $ResourcePath = "/setting/diagnosticsources"
 
         $QueryParams = ""
         $Count = 0

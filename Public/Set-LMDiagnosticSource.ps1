@@ -70,7 +70,7 @@ function Set-LMDiagnosticSource {
                 if (Test-LookupResult -Result $LookupResult -LookupString $Name) { return }
                 $Id = $LookupResult
             }
-            $ResourcePath = "/setting/diagnosticssources/$Id"
+            $ResourcePath = "/setting/diagnosticsources/$Id"
             $Message = "Id: $Id | Name: $Name"
             $Data = @{
                 name         = $NewName
