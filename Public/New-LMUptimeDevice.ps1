@@ -481,7 +481,8 @@ function New-LMUptimeDevice {
 
         if ($PSCmdlet.ShouldProcess($message, 'Create Uptime Device')) {
             $headers = New-LMHeader -Auth $Script:LMAuth -Method 'POST' -ResourcePath $resourcePath -Data $jsonPayload -Version 3
-            $uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)$resourcePath"
+            $apiType = if ($isWeb) { 'uptimewebcheck' } else { 'uptimepingcheck' }
+            $uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)$resourcePath`?type=$apiType"
 
             Resolve-LMDebugInfo -Url $uri -Headers $headers[0] -Command $MyInvocation -Payload $jsonPayload
 

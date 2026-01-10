@@ -5,8 +5,9 @@ Retrieves LogicMonitor Uptime devices from the v3 device endpoint.
 .DESCRIPTION
 The Get-LMUptimeDevice cmdlet returns Uptime monitors (web or ping) that are backed by the
 LogicMonitor v3 /device/devices endpoint. It supports lookup by ID or name, optional filtering
-by type or internal/external flag, custom filters, and the interactive filter wizard. All
-requests automatically enforce the Uptime model so only websiteDevice resources are returned.
+by internal/external flag, custom filters, and the interactive filter wizard. The Type parameter
+is mandatory and determines whether to retrieve webcheck or pingcheck uptime devices, returning
+the full response structure specific to that type.
 
 .PARAMETER Id
 Specifies the identifier of the Uptime device to retrieve.
@@ -15,36 +16,40 @@ Specifies the identifier of the Uptime device to retrieve.
 Specifies the name of the Uptime device to retrieve.
 
 .PARAMETER Type
-Filters results by Uptime monitor type. Valid values are webcheck and pingcheck.
+Specifies the Uptime monitor type to retrieve. This parameter is mandatory and determines the
+response structure. Valid values are uptimewebcheck and uptimepingcheck.
 
 .PARAMETER IsInternal
 Filters results by internal (true) or external (false) monitors.
 
 .PARAMETER Filter
-Provides a filter object for advanced queries. The Uptime model constraint is applied
-automatically in addition to the supplied criteria.
+Provides a filter object for advanced queries.
 
 .PARAMETER FilterWizard
-Launches the interactive filter wizard and applies the chosen filter along with the Uptime
-model constraint.
+Launches the interactive filter wizard and applies the chosen filter.
 
 .PARAMETER BatchSize
 Controls the number of results returned per request. Must be between 1 and 1000. Default 1000.
 
 .EXAMPLE
-Get-LMUptimeDevice
+Get-LMUptimeDevice -Type uptimewebcheck
 
-Retrieves all Uptime devices across the account.
+Retrieves all web Uptime devices across the account.
 
 .EXAMPLE
-Get-LMUptimeDevice -Type webcheck -IsInternal $true
+Get-LMUptimeDevice -Type uptimewebcheck -IsInternal $true
 
 Retrieves internal web Uptime devices only.
 
 .EXAMPLE
-Get-LMUptimeDevice -Name "web-int-01"
+Get-LMUptimeDevice -Name "web-int-01" -Type uptimewebcheck
 
-Retrieves a specific Uptime device by name.
+Retrieves a specific web Uptime device by name.
+
+.EXAMPLE
+Get-LMUptimeDevice -Id 123 -Type uptimepingcheck
+
+Retrieves a specific ping Uptime device by ID.
 
 .NOTES
 You must run Connect-LMAccount before invoking this cmdlet. Responses are tagged with the
@@ -65,8 +70,8 @@ function Get-LMUptimeDevice {
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Parameter(ParameterSetName = 'All')]
-        [ValidateSet('webcheck', 'pingcheck')]
+        [Parameter(Mandatory)]
+        [ValidateSet('uptimewebcheck', 'uptimepingcheck')]
         [String]$Type,
 
         [Parameter(ParameterSetName = 'All')]
@@ -88,9 +93,6 @@ function Get-LMUptimeDevice {
     }
 
     $resourcePathRoot = '/device/devices'
-    $deviceTypeWebClause = 'deviceType:%2218%22'
-    $deviceTypePingClause = 'deviceType:%2219%22'
-    $deviceTypeCombinedClause = 'deviceType:%2218%22|%2219%22'
 
     $queryParams = ''
     $count = 0
@@ -103,13 +105,7 @@ function Get-LMUptimeDevice {
 
         switch ($PSCmdlet.ParameterSetName) {
             'All' {
-                $deviceTypeClause = switch ($Type) {
-                    'webcheck' { $deviceTypeWebClause }
-                    'pingcheck' { $deviceTypePingClause }
-                    default { $deviceTypeCombinedClause }
-                }
-
-                $filterParts = @($deviceTypeClause)
+                $filterParts = @()
 
                 if ($PSBoundParameters.ContainsKey('IsInternal')) {
                     $boolValue = ([bool]$IsInternal).ToString().ToLowerInvariant()
@@ -117,14 +113,20 @@ function Get-LMUptimeDevice {
                 }
 
                 $filterString = $filterParts -join ','
-                $queryParams = "?filter=$filterString&size=$BatchSize&offset=$count&sort=+id"
+                if ($filterString) {
+                    $queryParams = "?filter=$filterString&size=$BatchSize&offset=$count&sort=+id&type=$Type"
+                }
+                else {
+                    $queryParams = "?size=$BatchSize&offset=$count&sort=+id&type=$Type"
+                }
             }
             'Id' {
                 $resourcePath = "$resourcePath/$Id"
+                $queryParams = "?type=$Type"
             }
             'Name' {
-                $filterString = "$deviceTypeCombinedClause,name:%22$Name%22"
-                $queryParams = "?filter=$filterString&size=$BatchSize&offset=$count&sort=+id"
+                $filterString = "name:%22$Name%22"
+                $queryParams = "?filter=$filterString&size=$BatchSize&offset=$count&sort=+id&type=$Type"
             }
             'Filter' {
                 $filterInput = $Filter
@@ -139,15 +141,11 @@ function Get-LMUptimeDevice {
 
                 $validFilter = Format-LMFilter -Filter $filterInput -ResourcePath $resourcePath
                 if ($validFilter) {
-                    if ($validFilter -notlike '*deviceType%22*') {
-                        $validFilter = "$validFilter,$deviceTypeCombinedClause"
-                    }
+                    $queryParams = "?filter=$validFilter&size=$BatchSize&offset=$count&sort=+id&type=$Type"
                 }
                 else {
-                    $validFilter = $deviceTypeCombinedClause
+                    $queryParams = "?size=$BatchSize&offset=$count&sort=+id&type=$Type"
                 }
-
-                $queryParams = "?filter=$validFilter&size=$BatchSize&offset=$count&sort=+id"
             }
             'FilterWizard' {
                 $filterObject = Build-LMFilter -PassThru -ResourcePath $resourcePathRoot
@@ -156,15 +154,11 @@ function Get-LMUptimeDevice {
                 }
                 $validFilter = Format-LMFilter -Filter $filterObject -ResourcePath $resourcePathRoot
                 if ($validFilter) {
-                    if ($validFilter -notlike '*deviceType%22*') {
-                        $validFilter = "$validFilter,$deviceTypeCombinedClause"
-                    }
+                    $queryParams = "?filter=$validFilter&size=$BatchSize&offset=$count&sort=+id&type=$Type"
                 }
                 else {
-                    $validFilter = $deviceTypeCombinedClause
+                    $queryParams = "?size=$BatchSize&offset=$count&sort=+id&type=$Type"
                 }
-
-                $queryParams = "?filter=$validFilter&size=$BatchSize&offset=$count&sort=+id"
             }
         }
 

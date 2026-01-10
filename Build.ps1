@@ -6,7 +6,7 @@ $manifestPath = "./Logic.Monitor.psd1"
 $publicFuncFolderPath = './Public'
 
 # Exclude patterns for functions to not export (e.g., work-in-progress features)
-$excludePatterns = @('*LMUptime*')
+$excludePatterns = @()
 
 $ps1xmlFiles = Get-ChildItem -Path ./ -Filter *.ps1xml
 Foreach ($ps1xml in $ps1xmlFiles) {

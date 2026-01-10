@@ -6,13 +6,18 @@ Updates an existing LogicMonitor Uptime device using the v3 device endpoint.
 The Set-LMUptimeDevice cmdlet updates internal or external Uptime monitors (web or ping) by
 submitting a PATCH request to the LogicMonitor v3 device endpoint. It resolves the device ID
 from name when necessary, validates location combinations, and constructs the appropriate
-payload structure before issuing the request.
+payload structure before issuing the request. The Type parameter is mandatory and determines
+the response structure returned by the API.
 
 .PARAMETER Id
 Specifies the device identifier to update. Accepts pipeline input by property name.
 
 .PARAMETER Name
 Specifies the device name to update. The cmdlet resolves the corresponding ID prior to issuing the request.
+
+.PARAMETER Type
+Specifies the Uptime monitor type. This parameter is mandatory and determines the response
+structure. Valid values are uptimewebcheck and uptimepingcheck.
 
 .PARAMETER PropertiesMethod
 Determines how custom properties are applied when supplied. Valid values are Add, Replace, or Refresh.
@@ -99,14 +104,19 @@ Specifies synthetic monitoring group identifiers for external checks.
 Indicates that all public locations should be used for external checks.
 
 .EXAMPLE
-Set-LMUptimeDevice -Id 123 -PollingInterval 10 -Transition 2
+Set-LMUptimeDevice -Id 123 -Type uptimewebcheck -PollingInterval 10 -AlertTriggerInterval 2
 
-Updates the polling interval and transition threshold for the uptime device with ID 123.
+Updates the polling interval and alert trigger threshold for the web uptime device with ID 123.
 
 .EXAMPLE
-Set-LMUptimeDevice -Name "web-ext-01" -TestLocationSmgIds 2,4,6 -TriggerSSLStatusAlert $true
+Set-LMUptimeDevice -Name "web-ext-01" -Type uptimewebcheck -TestLocationSmgIds 2,4,6 -TriggerSSLStatusAlert $true
 
 Resolves the ID from the device name and updates external web check locations and SSL alerts.
+
+.EXAMPLE
+Set-LMUptimeDevice -Id 456 -Type uptimepingcheck -Description "Updated ping check"
+
+Updates the description for the ping uptime device with ID 456.
 
 .NOTES
 You must run Connect-LMAccount before invoking this cmdlet. Requests are issued to
@@ -128,6 +138,10 @@ function Set-LMUptimeDevice {
         [Parameter(Mandatory, ParameterSetName = 'NamePing')]
         [ValidateNotNullOrEmpty()]
         [String]$Name,
+
+        [Parameter(Mandatory)]
+        [ValidateSet('uptimewebcheck', 'uptimepingcheck')]
+        [String]$Type,
 
         [ValidateSet('Add', 'Replace', 'Refresh')]
         [String]$PropertiesMethod = 'Replace',
@@ -362,7 +376,7 @@ function Set-LMUptimeDevice {
         }
 
         $resourcePath = "/device/devices/$Id"
-        $query = "?opType=$($PropertiesMethod.ToLower())"
+        $query = "?opType=$($PropertiesMethod.ToLower())&type=$Type"
 
         $jsonPayload = Format-LMData -Data $payload -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys -AlwaysKeepKeys @('groupIds', 'properties', 'steps', 'testLocation') -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('properties') }) } -Context @{ PropertiesMethod = $PropertiesMethod } -JsonDepth 20
 

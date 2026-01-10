@@ -14,41 +14,43 @@ Updates an existing LogicMonitor Uptime device using the v3 device endpoint.
 
 ### IdGeneral (Default)
 ```
-Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-HostGroupIds <String[]>]
- [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
- [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
- [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
- [-Template <String>] [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>] [-TestLocationAll]
+Set-LMUptimeDevice -Id <Int32> -Type <String> [-PropertiesMethod <String>] [-Description <String>]
+ [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
+ [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
+ [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
+ [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>] [-Template <String>]
+ [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>] [-TestLocationAll]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### IdPing
 ```
-Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-HostGroupIds <String[]>]
- [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
- [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
- [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
- [-Template <String>] [-Hostname <String>] [-Count <Int32>] [-PercentPktsNotReceiveInTime <Int32>]
- [-TimeoutInMSPktsNotReceive <Int32>] [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>]
- [-TestLocationAll] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMUptimeDevice -Id <Int32> -Type <String> [-PropertiesMethod <String>] [-Description <String>]
+ [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
+ [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
+ [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
+ [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>] [-Template <String>] [-Hostname <String>]
+ [-Count <Int32>] [-PercentPktsNotReceiveInTime <Int32>] [-TimeoutInMSPktsNotReceive <Int32>]
+ [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>] [-TestLocationAll]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### IdWeb
 ```
-Set-LMUptimeDevice -Id <Int32> [-PropertiesMethod <String>] [-Description <String>] [-HostGroupIds <String[]>]
- [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>] [-GlobalSmAlertCond <String>]
- [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>] [-IndividualSmAlertEnable <Boolean>]
- [-UseDefaultLocationSetting <Boolean>] [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>]
- [-Template <String>] [-Domain <String>] [-Schema <String>] [-IgnoreSSL <Boolean>]
- [-PageLoadAlertTimeInMS <Int32>] [-AlertExpr <String>] [-TriggerSSLStatusAlert <Boolean>]
- [-TriggerSSLExpirationAlert <Boolean>] [-Steps <Hashtable[]>] [-TestLocationCollectorIds <Int32[]>]
- [-TestLocationSmgIds <Int32[]>] [-TestLocationAll] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+Set-LMUptimeDevice -Id <Int32> -Type <String> [-PropertiesMethod <String>] [-Description <String>]
+ [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
+ [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
+ [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
+ [-UseDefaultAlertSetting <Boolean>] [-Properties <Hashtable>] [-Template <String>] [-Domain <String>]
+ [-Schema <String>] [-IgnoreSSL <Boolean>] [-PageLoadAlertTimeInMS <Int32>] [-AlertExpr <String>]
+ [-TriggerSSLStatusAlert <Boolean>] [-TriggerSSLExpirationAlert <Boolean>] [-Steps <Hashtable[]>]
+ [-TestLocationCollectorIds <Int32[]>] [-TestLocationSmgIds <Int32[]>] [-TestLocationAll]
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### NamePing
 ```
-Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>]
+Set-LMUptimeDevice -Name <String> -Type <String> [-PropertiesMethod <String>] [-Description <String>]
  [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
  [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
  [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
@@ -60,7 +62,7 @@ Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <St
 
 ### NameWeb
 ```
-Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>]
+Set-LMUptimeDevice -Name <String> -Type <String> [-PropertiesMethod <String>] [-Description <String>]
  [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
  [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
  [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
@@ -73,7 +75,7 @@ Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <St
 
 ### NameGeneral
 ```
-Set-LMUptimeDevice -Name <String> [-PropertiesMethod <String>] [-Description <String>]
+Set-LMUptimeDevice -Name <String> -Type <String> [-PropertiesMethod <String>] [-Description <String>]
  [-HostGroupIds <String[]>] [-PollingInterval <Int32>] [-AlertTriggerInterval <Int32>]
  [-GlobalSmAlertCond <String>] [-OverallAlertLevel <String>] [-IndividualAlertLevel <String>]
  [-IndividualSmAlertEnable <Boolean>] [-UseDefaultLocationSetting <Boolean>]
@@ -88,22 +90,31 @@ submitting a PATCH request to the LogicMonitor v3 device endpoint.
 It resolves the device ID
 from name when necessary, validates location combinations, and constructs the appropriate
 payload structure before issuing the request.
+The Type parameter is mandatory and determines
+the response structure returned by the API.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Set-LMUptimeDevice -Id 123 -PollingInterval 10 -Transition 2
+Set-LMUptimeDevice -Id 123 -Type uptimewebcheck -PollingInterval 10 -AlertTriggerInterval 2
 ```
 
-Updates the polling interval and transition threshold for the uptime device with ID 123.
+Updates the polling interval and alert trigger threshold for the web uptime device with ID 123.
 
 ### EXAMPLE 2
 ```
-Set-LMUptimeDevice -Name "web-ext-01" -TestLocationSmgIds 2,4,6 -TriggerSSLStatusAlert $true
+Set-LMUptimeDevice -Name "web-ext-01" -Type uptimewebcheck -TestLocationSmgIds 2,4,6 -TriggerSSLStatusAlert $true
 ```
 
 Resolves the ID from the device name and updates external web check locations and SSL alerts.
+
+### EXAMPLE 3
+```
+Set-LMUptimeDevice -Id 456 -Type uptimepingcheck -Description "Updated ping check"
+```
+
+Updates the description for the ping uptime device with ID 456.
 
 ## PARAMETERS
 
@@ -130,6 +141,24 @@ The cmdlet resolves the corresponding ID prior to issuing the request.
 ```yaml
 Type: String
 Parameter Sets: NamePing, NameWeb, NameGeneral
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Type
+Specifies the Uptime monitor type.
+This parameter is mandatory and determines the response
+structure.
+Valid values are uptimewebcheck and uptimepingcheck.
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: True
@@ -616,5 +645,6 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ### LogicMonitor.LMUptimeDevice
 ## NOTES
 You must run Connect-LMAccount before invoking this cmdlet.
+Requests are issued to
 
 ## RELATED LINKS
