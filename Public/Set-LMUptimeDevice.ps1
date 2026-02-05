@@ -119,10 +119,22 @@ Set-LMUptimeDevice -Id 456 -Type uptimepingcheck -Description "Updated ping chec
 Updates the description for the ping uptime device with ID 456.
 
 .NOTES
-You must run Connect-LMAccount before invoking this cmdlet. Requests are issued to
+You must run Connect-LMAccount before invoking this cmdlet.
+
+.INPUTS
+System.Int32. You can pipe an Id to this cmdlet.
 
 .OUTPUTS
 LogicMonitor.LMUptimeDevice
+
+.LINK
+Get-LMUptimeDevice
+
+.LINK
+New-LMUptimeDevice
+
+.LINK
+Remove-LMUptimeDevice
 #>
 function Set-LMUptimeDevice {
 
@@ -247,7 +259,19 @@ function Set-LMUptimeDevice {
 
         $resolvedName = $null
         if ($parameterSet -like 'Name*') {
-            $lookupResult = (Get-LMDevice -Name $Name)
+            try {
+                $lookupResult = Get-LMDevice -Name $Name
+            }
+            catch {
+                Write-Error "Failed to lookup device '$Name': $($_.Exception.Message)"
+                return
+            }
+            
+            if ($null -eq $lookupResult) {
+                Write-Error "Device '$Name' not found."
+                return
+            }
+            
             if (Test-LookupResult -Result $lookupResult.Id -LookupString $Name) {
                 return
             }

@@ -15,19 +15,29 @@ Updates a LogicMonitor diagnostic source configuration.
 ### Id
 ```
 Set-LMDiagnosticSource -Id <String> [-NewName <String>] [-Description <String>] [-Group <String>]
- [-GroovyScript <String>] [-Tags <String>] [-Technology <String>] [-AppliesTo <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-GroovyScript <String>] [-Tags <String>] [-Technology <String>] [-AppliesTo <String>] [-ScriptType <String>]
+ [-AccessGroupIds <Int32[]>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMDiagnosticSource -Name <String> [-NewName <String>] [-Description <String>] [-Group <String>]
- [-GroovyScript <String>] [-Tags <String>] [-Technology <String>] [-AppliesTo <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-GroovyScript <String>] [-Tags <String>] [-Technology <String>] [-AppliesTo <String>] [-ScriptType <String>]
+ [-AccessGroupIds <Int32[]>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### InputObject
+```
+Set-LMDiagnosticSource -InputObject <PSObject> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-The Set-LMDiagnosticSource function modifies an existing diagnostic source in LogicMonitor, allowing updates to its name, description, group, script, tags, technology, appliesTo, and other properties.
+The Set-LMDiagnosticSource function modifies an existing diagnostic source in LogicMonitor,
+allowing updates to its name, description, group, script, tags, technology, appliesTo, scriptType,
+accessGroupIds, and other properties.
+You can specify individual parameters or provide a complete
+configuration object using the InputObject parameter.
 
 ## EXAMPLES
 
@@ -37,11 +47,26 @@ Set-LMDiagnosticSource -Id 123 -NewName "UpdatedSource" -Description "New descri
 Updates the diagnostic source with ID 123 with a new name and description.
 ```
 
+### EXAMPLE 2
+```
+Set-LMDiagnosticSource -Name "MySource" -Description "Updated description" -ScriptType "powershell"
+Updates the diagnostic source by name and changes the script type.
+```
+
+### EXAMPLE 3
+```
+$config = Get-LMDiagnosticSource -Id 123
+$config.description = "Updated via InputObject"
+Set-LMDiagnosticSource -InputObject $config
+Updates the diagnostic source using an InputObject.
+```
+
 ## PARAMETERS
 
 ### -Id
 Specifies the ID of the diagnostic source to modify.
-This parameter is mandatory when using the 'Id' parameter set.
+This parameter is mandatory when using
+the 'Id' parameter set.
 
 ```yaml
 Type: String
@@ -57,11 +82,30 @@ Accept wildcard characters: False
 
 ### -Name
 Specifies the current name of the diagnostic source.
-This parameter is mandatory when using the 'Name' parameter set.
+This parameter is mandatory when using
+the 'Name' parameter set.
 
 ```yaml
 Type: String
 Parameter Sets: Name
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -InputObject
+A PSCustomObject containing the complete diagnostic source configuration.
+Must include either
+an 'id' or 'name' property to identify the target.
+Use this parameter for advanced or programmatic scenarios.
+
+```yaml
+Type: PSObject
+Parameter Sets: InputObject
 Aliases:
 
 Required: True
@@ -76,7 +120,7 @@ Specifies the new name for the diagnostic source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -91,7 +135,7 @@ Specifies the new description for the diagnostic source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -106,7 +150,7 @@ Specifies the group for the diagnostic source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -117,11 +161,11 @@ Accept wildcard characters: False
 ```
 
 ### -GroovyScript
-Specifies the Groovy script for the diagnostic source.
+Specifies the script content for the diagnostic source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -136,7 +180,7 @@ Specifies tags to associate with the diagnostic source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -151,7 +195,7 @@ Specifies the technology details for the diagnostic source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -166,7 +210,38 @@ Specifies the appliesTo expression for the diagnostic source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ScriptType
+Specifies the script type for the diagnostic source.
+Valid values are 'groovy' or 'powershell'.
+
+```yaml
+Type: String
+Parameter Sets: Id, Name
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AccessGroupIds
+An array of Access Group IDs to assign to the diagnostic source.
+
+```yaml
+Type: Int32[]
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False

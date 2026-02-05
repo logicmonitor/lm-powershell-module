@@ -15,21 +15,29 @@ Updates a LogicMonitor remediation source configuration.
 ### Id
 ```
 Set-LMRemediationSource -Id <String> [-NewName <String>] [-Description <String>] [-Group <String>]
- [-GroovyScript <String>] [-Tags <String>] [-Technology <String>] [-AppliesTo <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-GroovyScript <String>] [-Tags <String>] [-Technology <String>] [-AppliesTo <String>] [-ScriptType <String>]
+ [-AccessGroupIds <Int32[]>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
 ```
 Set-LMRemediationSource -Name <String> [-NewName <String>] [-Description <String>] [-Group <String>]
- [-GroovyScript <String>] [-Tags <String>] [-Technology <String>] [-AppliesTo <String>]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-GroovyScript <String>] [-Tags <String>] [-Technology <String>] [-AppliesTo <String>] [-ScriptType <String>]
+ [-AccessGroupIds <Int32[]>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### InputObject
+```
+Set-LMRemediationSource -InputObject <PSObject> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 The Set-LMRemediationSource function modifies an existing remediation source in LogicMonitor,
-allowing updates to its name, description, group, script, tags, technology, appliesTo, and
-other properties.
+allowing updates to its name, description, group, script, tags, technology, appliesTo, scriptType,
+accessGroupIds, and other properties.
+You can specify individual parameters or provide a complete
+configuration object using the InputObject parameter.
 
 ## EXAMPLES
 
@@ -41,8 +49,16 @@ Updates the remediation source with ID 123 with a new name and description.
 
 ### EXAMPLE 2
 ```
-Set-LMRemediationSource -Name "MySource" -Description "Updated description"
-Updates the remediation source by name.
+Set-LMRemediationSource -Name "MySource" -Description "Updated description" -ScriptType "powershell"
+Updates the remediation source by name and changes the script type.
+```
+
+### EXAMPLE 3
+```
+$config = Get-LMRemediationSource -Id 123
+$config.description = "Updated via InputObject"
+Set-LMRemediationSource -InputObject $config
+Updates the remediation source using an InputObject.
 ```
 
 ## PARAMETERS
@@ -81,12 +97,30 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -InputObject
+A PSCustomObject containing the complete remediation source configuration.
+Must include either
+an 'id' or 'name' property to identify the target.
+Use this parameter for advanced or programmatic scenarios.
+
+```yaml
+Type: PSObject
+Parameter Sets: InputObject
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -NewName
 Specifies the new name for the remediation source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -101,7 +135,7 @@ Specifies the new description for the remediation source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -116,7 +150,7 @@ Specifies the group for the remediation source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -127,11 +161,11 @@ Accept wildcard characters: False
 ```
 
 ### -GroovyScript
-Specifies the Groovy script for the remediation source.
+Specifies the script content for the remediation source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -146,7 +180,7 @@ Specifies tags to associate with the remediation source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -161,7 +195,7 @@ Specifies the technology details for the remediation source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False
@@ -176,7 +210,38 @@ Specifies the appliesTo expression for the remediation source.
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Id, Name
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ScriptType
+Specifies the script type for the remediation source.
+Valid values are 'groovy' or 'powershell'.
+
+```yaml
+Type: String
+Parameter Sets: Id, Name
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AccessGroupIds
+An array of Access Group IDs to assign to the remediation source.
+
+```yaml
+Type: Int32[]
+Parameter Sets: Id, Name
 Aliases:
 
 Required: False

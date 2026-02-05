@@ -220,6 +220,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this cmdlet.
 ## OUTPUTS
 
 ### LogicMonitor.LMUptimeDevice
@@ -229,3 +230,10 @@ Responses are tagged with the
 LogicMonitor.LMUptimeDevice type information.
 
 ## RELATED LINKS
+
+[New-LMUptimeDevice]()
+
+[Set-LMUptimeDevice]()
+
+[Remove-LMUptimeDevice]()
+

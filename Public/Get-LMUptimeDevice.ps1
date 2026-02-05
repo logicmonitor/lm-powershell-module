@@ -60,8 +60,20 @@ Retrieves a specific Uptime device by ID.
 You must run Connect-LMAccount before invoking this cmdlet. Responses are tagged with the
 LogicMonitor.LMUptimeDevice type information.
 
+.INPUTS
+None. You cannot pipe objects to this cmdlet.
+
 .OUTPUTS
 LogicMonitor.LMUptimeDevice
+
+.LINK
+New-LMUptimeDevice
+
+.LINK
+Set-LMUptimeDevice
+
+.LINK
+Remove-LMUptimeDevice
 #>
 function Get-LMUptimeDevice {
 
@@ -181,9 +193,18 @@ function Get-LMUptimeDevice {
 
         $response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $uri -Method 'GET' -Headers $headers[0] -WebSession $headers[1]
 
+        # Handle null response
+        if ($null -eq $response) {
+            if ($PSCmdlet.ParameterSetName -eq 'Id') {
+                return $null
+            }
+            $done = $true
+            continue
+        }
+
         if ($PSCmdlet.ParameterSetName -eq 'Id') {
             # Validate that the returned device is an uptime device (type 18 or 19)
-            if ($response -and $response.deviceType -notin @(18, 19)) {
+            if ($response.deviceType -notin @(18, 19)) {
                 Write-Error "Device with Id $Id is not an Uptime device (deviceType: $($response.deviceType))"
                 return
             }
@@ -193,7 +214,7 @@ function Get-LMUptimeDevice {
                     'uptimewebcheck' { 18 }
                     'uptimepingcheck' { 19 }
                 }
-                if ($response -and $response.deviceType -ne $expectedType) {
+                if ($response.deviceType -ne $expectedType) {
                     Write-Error "Device with Id $Id is not of type '$Type' (deviceType: $($response.deviceType))"
                     return
                 }
@@ -201,9 +222,16 @@ function Get-LMUptimeDevice {
             return (Add-ObjectTypeInfo -InputObject $response -TypeName 'LogicMonitor.LMUptimeDevice')
         }
 
+        # Handle paginated response - check for expected properties
+        if (-not $response.PSObject.Properties['total']) {
+            $done = $true
+            continue
+        }
+
         [Int]$total = $response.total
-        [Int]$count += ($response.items | Measure-Object).Count
-        $results += $response.items
+        $items = if ($response.items) { $response.items } else { @() }
+        [Int]$count += ($items | Measure-Object).Count
+        $results += $items
 
         if ($count -ge $total -or $total -eq 0) {
             $done = $true

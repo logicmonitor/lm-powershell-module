@@ -163,6 +163,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### PSObject. Website objects returned by Get-LMWebsite can be piped to this cmdlet.
 ## OUTPUTS
 
 ### LogicMonitor.LMUptimeDevice
@@ -172,3 +173,10 @@ The cmdlet honours -WhatIf/-Confirm
 through ShouldProcess.
 
 ## RELATED LINKS
+
+[Get-LMWebsite]()
+
+[New-LMUptimeDevice]()
+
+[Get-LMUptimeDevice]()
+

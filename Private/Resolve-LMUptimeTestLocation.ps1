@@ -55,7 +55,8 @@ function Resolve-LMUptimeTestLocation {
     # - If collector IDs are provided without explicit 'all', default to true (use all specified collectors)
     $allFlagValue = $true
     if ($WasTestLocationAllSpecified.IsPresent) {
-        $allFlagValue = [bool]$TestLocationAll
+        # Handle nullable bool - if null, default to false
+        $allFlagValue = if ($null -eq $TestLocationAll) { $false } else { [bool]$TestLocationAll }
     }
     elseif ($smgSpecified) {
         # For external checks with specific SMG IDs, default to false to respect the specific IDs

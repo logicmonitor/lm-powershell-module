@@ -640,11 +640,18 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### System.Int32. You can pipe an Id to this cmdlet.
 ## OUTPUTS
 
 ### LogicMonitor.LMUptimeDevice
 ## NOTES
 You must run Connect-LMAccount before invoking this cmdlet.
-Requests are issued to
 
 ## RELATED LINKS
+
+[Get-LMUptimeDevice]()
+
+[New-LMUptimeDevice]()
+
+[Remove-LMUptimeDevice]()
+

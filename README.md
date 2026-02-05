@@ -73,17 +73,25 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.7.5
-### Cmdlet Changes
-- **Get-LMDeviceData**: Fixed a bug that used the incorrect pagination logic when trying to enumerate additional pages of result data.
-- **Get-LMDeviceData**: Added a new parameter *-Datapoints* which allows for filtering which datapoints are returned as part of the data export.
+## 7.8
+### Reintroduction of LMUptime Cmdlets
+With the release of portal version v232, LMUptime API endpoints are fully supported. As a result, we hav reintroduced our Uptime cmdlets to help assist customers in migrating and managing uptime devices.
+
+- **New-LMUptimeDevice**: Create LogicMonitor Uptime monitors (web or ping) using the v3 device endpoint.
+- **New-LMUptimeWebStep**: Helper cmdlet to create a properly formated step for use with *New-LMUptimedevice*
+- **Get-LMUptimeDevice**: Retrieve existing Uptime devices with support for filtering by type or internal/external status.
+- **Set-LMUptimeDevice**: Update Uptime device configuration, including alert thresholds, locations, and scripted steps.
+- **Remove-LMUptimeDevice**: Delete Uptime devices individually.
+- **ConvertTo-LMUptimeDevice** Migration cmdlet relies will take a provided set of WebChecks/PingChecks and convert them to LMUptime Resources.
 
 ### New Cmdlets
-- **Set-LMDeviceGroupDatasource**: This cmdlet modifies an existing device group datasource in LogicMonitor, allowing updates to monitoring state. This cmdlet provides control over the "Enable" checkbox (stopMonitoring) for a datasource applied to a device group. For alert settings use *Set-LMDeviceGroupDatasourceAlertSetting*.
-
-### Important Notes
-- **LM Uptime Removal**: Due to issues with the v3 api endpoints for LM Uptime, they are being temporarily removed from the module. As soon as they are officially supported in the LM Swagger guide they will be reintroduced along with the Website->Uptime conversion cmdlet. For previous versions of the module that still have access to these cmdlets it is recommended that you wait until the official swagger endpoints are released.
----
+- **Get-LMExternalAPIStats**: Cmdlet that retrieves external API usage statistics from LogicMonitor. This provides information about API call volumes and usage patterns for external API access.
+- **Get-LMPortalVersion**: Cmdlet that makes a lightweight API call to retrieve the portal version
+from the x-server-version response header.
+- **Get-LMRemediationSource**: Retrieves remediation source information from LogicMonitor. It can return remediation sources by ID, name, display name, or using filters.
+- **Set-LMRemediationSource**: Updates an existing remediation source in a LogicMonitor portal.
+- **New-LMRemediationSource**:  Creates a new remediation source in LogicMonitor using a provided remediation source configuration object.
+- **Remove-LMRemediationSource**: Removes a LogicMonitor remediation source based on the specified parameters. 
 
 ### Major Changes in v7:
  - **API Headers**: Updated all API request headers to use a custom User-Agent (Logic.Monitor-PowerShell-Module/Version) for usage reporting on versions deployed.

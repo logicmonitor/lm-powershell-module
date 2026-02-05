@@ -22,10 +22,10 @@ Specifies one or more device group identifiers to assign to the Uptime device.
 Provides an optional description for the device.
 
 .PARAMETER PollingInterval
-Sets the polling interval in minutes. Valid values are 1-10, 30 or 60.
+Sets the polling interval in minutes. Valid values are 1-10.
 
 .PARAMETER AlertTriggerInterval
-Specifies the number of consecutive failures required to trigger an alert. Valid values are 1-10, 30, 60. Default is 1.
+Specifies the number of consecutive failures required to trigger an alert. Valid values are 1-10. Default is 1.
 
 .PARAMETER GlobalSmAlertCond
 Defines the global synthetic alert condition threshold.
@@ -150,8 +150,23 @@ Creates an external web check that performs a POST request with JSON body and cu
 You must run Connect-LMAccount before invoking this cmdlet. This function sends requests to
 /device/devices with X-Version 3 and returns LogicMonitor.LMUptimeDevice objects.
 
+.INPUTS
+None. You cannot pipe objects to this cmdlet.
+
 .OUTPUTS
 LogicMonitor.LMUptimeDevice
+
+.LINK
+Get-LMUptimeDevice
+
+.LINK
+Set-LMUptimeDevice
+
+.LINK
+Remove-LMUptimeDevice
+
+.LINK
+New-LMUptimeWebStep
 #>
 function New-LMUptimeDevice {
 
@@ -305,7 +320,15 @@ function New-LMUptimeDevice {
         function New-LMUptimeDefaultWebStep {
             param (
                 [String]$StepName = '__step0',
-                [bool]$IsInternalCheck = $false
+                [bool]$IsInternalCheck = $false,
+                [String]$HttpMethod = 'GET',
+                [bool]$FollowRedir = $true,
+                [String]$Headers = '',
+                [String]$Body = '',
+                [Int]$Timeout = 30,
+                [String]$KeywordMatch = '',
+                [String]$StatusCodeMatch = '200',
+                [String]$Path = ''
             )
 
             # Use 'script' type for internal checks, 'config' for external (matches UI behavior)
@@ -318,9 +341,9 @@ function New-LMUptimeDevice {
                     useDefaultRoot    = $true
                     url               = ''
                     HTTPVersion       = '1.1'
-                    HTTPMethod        = $HTTPMethod
+                    HTTPMethod        = $HttpMethod
                     name              = $StepName
-                    followRedirection = [bool]$FollowRedirection
+                    followRedirection = $FollowRedir
                     fullpageLoad      = $false
                     requireAuth       = $false
                     auth              = @{
@@ -329,16 +352,16 @@ function New-LMUptimeDevice {
                         type     = 'basic'
                         userName = ''
                     }
-                    HTTPHeaders       = $HTTPHeaders
-                    HTTPBody          = $HTTPBody
-                    timeout           = $StepTimeout
+                    HTTPHeaders       = $Headers
+                    HTTPBody          = $Body
+                    timeout           = $Timeout
                     reqType           = 'config'
                     respType          = 'config'
                     matchType         = 'plain'
-                    keyword           = $Keyword
+                    keyword           = $KeywordMatch
                     invertMatch       = 'false'
-                    statusCode        = $StatusCode
-                    path              = $FolderPath
+                    statusCode        = $StatusCodeMatch
+                    path              = $Path
                 }
             )
         }
@@ -404,7 +427,7 @@ function New-LMUptimeDevice {
                 foreach ($step in $Steps) { $stepsToSend += $step }
             }
             else {
-                $stepsToSend = @(New-LMUptimeDefaultWebStep -IsInternalCheck $isInternal)
+                $stepsToSend = @(New-LMUptimeDefaultWebStep -IsInternalCheck $isInternal -HttpMethod $HTTPMethod -FollowRedir $FollowRedirection -Headers $HTTPHeaders -Body $HTTPBody -Timeout $StepTimeout -KeywordMatch $Keyword -StatusCodeMatch $StatusCode -Path $FolderPath)
             }
 
             $index = 0

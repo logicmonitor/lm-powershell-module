@@ -28,10 +28,22 @@ Remove-LMUptimeDevice -Name "web-int-01"
 Resolves the device ID by name and removes the corresponding Uptime device.
 
 .NOTES
-You must run Connect-LMAccount before invoking this cmdlet. Requests target
+You must run Connect-LMAccount before invoking this cmdlet.
+
+.INPUTS
+System.Int32. You can pipe an Id to this cmdlet.
 
 .OUTPUTS
 System.Management.Automation.PSCustomObject
+
+.LINK
+Get-LMUptimeDevice
+
+.LINK
+New-LMUptimeDevice
+
+.LINK
+Set-LMUptimeDevice
 #>
 function Remove-LMUptimeDevice {
 
@@ -55,7 +67,19 @@ function Remove-LMUptimeDevice {
 
         $resolvedName = $null
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
-            $lookupResult = (Get-LMDevice -Name $Name)
+            try {
+                $lookupResult = Get-LMDevice -Name $Name
+            }
+            catch {
+                Write-Error "Failed to lookup device '$Name': $($_.Exception.Message)"
+                return
+            }
+            
+            if ($null -eq $lookupResult) {
+                Write-Error "Device '$Name' not found."
+                return
+            }
+            
             if (Test-LookupResult -Result $lookupResult.Id -LookupString $Name) {
                 return
             }

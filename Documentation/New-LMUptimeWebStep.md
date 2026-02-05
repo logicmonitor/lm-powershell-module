@@ -544,9 +544,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this cmdlet.
 ## OUTPUTS
 
 ### Hashtable describing an uptime web step.
 ## NOTES
 
 ## RELATED LINKS
+
+[New-LMUptimeDevice]()
+

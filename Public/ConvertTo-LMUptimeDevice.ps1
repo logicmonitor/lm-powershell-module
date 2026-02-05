@@ -32,8 +32,20 @@ Migrates the logicmonitor.com website check to an Uptime device with a "-uptime"
 You must run Connect-LMAccount prior to execution. The cmdlet honours -WhatIf/-Confirm
 through ShouldProcess.
 
+.INPUTS
+PSObject. Website objects returned by Get-LMWebsite can be piped to this cmdlet.
+
 .OUTPUTS
 LogicMonitor.LMUptimeDevice
+
+.LINK
+Get-LMWebsite
+
+.LINK
+New-LMUptimeDevice
+
+.LINK
+Get-LMUptimeDevice
 #>
 function ConvertTo-LMUptimeDevice {
 
@@ -151,7 +163,14 @@ function ConvertTo-LMUptimeDevice {
             Description = $Website.description
         }
 
-        if ($Website.pollingInterval) { $parameters.PollingInterval = [int]$Website.pollingInterval }
+        if ($Website.pollingInterval) { 
+            $pollingValue = [int]$Website.pollingInterval
+            if ($pollingValue -gt 10) {
+                Write-Warning "Website '$($Website.name)' has PollingInterval of $pollingValue minutes. Uptime devices only support 1-10 minutes. Setting to 10 minutes."
+                $pollingValue = 10
+            }
+            $parameters.PollingInterval = $pollingValue
+        }
         if ($Website.transition) { $parameters.AlertTriggerInterval = [int]$Website.transition }
 
         $parameters.GlobalSmAlertCond = Get-GlobalSmAlertCondString -Value $Website.globalSmAlertCond

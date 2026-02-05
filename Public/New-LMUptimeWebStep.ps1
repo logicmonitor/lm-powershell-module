@@ -107,8 +107,14 @@ New-LMUptimeWebStep -Type External -Name '__home' -Url '/' -Keyword 'Welcome' -S
 .EXAMPLE
 New-LMUptimeWebStep -Type Internal -RequestType script -RequestScript $scriptBlock
 
+.INPUTS
+None. You cannot pipe objects to this cmdlet.
+
 .OUTPUTS
 Hashtable describing an uptime web step.
+
+.LINK
+New-LMUptimeDevice
 #>
 function New-LMUptimeWebStep {
 
@@ -254,6 +260,7 @@ function New-LMUptimeWebStep {
     }
 
     $step = @{
+        type              = $RequestType  # 'config' for standard options, 'script' for Groovy scripts
         enable            = [bool]$Enable
         useDefaultRoot    = [bool]$UseDefaultRoot
         url               = $Url
@@ -275,7 +282,7 @@ function New-LMUptimeWebStep {
         respType          = $ResponseType
         matchType         = $MatchType
         keyword           = $Keyword
-        invertMatch       = [bool]$InvertMatch.IsPresent
+        invertMatch       = if ($InvertMatch.IsPresent) { 'true' } else { 'false' }
         statusCode        = $StatusCode
         path              = $Path
     }

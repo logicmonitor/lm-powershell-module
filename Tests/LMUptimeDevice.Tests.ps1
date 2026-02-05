@@ -1,4 +1,4 @@
-Describe 'Uptime Device Testing New/Get/Set/Remove' -Skip {
+Describe 'Uptime Device Testing New/Get/Set/Remove' {
 
     BeforeAll {
         Import-Module $Module -Force
@@ -6,21 +6,53 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' -Skip {
 
         $script:UptimeDeviceName = "Uptime.Build.Test." + ([guid]::NewGuid().ToString('N').Substring(0, 8))
         $script:UptimeDomain = "uptime-" + ([guid]::NewGuid().ToString('N').Substring(0, 6)) + ".example.com"
+        $script:UptimePingHost = "ping-" + ([guid]::NewGuid().ToString('N').Substring(0, 6)) + ".example.com"
     }
 
     Describe 'New-LMUptimeDevice' {
-        It 'When given mandatory parameters, returns a created uptime device with matching values' {
+        It 'When given mandatory parameters for WebExternal, returns a created uptime device with matching values' {
             $script:NewUptimeDevice = New-LMUptimeDevice `
                 -Name $script:UptimeDeviceName `
                 -HostGroupIds @('1') `
                 -Domain $script:UptimeDomain `
                 -Description 'BuildUptimeTest' `
-                -TestLocationAll `
+                -TestLocationSmgIds @(2, 3) `
                 -Properties @{ 'testprop' = 'BuildTest' }
 
             $script:NewUptimeDevice | Should -Not -BeNullOrEmpty
             $script:NewUptimeDevice.description | Should -BeExactly 'BuildUptimeTest'
+            $script:NewUptimeDevice.deviceType | Should -Be 18
             ($script:NewUptimeDevice.customProperties | Where-Object { $_.name -eq 'testprop' }).value | Should -BeExactly 'BuildTest'
+        }
+
+        It 'When given PingExternal parameters, returns a ping uptime device' {
+            $script:NewPingDevice = New-LMUptimeDevice `
+                -Name ("Ping." + $script:UptimeDeviceName) `
+                -HostGroupIds @('1') `
+                -Hostname $script:UptimePingHost `
+                -Description 'BuildPingTest' `
+                -TestLocationSmgIds @(2, 3)
+
+            $script:NewPingDevice | Should -Not -BeNullOrEmpty
+            $script:NewPingDevice.deviceType | Should -Be 19
+        }
+
+        It 'When given invalid PollingInterval, should throw validation error' {
+            { New-LMUptimeDevice `
+                -Name "InvalidPolling" `
+                -HostGroupIds @('1') `
+                -Domain "invalid.example.com" `
+                -TestLocationSmgIds @(2) `
+                -PollingInterval 30 } | Should -Throw
+        }
+
+        It 'When given invalid PercentPktsNotReceiveInTime, should throw validation error' {
+            { New-LMUptimeDevice `
+                -Name "InvalidPercent" `
+                -HostGroupIds @('1') `
+                -Hostname "invalid.example.com" `
+                -TestLocationSmgIds @(2) `
+                -PercentPktsNotReceiveInTime 15 } | Should -Throw
         }
     }
 
@@ -65,14 +97,28 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' -Skip {
 
     Describe 'Remove-LMUptimeDevice' {
         It 'When given an id, removes the uptime device from LogicMonitor' {
-            { Remove-LMUptimeDevice -Id $script:NewUptimeDevice.id -Type uptimewebcheck -Confirm:$false -HardDelete $true -ErrorAction Stop } | Should -Not -Throw
+            { Remove-LMUptimeDevice -Id $script:NewUptimeDevice.id -Confirm:$false -HardDelete $true -ErrorAction Stop } | Should -Not -Throw
             $script:NewUptimeDevice = $null
+        }
+
+        It 'When given a name, removes the uptime device from LogicMonitor' {
+            if ($script:NewPingDevice) {
+                { Remove-LMUptimeDevice -Name $script:NewPingDevice.name -Confirm:$false -HardDelete $true -ErrorAction Stop } | Should -Not -Throw
+                $script:NewPingDevice = $null
+            }
+        }
+
+        It 'When given a non-existent name, returns an error' {
+            { Remove-LMUptimeDevice -Name "NonExistentDevice12345" -Confirm:$false -ErrorAction Stop } | Should -Throw
         }
     }
 
     AfterAll {
         if ($script:NewUptimeDevice) {
-            try { Remove-LMUptimeDevice -Id $script:NewUptimeDevice.id -Type uptimewebcheck -Confirm:$false -HardDelete $true -ErrorAction Stop } catch { }
+            try { Remove-LMUptimeDevice -Id $script:NewUptimeDevice.id -Confirm:$false -HardDelete $true -ErrorAction Stop } catch { }
+        }
+        if ($script:NewPingDevice) {
+            try { Remove-LMUptimeDevice -Id $script:NewPingDevice.id -Confirm:$false -HardDelete $true -ErrorAction Stop } catch { }
         }
         Disconnect-LMAccount
     }

@@ -160,7 +160,7 @@ Accept wildcard characters: False
 
 ### -PollingInterval
 Sets the polling interval in minutes.
-Valid values are 1-10, 30 or 60.
+Valid values are 1-10.
 
 ```yaml
 Type: Int32
@@ -176,7 +176,7 @@ Accept wildcard characters: False
 
 ### -AlertTriggerInterval
 Specifies the number of consecutive failures required to trigger an alert.
-Valid values are 1-10, 30, 60.
+Valid values are 1-10.
 Default is 1.
 
 ```yaml
@@ -729,6 +729,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### None. You cannot pipe objects to this cmdlet.
 ## OUTPUTS
 
 ### LogicMonitor.LMUptimeDevice
@@ -738,3 +739,12 @@ This function sends requests to
 /device/devices with X-Version 3 and returns LogicMonitor.LMUptimeDevice objects.
 
 ## RELATED LINKS
+
+[Get-LMUptimeDevice]()
+
+[Set-LMUptimeDevice]()
+
+[Remove-LMUptimeDevice]()
+
+[New-LMUptimeWebStep]()
+

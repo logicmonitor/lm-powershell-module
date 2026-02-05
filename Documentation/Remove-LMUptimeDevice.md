@@ -148,6 +148,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### System.Int32. You can pipe an Id to this cmdlet.
 ## OUTPUTS
 
 ### System.Management.Automation.PSCustomObject
@@ -155,3 +156,10 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 You must run Connect-LMAccount before invoking this cmdlet.
 
 ## RELATED LINKS
+
+[Get-LMUptimeDevice]()
+
+[New-LMUptimeDevice]()
+
+[Set-LMUptimeDevice]()
+
