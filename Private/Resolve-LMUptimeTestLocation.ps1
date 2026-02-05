@@ -22,14 +22,9 @@ function Resolve-LMUptimeTestLocation {
 
     $collectorSpecified = $WasCollectorIdsSpecified.IsPresent -or ($TestLocationCollectorIds -and $TestLocationCollectorIds.Count -gt 0)
     $smgSpecified = $WasSmgIdsSpecified.IsPresent -or ($TestLocationSmgIds -and $TestLocationSmgIds.Count -gt 0)
-    $allSpecified = $WasTestLocationAllSpecified.IsPresent -or $TestLocationAll
 
     if ($collectorSpecified -and $smgSpecified) {
         throw "TestLocationCollectorIds and TestLocationSmgIds cannot be used together."
-    }
-
-    if ($allSpecified -and ($collectorSpecified -or $smgSpecified)) {
-        throw "TestLocationAll cannot be combined with TestLocationCollectorIds or TestLocationSmgIds."
     }
 
     if ($IsInternal -and $smgSpecified) {
@@ -40,29 +35,40 @@ function Resolve-LMUptimeTestLocation {
         throw "TestLocationCollectorIds is only valid for internal uptime devices."
     }
 
-    if (-not $IsInternal -and $allSpecified -and $TestLocationAll -eq $false -and -not $AllowUnset) {
-        throw "TestLocationAll must be specified as true when provided for external uptime devices."
-    }
-
-    if (-not $IsInternal -and $TestLocationAll -ne $true -and -not $smgSpecified -and -not $AllowUnset) {
-        throw "At least one of TestLocationAll or TestLocationSmgIds must be specified for external uptime devices."
+    if (-not $IsInternal -and -not $smgSpecified -and -not $AllowUnset) {
+        throw "TestLocationSmgIds must be specified for external uptime devices."
     }
 
     if ($IsInternal -and -not $collectorSpecified -and -not $AllowUnset) {
         throw "TestLocationCollectorIds is required for internal uptime devices."
     }
 
-    if (-not $collectorSpecified -and -not $smgSpecified -and -not $allSpecified) {
+    if (-not $collectorSpecified -and -not $smgSpecified) {
         if ($AllowUnset) {
             return $null
         }
     }
 
+    # Determine the 'all' flag value:
+    # - If TestLocationAll was explicitly specified, use that value
+    # - If SMG IDs are provided without explicit 'all', default to false (use only specified locations)
+    # - If collector IDs are provided without explicit 'all', default to true (use all specified collectors)
+    $allFlagValue = $true
+    if ($WasTestLocationAllSpecified.IsPresent) {
+        $allFlagValue = [bool]$TestLocationAll
+    }
+    elseif ($smgSpecified) {
+        # For external checks with specific SMG IDs, default to false to respect the specific IDs
+        $allFlagValue = $false
+    }
+    # For internal checks with collector IDs, keep default true
+
+    # Build testLocation object
     $testLocation = @{
         collectorIds = @()
         collectors   = @()
         smgIds       = @()
-        all          = $false
+        all          = $allFlagValue
     }
 
     if ($collectorSpecified) {
@@ -83,10 +89,6 @@ function Resolve-LMUptimeTestLocation {
         else {
             $testLocation.smgIds = @()
         }
-    }
-
-    if ($allSpecified) {
-        $testLocation.all = [bool]$TestLocationAll
     }
 
     return $testLocation

@@ -58,7 +58,7 @@ Specifies the domain for web checks. Required for web parameter sets.
 Defines the HTTP schema (http or https) for web checks. Defaults to https.
 
 .PARAMETER IgnoreSSL
-Indicates whether SSL warnings should be ignored for web checks. Defaults to $true.
+Indicates whether SSL warnings should be ignored for web checks. Defaults to $false.
 
 .PARAMETER PageLoadAlertTimeInMS
 Specifies the page load alert threshold in milliseconds for web checks.
@@ -84,6 +84,21 @@ Specifies the keyword to match for web checks. Defaults to empty string.
 
 .PARAMETER FolderPath
 Specifies the folder path to use for web checks. Defaults to empty string.
+
+.PARAMETER HTTPMethod
+Specifies the HTTP method for web checks. Valid values are GET, HEAD, or POST. Defaults to GET.
+
+.PARAMETER HTTPBody
+Specifies the HTTP body content for POST requests. Only applicable when HTTPMethod is POST.
+
+.PARAMETER HTTPHeaders
+Specifies custom HTTP headers for web checks as a string.
+
+.PARAMETER StepTimeout
+Specifies the request timeout in seconds for web check steps. Valid range is 1-300. Defaults to 30.
+
+.PARAMETER FollowRedirection
+Indicates whether to follow HTTP redirects. Defaults to $true.
 
 .PARAMETER Host
 Specifies the host or IP for ping checks. Required for ping parameter sets.
@@ -125,6 +140,11 @@ Creates an internal ping uptime check that targets intranet.local.
 New-LMUptimeDevice -Name "ping-ext-01" -HostGroupIds 17 -Host "api.example.net" -TestLocationSmgIds 2,4
 
 Creates an external ping uptime check using the provided public locations.
+
+.EXAMPLE
+New-LMUptimeDevice -Name "api-post-check" -HostGroupIds 17 -Domain "api.example.com" -TestLocationSmgIds 2,3 -HTTPMethod POST -HTTPBody '{"test": true}' -HTTPHeaders "Content-Type: application/json" -StatusCode 201
+
+Creates an external web check that performs a POST request with JSON body and custom headers.
 
 .NOTES
 You must run Connect-LMAccount before invoking this cmdlet. This function sends requests to
@@ -202,7 +222,7 @@ function New-LMUptimeDevice {
 
         [Parameter(ParameterSetName = 'WebInternal')]
         [Parameter(ParameterSetName = 'WebExternal')]
-        [Bool]$IgnoreSSL = $true,
+        [Bool]$IgnoreSSL = $false,
 
         [Parameter(ParameterSetName = 'WebInternal')]
         [Parameter(ParameterSetName = 'WebExternal')]
@@ -224,6 +244,28 @@ function New-LMUptimeDevice {
         [Parameter(ParameterSetName = 'WebInternal')]
         [Parameter(ParameterSetName = 'WebExternal')]
         [Hashtable[]]$Steps,
+
+        [Parameter(ParameterSetName = 'WebInternal')]
+        [Parameter(ParameterSetName = 'WebExternal')]
+        [ValidateSet('GET', 'HEAD', 'POST')]
+        [String]$HTTPMethod = 'GET',
+
+        [Parameter(ParameterSetName = 'WebInternal')]
+        [Parameter(ParameterSetName = 'WebExternal')]
+        [String]$HTTPBody = '',
+
+        [Parameter(ParameterSetName = 'WebInternal')]
+        [Parameter(ParameterSetName = 'WebExternal')]
+        [String]$HTTPHeaders = '',
+
+        [Parameter(ParameterSetName = 'WebInternal')]
+        [Parameter(ParameterSetName = 'WebExternal')]
+        [ValidateRange(1, 300)]
+        [Int]$StepTimeout = 30,
+
+        [Parameter(ParameterSetName = 'WebInternal')]
+        [Parameter(ParameterSetName = 'WebExternal')]
+        [Bool]$FollowRedirection = $true,
 
         [Parameter(Mandatory, ParameterSetName = 'PingInternal')]
         [Parameter(Mandatory, ParameterSetName = 'PingExternal')]
@@ -262,19 +304,23 @@ function New-LMUptimeDevice {
     begin {
         function New-LMUptimeDefaultWebStep {
             param (
-                [String]$StepName = '__step0'
+                [String]$StepName = '__step0',
+                [bool]$IsInternalCheck = $false
             )
+
+            # Use 'script' type for internal checks, 'config' for external (matches UI behavior)
+            $stepType = if ($IsInternalCheck) { 'script' } else { 'config' }
 
             return @(
                 @{
-                    type              = 'config'
+                    type              = $stepType
                     enable            = $true
                     useDefaultRoot    = $true
                     url               = ''
                     HTTPVersion       = '1.1'
-                    HTTPMethod        = 'GET'
+                    HTTPMethod        = $HTTPMethod
                     name              = $StepName
-                    followRedirection = $true
+                    followRedirection = [bool]$FollowRedirection
                     fullpageLoad      = $false
                     requireAuth       = $false
                     auth              = @{
@@ -283,7 +329,9 @@ function New-LMUptimeDevice {
                         type     = 'basic'
                         userName = ''
                     }
-                    HTTPHeaders       = ''
+                    HTTPHeaders       = $HTTPHeaders
+                    HTTPBody          = $HTTPBody
+                    timeout           = $StepTimeout
                     reqType           = 'config'
                     respType          = 'config'
                     matchType         = 'plain'
@@ -356,7 +404,7 @@ function New-LMUptimeDevice {
                 foreach ($step in $Steps) { $stepsToSend += $step }
             }
             else {
-                $stepsToSend = @(New-LMUptimeDefaultWebStep)
+                $stepsToSend = @(New-LMUptimeDefaultWebStep -IsInternalCheck $isInternal)
             }
 
             $index = 0
@@ -380,9 +428,9 @@ function New-LMUptimeDevice {
 
         $resourcePath = '/device/devices'
         $deviceType = if ($isWeb) { 18 } else { 19 }
-        $deviceKind = if ($isWeb) { 'webcheck' } else { 'pingcheck' }
+        $deviceKind = if ($isWeb) { 'uptimewebcheck' } else { 'uptimepingcheck' }
 
-        # Ensure groupIds is always an array (even with single item)
+        # Ensure groupIds is always an array of strings (even with single item) - API expects strings
         $groupIdsArray = @()
         if ($HostGroupIds) {
             $groupIdsArray = @($HostGroupIds | ForEach-Object { [String]$_ })
@@ -462,17 +510,40 @@ function New-LMUptimeDevice {
             }
         }
 
-        # Ensure testLocation nested arrays are preserved during JSON conversion
+        # Ensure arrays are properly formatted for JSON serialization
+        # Use ArrayList to force array serialization even with single elements
         if ($payload.testLocation) {
-            # Force arrays to be recognized as arrays by PowerShell's JSON serializer
-            $payload.testLocation.collectorIds = [Array]$payload.testLocation.collectorIds
-            $payload.testLocation.collectors = [Array]$payload.testLocation.collectors
-            $payload.testLocation.smgIds = [Array]$payload.testLocation.smgIds
+            $collectorIdsList = [System.Collections.ArrayList]::new()
+            foreach ($id in @($payload.testLocation.collectorIds | Where-Object { $_ })) { [void]$collectorIdsList.Add($id) }
+            $payload.testLocation.collectorIds = $collectorIdsList
+
+            $smgIdsList = [System.Collections.ArrayList]::new()
+            foreach ($id in @($payload.testLocation.smgIds | Where-Object { $_ })) { [void]$smgIdsList.Add($id) }
+            $payload.testLocation.smgIds = $smgIdsList
+
+            # Remove the 'collectors' key as it's not needed in the request (only in response)
+            $payload.testLocation.Remove('collectors')
         }
 
-        # Ensure groupIds is recognized as an array
+        # Ensure groupIds is an ArrayList for proper JSON array serialization
         if ($payload.groupIds) {
-            $payload.groupIds = [Array]$payload.groupIds
+            $groupIdsList = [System.Collections.ArrayList]::new()
+            foreach ($id in @($payload.groupIds)) { [void]$groupIdsList.Add($id) }
+            $payload.groupIds = $groupIdsList
+        }
+
+        # Ensure steps is an ArrayList for proper JSON array serialization
+        if ($payload.steps) {
+            $stepsList = [System.Collections.ArrayList]::new()
+            foreach ($step in @($payload.steps)) { [void]$stepsList.Add($step) }
+            $payload.steps = $stepsList
+        }
+
+        # Ensure properties is an ArrayList for proper JSON array serialization
+        if ($payload.properties) {
+            $propertiesList = [System.Collections.ArrayList]::new()
+            foreach ($prop in @($payload.properties)) { [void]$propertiesList.Add($prop) }
+            $payload.properties = $propertiesList
         }
 
         $jsonPayload = Format-LMData -Data $payload -UserSpecifiedKeys @() -AlwaysKeepKeys @('groupIds', 'properties', 'steps', 'testLocation') -JsonDepth 20

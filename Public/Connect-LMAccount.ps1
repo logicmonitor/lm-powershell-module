@@ -248,6 +248,7 @@ function Connect-LMAccount {
     if (!$Type) {
         $Type = "LMv1"
     }
+    $Version = Get-LMPortalVersion -ErrorAction SilentlyContinue
 
     #Create Credential Object for reuse in other functions
     $Script:LMAuth = [PSCustomObject]@{
@@ -259,6 +260,7 @@ function Connect-LMAccount {
         Type        = $Type
         Logging     = !$DisableConsoleLogging.IsPresent
         GovCloud    = $GovCloud.IsPresent
+        Version     = $Version
     }
 
     #Check for newer version of Logic.Monitor module

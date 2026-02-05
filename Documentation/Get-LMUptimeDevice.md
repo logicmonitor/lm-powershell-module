@@ -14,31 +14,31 @@ Retrieves LogicMonitor Uptime devices from the v3 device endpoint.
 
 ### All (Default)
 ```
-Get-LMUptimeDevice -Type <String> [-IsInternal <Boolean>] [-BatchSize <Int32>]
+Get-LMUptimeDevice [-Type <String>] [-IsInternal <Boolean>] [-BatchSize <Int32>]
  [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### Id
 ```
-Get-LMUptimeDevice [-Id <Int32>] -Type <String> [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+Get-LMUptimeDevice [-Id <Int32>] [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### Name
 ```
-Get-LMUptimeDevice [-Name <String>] -Type <String> [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+Get-LMUptimeDevice [-Name <String>] [-Type <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
 ### Filter
 ```
-Get-LMUptimeDevice -Type <String> [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-LMUptimeDevice [-Type <String>] [-Filter <Object>] [-BatchSize <Int32>]
+ [-ProgressAction <ActionPreference>] [<CommonParameters>]
 ```
 
 ### FilterWizard
 ```
-Get-LMUptimeDevice -Type <String> [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
+Get-LMUptimeDevice [-Type <String>] [-FilterWizard] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
  [<CommonParameters>]
 ```
 
@@ -48,38 +48,46 @@ LogicMonitor v3 /device/devices endpoint.
 It supports lookup by ID or name, optional filtering
 by internal/external flag, custom filters, and the interactive filter wizard.
 The Type parameter
-is mandatory and determines whether to retrieve webcheck or pingcheck uptime devices, returning
-the full response structure specific to that type.
+is optional and filters by webcheck or pingcheck uptime devices.
+If not specified, both types
+are returned.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
+```
+Get-LMUptimeDevice
+```
+
+Retrieves all Uptime devices (both webcheck and pingcheck) across the account.
+
+### EXAMPLE 2
 ```
 Get-LMUptimeDevice -Type uptimewebcheck
 ```
 
 Retrieves all web Uptime devices across the account.
 
-### EXAMPLE 2
+### EXAMPLE 3
 ```
 Get-LMUptimeDevice -Type uptimewebcheck -IsInternal $true
 ```
 
 Retrieves internal web Uptime devices only.
 
-### EXAMPLE 3
-```
-Get-LMUptimeDevice -Name "web-int-01" -Type uptimewebcheck
-```
-
-Retrieves a specific web Uptime device by name.
-
 ### EXAMPLE 4
 ```
-Get-LMUptimeDevice -Id 123 -Type uptimepingcheck
+Get-LMUptimeDevice -Name "web-int-01"
 ```
 
-Retrieves a specific ping Uptime device by ID.
+Retrieves a specific Uptime device by name.
+
+### EXAMPLE 5
+```
+Get-LMUptimeDevice -Id 123
+```
+
+Retrieves a specific Uptime device by ID.
 
 ## PARAMETERS
 
@@ -115,16 +123,15 @@ Accept wildcard characters: False
 
 ### -Type
 Specifies the Uptime monitor type to retrieve.
-This parameter is mandatory and determines the
-response structure.
 Valid values are uptimewebcheck and uptimepingcheck.
+If not specified, both types are returned.
 
 ```yaml
 Type: String
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False

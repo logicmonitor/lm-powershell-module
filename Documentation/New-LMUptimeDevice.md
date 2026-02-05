@@ -20,8 +20,10 @@ New-LMUptimeDevice -Name <String> -HostGroupIds <String[]> [-Description <String
  [-UseDefaultAlertSetting <Boolean>] [-Properties <Object>] [-Template <String>] -Domain <String>
  [-FolderPath <String>] [-StatusCode <String>] [-Keyword <String>] [-Schema <String>] [-IgnoreSSL <Boolean>]
  [-PageLoadAlertTimeInMS <Int32>] [-AlertExpr <String>] [-TriggerSSLStatusAlert <Boolean>]
- [-TriggerSSLExpirationAlert <Boolean>] [-Steps <Hashtable[]>] -TestLocationCollectorIds <Int32[]>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+ [-TriggerSSLExpirationAlert <Boolean>] [-Steps <Hashtable[]>] [-HTTPMethod <String>] [-HTTPBody <String>]
+ [-HTTPHeaders <String>] [-StepTimeout <Int32>] [-FollowRedirection <Boolean>]
+ -TestLocationCollectorIds <Int32[]> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### PingExternal
@@ -54,7 +56,8 @@ New-LMUptimeDevice -Name <String> -HostGroupIds <String[]> [-Description <String
  [-UseDefaultAlertSetting <Boolean>] [-Properties <Object>] [-Template <String>] -Domain <String>
  [-FolderPath <String>] [-StatusCode <String>] [-Keyword <String>] [-Schema <String>] [-IgnoreSSL <Boolean>]
  [-PageLoadAlertTimeInMS <Int32>] [-AlertExpr <String>] [-TriggerSSLStatusAlert <Boolean>]
- [-TriggerSSLExpirationAlert <Boolean>] [-Steps <Hashtable[]>] [-TestLocationSmgIds <Int32[]>]
+ [-TriggerSSLExpirationAlert <Boolean>] [-Steps <Hashtable[]>] [-HTTPMethod <String>] [-HTTPBody <String>]
+ [-HTTPHeaders <String>] [-StepTimeout <Int32>] [-FollowRedirection <Boolean>] [-TestLocationSmgIds <Int32[]>]
  [-TestLocationAll] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -99,6 +102,13 @@ New-LMUptimeDevice -Name "ping-ext-01" -HostGroupIds 17 -Host "api.example.net" 
 ```
 
 Creates an external ping uptime check using the provided public locations.
+
+### EXAMPLE 5
+```
+New-LMUptimeDevice -Name "api-post-check" -HostGroupIds 17 -Domain "api.example.com" -TestLocationSmgIds 2,3 -HTTPMethod POST -HTTPBody '{"test": true}' -HTTPHeaders "Content-Type: application/json" -StatusCode 201
+```
+
+Creates an external web check that performs a POST request with JSON body and custom headers.
 
 ## PARAMETERS
 
@@ -389,7 +399,7 @@ Accept wildcard characters: False
 
 ### -IgnoreSSL
 Indicates whether SSL warnings should be ignored for web checks.
-Defaults to $true.
+Defaults to $false.
 
 ```yaml
 Type: Boolean
@@ -398,7 +408,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: True
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -476,6 +486,87 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HTTPMethod
+Specifies the HTTP method for web checks.
+Valid values are GET, HEAD, or POST.
+Defaults to GET.
+
+```yaml
+Type: String
+Parameter Sets: WebInternal, WebExternal
+Aliases:
+
+Required: False
+Position: Named
+Default value: GET
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HTTPBody
+Specifies the HTTP body content for POST requests.
+Only applicable when HTTPMethod is POST.
+
+```yaml
+Type: String
+Parameter Sets: WebInternal, WebExternal
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -HTTPHeaders
+Specifies custom HTTP headers for web checks as a string.
+
+```yaml
+Type: String
+Parameter Sets: WebInternal, WebExternal
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StepTimeout
+Specifies the request timeout in seconds for web check steps.
+Valid range is 1-300.
+Defaults to 30.
+
+```yaml
+Type: Int32
+Parameter Sets: WebInternal, WebExternal
+Aliases:
+
+Required: False
+Position: Named
+Default value: 30
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FollowRedirection
+Indicates whether to follow HTTP redirects.
+Defaults to $true.
+
+```yaml
+Type: Boolean
+Parameter Sets: WebInternal, WebExternal
+Aliases:
+
+Required: False
+Position: Named
+Default value: True
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

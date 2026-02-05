@@ -173,39 +173,47 @@ function ConvertTo-LMUptimeDevice {
 
         $propertyTable = Convert-LMWebsiteProperties -Properties $Website.properties
         if ($propertyTable.Count -gt 0) {
-            $propertyArray = @()
-            foreach ($key in $propertyTable.Keys) {
-                $propertyArray += @{ name = $key; value = $propertyTable[$key] }
-            }
-            if ($propertyArray.Count -gt 0) {
-                $parameters.Properties = $propertyArray
-            }
+            # Pass the hashtable directly - New-LMUptimeDevice handles conversion
+            $parameters.Properties = $propertyTable
         }
 
         if ($Website.template) { $parameters.Template = $Website.template }
 
         $testLocation = $Website.testLocation
-        if (-not $useDefaultLocation) {
-            $collectorIds = @($testLocation.collectorIds)
-            $smgIds = @($testLocation.smgIds)
-            $allFlag = [bool]$testLocation.all
+        $collectorIds = @($testLocation.collectorIds | Where-Object { $_ })
+        $smgIds = @($testLocation.smgIds | Where-Object { $_ })
+        $allFlag = [bool]$testLocation.all
 
-            if ($isInternal -and ($collectorIds.Count -eq 0)) {
-                $isInternal = $false
+        # If marked as internal but no collectors specified, treat as external
+        if ($isInternal -and ($collectorIds.Count -eq 0)) {
+            $isInternal = $false
+        }
+
+        if ($isInternal) {
+            # Internal checks require collector IDs
+            if ($collectorIds.Count -gt 0) {
+                $parameters.TestLocationCollectorIds = $collectorIds
             }
-
-            if ($isInternal) {
-                if ($collectorIds.Count -gt 0) {
-                    $parameters.TestLocationCollectorIds = $collectorIds
+        }
+        else {
+            # External checks - need to specify location and preserve the 'all' flag
+            if ($smgIds.Count -gt 0) {
+                $parameters.TestLocationSmgIds = $smgIds
+                # Pass the all flag to preserve the source configuration
+                # If all:false, the API will use only the specified SMG IDs
+                # If all:true, the API will use all locations
+                if (-not $allFlag) {
+                    $parameters.TestLocationAll = $false
                 }
+            }
+            elseif ($allFlag) {
+                # Use default SMG IDs (all public locations) when 'all' flag is set
+                # These are the standard LogicMonitor public checkpoint locations
+                $parameters.TestLocationSmgIds = @(2, 3, 4, 5, 6)
             }
             else {
-                if ($allFlag) {
-                    $parameters.TestLocationAll = $true
-                }
-                if (-not $allFlag -and $smgIds.Count -gt 0) {
-                    $parameters.TestLocationSmgIds = $smgIds
-                }
+                # Fallback to all locations if no specific config
+                $parameters.TestLocationSmgIds = @(2, 3, 4, 5, 6)
             }
         }
 
@@ -224,9 +232,17 @@ function ConvertTo-LMUptimeDevice {
             if ($Website.PSObject.Properties.Match('triggerSSLExpirationAlert')) { $parameters.TriggerSSLExpirationAlert = [bool]$Website.triggerSSLExpirationAlert }
 
             $stepObjects = @()
+            $authWarningShown = $false
             foreach ($step in @($Website.steps)) {
                 $convertedStep = Convert-PSObjectToHashtable $step
-                if ($convertedStep) { $stepObjects += $convertedStep }
+                if ($convertedStep) { 
+                    $stepObjects += $convertedStep
+                    # Check if this step has authentication configured
+                    if (-not $authWarningShown -and $convertedStep.requireAuth -eq $true) {
+                        Write-Warning "Website '$($Website.name)' has authentication configured in step '$($step.name)'. The password cannot be retrieved via API and must be manually updated after migration."
+                        $authWarningShown = $true
+                    }
+                }
             }
             if ($stepObjects.Count -gt 0) { $parameters.Steps = $stepObjects }
 
@@ -254,7 +270,7 @@ function ConvertTo-LMUptimeDevice {
             }
 
             try {
-                Write-Verbose "Creating Uptime device '$targetName' with parameters: $($parameters | ConvertTo-Json -Compress)"
+                Write-Verbose "Creating Uptime device '$targetName' with parameters: $($parameters | ConvertTo-Json -Compress -Depth 10)"
                 $result = New-LMUptimeDevice @parameters @commonParams
                 if ($result -and $DisableSourceAlerting.IsPresent) {
                     try {
