@@ -381,7 +381,7 @@ function Set-LMUptimeDevice {
         }
 
         if ($customProperties) {
-            $payload.customProperties = $customProperties
+            $payload.properties = $customProperties
         }
 
         if ($testLocation) {
