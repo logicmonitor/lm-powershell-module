@@ -260,7 +260,7 @@ function Set-LMUptimeDevice {
         $resolvedName = $null
         if ($parameterSet -like 'Name*') {
             try {
-                $lookupResult = Get-LMDevice -Name $Name
+                $lookupResult = Get-LMUptimeDevice -Name $Name
             }
             catch {
                 Write-Error "Failed to lookup device '$Name': $($_.Exception.Message)"

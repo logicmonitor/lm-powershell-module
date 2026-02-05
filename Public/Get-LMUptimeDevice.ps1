@@ -149,7 +149,7 @@ function Get-LMUptimeDevice {
                 $queryParams = ''
             }
             'Name' {
-                $filterString = "$deviceTypeFilter,name:%22$Name%22"
+                $filterString = "$deviceTypeFilter,name:`"$Name`""
                 $queryParams = "?filter=$filterString&size=$BatchSize&offset=$count&sort=+id"
             }
             'Filter' {

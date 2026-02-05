@@ -68,7 +68,7 @@ function Remove-LMUptimeDevice {
         $resolvedName = $null
         if ($PSCmdlet.ParameterSetName -eq 'Name') {
             try {
-                $lookupResult = Get-LMDevice -Name $Name
+                $lookupResult = Get-LMUptimeDevice -Name $Name
             }
             catch {
                 Write-Error "Failed to lookup device '$Name': $($_.Exception.Message)"
