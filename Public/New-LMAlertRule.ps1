@@ -118,7 +118,17 @@ function New-LMAlertRule {
 
             #Add optional properties to Data
             if ($EscalationInterval) { $Data.Add("escalationInterval", $EscalationInterval) }
-            if ($ResourceProperties) { $Data.Add("resourceProperties", $ResourceProperties) }
+            if ($ResourceProperties) {
+                # Convert hashtable to array of name/value objects as required by the API
+                $ResourcePropertiesArray = @()
+                foreach ($key in $ResourceProperties.Keys) {
+                    $ResourcePropertiesArray += @{
+                        name  = $key
+                        value = $ResourceProperties[$key]
+                    }
+                }
+                $Data.Add("resourceProperties", $ResourcePropertiesArray)
+            }
             if ($Devices) { $Data.Add("devices", $Devices) }
             if ($DeviceGroups) { $Data.Add("deviceGroups", $DeviceGroups) }
             if ($DataSource) { $Data.Add("datasource", $DataSource) }
