@@ -62,7 +62,7 @@ function Get-LMDatasource {
         #Build header and uri
         $ResourcePath = "/setting/datasources"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

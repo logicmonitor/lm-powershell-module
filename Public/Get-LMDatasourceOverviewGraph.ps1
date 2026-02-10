@@ -85,7 +85,7 @@ function Get-LMDatasourceOverviewGraph {
         #Build header and uri
         $ResourcePath = "/setting/datasources/$DatasourceId/ographs"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

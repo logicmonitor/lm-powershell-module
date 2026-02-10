@@ -60,7 +60,7 @@ function Get-LMAccessGroup {
         #Build header and uri
         $ResourcePath = "/setting/accessgroup"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

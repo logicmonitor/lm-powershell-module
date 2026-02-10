@@ -29,7 +29,7 @@ function Get-LMLogPartitionRetention {
         #Build header and uri
         $ResourcePath = "/log/partitions/retentions"
 
-        #Initalize vars
+        #Initialize vars
         $Count = 0
         $Done = $false
         $Results = @()

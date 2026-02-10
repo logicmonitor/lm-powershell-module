@@ -91,7 +91,7 @@ function Get-LMDevice {
             $ResourcePath = "/device/devices"
         }
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $DeltaIdResponse = ""
         $Count = 0

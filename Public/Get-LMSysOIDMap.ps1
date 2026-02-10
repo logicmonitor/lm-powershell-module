@@ -57,7 +57,7 @@ function Get-LMSysOIDMap {
         #Build header and uri
         $ResourcePath = "/setting/oids"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

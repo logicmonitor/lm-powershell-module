@@ -92,7 +92,7 @@ function Get-LMDeviceProperty {
             $ResourcePath = "/device/devices/$Id/properties"
         }
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

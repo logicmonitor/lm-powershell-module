@@ -57,7 +57,7 @@ function Get-LMNetscan {
         #Build header and uri
         $ResourcePath = "/setting/netscans"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

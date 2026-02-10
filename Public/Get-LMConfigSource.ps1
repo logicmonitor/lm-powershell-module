@@ -56,7 +56,7 @@ function Get-LMConfigSource {
         #Build header and uri
         $ResourcePath = "/setting/configsources"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

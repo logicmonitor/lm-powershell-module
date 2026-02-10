@@ -57,7 +57,7 @@ function Get-LMRecipientGroup {
         #Build header and uri
         $ResourcePath = "/setting/recipientgroups"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

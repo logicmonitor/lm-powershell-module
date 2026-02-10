@@ -57,7 +57,7 @@ function Get-LMLogPartition {
         #Build header and uri
         $ResourcePath = "/log/partitions"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

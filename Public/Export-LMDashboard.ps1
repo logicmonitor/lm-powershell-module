@@ -60,7 +60,7 @@ function Export-LMDashboard {
         #Build header and uri
         $ResourcePath = "/dashboard/dashboards/$Id"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = "?format=file&template=true"
 
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath

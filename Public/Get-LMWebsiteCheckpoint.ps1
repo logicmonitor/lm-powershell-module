@@ -46,7 +46,7 @@ function Get-LMWebsiteCheckpoint {
         #Build header and uri
         $ResourcePath = "/website/smcheckpoints"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

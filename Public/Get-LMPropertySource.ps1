@@ -57,7 +57,7 @@ function Get-LMPropertySource {
         #Build header and uri
         $ResourcePath = "/setting/propertyrules"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

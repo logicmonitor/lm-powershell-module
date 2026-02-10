@@ -45,7 +45,7 @@ function Get-LMUnmonitoredDevice {
         #Build header and uri
         $ResourcePath = "/device/unmonitoreddevices"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

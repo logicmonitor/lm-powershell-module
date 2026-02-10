@@ -64,7 +64,7 @@ function Get-LMCollector {
         #Build header and uri
         $ResourcePath = "/setting/collector/collectors"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

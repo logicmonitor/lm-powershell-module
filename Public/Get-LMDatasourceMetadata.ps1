@@ -75,7 +75,7 @@ function Get-LMDatasourceMetadata {
         #Build header and uri
         $ResourcePath = "/setting/registry/metadata/datasource/$Id"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
 
         #Build query params

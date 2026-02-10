@@ -62,7 +62,7 @@ function Get-LMUser {
         #Build header and uri
         $ResourcePath = "/setting/admins"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

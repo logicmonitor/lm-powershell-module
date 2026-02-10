@@ -65,7 +65,7 @@ function Get-LMReportGroup {
         #Build header and uri
         $ResourcePath = "/report/groups"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

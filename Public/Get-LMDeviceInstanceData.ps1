@@ -60,7 +60,7 @@ function Get-LMDeviceInstanceData {
         #Build header and uri
         $ResourcePath = "/device/instances/datafetch"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Results = @()
 

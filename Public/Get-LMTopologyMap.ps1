@@ -57,7 +57,7 @@ function Get-LMTopologyMap {
         #Build header and uri
         $ResourcePath = "/topology/topologies"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

@@ -57,7 +57,7 @@ function Get-LMEventSource {
         #Build header and uri
         $ResourcePath = "/setting/eventsources"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

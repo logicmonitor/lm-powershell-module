@@ -40,7 +40,7 @@ function Get-LMRepositoryLogicModule {
         #Build header and uri
         $ResourcePath = "/setting/logicmodules/listcore"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = "?type=$Type"
         $Results = @()
 

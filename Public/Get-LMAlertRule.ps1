@@ -60,7 +60,7 @@ function Get-LMAlertRule {
         #Build header and uri
         $ResourcePath = "/setting/alert/rules"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

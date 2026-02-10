@@ -85,7 +85,7 @@ function Get-LMDatasourceGraph {
         #Build header and uri
         $ResourcePath = "/setting/datasources/$DatasourceId/graphs"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

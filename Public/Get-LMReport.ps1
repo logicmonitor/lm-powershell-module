@@ -65,7 +65,7 @@ function Get-LMReport {
         #Build header and uri
         $ResourcePath = "/report/reports"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

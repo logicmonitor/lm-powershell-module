@@ -72,7 +72,7 @@ function Get-LMAPIToken {
         #Build header and uri
         $ResourcePath = "/setting/admins/apitokens"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

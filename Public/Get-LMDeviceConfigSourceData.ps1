@@ -71,7 +71,7 @@ function Get-LMDeviceConfigSourceData {
         #Build header and uri
         $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$HdsInsId/config"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $SortParam = ""
         $Count = 0
@@ -110,8 +110,13 @@ function Get-LMDeviceConfigSourceData {
             #Issue request
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
+            #If the API call failed (for example, resource not found), stop processing.
+            if ($null -eq $Response) {
+                return
+            }
+
             #Stop looping if single device, no need to continue
-            if (![bool]$Response.psobject.Properties["total"]) {
+            if ($Response.psobject.Properties["total"].Count -eq 0) {
                 $Done = $true
                 return $Response
             }

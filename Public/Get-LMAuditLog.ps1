@@ -68,7 +68,7 @@ function Get-LMAuditLog {
         #Build header and uri
         $ResourcePath = "/setting/accesslogs"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

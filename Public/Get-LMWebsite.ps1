@@ -71,7 +71,7 @@ function Get-LMWebsite {
         #Build header and uri
         $ResourcePath = "/website/websites"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

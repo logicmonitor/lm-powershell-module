@@ -157,7 +157,7 @@ function Get-LMDeviceData {
         #Build header and uri
         $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId/data"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Done = $false
         $AllDatapoints = @()

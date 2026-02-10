@@ -66,7 +66,7 @@ function Get-LMUserGroup {
         #Build header and uri
         $ResourcePath = "/setting/admin/groups"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

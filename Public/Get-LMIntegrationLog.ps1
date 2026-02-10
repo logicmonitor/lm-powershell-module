@@ -69,7 +69,7 @@ function Get-LMIntegrationLog {
         #Build header and uri
         $ResourcePath = "/setting/integrations/auditlogs"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

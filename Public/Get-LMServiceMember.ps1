@@ -72,7 +72,7 @@ function Get-LMServiceMember {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id/service/members"
 
-            #Initalize vars
+            #Initialize vars
             $QueryParams = "?size=$BatchSize"
             $Count = 0
             $Done = $false

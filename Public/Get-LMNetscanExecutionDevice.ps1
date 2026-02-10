@@ -70,7 +70,7 @@ function Get-LMNetscanExecutionDevice {
         #Build header and uri
         $ResourcePath = "/setting/netscans/$NspId/executions/$Id/devices"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

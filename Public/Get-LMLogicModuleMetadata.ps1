@@ -77,7 +77,7 @@ function Get-LMLogicModuleMetadata {
         #Build header and uri
         $ResourcePath = "/setting/logicmodules/metadata"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
 
         

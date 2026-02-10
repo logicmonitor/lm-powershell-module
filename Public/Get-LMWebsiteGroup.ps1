@@ -69,7 +69,7 @@ function Get-LMWebsiteGroup {
         #Build header and uri
         $ResourcePath = "/website/groups"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

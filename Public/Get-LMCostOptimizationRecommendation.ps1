@@ -52,7 +52,7 @@ function Get-LMCostOptimizationRecommendation {
             #Build header and uri
             $ResourcePath = "/cost-optimization/recommendations"
 
-            #Initalize vars
+            #Initialize vars
             $QueryParams = ""
             $Count = 0
             $Done = $false

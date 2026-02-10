@@ -57,7 +57,7 @@ function Get-LMRole {
         #Build header and uri
         $ResourcePath = "/setting/roles"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

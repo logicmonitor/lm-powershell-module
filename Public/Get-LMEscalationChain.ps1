@@ -57,7 +57,7 @@ function Get-LMEscalationChain {
         #Build header and uri
         $ResourcePath = "/setting/alert/chains"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

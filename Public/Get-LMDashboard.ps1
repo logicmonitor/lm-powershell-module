@@ -83,7 +83,7 @@ function Get-LMDashboard {
         #Build header and uri
         $ResourcePath = "/dashboard/dashboards"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

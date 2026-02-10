@@ -56,7 +56,7 @@ function Get-LMSDT {
         #Build header and uri
         $ResourcePath = "/sdt/sdts"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false

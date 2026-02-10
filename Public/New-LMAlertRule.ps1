@@ -117,7 +117,7 @@ function New-LMAlertRule {
             }
 
             #Add optional properties to Data
-            if ($EscalationInterval) { $Data.Add("escalationInterval", $EscalationInterval) }
+            if ($PSBoundParameters.ContainsKey("EscalationInterval")) { $Data.Add("escalationInterval", $EscalationInterval) }
             if ($ResourceProperties) {
                 # Convert hashtable to array of name/value objects as required by the API
                 $ResourcePropertiesArray = @()

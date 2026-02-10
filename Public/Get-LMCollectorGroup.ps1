@@ -60,7 +60,7 @@ function Get-LMCollectorGroup {
         #Build header and uri
         $ResourcePath = "/setting/collector/groups"
 
-        #Initalize vars
+        #Initialize vars
         $QueryParams = ""
         $Count = 0
         $Done = $false
