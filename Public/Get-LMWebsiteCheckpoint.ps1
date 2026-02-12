@@ -43,53 +43,36 @@ function Get-LMWebsiteCheckpoint {
     #Check if we are logged in and have valid api creds
     if ($Script:LMAuth.Valid) {
 
-        #Build header and uri
         $ResourcePath = "/website/smcheckpoints"
+        $ParameterSetName = $PSCmdlet.ParameterSetName
+        $CommandInvocation = $MyInvocation
 
-        #Initialize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged -InvokeRequest {
+            param($Offset, $PageSize)
 
-        #Loop through requests
-        while (!$Done) {
-            #Build query params
-            switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = ""
+
+            switch ($ParameterSetName) {
+                "All" { $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id" }
+                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$PageSize&offset=$Offset&sort=+id" }
                 "Filter" {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
             }
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
-
-            #Issue request
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-
-            #Stop looping if single device, no need to continue
-            if ($PSCmdlet.ParameterSetName -eq "Id") {
-                $Done = $true
-                return $Response
-            }
-            #Check result size and if needed loop again
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) {
-                    $Done = $true
-                }
-            }
-
+            if ($null -eq $Response) { return $null }
+            return $Response
         }
+
+        if ($null -eq $Results) { return }
         return $Results
     }
     else {

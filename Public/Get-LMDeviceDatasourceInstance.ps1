@@ -92,27 +92,21 @@ function Get-LMDeviceDatasourceInstance {
         #Build header and uri
         $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances"
 
-        #Initialize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
+        $SingleObjectWhenNotPaged = $false
 
-        #Loop through requests
-        while (!$Done) {
-            #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+            param($Offset, $PageSize)
+
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id"
 
             if ($Filter) {
-                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
+                $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"
             }
 
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-
-
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
@@ -124,22 +118,13 @@ function Get-LMDeviceDatasourceInstance {
                 return
             }
 
-            #Stop looping if single device, no need to continue
-            if ($Response.psobject.Properties["total"].Count -eq 0) {
-                $Done = $true
-                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DeviceDatasourceInstance" )
-            }
-            #Check result size and if needed loop again
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) {
-                    $Done = $true
-                }
-            }
-
+            return $Response
         }
+
+        if ($null -eq $Results) {
+            return
+        }
+
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DeviceDatasourceInstance" )
     }
     else {

@@ -158,35 +158,35 @@ function Get-LMDeviceData {
         $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId/data"
 
         #Initialize vars
-        $QueryParams = ""
-        $Done = $false
         $AllDatapoints = @()
         $AllValues = @()
         $AllTimes = @()
+        $InitialQueryParams = "?"
 
-        #Loop through requests using nextPageParams
-        while (!$Done) {
-            #Build query params - start with empty or use nextPageParams from previous response
-            if (!$QueryParams) {
-                $QueryParams = "?"
-                
-                #Add time range filter if provided data ranges
-                if ($StartDate -and $EndDate) {
-                    $QueryParams = $QueryParams + "start=$StartDate&end=$EndDate"
-                }
+        #Add time range filter if provided data ranges
+        if ($StartDate -and $EndDate) {
+            $InitialQueryParams = $InitialQueryParams + "start=$StartDate&end=$EndDate"
+        }
 
-                #Add datapoints filter if provided
-                if ($Datapoints) {
-                    if ($QueryParams -ne "?") {
-                        $QueryParams = $QueryParams + "&"
-                    }
-                    $QueryParams = $QueryParams + "datapoints=$Datapoints"
-                }
+        #Add datapoints filter if provided
+        if ($Datapoints) {
+            if ($InitialQueryParams -ne "?") {
+                $InitialQueryParams = $InitialQueryParams + "&"
+            }
+            $InitialQueryParams = $InitialQueryParams + "datapoints=$Datapoints"
+        }
 
-                #Remove trailing ? if no params were added
-                if ($QueryParams -eq "?") {
-                    $QueryParams = ""
-                }
+        #Remove trailing ? if no params were added
+        if ($InitialQueryParams -eq "?") {
+            $InitialQueryParams = ""
+        }
+
+        $ResponsePages = Invoke-LMCursorPagedGet -InvokeRequest {
+            param($Cursor, $PageIndex, $PreviousResponse)
+
+            $QueryParams = $InitialQueryParams
+            if ($Cursor) {
+                $QueryParams = "?$Cursor"
             }
 
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
@@ -194,10 +194,26 @@ function Get-LMDeviceData {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-            #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            return (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1])
+        } -ExtractItems {
+            param($Response)
+            if ($null -eq $Response) {
+                return @()
+            }
+            return @($Response)
+        } -GetNextCursor {
+            param($Response)
+            return $Response.nextPageParams
+        } -IsComplete {
+            param($Response, $PageIndex, $Cursor)
+            return [string]::IsNullOrWhiteSpace([string]$Response.nextPageParams)
+        }
 
-            #Collect data from this page
+        if ($null -eq $ResponsePages) {
+            return
+        }
+
+        foreach ($Response in $ResponsePages) {
             if ($Response.values) {
                 $AllValues += $Response.values
             }
@@ -207,16 +223,8 @@ function Get-LMDeviceData {
             if ($Response.dataPoints -and $AllDatapoints.Count -eq 0) {
                 $AllDatapoints = $Response.dataPoints
             }
-
-            #Check if there are more pages using nextPageParams
-            if ($Response.nextPageParams) {
-                $QueryParams = "?$($Response.nextPageParams)"
-            }
-            else {
-                $Done = $true
-            }
-
         }
+
         #Convert results into readable format for consumption
         if ($AllValues.Count -gt 0) {
             $DatapointResults = @($null) * $AllValues.Count

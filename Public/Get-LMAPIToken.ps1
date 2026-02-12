@@ -73,53 +73,57 @@ function Get-LMAPIToken {
         $ResourcePath = "/setting/admins/apitokens"
 
         #Initialize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
-
+        $BearerParam = ""
         if ($Type -eq "Bearer") {
             $BearerParam = "&type=bearer"
         }
 
-        #Loop through requests
-        while (!$Done) {
-            #Build query params
-            switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
-                "Id" { $QueryParams = "?filter=id:$Id&size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
-                "AccessId" { $QueryParams = "?filter=accessId:`"$AccessId`"&size=$BatchSize&offset=$Count&sort=+id$BearerParam" }
-                "AdminId" { $resourcePath = "/setting/admins/$AdminId/apitokens$BearerParam" }
+        $ParameterSetName = $PSCmdlet.ParameterSetName
+        $SingleObjectWhenNotPaged = $false
+
+        $ExtractResponse = {
+            param($r)
+            if ($null -eq $r) { return $null }
+            if (-not (Test-LMResponseHasPagination -Response $r) -and $r.items) { return $r.items }
+            return $r
+        }
+
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+            param($Offset, $PageSize)
+
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = ""
+
+            switch ($ParameterSetName) {
+                "All" { $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id$BearerParam" }
+                "Id" { $QueryParams = "?filter=id:$Id&size=$PageSize&offset=$Offset&sort=+id$BearerParam" }
+                "AccessId" { $QueryParams = "?filter=accessId:`"$AccessId`"&size=$PageSize&offset=$Offset&sort=+id$BearerParam" }
+                "AdminId" {
+                    $RequestResourcePath = "/setting/admins/$AdminId/apitokens"
+                    $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id$BearerParam"
+                }
                 "Filter" {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id$BearerParam"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id$BearerParam"
                 }
             }
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
             #Issue request
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            if ($null -eq $Response) { return }
 
-            #Stop looping if single device, no need to continue
-            if ($PSCmdlet.ParameterSetName -eq "Id") {
-                $Done = $true
-                return (Add-ObjectTypeInfo -InputObject $Response.items -TypeName "LogicMonitor.APIToken" )
-            }
-            #Check result size and if needed loop again
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) {
-                    $Done = $true
-                }
-            }
+            return $Response
+        } -ExtractResponse $ExtractResponse
 
+        if ($null -eq $Results) {
+            return
         }
+
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.APIToken" )
     }
     else {

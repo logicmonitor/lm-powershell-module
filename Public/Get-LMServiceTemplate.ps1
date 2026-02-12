@@ -33,50 +33,67 @@ function Get-LMServiceTemplate {
 
             #Build header and uri
             $ResourcePath = "/serviceTemplates/list"
+            $BatchSize = 25
+            $CommandInvocation = $MyInvocation
 
-            $Body = [PSCustomObject]@{
-                meta = @{
-                    filters = @{
-                        filterType = "FILTER_CATEGORICAL_MODEL_TYPE"
-                    }
-                    columns = @(
-                        @{
-                            RestServiceTemplate = "model,id,name,description,isEnabled,noOfServices,serviceIssues,metrics,createdAtMS,isDatasourceAttached,status,isLogicallyDeleted"
+            $Results = Invoke-LMPaginatedPostV4 -BatchSize $BatchSize -InvokeRequest {
+                param($Offset, $PageSize)
+
+                $Body = [PSCustomObject]@{
+                    meta = @{
+                        filters = @{
+                            filterType = "FILTER_CATEGORICAL_MODEL_TYPE"
                         }
-                    )
-                    paging = @{
-                        perPageCount = 25
-                        pageOffsetCount = 0
+                        columns = @(
+                            @{
+                                RestServiceTemplate = "model,id,name,description,isEnabled,noOfServices,serviceIssues,metrics,createdAtMS,isDatasourceAttached,status,isLogicallyDeleted"
+                            }
+                        )
+                        paging  = @{
+                            perPageCount    = $PageSize
+                            pageOffsetCount = $Offset
+                        }
+                        sort    = "serviceIssuesRank,name"
                     }
-                    sort = "serviceIssuesRank,name"
+                } | ConvertTo-Json -Depth 10
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation -Payload $Body
+
+                return (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body)
+            } -ExtractItems {
+                param($RawResponse)
+
+                if ($RawResponse.data.byId.RestServiceTemplate) {
+                    $serviceTemplates = $RawResponse.data.byId.RestServiceTemplate
+                    $templateNames = $serviceTemplates.PSObject.Properties.Name | Sort-Object {
+                        $parsedName = 0
+                        if ([int]::TryParse([string]$_, [ref]$parsedName)) {
+                            return $parsedName
+                        }
+                        return [int]::MaxValue
+                    }
+                    $transformedProperties = @()
+                    foreach ($templateName in $templateNames) {
+                        $transformedProperties += $serviceTemplates.$templateName
+                    }
+                    return $transformedProperties
                 }
-            } | ConvertTo-Json -Depth 10
-                
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
-
-            #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
-
-            if ($Response.data.byId.RestServiceTemplate) {
-                $serviceTemplates = $Response.data.byId.RestServiceTemplate
-                $transformedProperties = @()
-
-                # Get all template names and sort them numerically
-                $templateNames = $serviceTemplates.PSObject.Properties.Name | Sort-Object { [int]$_ }
-                
-                # Add each property's value to the array
-                foreach ($templateName in $templateNames) {
-                    $transformedProperties += $serviceTemplates.$templateName
+                if ($RawResponse.data.items) {
+                    return @($RawResponse.data.items)
                 }
 
-                return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.ServiceTemplate" )
+                return @()
             }
 
-            #No templates found return items array with info notice
-            return $Response.data.items
+            if ($null -eq $Results) {
+                return
+            }
+
+            return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.ServiceTemplate" )
             
         }
         else {

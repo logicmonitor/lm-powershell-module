@@ -118,20 +118,19 @@ function Get-LMUptimeDevice {
         }
     }
     else {
-        # Both types: deviceType:18|19
         $deviceTypeFilter = 'deviceType:18|19'
     }
 
-    $queryParams = ''
-    $count = 0
-    $done = $false
-    $results = @()
+    $ParameterSetName = $PSCmdlet.ParameterSetName
+    $SingleObjectWhenNotPaged = $ParameterSetName -eq 'Id'
 
-    while (-not $done) {
-        $resourcePath = $resourcePathRoot
+    $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+        param($Offset, $PageSize)
+
+        $RequestResourcePath = $resourcePathRoot
         $queryParams = ''
 
-        switch ($PSCmdlet.ParameterSetName) {
+        switch ($ParameterSetName) {
             'All' {
                 $filterParts = @()
                 $filterParts += $deviceTypeFilter
@@ -142,15 +141,15 @@ function Get-LMUptimeDevice {
                 }
 
                 $filterString = $filterParts -join ','
-                $queryParams = "?filter=$filterString&size=$BatchSize&offset=$count&sort=+id"
+                $queryParams = "?filter=$filterString&size=$PageSize&offset=$Offset&sort=+id"
             }
             'Id' {
-                $resourcePath = "$resourcePath/$Id"
+                $RequestResourcePath = "$resourcePathRoot/$Id"
                 $queryParams = ''
             }
             'Name' {
                 $filterString = "$deviceTypeFilter,name:`"$Name`""
-                $queryParams = "?filter=$filterString&size=$BatchSize&offset=$count&sort=+id"
+                $queryParams = "?filter=$filterString&size=$PageSize&offset=$Offset&sort=+id"
             }
             'Filter' {
                 $filterInput = $Filter
@@ -163,12 +162,12 @@ function Get-LMUptimeDevice {
                     $filterInput = "($deviceTypeFilter,$Filter)"
                 }
 
-                $validFilter = Format-LMFilter -Filter $filterInput -ResourcePath $resourcePath
+                $validFilter = Format-LMFilter -Filter $filterInput -ResourcePath $RequestResourcePath
                 if ($validFilter) {
-                    $queryParams = "?filter=$deviceTypeFilter,$validFilter&size=$BatchSize&offset=$count&sort=+id"
+                    $queryParams = "?filter=$deviceTypeFilter,$validFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
                 else {
-                    $queryParams = "?filter=$deviceTypeFilter&size=$BatchSize&offset=$count&sort=+id"
+                    $queryParams = "?filter=$deviceTypeFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
             }
             'FilterWizard' {
@@ -178,37 +177,30 @@ function Get-LMUptimeDevice {
                 }
                 $validFilter = Format-LMFilter -Filter $filterObject -ResourcePath $resourcePathRoot
                 if ($validFilter) {
-                    $queryParams = "?filter=$deviceTypeFilter,$validFilter&size=$BatchSize&offset=$count&sort=+id"
+                    $queryParams = "?filter=$deviceTypeFilter,$validFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
                 else {
-                    $queryParams = "?filter=$deviceTypeFilter&size=$BatchSize&offset=$count&sort=+id"
+                    $queryParams = "?filter=$deviceTypeFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
             }
         }
 
-        $headers = New-LMHeader -Auth $Script:LMAuth -Method 'GET' -ResourcePath $resourcePath
-        $uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)$resourcePath$queryParams"
+        $headers = New-LMHeader -Auth $Script:LMAuth -Method 'GET' -ResourcePath $RequestResourcePath
+        $uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $queryParams
 
         Resolve-LMDebugInfo -Url $uri -Headers $headers[0] -Command $MyInvocation
 
         $response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $uri -Method 'GET' -Headers $headers[0] -WebSession $headers[1]
 
-        # Handle null response
         if ($null -eq $response) {
-            if ($PSCmdlet.ParameterSetName -eq 'Id') {
-                return $null
-            }
-            $done = $true
-            continue
+            return $null
         }
 
-        if ($PSCmdlet.ParameterSetName -eq 'Id') {
-            # Validate that the returned device is an uptime device (type 18 or 19)
+        if ($ParameterSetName -eq 'Id') {
             if ($response.deviceType -notin @(18, 19)) {
                 Write-Error "Device with Id $Id is not an Uptime device (deviceType: $($response.deviceType))"
-                return
+                return $null
             }
-            # If Type was specified, validate it matches
             if ($PSBoundParameters.ContainsKey('Type')) {
                 $expectedType = switch ($Type) {
                     'uptimewebcheck' { 18 }
@@ -216,28 +208,17 @@ function Get-LMUptimeDevice {
                 }
                 if ($response.deviceType -ne $expectedType) {
                     Write-Error "Device with Id $Id is not of type '$Type' (deviceType: $($response.deviceType))"
-                    return
+                    return $null
                 }
             }
-            return (Add-ObjectTypeInfo -InputObject $response -TypeName 'LogicMonitor.LMUptimeDevice')
+            return $response
         }
 
-        # Handle paginated response - check for expected properties
-        if (-not $response.PSObject.Properties['total']) {
-            $done = $true
-            continue
-        }
-
-        [Int]$total = $response.total
-        $items = if ($response.items) { $response.items } else { @() }
-        [Int]$count += ($items | Measure-Object).Count
-        $results += $items
-
-        if ($count -ge $total -or $total -eq 0) {
-            $done = $true
-        }
+        return $response
     }
 
-    return (Add-ObjectTypeInfo -InputObject $results -TypeName 'LogicMonitor.LMUptimeDevice')
+    return (Add-ObjectTypeInfo -InputObject $Results -TypeName 'LogicMonitor.LMUptimeDevice')
 }
+
+
 

@@ -68,71 +68,47 @@ function Get-LMDeviceConfigSourceData {
     #Check if we are logged in and have valid api creds
     if ($Script:LMAuth.Valid) {
 
-        #Build header and uri
         $ResourcePath = "/device/devices/$Id/devicedatasources/$HdsId/instances/$HdsInsId/config"
-
-        #Initialize vars
-        $QueryParams = ""
-        $SortParam = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
+        $CommandInvocation = $MyInvocation
 
         switch ($ConfigType) {
             "Delta" { $ConfigField = "!config" }
             "Full" { $ConfigField = "!deltaConfig" }
         }
 
-        if ($LatestConfigOnly) {
-            $BatchSize = 1
-            $SortParam = "&sort=-pollTimestamp"
+        if ($ConfigId) {
+            $RequestResourcePath = "$ResourcePath/$ConfigId"
+            $QueryParams = "?deviceId=$Id&deviceDataSourceId=$HdsId&instanceId=$HdsInsId&fields=$ConfigField"
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            if ($null -eq $Response) { return }
+            return $Response
         }
 
-        #Loop through requests
-        while (!$Done) {
-            #Build query params
-            if ($ConfigId) {
-                $ResourcePath = $ResourcePath + "/$ConfigId"
-                $QueryParams = "?deviceId=$Id&deviceDataSourceId=$HdsId&instanceId=$HdsInsId&fields=$ConfigField"
-            }
-            else {
-                $QueryParams = "?size=$BatchSize&offset=$Count&fields=$ConfigField$SortParam"
-            }
+        $BatchSize = if ($LatestConfigOnly) { 1 } else { 1000 }
+        $SortParam = if ($LatestConfigOnly) { "&sort=-pollTimestamp" } else { "" }
 
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -InvokeRequest {
+            param($Offset, $PageSize)
 
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = "?size=$PageSize&offset=$Offset&fields=$ConfigField$SortParam"
 
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
-            #Issue request
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            if ($null -eq $Response) { return $null }
+            return $Response
+        }
 
-            #If the API call failed (for example, resource not found), stop processing.
-            if ($null -eq $Response) {
-                return
-            }
-
-            #Stop looping if single device, no need to continue
-            if ($Response.psobject.Properties["total"].Count -eq 0) {
-                $Done = $true
-                return $Response
-            }
-            elseif ($LatestConfigOnly) {
-                return $Response.Items
-            }
-            #Check result size and if needed loop again
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) {
-                    $Done = $true
-                }
-            }
-
+        if ($null -eq $Results) { return }
+        if ($LatestConfigOnly -and $Results -is [array] -and $Results.Count -gt 0) {
+            return $Results[0]
         }
         return $Results
     }

@@ -59,43 +59,37 @@ function Get-LMDiagnosticSource {
     if ($Script:LMAuth.Valid) {
 
         $ResourcePath = "/setting/diagnosticsources"
+        $ParameterSetName = $PSCmdlet.ParameterSetName
+        $CommandInvocation = $MyInvocation
+        $SingleObjectWhenNotPaged = $ParameterSetName -eq "Id"
 
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+            param($Offset, $PageSize)
 
-        while (!$Done) {
-            switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
-                "Id" { $resourcePath += "/$Id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
-                "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$BatchSize&offset=$Count&sort=+id" }
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = ""
+
+            switch ($ParameterSetName) {
+                "All" { $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id" }
+                "Id" { $RequestResourcePath = "$ResourcePath/$Id" }
+                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$PageSize&offset=$Offset&sort=+id" }
+                "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$PageSize&offset=$Offset&sort=+id" }
                 "Filter" {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
             }
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
 
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-
-            if ($PSCmdlet.ParameterSetName -eq "Id") {
-                $Done = $true
-                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.DiagnosticSource")
-            }
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) { $Done = $true }
-            }
-
+            if ($null -eq $Response) { return $null }
+            return $Response
         }
+
+        if ($null -eq $Results) { return }
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.DiagnosticSource")
     }
     else {

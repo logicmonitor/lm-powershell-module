@@ -22,45 +22,39 @@ Returns LogicMonitor.LogPartitionRetention objects.
 function Get-LMLogPartitionRetention {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
-    param ()
+    param (
+        [ValidateRange(1, 1000)]
+        [Int]$BatchSize = 1000
+    )
     #Check if we are logged in and have valid api creds
     if ($Script:LMAuth.Valid) {
 
         #Build header and uri
         $ResourcePath = "/log/partitions/retentions"
 
-        #Initialize vars
-        $Count = 0
-        $Done = $false
-        $Results = @()
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -InvokeRequest {
+            param($Offset, $PageSize)
 
-        #Loop through requests
-        while (!$Done) {
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id"
+
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-            #Issue request
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-
-            #Stop looping if single device, no need to continue
-            if ($PSCmdlet.ParameterSetName -eq "Id") {
-                $Done = $true
-                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.LogPartitionRetention" )
-            }
-            #Check result size and if needed loop again
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) {
-                    $Done = $true
-                }
+            if ($null -eq $Response) {
+                return $null
             }
 
+            return $Response
         }
+
+        if ($null -eq $Results) {
+            return
+        }
+
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LogPartitionRetention" )
     }
     else {

@@ -75,17 +75,8 @@ function Get-LMDatasourceMetadata {
         #Build header and uri
         $ResourcePath = "/setting/registry/metadata/datasource/$Id"
 
-        #Initialize vars
-        $QueryParams = ""
-
-        #Build query params
-        $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
-
-        
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-
-
+        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
         Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
@@ -93,9 +84,6 @@ function Get-LMDatasourceMetadata {
         $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
         return $Response
-
-
-        return $Results
     }
     else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

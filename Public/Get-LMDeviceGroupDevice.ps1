@@ -76,58 +76,35 @@ function Get-LMDeviceGroupDevice {
         $Results = @()
 
         foreach ($i in $Ids) {
-
-            #Build header and uri
             $ResourcePath = "/device/groups/$i/devices"
 
-            #Initialize vars
-            $QueryParams = ""
-            $Count = 0
-            $Done = $false
+            $GroupResults = Invoke-LMPaginatedGet -BatchSize $BatchSize -InvokeRequest {
+                param($Offset, $PageSize)
 
-            #Loop through requests
-            while (!$Done) {
-                #Build query params
-                $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
+                $RequestResourcePath = $ResourcePath
+                $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id"
 
                 if ($Filter) {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
 
-                
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
-
-
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-                #Issue request
                 $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-
-                #If the API call failed (for example, resource not found), stop processing.
                 if ($null -eq $Response) {
-                    return
+                    return $null
                 }
 
-                #Stop looping if single device, no need to continue
-                if ($Response.psobject.Properties["total"].Count -eq 0) {
-                    $Done = $true
-                    $Results += $Response
-                }
-                #Check result size and if needed loop again
-                else {
-                    [Int]$Total = $Response.Total
-                    [Int]$Count += ($Response.Items | Measure-Object).Count
-                    $Results += $Response.Items
-                    if ($Count -ge $Total) {
-                        $Done = $true
-                    }
-                }
-
+                return $Response
             }
-            #Dedupe results
+
+            if ($null -ne $GroupResults) {
+                $Results += $GroupResults
+            }
         }
         if ($Results) {
             $Results = ($Results | Sort-Object -Property Id -Unique)

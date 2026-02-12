@@ -91,43 +91,55 @@ function Get-LMDevice {
             $ResourcePath = "/device/devices"
         }
 
-        #Initialize vars
-        $QueryParams = ""
+        #Track delta id response for Delta mode.
         $DeltaIdResponse = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
+        $ParameterSetName = $PSCmdlet.ParameterSetName
+        $CommandInvocation = $MyInvocation
+        $SingleObjectWhenNotPaged = $ParameterSetName -eq "Id"
+        $CallerPSCmdlet = $PSCmdlet
 
-        #Loop through requests
-        while (!$Done) {
-            #Build query params
-            switch ($PSCmdlet.ParameterSetName) {
-                "All" { $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id" }
-                "Delta" { $resourcePath += "/$DeltaId" ; $QueryParams = "?size=$BatchSize&offset=$Count" }
-                "Id" { $resourcePath += "/$Id" }
-                "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$BatchSize&offset=$Count&sort=+id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$BatchSize&offset=$Count&sort=+id" }
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+            param($Offset, $PageSize)
+
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = ""
+
+            switch ($ParameterSetName) {
+                "All" { $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id" }
+                "Delta" {
+                    if ($DeltaId) {
+                        $RequestResourcePath = "$ResourcePath/$DeltaId"
+                    }
+                    $QueryParams = "?size=$PageSize&offset=$Offset"
+                }
+                "Id" { $RequestResourcePath = "$ResourcePath/$Id" }
+                "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$PageSize&offset=$Offset&sort=+id" }
+                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$PageSize&offset=$Offset&sort=+id" }
                 "Filter" {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
                 "FilterWizard" {
                     $Filter = Build-LMFilter -PassThru -ResourcePath $ResourcePath
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"
                 }
             }
             if ($Delta -and $DeltaIdResponse) {
                 $QueryParams = $QueryParams + "&deltaId=$DeltaIdResponse"
             }
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
+
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
             #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+
+            if ($null -eq $Response) {
+                return $null
+            }
 
             #Store delta id if delta switch is present
             if ($Response.deltaId -and !$DeltaIdResponse) {
@@ -136,28 +148,15 @@ function Get-LMDevice {
                 Set-Variable -Name "LMDeltaId" -Value $DeltaIdResponse -Scope global
             }
 
-            #Stop looping if single device, no need to continue
-            if ($PSCmdlet.ParameterSetName -eq "Id") {
-                $Done = $true
-
-                #Filter out uptime devices
-                #$Response = $Response | Where-Object { $_.deviceType -ne '18' -and $_.deviceType -ne '19' }
-
-                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Device" )
-            }
-            #Check result size and if needed loop again
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) {
-                    $Done = $true
-                }
-            }
-            
+            return $Response
         }
+
+        if ($null -eq $Results) {
+            return
+        }
+
         #Filter out uptime devices
-        #$Results = $Results | Where-Object { $_.deviceType -ne '18' -and $_.deviceType -ne '19' }
+        $Results = $Results | Where-Object { $_.deviceType -ne '18' -and $_.deviceType -ne '19' }
 
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Device" )
     }

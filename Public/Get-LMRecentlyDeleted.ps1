@@ -112,51 +112,30 @@ function Get-LMRecentlyDeleted {
     }
 
     $resourcePath = '/recyclebin/recycles'
-    $results = @()
-    $currentOffset = 0
-    $total = $null
+    $SingleObjectWhenNotPaged = $false
 
-    while ($true) {
-        $queryParams = "?size=$BatchSize&offset=$currentOffset&sort=$Sort"
+    $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+        param($Offset, $PageSize)
+
+        $RequestResourcePath = $resourcePath
+        $queryParams = "?size=$PageSize&offset=$Offset&sort=$Sort"
         if ($filterString) {
             $queryParams += "&filter=$filterString"
         }
 
-        $headers = New-LMHeader -Auth $Script:LMAuth -Method 'GET' -ResourcePath $resourcePath
-        $uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $resourcePath + $queryParams
+        $headers = New-LMHeader -Auth $Script:LMAuth -Method 'GET' -ResourcePath $RequestResourcePath
+        $uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $queryParams
 
         Resolve-LMDebugInfo -Url $uri -Headers $headers[0] -Command $MyInvocation
 
         $response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $uri -Method 'GET' -Headers $headers[0] -WebSession $headers[1]
 
-        $itemCount = 0
-        if ($response.items) {
-            $results += $response.items
-            $itemCount = ($response.items | Measure-Object).Count
-        }
-
-        if (-not $total -and $response.total) {
-            $total = $response.total
-        }
-
-        if ($itemCount -lt $BatchSize) {
-            break
-        }
-
-        if ($total -and (($currentOffset + $itemCount) -ge $total)) {
-            break
-        }
-
-        $currentOffset += $itemCount
+        return $response
     }
 
-    if ($response.total) {
-        Write-Verbose "Retrieved $($results.Count) of $($response.total) recently deleted items."
-    }
-    else {
-        Write-Verbose "Retrieved $($results.Count) recently deleted items."
+    if ($null -ne $Results) {
+        Write-Verbose "Retrieved $($Results.Count) recently deleted items."
     }
 
-    return (Add-ObjectTypeInfo -InputObject $results -TypeName 'LogicMonitor.RecentlyDeleted')
+    return (Add-ObjectTypeInfo -InputObject $Results -TypeName 'LogicMonitor.RecentlyDeleted')
 }
-

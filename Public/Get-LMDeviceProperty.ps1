@@ -92,47 +92,38 @@ function Get-LMDeviceProperty {
             $ResourcePath = "/device/devices/$Id/properties"
         }
 
-        #Initialize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
+        $SingleObjectWhenNotPaged = [bool]$PropertyName
 
-        #Loop through requests
-        while (!$Done) {
-            #Build query params
-            $QueryParams = "?size=$BatchSize&offset=$Count&sort=+id"
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+            param($Offset, $PageSize)
+
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id"
 
             if ($Filter) {
-                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=+id"
+                $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
+                $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"
             }
 
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-            #Issue request
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-            Write-Verbose "Response: $($Response | ConvertTo-Json -Depth 10)"
-            #Stop looping if single device, no need to continue
-            if ($null -eq $Response -or ![bool]$Response.psobject.Properties["total"]) {
-                $Done = $true
-                return $Response
-            }
-            #Check result size and if needed loop again
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) {
-                    $Done = $true
-                }
+            if ($null -eq $Response) {
+                return $null
             }
 
+            Write-Verbose "Response: $($Response | ConvertTo-Json -Depth 10)"
+
+            return $Response
         }
+
+        if ($null -eq $Results) {
+            return
+        }
+
         return $Results
     }
     else {

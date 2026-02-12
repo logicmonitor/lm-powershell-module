@@ -54,10 +54,8 @@ function Get-LMTopologyMapData {
         #Build header and uri
         $ResourcePath = "/topology/topologies/$Id/data"
 
-        #Loop through requests
-        
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
         Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 

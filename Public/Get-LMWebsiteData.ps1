@@ -52,7 +52,10 @@ function Get-LMWebsiteData {
 
         [Datetime]$EndDate,
 
-        [String]$CheckpointId = 0
+        [String]$CheckpointId = 0,
+
+        [ValidateRange(1, 1000)]
+        [Int]$BatchSize = 1000
     )
     #Check if we are logged in and have valid api creds
     if ($Script:LMAuth.Valid) {
@@ -69,7 +72,7 @@ function Get-LMWebsiteData {
                 return
             }
             $Id = $LookupResult.Id
-            $Id = $LookupResult.Checkpoints[0].id
+            $CheckpointId = $LookupResult.Checkpoints[0].id
         }
 
         #Build header and uri
@@ -90,18 +93,70 @@ function Get-LMWebsiteData {
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
-        #Build query params
-        $QueryParams = "?size=$BatchSize&start=$StartDate&end=$EndDate"
+        #Build initial query params
+        $InitialQueryParams = "?size=$BatchSize&start=$StartDate&end=$EndDate"
 
-        
-        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+        $ResponsePages = Invoke-LMCursorPagedGet -InvokeRequest {
+            param($Cursor, $PageIndex, $PreviousResponse)
 
-        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            $QueryParams = $InitialQueryParams
+            if ($Cursor) {
+                $QueryParams = "?$Cursor"
+            }
 
-        #Issue request
-        $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-        return $Response
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+
+            return (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1])
+        } -ExtractItems {
+            param($Response)
+            if ($null -eq $Response) {
+                return @()
+            }
+            return @($Response)
+        } -GetNextCursor {
+            param($Response)
+            return $Response.nextPageParams
+        } -IsComplete {
+            param($Response, $PageIndex, $Cursor)
+            return [string]::IsNullOrWhiteSpace([string]$Response.nextPageParams)
+        }
+
+        if ($null -eq $ResponsePages) {
+            return
+        }
+
+        if (@($ResponsePages).Count -eq 1) {
+            return $ResponsePages[0]
+        }
+
+        $MergedResponse = $ResponsePages[0].PSObject.Copy()
+        $MergedValues = @()
+        $MergedTimes = @()
+
+        foreach ($PageResponse in $ResponsePages) {
+            if ($PageResponse.values) {
+                $MergedValues += $PageResponse.values
+            }
+            if ($PageResponse.time) {
+                $MergedTimes += $PageResponse.time
+            }
+        }
+
+        if ($MergedValues.Count -gt 0) {
+            $MergedResponse.values = $MergedValues
+        }
+        if ($MergedTimes.Count -gt 0) {
+            $MergedResponse.time = $MergedTimes
+        }
+
+        if ($MergedResponse.PSObject.Properties["nextPageParams"]) {
+            $MergedResponse.nextPageParams = $null
+        }
+
+        return $MergedResponse
 
 
     }

@@ -72,31 +72,30 @@ function Get-LMServiceMember {
             #Build header and uri
             $ResourcePath = "/device/devices/$Id/service/members"
 
-            #Initialize vars
-            $QueryParams = "?size=$BatchSize"
-            $Count = 0
-            $Done = $false
-            $Results = @()
+            $SingleObjectWhenNotPaged = $false
 
-            #Loop through requests
-            while (!$Done) {
-                
-                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+                param($Offset, $PageSize)
+
+                $RequestResourcePath = $ResourcePath
+                $QueryParams = "?size=$PageSize&offset=$Offset"
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
                 $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                if ($null -eq $Response) { return }
 
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $Total) {
-                    $Done = $true
-                }
-
+                return $Response
             }
+
+            if ($null -eq $Results) {
+                return
+            }
+
             return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.ServiceMember" )
         }
         else {

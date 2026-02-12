@@ -33,62 +33,78 @@ function Get-LMNormalizedProperty {
 
             #Build header and uri
             $ResourcePath = "/normalizedProperties/filter"
+            $BatchSize = 100
+            $CommandInvocation = $MyInvocation
 
-            $Body = [PSCustomObject]@{
-                meta = @{
-                    filters = @{
-                        filterType           = "FILTER_CATEGORICAL_MODEL_TYPE"
-                        normalizedProperties = @{
-                            dynamic = @(
-                                @{
-                                    field       = "alias"
-                                    expressions = @(
-                                        @{
-                                            operator = "REGEX"
-                                            value    = ".*"
-                                        }
-                                    )
-                                }
-                            )
+            $Results = Invoke-LMPaginatedPostV4 -BatchSize $BatchSize -InvokeRequest {
+                param($Offset, $PageSize)
+
+                $Body = [PSCustomObject]@{
+                    meta = @{
+                        filters = @{
+                            filterType           = "FILTER_CATEGORICAL_MODEL_TYPE"
+                            normalizedProperties = @{
+                                dynamic = @(
+                                    @{
+                                        field       = "alias"
+                                        expressions = @(
+                                            @{
+                                                operator = "REGEX"
+                                                value    = ".*"
+                                            }
+                                        )
+                                    }
+                                )
+                            }
                         }
+                        paging  = @{
+                            perPageCount    = $PageSize
+                            pageOffsetCount = $Offset
+                        }
+                        sort    = "alias, hostPropertyPriority"
+                        columns = @(
+                            @{ properties = "id, name, propertyType" }
+                        )
                     }
-                    paging  = @{
-                        perPageCount    = 100
-                        pageOffsetCount = 0
+                } | ConvertTo-Json -Depth 10
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation -Payload $Body
+
+                return (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body)
+            } -ExtractItems {
+                param($RawResponse)
+
+                if ($RawResponse.data.byId.normalizedProperties) {
+                    $normalizedProperties = $RawResponse.data.byId.normalizedProperties
+                    $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object {
+                        $parsedName = 0
+                        if ([int]::TryParse([string]$_, [ref]$parsedName)) {
+                            return $parsedName
+                        }
+                        return [int]::MaxValue
                     }
-                    sort    = "alias, hostPropertyPriority"
-                    columns = @(
-                        @{ properties = "id, name, propertyType" }
-                    )
-                }
-            } | ConvertTo-Json -Depth 10
-
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
-
-            #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
-
-            # Transform the response to return just the normalized property values
-            if ($Response.data.byId.normalizedProperties) {
-                $normalizedProperties = $Response.data.byId.normalizedProperties
-                $transformedProperties = @()
-
-                # Get all property names and sort them numerically
-                $propertyNames = $normalizedProperties.PSObject.Properties.Name | Sort-Object { [int]$_ }
-
-                # Add each property's value to the array
-                foreach ($propName in $propertyNames) {
-                    $transformedProperties += $normalizedProperties.$propName
+                    $transformedProperties = @()
+                    foreach ($propName in $propertyNames) {
+                        $transformedProperties += $normalizedProperties.$propName
+                    }
+                    return $transformedProperties
                 }
 
-                return (Add-ObjectTypeInfo -InputObject $transformedProperties -TypeName "LogicMonitor.NormalizedProperties" )
+                if ($RawResponse.data.items) {
+                    return @($RawResponse.data.items)
+                }
+
+                return @()
             }
 
-            return $Response
+            if ($null -eq $Results) {
+                return
+            }
+
+            return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.NormalizedProperties" )
 
         }
         else {
