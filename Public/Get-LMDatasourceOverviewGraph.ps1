@@ -90,6 +90,8 @@ function Get-LMDatasourceOverviewGraph {
         $CommandInvocation = $MyInvocation
         $SingleObjectWhenNotPaged = $ParameterSetName -match "^Id"
 
+        $CallerPSCmdlet = $PSCmdlet
+
         $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
             param($Offset, $PageSize)
 
@@ -111,7 +113,7 @@ function Get-LMDatasourceOverviewGraph {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             if ($null -eq $Response) { return $null }
             return $Response
         }

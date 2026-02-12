@@ -62,6 +62,8 @@ function Get-LMAlertRule {
         $ParameterSetName = $PSCmdlet.ParameterSetName
         $SingleObjectWhenNotPaged = $ParameterSetName -eq "Id"
 
+        $CallerPSCmdlet = $PSCmdlet
+
         $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
             param($Offset, $PageSize)
 
@@ -83,7 +85,7 @@ function Get-LMAlertRule {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             if ($null -eq $Response) {
                 return $null
             }

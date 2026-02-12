@@ -6,6 +6,8 @@ Centralized pagination runner for LogicMonitor GET requests.
 Invoke-LMPaginatedGet centralizes common pagination behavior used by many
 Get-LM cmdlets. It executes a caller-supplied request scriptblock for each
 offset, safely handles null responses, and aggregates paged items.
+Callers should capture `$PSCmdlet` before invoking this helper and pass that
+captured reference to `Invoke-LMRestMethod -CallerPSCmdlet` inside InvokeRequest.
 
 .PARAMETER InvokeRequest
 A scriptblock that accepts two arguments: offset and batch size, and returns

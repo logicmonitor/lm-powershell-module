@@ -156,6 +156,8 @@ function Get-LMDeviceData {
 
         #Build header and uri
         $ResourcePath = "/device/devices/$DeviceId/devicedatasources/$HdsId/instances/$InstanceId/data"
+        $CommandInvocation = $MyInvocation
+        $CallerPSCmdlet = $PSCmdlet
 
         #Initialize vars
         $AllDatapoints = @()
@@ -192,9 +194,9 @@ function Get-LMDeviceData {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
-            return (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1])
+            return (Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1])
         } -ExtractItems {
             param($Response)
             if ($null -eq $Response) {

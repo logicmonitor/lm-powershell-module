@@ -68,6 +68,7 @@ function Get-LMDeviceGroupAlert {
             $ResourcePath = "/device/groups/$Id/alerts"
 
             $SingleObjectWhenNotPaged = $false
+            $CallerPSCmdlet = $PSCmdlet
 
             $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
                 param($Offset, $PageSize)
@@ -86,7 +87,7 @@ function Get-LMDeviceGroupAlert {
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
                 #Issue request
-                $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
 
                 #If the API call failed (for example, resource not found), stop processing.
                 if ($null -eq $Response) {

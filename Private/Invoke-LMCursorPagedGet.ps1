@@ -6,6 +6,8 @@ Centralized cursor/async pagination runner for LogicMonitor requests.
 Invoke-LMCursorPagedGet executes a caller-supplied request scriptblock that can
 use next-page cursors and async completion state. It aggregates extracted items
 across iterations and stops when completion criteria are met.
+Callers should capture `$PSCmdlet` before invoking this helper and pass that
+captured reference to `Invoke-LMRestMethod -CallerPSCmdlet` inside InvokeRequest.
 
 .PARAMETER InvokeRequest
 A scriptblock that accepts three arguments: cursor token, page index, and the

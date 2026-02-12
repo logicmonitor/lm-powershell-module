@@ -5,6 +5,8 @@ Centralized v4 body-offset pagination runner for LogicMonitor POST requests.
 .DESCRIPTION
 Invoke-LMPaginatedPostV4 executes a caller-supplied request scriptblock for each
 pageOffsetCount/perPageCount step and aggregates extracted items.
+Callers should capture `$PSCmdlet` before invoking this helper and pass that
+captured reference to `Invoke-LMRestMethod -CallerPSCmdlet` inside InvokeRequest.
 
 .PARAMETER InvokeRequest
 A scriptblock that accepts two arguments: page offset count and page size, and

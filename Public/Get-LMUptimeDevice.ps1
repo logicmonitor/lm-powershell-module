@@ -123,6 +123,7 @@ function Get-LMUptimeDevice {
 
     $ParameterSetName = $PSCmdlet.ParameterSetName
     $SingleObjectWhenNotPaged = $ParameterSetName -eq 'Id'
+    $CallerPSCmdlet = $PSCmdlet
 
     $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
         param($Offset, $PageSize)
@@ -190,7 +191,7 @@ function Get-LMUptimeDevice {
 
         Resolve-LMDebugInfo -Url $uri -Headers $headers[0] -Command $MyInvocation
 
-        $response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $uri -Method 'GET' -Headers $headers[0] -WebSession $headers[1]
+        $response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $uri -Method 'GET' -Headers $headers[0] -WebSession $headers[1]
 
         if ($null -eq $response) {
             return $null

@@ -88,6 +88,7 @@ function Get-LMDeviceGroupDatasourceAlertSetting {
 
         #Build header and uri
         $ResourcePath = "/device/groups/$Id/datasources/$DatasourceId/alertsettings"
+        $CallerPSCmdlet = $PSCmdlet
 
         $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -InvokeRequest {
             param($Offset, $PageSize)
@@ -105,7 +106,7 @@ function Get-LMDeviceGroupDatasourceAlertSetting {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
-            $RawResponse = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $RawResponse = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             if ($null -eq $RawResponse) {
                 return $null
             }

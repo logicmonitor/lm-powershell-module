@@ -77,6 +77,8 @@ function Get-LMWebsiteData {
 
         #Build header and uri
         $ResourcePath = "/website/websites/$Id/checkpoints/$CheckpointId/data"
+        $CommandInvocation = $MyInvocation
+        $CallerPSCmdlet = $PSCmdlet
 
         #Convert to epoch, if not set use defaults
         if (!$StartDate) {
@@ -107,9 +109,9 @@ function Get-LMWebsiteData {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
-            return (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1])
+            return (Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1])
         } -ExtractItems {
             param($Response)
             if ($null -eq $Response) {

@@ -68,6 +68,7 @@ function Get-LMDeviceInstanceList {
 
         $ResourcePath = "/device/devices/$Id/instances"
         $CommandInvocation = $MyInvocation
+        $CallerPSCmdlet = $PSCmdlet
 
         if ($CountOnly) {
             $QueryParams = "?size=1&offset=0&sort=-endDateTime"
@@ -78,7 +79,7 @@ function Get-LMDeviceInstanceList {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             if ($null -eq $Response) { return }
             return $Response.Total
         }
@@ -98,7 +99,7 @@ function Get-LMDeviceInstanceList {
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+            $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             if ($null -eq $Response) { return $null }
             return $Response
         }

@@ -35,6 +35,7 @@ function Get-LMNormalizedProperty {
             $ResourcePath = "/normalizedProperties/filter"
             $BatchSize = 100
             $CommandInvocation = $MyInvocation
+            $CallerPSCmdlet = $PSCmdlet
 
             $Results = Invoke-LMPaginatedPostV4 -BatchSize $BatchSize -InvokeRequest {
                 param($Offset, $PageSize)
@@ -73,7 +74,7 @@ function Get-LMNormalizedProperty {
 
                 Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation -Payload $Body
 
-                return (Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body)
+                return (Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body)
             } -ExtractItems {
                 param($RawResponse)
 
