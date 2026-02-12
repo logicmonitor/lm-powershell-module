@@ -97,13 +97,7 @@ function Get-LMAlert {
         #Build header and uri
         $ResourcePath = "/alert/alerts"
 
-        #Initialize vars
-        $QueryParams = ""
-        $Count = 0
-        $Done = $false
-        $Results = @()
         $QueryLimit = 10000 #API limit to how many results can be returned
-
 
         #Convert to epoch, if not set use defaults
         if (!$StartDate) {
@@ -120,22 +114,27 @@ function Get-LMAlert {
             [int]$EndDate = ([DateTimeOffset]$($EndDate)).ToUnixTimeSeconds()
         }
 
-        #Loop through requests
-        while (!$Done) {
-            #Build query params
+        $ParameterSetName = $PSCmdlet.ParameterSetName
+        $SingleObjectWhenNotPaged = $ParameterSetName -eq "Id"
 
-            switch ($PSCmdlet.ParameterSetName) {
-                "Id" { $resourcePath += "/$Id" }
-                "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
-                "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$BatchSize&offset=$Count&sort=$Sort" }
+        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -MaxItems $QueryLimit -MaxItemsWarningMessage "[WARN]: Reached $QueryLimit record query limitation for this endpoint" -InvokeRequest {
+            param($Offset, $PageSize)
+
+            $RequestResourcePath = $ResourcePath
+            $QueryParams = ""
+
+            switch ($ParameterSetName) {
+                "Id" { $RequestResourcePath = "$ResourcePath/$Id" }
+                "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$PageSize&offset=$Offset&sort=$Sort" }
+                "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$PageSize&offset=$Offset&sort=$Sort" }
                 "Filter" {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=$Sort"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=$Sort"
                 }
                 "FilterWizard" {
                     $Filter = Build-LMFilter -PassThru -ResourcePath $ResourcePath
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$BatchSize&offset=$Count&sort=$Sort"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=$Sort"
                 }
             }
 
@@ -154,36 +153,22 @@ function Get-LMAlert {
                 }
             }
 
-            
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
+            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
             Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
 
             #Issue request
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-            #Stop looping if single device, no need to continue
-            if ($PSCmdlet.ParameterSetName -eq "Id") {
-                $Done = $true
-                return (Add-ObjectTypeInfo -InputObject $Response -TypeName "LogicMonitor.Alert" )
-            }
-            #Check result size and if needed loop again
-            else {
-                [Int]$Total = $Response.Total
-                [Int]$Count += ($Response.Items | Measure-Object).Count
-                $Results += $Response.Items
-                if ($Count -ge $QueryLimit) {
-                    $Done = $true
-                    Write-Warning "[WARN]: Reached $QueryLimit record query limitation for this endpoint"
-                }
-                elseif ($Count -ge $Total -and $Total -ge 0) {
-                    $Done = $true
-                }
-            }
+            if ($null -eq $Response) { return }
 
+            return $Response
         }
 
-        # Return $Results
+        if ($null -eq $Results) {
+            return
+        }
+
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Alert" )
     }
     else {
