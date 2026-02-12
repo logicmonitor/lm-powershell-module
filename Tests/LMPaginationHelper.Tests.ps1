@@ -168,6 +168,40 @@ Describe 'Pagination Helper Tests' {
             ($result | Where-Object { $_ -isnot [System.Management.Automation.WarningRecord] }).Count | Should -Be 3
             ($result | Where-Object { $_ -is [System.Management.Automation.WarningRecord] }).Count | Should -Be 1
         }
+
+        It 'Stops when MaxItems is reached exactly' {
+            $WarningPreference = 'Continue'
+            $script:requestCount = 0
+            $result = Invoke-LMPaginatedGet -BatchSize 2 -MaxItems 4 -MaxItemsWarningMessage 'max hit' -InvokeRequest {
+                param($Offset, $PageSize)
+
+                $script:requestCount++
+                switch ($Offset) {
+                    0 {
+                        return [PSCustomObject]@{
+                            total = 6
+                            items = @(
+                                [PSCustomObject]@{ id = 1 },
+                                [PSCustomObject]@{ id = 2 }
+                            )
+                        }
+                    }
+                    default {
+                        return [PSCustomObject]@{
+                            total = 6
+                            items = @(
+                                [PSCustomObject]@{ id = 3 },
+                                [PSCustomObject]@{ id = 4 }
+                            )
+                        }
+                    }
+                }
+            } 3>&1
+
+            ($result | Where-Object { $_ -isnot [System.Management.Automation.WarningRecord] }).Count | Should -Be 4
+            ($result | Where-Object { $_ -is [System.Management.Automation.WarningRecord] }).Count | Should -Be 1
+            $script:requestCount | Should -Be 2
+        }
     }
 
     Describe 'Invoke-LMPaginatedPostV4' {

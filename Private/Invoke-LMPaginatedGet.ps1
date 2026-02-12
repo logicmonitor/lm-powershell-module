@@ -84,15 +84,22 @@ function Invoke-LMPaginatedGet {
             return $results
         }
 
-        if ($MaxItems -gt 0 -and ($results.Count + $items.Count) -gt $MaxItems) {
+        if ($MaxItems -gt 0) {
             $remaining = $MaxItems - $results.Count
-            if ($remaining -gt 0) {
+            if ($remaining -le 0) {
+                if ($MaxItemsWarningMessage) {
+                    Write-Warning $MaxItemsWarningMessage
+                }
+                break
+            }
+
+            if ($items.Count -ge $remaining) {
                 $results += $items[0..($remaining - 1)]
+                if ($MaxItemsWarningMessage) {
+                    Write-Warning $MaxItemsWarningMessage
+                }
+                break
             }
-            if ($MaxItemsWarningMessage) {
-                Write-Warning $MaxItemsWarningMessage
-            }
-            break
         }
 
         $results += $items
