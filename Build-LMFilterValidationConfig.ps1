@@ -1,12 +1,12 @@
 <#
 .SYNOPSIS
-Development tool to generate filter field validation configuration from swagger YAML.
+Development tool to generate filter field validation configuration from Swagger.
 
 .DESCRIPTION
-This script parses the logicmonitor-api.yaml file to extract all API endpoints and their
-response schemas. It then maps each endpoint to the properties available in the response
-model, creating a validation configuration file that can be used at runtime to validate
-filter fields before sending API requests.
+This script fetches the LogicMonitor public Swagger JSON endpoint and extracts API
+endpoints and their response schemas. It then maps each endpoint to the properties
+available in the response model, creating a validation configuration file that can be
+used at runtime to validate filter fields before sending API requests.
 
 .EXAMPLE
 .\Build-LMFilterValidationConfig.ps1
@@ -14,43 +14,37 @@ filter fields before sending API requests.
 This will generate Private/LMFilterValidationConfig.psd1 with all endpoint-to-fields mappings.
 
 .NOTES
-This is a development-time tool and should be run whenever the swagger file is updated.
-Requires the powershell-yaml module for parsing YAML files.
+This is a development-time tool and should be run whenever endpoint filter fields
+need to be refreshed from the latest public Swagger spec.
 #>
 
 [CmdletBinding()]
-param()
+param(
+    [Parameter()]
+    [String]$SwaggerUrl = 'https://www.logicmonitor.com/swagger-ui-master/api-v3/dist/swagger.json',
 
-# Check if powershell-yaml module is available
-if (-not (Get-Module -ListAvailable -Name powershell-yaml)) {
-    Write-Warning "The powershell-yaml module is required to parse the swagger YAML file."
-    Write-Warning "Install it with: Install-Module -Name powershell-yaml"
-    Write-Warning "Attempting to install now..."
-    try {
-        Install-Module -Name powershell-yaml -Scope CurrentUser -Force -AllowClobber
-        Write-Host "Successfully installed powershell-yaml module" -ForegroundColor Green
-    }
-    catch {
-        Write-Error "Failed to install powershell-yaml module. Please install it manually."
-        return
-    }
+    [Parameter()]
+    [String]$OutputPath = (Join-Path $PSScriptRoot 'Private/LMFilterValidationConfig.psd1')
+)
+
+Write-Host "Fetching Swagger file: $SwaggerUrl" -ForegroundColor Cyan
+try {
+    $Swagger = Invoke-RestMethod -Uri $SwaggerUrl -Method Get -ErrorAction Stop
 }
-
-Import-Module powershell-yaml
-
-$SwaggerPath = Join-Path $PSScriptRoot "logicmonitor-api.yaml"
-$OutputPath = Join-Path $PSScriptRoot "Private/LMFilterValidationConfig.psd1"
-
-if (-not (Test-Path $SwaggerPath)) {
-    Write-Error "Swagger file not found at: $SwaggerPath"
+catch {
+    Write-Error "Failed to fetch Swagger from '$SwaggerUrl'. $($_.Exception.Message)"
     return
 }
 
-Write-Host "Parsing swagger file: $SwaggerPath" -ForegroundColor Cyan
+if (-not $Swagger.definitions -or -not $Swagger.paths) {
+    Write-Error "Unexpected Swagger format. Expected Swagger 2.0 with 'definitions' and 'paths'."
+    return
+}
 
-# Parse the YAML file
-$SwaggerContent = Get-Content -Path $SwaggerPath -Raw
-$Swagger = ConvertFrom-Yaml -Yaml $SwaggerContent
+$Definitions = @{}
+foreach ($definitionProperty in $Swagger.definitions.PSObject.Properties) {
+    $Definitions[$definitionProperty.Name] = $definitionProperty.Value
+}
 
 Write-Host "Extracting API endpoints and schemas..." -ForegroundColor Cyan
 
@@ -58,39 +52,81 @@ Write-Host "Extracting API endpoints and schemas..." -ForegroundColor Cyan
 $EndpointToSchema = @{}
 $SchemaProperties = @{}
 
-# First, extract all schema properties
-foreach ($schemaName in $Swagger.components.schemas.Keys) {
-    $schema = $Swagger.components.schemas[$schemaName]
-    $properties = @()
-    
-    if ($schema.properties) {
-        $properties += $schema.properties.Keys
+function Get-SwaggerRefName {
+    param(
+        [Parameter(Mandatory)]
+        [String]$RefPath
+    )
+
+    if ($RefPath -match '^#/definitions/(?<name>.+)$') {
+        return $Matches.name
     }
-    
-    # Handle allOf (inheritance)
-    if ($schema.allOf) {
-        foreach ($allOfItem in $schema.allOf) {
+
+    return $null
+}
+
+function Get-SchemaPropertyNames {
+    param(
+        [Parameter(Mandatory)]
+        [Object]$Schema,
+
+        [Parameter(Mandatory)]
+        [hashtable]$AllDefinitions,
+
+        [Parameter()]
+        [hashtable]$Visited = @{}
+    )
+
+    $properties = @()
+    if ($null -eq $Schema) {
+        return $properties
+    }
+
+    if ($Schema.properties) {
+        $properties += @($Schema.properties.PSObject.Properties.Name)
+    }
+
+    if ($Schema.allOf) {
+        foreach ($allOfItem in $Schema.allOf) {
             if ($allOfItem.properties) {
-                $properties += $allOfItem.properties.Keys
+                $properties += @($allOfItem.properties.PSObject.Properties.Name)
             }
-            # Handle $ref in allOf
+
             if ($allOfItem.'$ref') {
-                $refSchema = $allOfItem.'$ref' -replace '#/components/schemas/', ''
-                # We'll resolve these in a second pass
+                $refSchemaName = Get-SwaggerRefName -RefPath $allOfItem.'$ref'
+                if ($refSchemaName -and -not $Visited.ContainsKey($refSchemaName) -and $AllDefinitions.ContainsKey($refSchemaName)) {
+                    $Visited[$refSchemaName] = $true
+                    $properties += Get-SchemaPropertyNames -Schema $AllDefinitions[$refSchemaName] -AllDefinitions $AllDefinitions -Visited $Visited
+                }
             }
         }
     }
-    
+
+    if ($Schema.'$ref') {
+        $refSchemaName = Get-SwaggerRefName -RefPath $Schema.'$ref'
+        if ($refSchemaName -and -not $Visited.ContainsKey($refSchemaName) -and $AllDefinitions.ContainsKey($refSchemaName)) {
+            $Visited[$refSchemaName] = $true
+            $properties += Get-SchemaPropertyNames -Schema $AllDefinitions[$refSchemaName] -AllDefinitions $AllDefinitions -Visited $Visited
+        }
+    }
+
+    return @($properties | Sort-Object -Unique)
+}
+
+# First, extract all schema properties
+foreach ($schemaName in $Swagger.definitions.PSObject.Properties.Name) {
+    $schema = $Definitions[$schemaName]
+    $properties = Get-SchemaPropertyNames -Schema $schema -AllDefinitions $Definitions
     if ($properties.Count -gt 0) {
-        $SchemaProperties[$schemaName] = $properties | Sort-Object -Unique
+        $SchemaProperties[$schemaName] = $properties
     }
 }
 
 Write-Host "Found $($SchemaProperties.Count) schemas with properties" -ForegroundColor Green
 
 # Now map endpoints to their response schemas
-foreach ($path in $Swagger.paths.Keys) {
-    $pathItem = $Swagger.paths[$path]
+foreach ($path in $Swagger.paths.PSObject.Properties.Name) {
+    $pathItem = $Swagger.paths.$path
     
     # We're primarily interested in GET endpoints for filtering
     if ($pathItem.get) {
@@ -98,8 +134,9 @@ foreach ($path in $Swagger.paths.Keys) {
         
         # Check if it has a filter parameter
         $hasFilter = $false
-        if ($getOp.parameters) {
-            foreach ($param in $getOp.parameters) {
+        $parameters = @($pathItem.parameters) + @($getOp.parameters)
+        if ($parameters) {
+            foreach ($param in $parameters) {
                 if ($param.name -eq 'filter') {
                     $hasFilter = $true
                     break
@@ -108,17 +145,24 @@ foreach ($path in $Swagger.paths.Keys) {
         }
         
         if ($hasFilter) {
-            # Extract the response schema
-            if ($getOp.responses.'200'.content.'application/json'.schema.'$ref') {
-                $responseSchemaRef = $getOp.responses.'200'.content.'application/json'.schema.'$ref'
-                $responseSchemaName = $responseSchemaRef -replace '#/components/schemas/', ''
+            # Extract the Swagger 2.0 response schema
+            $responseSchema = $null
+            if ($getOp.responses -and $getOp.responses.'200' -and $getOp.responses.'200'.schema) {
+                $responseSchema = $getOp.responses.'200'.schema
+            }
+
+            if ($responseSchema -and $responseSchema.'$ref') {
+                $responseSchemaName = Get-SwaggerRefName -RefPath $responseSchema.'$ref'
+                if (-not $responseSchemaName) {
+                    continue
+                }
                 
                 # For pagination responses, we need to get the items schema
                 if ($responseSchemaName -match 'PaginationResponse$') {
-                    $paginationSchema = $Swagger.components.schemas[$responseSchemaName]
+                    $paginationSchema = $Definitions[$responseSchemaName]
                     if ($paginationSchema.properties.items.items.'$ref') {
                         $itemsSchemaRef = $paginationSchema.properties.items.items.'$ref'
-                        $itemsSchemaName = $itemsSchemaRef -replace '#/components/schemas/', ''
+                        $itemsSchemaName = Get-SwaggerRefName -RefPath $itemsSchemaRef
                         
                         if ($SchemaProperties[$itemsSchemaName]) {
                             $EndpointToSchema[$path] = @{
@@ -162,7 +206,7 @@ Write-Host "Generating configuration file: $OutputPath" -ForegroundColor Cyan
 $PSD1Content = @"
 <#
 .SYNOPSIS
-Filter field validation configuration generated from logicmonitor-api.yaml
+Filter field validation configuration generated from public Swagger JSON
 
 .DESCRIPTION
 This file contains a mapping of API endpoints to their valid filterable fields.
@@ -170,6 +214,7 @@ It is automatically generated by Build-LMFilterValidationConfig.ps1 and should n
 
 Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')
 Swagger endpoints processed: $($EndpointToSchema.Count)
+Swagger URL: $SwaggerUrl
 
 .NOTES
 To regenerate this file, run: .\Build-LMFilterValidationConfig.ps1
