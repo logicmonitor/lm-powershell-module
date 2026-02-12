@@ -316,7 +316,7 @@ function Set-LMUptimeDevice {
         }
 
         $explicitLocationSpecified = $wasAllSpecified -or $wasCollectorSpecified -or $wasSmgSpecified
-        if ($explicitLocationSpecified){
+        if ($explicitLocationSpecified) {
             $UseDefaultLocationSetting = $false
         }
 

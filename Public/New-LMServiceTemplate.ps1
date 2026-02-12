@@ -102,21 +102,21 @@ function New-LMServiceTemplate {
 
         #Build the service template data structure
         $ServiceTemplateData = @{
-            description = $Description
-            filterType = $FilterType
-            cardinality = $Cardinality
-            propertySelector = $PropertySelector
+            description                  = $Description
+            filterType                   = $FilterType
+            cardinality                  = $Cardinality
+            propertySelector             = $PropertySelector
             membershipEvaluationInterval = $MembershipEvaluationInterval
-            resourceGroupRecords = $ResourceGroupRecords
-            properties = $Properties
-            serviceNamingPattern = $ServiceNamingPattern
-            groupNamingPattern = $GroupNamingPattern
-            model = "RestServiceTemplate"
-            name = $Name
-            defaultCriticality = $DefaultCriticality
-            createGroup = $CreateGroup
-            criticality = $Criticality
-            staticGroup = $StaticGroup
+            resourceGroupRecords         = $ResourceGroupRecords
+            properties                   = $Properties
+            serviceNamingPattern         = $ServiceNamingPattern
+            groupNamingPattern           = $GroupNamingPattern
+            model                        = "RestServiceTemplate"
+            name                         = $Name
+            defaultCriticality           = $DefaultCriticality
+            createGroup                  = $CreateGroup
+            criticality                  = $Criticality
+            staticGroup                  = $StaticGroup
         }
 
         #Build the complete payload structure

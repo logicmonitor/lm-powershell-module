@@ -70,7 +70,7 @@ function Invoke-LMReportExecution {
     $resourcePath = "/report/reports/$reportId/executions"
 
     $Data = @{
-        withAdminId = $WithAdminId
+        withAdminId   = $WithAdminId
         receiveEmails = $ReceiveEmails
     }
 

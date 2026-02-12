@@ -158,9 +158,9 @@ function ConvertTo-LMUptimeDevice {
         $targetName = "${NamePrefix}$($Website.name)${NameSuffix}"
 
         $parameters = @{
-            Name        = $targetName
-            HostGroupIds    = $TargetHostGroupIds
-            Description = $Website.description
+            Name         = $targetName
+            HostGroupIds = $TargetHostGroupIds
+            Description  = $Website.description
         }
 
         if ($Website.pollingInterval) { 
@@ -282,7 +282,7 @@ function ConvertTo-LMUptimeDevice {
 
         if ($PSCmdlet.ShouldProcess($targetName, 'Create LM Uptime Device')) {
             $commonParams = @{}
-            foreach ($commonParam in 'Debug','Verbose','WhatIf','Confirm') {
+            foreach ($commonParam in 'Debug', 'Verbose', 'WhatIf', 'Confirm') {
                 if ($PSBoundParameters.ContainsKey($commonParam)) {
                     $commonParams[$commonParam] = $PSBoundParameters[$commonParam]
                 }

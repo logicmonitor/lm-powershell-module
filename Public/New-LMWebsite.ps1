@@ -379,7 +379,7 @@ function New-LMWebsite {
             }
 
             # Set default based on specified testLocations
-            if($TestLocationCollectorIds -or $TestLocationSmgIds){
+            if ($TestLocationCollectorIds -or $TestLocationSmgIds) {
                 $Data.useDefaultLocationSetting = $false
             }
 

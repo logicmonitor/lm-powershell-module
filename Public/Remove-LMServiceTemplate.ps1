@@ -45,7 +45,7 @@ function Remove-LMServiceTemplate {
                 allIds = @(
                     @{
                         model = "RestServiceTemplate"
-                        id = $Id
+                        id    = $Id
                     }
                 )
             }

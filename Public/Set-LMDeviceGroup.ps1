@@ -151,17 +151,17 @@ function Set-LMDeviceGroup {
             }
 
             $Data = @{
-                name             = $NewName
-                description      = $Description
-                appliesTo        = $AppliesTo
-                disableAlerting  = $DisableAlerting
+                name                                = $NewName
+                description                         = $Description
+                appliesTo                           = $AppliesTo
+                disableAlerting                     = $DisableAlerting
                 defaultAutoBalancedCollectorGroupId = $DefaultAutoBalancedCollectorGroupId
                 defaultCollectorGroupId             = $DefaultCollectorGroupId
                 defaultCollectorId                  = $DefaultCollectorId
-                enableNetflow    = $EnableNetFlow
-                customProperties = $customProperties
-                parentId         = $ParentGroupId
-                extra            = $Extra
+                enableNetflow                       = $EnableNetFlow
+                customProperties                    = $customProperties
+                parentId                            = $ParentGroupId
+                extra                               = $Extra
             }
 
             #Remove empty keys so we dont overwrite them

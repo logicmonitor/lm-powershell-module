@@ -22,7 +22,7 @@ function ConvertTo-LMCustomPropertyArray {
             }
         }
         if ($customProperties.Count -eq 0) { return @() }
-        return ,$customProperties
+        return , $customProperties
     }
 
     if ($Properties -is [System.Collections.IEnumerable] -and -not ($Properties -is [string])) {
@@ -50,7 +50,7 @@ function ConvertTo-LMCustomPropertyArray {
         }
 
         if ($customProperties.Count -eq 0) { return @() }
-        return ,$customProperties
+        return , $customProperties
     }
 
     throw "Unsupported property format. Provide a hashtable or an array of name/value objects."

@@ -264,11 +264,11 @@ function Invoke-LMAPIRequest {
 
         # Build parameters for Invoke-LMRestMethod
         $restParams = @{
-            Uri              = $Uri
-            Method           = $Method
-            Headers          = $Headers[0]
-            WebSession       = $Headers[1]
-            CallerPSCmdlet   = $PSCmdlet
+            Uri            = $Uri
+            Method         = $Method
+            Headers        = $Headers[0]
+            WebSession     = $Headers[1]
+            CallerPSCmdlet = $PSCmdlet
         }
 
         if ($Body) {
@@ -298,9 +298,9 @@ function Invoke-LMAPIRequest {
         if ($OutFile) {
             Write-Verbose "Response saved to: $OutFile"
             return [PSCustomObject]@{
-                Success = $true
+                Success  = $true
                 FilePath = $OutFile
-                Message = "Response saved successfully"
+                Message  = "Response saved successfully"
             }
         }
 

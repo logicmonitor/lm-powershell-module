@@ -109,7 +109,7 @@ function Get-LMNormalizedProperty {
 
         }
         else {
-             Write-Error "This cmdlet is for internal use only at this time does not support LMv1 or Bearer auth. Use Connect-LMAccount to login with the correct auth type and try again"
+            Write-Error "This cmdlet is for internal use only at this time does not support LMv1 or Bearer auth. Use Connect-LMAccount to login with the correct auth type and try again"
         }
     }
     end {}
