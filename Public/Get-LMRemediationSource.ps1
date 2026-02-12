@@ -12,9 +12,6 @@ The ID of the remediation source to retrieve. Part of a mutually exclusive param
 .PARAMETER Name
 The name of the remediation source to retrieve. Part of a mutually exclusive parameter set.
 
-.PARAMETER DisplayName
-The display name of the remediation source to retrieve. Part of a mutually exclusive parameter set.
-
 .PARAMETER Filter
 A filter object to apply when retrieving remediation sources. Part of a mutually exclusive parameter set.
 
@@ -51,9 +48,6 @@ function Get-LMRemediationSource {
         [Parameter(ParameterSetName = 'Name')]
         [String]$Name,
 
-        [Parameter(ParameterSetName = 'DisplayName')]
-        [String]$DisplayName,
-
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
 
@@ -79,7 +73,6 @@ function Get-LMRemediationSource {
                 "All" { $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id" }
                 "Id" { $RequestResourcePath = "$ResourcePath/$Id" }
                 "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$PageSize&offset=$Offset&sort=+id" }
-                "DisplayName" { $QueryParams = "?filter=displayName:`"$DisplayName`"&size=$PageSize&offset=$Offset&sort=+id" }
                 "Filter" {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"

@@ -31,7 +31,7 @@ Describe 'Pagination Cmdlet Regression Tests' {
         It 'Aggregates multiple v4 pages' {
             Mock Invoke-LMRestMethod {
                 param($CallerPSCmdlet, $Uri, $Method, $Headers, $WebSession, $Body)
-                $payload = $Body | ConvertFrom-Json -Depth 20
+                $payload = $Body | ConvertFrom-Json
                 $offset = [int]$payload.meta.paging.pageOffsetCount
 
                 if ($offset -eq 0) {

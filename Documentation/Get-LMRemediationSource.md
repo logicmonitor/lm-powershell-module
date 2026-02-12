@@ -29,12 +29,6 @@ Get-LMRemediationSource [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <
  [<CommonParameters>]
 ```
 
-### DisplayName
-```
-Get-LMRemediationSource [-DisplayName <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
-```
-
 ### Filter
 ```
 Get-LMRemediationSource [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
@@ -90,22 +84,6 @@ Part of a mutually exclusive parameter set.
 ```yaml
 Type: String
 Parameter Sets: Name
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-The display name of the remediation source to retrieve.
-Part of a mutually exclusive parameter set.
-
-```yaml
-Type: String
-Parameter Sets: DisplayName
 Aliases:
 
 Required: False

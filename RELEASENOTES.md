@@ -1,4 +1,24 @@
 # Previous module release notes
+## 7.8
+### Reintroduction of LMUptime Cmdlets
+With the release of portal version v232, LMUptime API endpoints are fully supported. As a result, we hav reintroduced our Uptime cmdlets to help assist customers in migrating and managing uptime devices.
+
+- **New-LMUptimeDevice**: Create LogicMonitor Uptime monitors (web or ping) using the v3 device endpoint.
+- **New-LMUptimeWebStep**: Helper cmdlet to create a properly formated step for use with *New-LMUptimedevice*
+- **Get-LMUptimeDevice**: Retrieve existing Uptime devices with support for filtering by type or internal/external status.
+- **Set-LMUptimeDevice**: Update Uptime device configuration, including alert thresholds, locations, and scripted steps.
+- **Remove-LMUptimeDevice**: Delete Uptime devices individually.
+- **ConvertTo-LMUptimeDevice** Migration cmdlet relies will take a provided set of WebChecks/PingChecks and convert them to LMUptime Resources.
+
+### New Cmdlets
+- **Get-LMExternalAPIStats**: Cmdlet that retrieves external API usage statistics from LogicMonitor. This provides information about API call volumes and usage patterns for external API access.
+- **Get-LMPortalVersion**: Cmdlet that makes a lightweight API call to retrieve the portal version
+from the x-server-version response header.
+- **Get-LMRemediationSource**: Retrieves remediation source information from LogicMonitor. It can return remediation sources by ID, name, display name, or using filters.
+- **Set-LMRemediationSource**: Updates an existing remediation source in a LogicMonitor portal.
+- **New-LMRemediationSource**:  Creates a new remediation source in LogicMonitor using a provided remediation source configuration object.
+- **Remove-LMRemediationSource**: Removes a LogicMonitor remediation source based on the specified parameters. 
+
 ## 7.7.5
 ### Cmdlet Changes
 - **Get-LMDeviceData**: Fixed a bug that used the incorrect pagination logic when trying to enumerate additional pages of result data.

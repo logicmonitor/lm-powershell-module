@@ -29,12 +29,6 @@ Get-LMDiagnosticSource [-Name <String>] [-BatchSize <Int32>] [-ProgressAction <A
  [<CommonParameters>]
 ```
 
-### DisplayName
-```
-Get-LMDiagnosticSource [-DisplayName <String>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
-```
-
 ### Filter
 ```
 Get-LMDiagnosticSource [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
@@ -84,22 +78,6 @@ Part of a mutually exclusive parameter set.
 ```yaml
 Type: String
 Parameter Sets: Name
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-The display name of the diagnostic source to retrieve.
-Part of a mutually exclusive parameter set.
-
-```yaml
-Type: String
-Parameter Sets: DisplayName
 Aliases:
 
 Required: False
