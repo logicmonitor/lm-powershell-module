@@ -1,35 +1,35 @@
 Describe 'Device Testing New/Get/Set/Remove' {
-    function Invoke-TestRetry {
-        param(
-            [Parameter(Mandatory)]
-            [scriptblock]$ScriptBlock,
-            [Parameter(Mandatory)]
-            [string]$OperationName,
-            [int]$MaxAttempts = 8,
-            [int]$DelaySeconds = 5
-        )
-
-        $lastError = $null
-
-        for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
-            try {
-                return & $ScriptBlock
-            }
-            catch {
-                $lastError = $_
-
-                if ($attempt -lt $MaxAttempts) {
-                    Start-Sleep -Seconds $DelaySeconds
-                }
-            }
-        }
-
-        throw "$OperationName failed after $MaxAttempts attempts. Last error: $($lastError.Exception.Message)"
-    }
-
     BeforeAll {
         Import-Module $Module -Force
         Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
+
+        $script:InvokeTestRetry = {
+            param(
+                [Parameter(Mandatory)]
+                [scriptblock]$ScriptBlock,
+                [Parameter(Mandatory)]
+                [string]$OperationName,
+                [int]$MaxAttempts = 8,
+                [int]$DelaySeconds = 5
+            )
+
+            $lastError = $null
+
+            for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+                try {
+                    return & $ScriptBlock
+                }
+                catch {
+                    $lastError = $_
+
+                    if ($attempt -lt $MaxAttempts) {
+                        Start-Sleep -Seconds $DelaySeconds
+                    }
+                }
+            }
+
+            throw "$OperationName failed after $MaxAttempts attempts. Last error: $($lastError.Exception.Message)"
+        }
 
         $script:DeviceTestSuffix = [guid]::NewGuid().ToString('N').Substring(0, 8)
         $script:DeviceTestName = "device-build-test-$($script:DeviceTestSuffix).example.com"
@@ -41,7 +41,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
             $Script:NewDevice = New-LMDevice -Name $script:DeviceTestName -DisplayName $script:DeviceTestDisplayName -PreferredCollectorId $PreferredCollectorId -DisableAlerting $true
             $Script:NewDevice | Should -Not -BeNullOrEmpty
 
-            Invoke-TestRetry -OperationName 'Get-LMDevice by Id for newly created device' -ScriptBlock {
+            & $script:InvokeTestRetry -OperationName 'Get-LMDevice by Id for newly created device' -ScriptBlock {
                 $device = Get-LMDevice -Id $Script:NewDevice.Id -ErrorAction Stop
                 if (($device | Measure-Object).Count -ne 1) {
                     throw "Device '$($Script:NewDevice.Id)' is not queryable yet."
@@ -88,7 +88,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
             ($Device | Measure-Object).Count | Should -BeGreaterThan 0
         }
         It 'When given an id should return that device' {
-            $Device = Invoke-TestRetry -OperationName 'Get-LMDevice by Id' -ScriptBlock {
+            $Device = & $script:InvokeTestRetry -OperationName 'Get-LMDevice by Id' -ScriptBlock {
                 $result = Get-LMDevice -Id $Script:NewDevice.Id -ErrorAction Stop
                 if (($result | Measure-Object).Count -ne 1) {
                     throw "Expected one device for id '$($Script:NewDevice.Id)'."
@@ -98,7 +98,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
             ($Device | Measure-Object).Count | Should -BeExactly 1
         }
         It 'When given a name should return all devices matching that name' {
-            $Device = Invoke-TestRetry -OperationName 'Get-LMDevice by Name' -ScriptBlock {
+            $Device = & $script:InvokeTestRetry -OperationName 'Get-LMDevice by Name' -ScriptBlock {
                 $result = Get-LMDevice -Name $Script:NewDevice.Name -ErrorAction Stop
                 if (($result | Measure-Object).Count -lt 1) {
                     throw "Device '$($Script:NewDevice.Name)' not visible yet."
@@ -108,7 +108,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
             ($Device | Measure-Object).Count | Should -BeExactly 1
         }
         It 'When given a wildcard displayname should return all devices matching that wildcard value' {
-            $Device = Invoke-TestRetry -OperationName 'Get-LMDevice by wildcard DisplayName' -ScriptBlock {
+            $Device = & $script:InvokeTestRetry -OperationName 'Get-LMDevice by wildcard DisplayName' -ScriptBlock {
                 $result = Get-LMDevice -DisplayName "$(($Script:NewDevice.DisplayName.Split(".")[0]))*" -ErrorAction Stop
                 if (($result | Measure-Object).Count -lt 1) {
                     throw "No devices returned for wildcard display name query."

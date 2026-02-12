@@ -1,36 +1,35 @@
 Describe 'Uptime Device Testing New/Get/Set/Remove' {
-
-    function Invoke-TestRetry {
-        param(
-            [Parameter(Mandatory)]
-            [scriptblock]$ScriptBlock,
-            [Parameter(Mandatory)]
-            [string]$OperationName,
-            [int]$MaxAttempts = 8,
-            [int]$DelaySeconds = 5
-        )
-
-        $lastError = $null
-
-        for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
-            try {
-                return & $ScriptBlock
-            }
-            catch {
-                $lastError = $_
-
-                if ($attempt -lt $MaxAttempts) {
-                    Start-Sleep -Seconds $DelaySeconds
-                }
-            }
-        }
-
-        throw "$OperationName failed after $MaxAttempts attempts. Last error: $($lastError.Exception.Message)"
-    }
-
     BeforeAll {
         Import-Module $Module -Force
         Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
+
+        $script:InvokeTestRetry = {
+            param(
+                [Parameter(Mandatory)]
+                [scriptblock]$ScriptBlock,
+                [Parameter(Mandatory)]
+                [string]$OperationName,
+                [int]$MaxAttempts = 8,
+                [int]$DelaySeconds = 5
+            )
+
+            $lastError = $null
+
+            for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+                try {
+                    return & $ScriptBlock
+                }
+                catch {
+                    $lastError = $_
+
+                    if ($attempt -lt $MaxAttempts) {
+                        Start-Sleep -Seconds $DelaySeconds
+                    }
+                }
+            }
+
+            throw "$OperationName failed after $MaxAttempts attempts. Last error: $($lastError.Exception.Message)"
+        }
 
         $script:UptimeDeviceName = "Uptime.Build.Test." + ([guid]::NewGuid().ToString('N').Substring(0, 8))
         $script:UptimeDomain = "uptime-" + ([guid]::NewGuid().ToString('N').Substring(0, 6)) + ".example.com"
@@ -52,7 +51,7 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
             $script:NewUptimeDevice.deviceType | Should -Be 18
             ($script:NewUptimeDevice.customProperties | Where-Object { $_.name -eq 'testprop' }).value | Should -BeExactly 'BuildTest'
 
-            Invoke-TestRetry -OperationName 'Get-LMUptimeDevice by Name for newly created web uptime device' -ScriptBlock {
+            & $script:InvokeTestRetry -OperationName 'Get-LMUptimeDevice by Name for newly created web uptime device' -ScriptBlock {
                 $device = Get-LMUptimeDevice -Name $script:NewUptimeDevice.name -Type uptimewebcheck -ErrorAction Stop
                 if (($device | Measure-Object).Count -lt 1) {
                     throw "Device '$($script:NewUptimeDevice.name)' not visible yet."
@@ -71,7 +70,7 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
             $script:NewPingDevice | Should -Not -BeNullOrEmpty
             $script:NewPingDevice.deviceType | Should -Be 19
 
-            Invoke-TestRetry -OperationName 'Get-LMUptimeDevice by Name for newly created ping uptime device' -ScriptBlock {
+            & $script:InvokeTestRetry -OperationName 'Get-LMUptimeDevice by Name for newly created ping uptime device' -ScriptBlock {
                 $device = Get-LMUptimeDevice -Name $script:NewPingDevice.name -Type uptimepingcheck -ErrorAction Stop
                 if (($device | Measure-Object).Count -lt 1) {
                     throw "Device '$($script:NewPingDevice.name)' not visible yet."
@@ -111,7 +110,7 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
         }
 
         It 'When given a name should return devices matching that name' {
-            $device = Invoke-TestRetry -OperationName 'Get-LMUptimeDevice by Name' -ScriptBlock {
+            $device = & $script:InvokeTestRetry -OperationName 'Get-LMUptimeDevice by Name' -ScriptBlock {
                 $result = Get-LMUptimeDevice -Name $script:NewUptimeDevice.name -Type uptimewebcheck -ErrorAction Stop
                 if (($result | Measure-Object).Count -lt 1) {
                     throw "Device '$($script:NewUptimeDevice.name)' not visible yet."
@@ -152,7 +151,7 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
         It 'When given a name, removes the uptime device from LogicMonitor' {
             if ($script:NewPingDevice) {
                 {
-                    Invoke-TestRetry -OperationName 'Remove-LMUptimeDevice by Name' -ScriptBlock {
+                    & $script:InvokeTestRetry -OperationName 'Remove-LMUptimeDevice by Name' -ScriptBlock {
                         Remove-LMUptimeDevice -Name $script:NewPingDevice.name -Confirm:$false -HardDelete $true -ErrorAction Stop | Out-Null
                     } | Out-Null
                 } | Should -Not -Throw
