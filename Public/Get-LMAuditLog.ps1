@@ -90,6 +90,7 @@ function Get-LMAuditLog {
 
         $ParameterSetName = $PSCmdlet.ParameterSetName
         $SingleObjectWhenNotPaged = $ParameterSetName -eq "Id"
+        $CommandInvocation = $MyInvocation
 
         $CallerPSCmdlet = $PSCmdlet
 
@@ -111,7 +112,7 @@ function Get-LMAuditLog {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
             #Issue request
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]

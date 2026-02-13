@@ -94,6 +94,7 @@ function Get-LMDeviceProperty {
 
         $SingleObjectWhenNotPaged = [bool]$PropertyName
 
+        $CommandInvocation = $MyInvocation
         $CallerPSCmdlet = $PSCmdlet
 
         $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
@@ -110,7 +111,7 @@ function Get-LMDeviceProperty {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             if ($null -eq $Response) {

@@ -88,6 +88,7 @@ function Get-LMDeviceGroupDatasourceAlertSetting {
 
         #Build header and uri
         $ResourcePath = "/device/groups/$Id/datasources/$DatasourceId/alertsettings"
+        $CommandInvocation = $MyInvocation
         $CallerPSCmdlet = $PSCmdlet
 
         $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -InvokeRequest {
@@ -104,7 +105,7 @@ function Get-LMDeviceGroupDatasourceAlertSetting {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
             $RawResponse = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             if ($null -eq $RawResponse) {

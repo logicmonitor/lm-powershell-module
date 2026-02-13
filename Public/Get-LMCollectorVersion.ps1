@@ -52,6 +52,7 @@ function Get-LMCollectorVersion {
         #Build header and uri
         $ResourcePath = "/setting/collector/collectors/versions"
         $ParameterSetName = $PSCmdlet.ParameterSetName
+        $CommandInvocation = $MyInvocation
         $CallerPSCmdlet = $PSCmdlet
 
         $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -InvokeRequest {
@@ -72,7 +73,7 @@ function Get-LMCollectorVersion {
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
 
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation
+            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
 
             $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
             if ($null -eq $Response) {
