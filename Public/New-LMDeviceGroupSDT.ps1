@@ -14,6 +14,9 @@ Specifies the start date and time for the scheduled downtime. This parameter is 
 .PARAMETER EndDate
 Specifies the end date and time for the scheduled downtime. This parameter is mandatory when using the 'OneTime-DeviceGroupId' or 'OneTime-DeviceGroupName' parameter sets.
 
+.PARAMETER Timezone
+Specifies the IANA timezone for SDTs. If omitted, the portal timezone is used.
+
 .PARAMETER StartHour
 Specifies the start hour for the scheduled downtime. This parameter is mandatory when using recurring parameter sets. The value must be between 0 and 23.
 
@@ -68,6 +71,9 @@ function New-LMDeviceGroupSDT {
         [Parameter(Mandatory, ParameterSetName = 'OneTime-DeviceGroupId')]
         [Parameter(Mandatory, ParameterSetName = 'OneTime-DeviceGroupName')]
         [Datetime]$EndDate,
+
+        [ValidateScript({ Test-LMTimezoneId -Timezone $_ })]
+        [String]$Timezone,
 
         [Parameter(Mandatory, ParameterSetName = 'Daily-DeviceGroupName')]
         [Parameter(Mandatory, ParameterSetName = 'Monthly-DeviceGroupName')]
@@ -173,24 +179,15 @@ function New-LMDeviceGroupSDT {
             comment       = $Comment
             deviceGroupId = $DeviceGroupId
             sdtType       = $Occurance
-            #timezone        = $Timezone
             type          = "ResourceGroupSDT"
         }
+        $EffectiveTimezone = Resolve-LMSDTTimezone -Timezone $Timezone
+        $Data.Add('timezone', $EffectiveTimezone)
 
         switch ($Occurance) {
             "onetime" {
-                #Get UTC time based on selected timezone
-                # $TimeZoneID = [System.TimeZoneInfo]::FindSystemTimeZoneById($Timezone)
-                # $StartUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($StartDate.ToUniversalTime(), $TimeZoneID)
-                # $EndUTCTime = [System.TimeZoneInfo]::ConvertTimeFromUtc($EndDate.ToUniversalTime(), $TimeZoneID)
-
-                # $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
-                # $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndUTCTime).TotalMilliseconds - $TimeZoneID.BaseUtcOffset.TotalMilliseconds
-
-                $StartDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $StartDate.ToUniversalTime()).TotalMilliseconds
-                $EndDateTime = (New-TimeSpan -Start (Get-Date "01/01/1970") -End $EndDate.ToUniversalTime()).TotalMilliseconds
-                $Data.Add('endDateTime', [math]::Round($EndDateTime))
-                $Data.Add('startDateTime', [math]::Round($StartDateTime))
+                $Data.Add('startDateTime', (ConvertTo-LMSDTEpochMillis -DateTime $StartDate -Timezone $EffectiveTimezone))
+                $Data.Add('endDateTime', (ConvertTo-LMSDTEpochMillis -DateTime $EndDate -Timezone $EffectiveTimezone))
             }
 
             "daily" {

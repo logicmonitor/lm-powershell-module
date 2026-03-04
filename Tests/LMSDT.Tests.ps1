@@ -8,10 +8,11 @@ Describe 'SDT Testing' {
         It 'When given mandatory parameters, returns a created DeviceGroup SDT with matching values' {
             $StartDate = (Get-Date).AddMinutes(5)
             $EndDate = $StartDate.AddHours(1)
-            $Script:NewDeviceGroupSDT = New-LMDeviceGroupSDT -DeviceGroupId 1 -StartDate $StartDate -EndDate $EndDate -Comment "DeviceGroupSDT.Build.Test"
+            $Script:NewDeviceGroupSDT = New-LMDeviceGroupSDT -DeviceGroupId 1 -StartDate $StartDate -EndDate $EndDate -Timezone "America/New_York" -Comment "DeviceGroupSDT.Build.Test"
             $Script:NewDeviceGroupSDT | Should -Not -BeNullOrEmpty
             $Script:NewDeviceGroupSDT.Comment | Should -Be "DeviceGroupSDT.Build.Test"
             $Script:NewDeviceGroupSDT.Type | Should -Be "ResourceGroupSDT"
+            $Script:NewDeviceGroupSDT.Timezone | Should -Be "America/New_York"
         }
     }
 
@@ -19,10 +20,11 @@ Describe 'SDT Testing' {
         It 'When given mandatory parameters, returns a created Device SDT with matching values' {
             $StartDate = (Get-Date).AddMinutes(5)
             $EndDate = $StartDate.AddHours(1)
-            $Script:NewDeviceSDT = New-LMDeviceSDT -DeviceId 123 -StartDate $StartDate -EndDate $EndDate -Comment "DeviceSDT.Build.Test"
+            $Script:NewDeviceSDT = New-LMDeviceSDT -DeviceId 123 -StartDate $StartDate -EndDate $EndDate -Timezone "America/New_York" -Comment "DeviceSDT.Build.Test"
             $Script:NewDeviceSDT | Should -Not -BeNullOrEmpty
             $Script:NewDeviceSDT.Comment | Should -Be "DeviceSDT.Build.Test"
             $Script:NewDeviceSDT.Type | Should -Be "ResourceSDT"
+            $Script:NewDeviceSDT.Timezone | Should -Be "America/New_York"
         }
     }
 

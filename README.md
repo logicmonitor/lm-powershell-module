@@ -73,17 +73,13 @@ Connect-LMAccount -UseCachedCredential
 
 # Change List
 
-## 7.9
-
-### New Cmdlets
-- **Invoke-LMDiagnosticSource**: Manually trigger a diagnostic source for a host using host `Id`/`Name`/`DisplayName` and diagnostic source `DiagnosticId`/`DiagnosticName` lookups, with optional `AlertId`.
-- **Invoke-LMRemediationSource**: Manually trigger a remediation source for a host using host `Id`/`Name`/`DisplayName` and remediation source `RemediationId`/`RemediationName` lookups, with optional `AlertId`.
+## 7.9.1
 
 ### Bug Fixes & Changes
-- **New-LMAlertRule**: Fixed bug that caused an *-EscalationInterval* of 0 to be ignored when creating alert rules.
-- **Overhaul of GET cmdlet pagination logic**: Centralized and standardized pagination behavior across GET cmdlets, including bug fixes for paging edge cases.
-- **Request error handling improvements**: Added `CallerPSCmdlet` scoping to invoke request paths for more consistent error behavior and reporting.
-- **Filter and lookup reliability updates**: Improved filter building and fixed not-found loop handling in affected cmdlets.
+- **SDT timezone consistency**: Added timezone-aware behavior across `New-LMDeviceSDT`, `New-LMDeviceGroupSDT`, `New-LMDeviceDatasourceSDT`, and `New-LMDeviceDatasourceInstanceSDT` so schedules are no longer interpreted based on the machine running the script.
+- **Portal timezone default for SDTs**: If `-Timezone` is omitted, SDT commands now resolve and use the portal timezone by default.
+- **Timezone validation improvements**: Replaced legacy commented timezone lists with active validation for timezone IDs and clearer error messages for invalid values.
+- **Set-LMSDT update alignment**: Added timezone handling and validation improvements for one-time SDT updates in `Set-LMSDT`.
 
 ### Major Changes in v7:
  - **API Headers**: Updated all API request headers to use a custom User-Agent (Logic.Monitor-PowerShell-Module/Version) for usage reporting on versions deployed.

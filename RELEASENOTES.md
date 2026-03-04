@@ -1,4 +1,17 @@
 # Previous module release notes
+
+## 7.9
+
+### New Cmdlets
+- **Invoke-LMDiagnosticSource**: Manually trigger a diagnostic source for a host using host `Id`/`Name`/`DisplayName` and diagnostic source `DiagnosticId`/`DiagnosticName` lookups, with optional `AlertId`.
+- **Invoke-LMRemediationSource**: Manually trigger a remediation source for a host using host `Id`/`Name`/`DisplayName` and remediation source `RemediationId`/`RemediationName` lookups, with optional `AlertId`.
+
+### Bug Fixes & Changes
+- **New-LMAlertRule**: Fixed bug that caused an *-EscalationInterval* of 0 to be ignored when creating alert rules.
+- **Overhaul of GET cmdlet pagination logic**: Centralized and standardized pagination behavior across GET cmdlets, including bug fixes for paging edge cases.
+- **Request error handling improvements**: Added `CallerPSCmdlet` scoping to invoke request paths for more consistent error behavior and reporting.
+- **Filter and lookup reliability updates**: Improved filter building and fixed not-found loop handling in affected cmdlets.
+
 ## 7.8
 ### Reintroduction of LMUptime Cmdlets
 With the release of portal version v232, LMUptime API endpoints are fully supported. As a result, we hav reintroduced our Uptime cmdlets to help assist customers in migrating and managing uptime devices.

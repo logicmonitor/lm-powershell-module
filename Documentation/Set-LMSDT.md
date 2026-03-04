@@ -14,14 +14,14 @@ Updates a Scheduled Down Time (SDT) entry in LogicMonitor.
 
 ### OneTime (Default)
 ```
-Set-LMSDT -Id <String> [-Comment <String>] [-StartDate <DateTime>] [-EndDate <DateTime>]
+Set-LMSDT -Id <String> [-Comment <String>] [-StartDate <DateTime>] [-EndDate <DateTime>] [-Timezone <String>]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Recurring
 ```
-Set-LMSDT -Id <String> [-Comment <String>] [-StartHour <Int32>] [-StartMinute <Int32>] [-EndHour <Int32>]
- [-EndMinute <Int32>] [-WeekDay <String>] [-WeekOfMonth <String>] [-DayOfMonth <Int32>]
+Set-LMSDT -Id <String> [-Comment <String>] [-Timezone <String>] [-StartHour <Int32>] [-StartMinute <Int32>]
+ [-EndHour <Int32>] [-EndMinute <Int32>] [-WeekDay <String>] [-WeekOfMonth <String>] [-DayOfMonth <Int32>]
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -89,6 +89,22 @@ Specifies the end date and time for one-time SDT.
 ```yaml
 Type: DateTime
 Parameter Sets: OneTime
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timezone
+Specifies the IANA timezone for SDTs.
+For one-time date conversion, if omitted, the portal timezone is used.
+
+```yaml
+Type: String
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -205,7 +221,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter

@@ -14,70 +14,70 @@ Creates a new LogicMonitor Device Group Scheduled Downtime.
 
 ### OneTime-DeviceGroupName
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> -DeviceGroupName <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceGroupSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> [-Timezone <String>]
+ -DeviceGroupName <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### OneTime-DeviceGroupId
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> -DeviceGroupId <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceGroupSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> [-Timezone <String>]
+ -DeviceGroupId <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Weekly-DeviceGroupId
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> -DeviceGroupId <String> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-LMDeviceGroupSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -WeekDay <String> -DeviceGroupId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### MonthlyByWeek-DeviceGroupId
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> -DeviceGroupId <String>
+New-LMDeviceGroupSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> -DeviceGroupId <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Monthly-DeviceGroupId
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DayOfMonth <Int32> -DeviceGroupId <String> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-LMDeviceGroupSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -DayOfMonth <Int32> -DeviceGroupId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Daily-DeviceGroupId
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DeviceGroupId <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+New-LMDeviceGroupSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -DeviceGroupId <String> [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ### Weekly-DeviceGroupName
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> -DeviceGroupName <String> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-LMDeviceGroupSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -WeekDay <String> -DeviceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### MonthlyByWeek-DeviceGroupName
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> -DeviceGroupName <String>
+New-LMDeviceGroupSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> -DeviceGroupName <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Monthly-DeviceGroupName
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DayOfMonth <Int32> -DeviceGroupName <String> [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceGroupSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -DayOfMonth <Int32> -DeviceGroupName <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Daily-DeviceGroupName
 ```
-New-LMDeviceGroupSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DeviceGroupName <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+New-LMDeviceGroupSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -DeviceGroupName <String> [-ProgressAction <ActionPreference>] [-WhatIf]
+ [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -136,6 +136,22 @@ Parameter Sets: OneTime-DeviceGroupName, OneTime-DeviceGroupId
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timezone
+Specifies the IANA timezone for SDTs.
+If omitted, the portal timezone is used.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -291,7 +307,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter

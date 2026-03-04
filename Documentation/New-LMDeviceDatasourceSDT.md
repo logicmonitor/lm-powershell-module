@@ -14,36 +14,36 @@ Creates a new device datasource SDT (Scheduled Downtime) in Logic Monitor.
 
 ### OneTime
 ```
-New-LMDeviceDatasourceSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime>
+New-LMDeviceDatasourceSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> [-Timezone <String>]
  -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Weekly
 ```
-New-LMDeviceDatasourceSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceDatasourceSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -WeekDay <String> -DeviceDataSourceId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### MonthlyByWeek
 ```
-New-LMDeviceDatasourceSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> -DeviceDataSourceId <String>
+New-LMDeviceDatasourceSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String> -DeviceDataSourceId <String>
  [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Monthly
 ```
-New-LMDeviceDatasourceSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DayOfMonth <Int32> -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceDatasourceSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -DayOfMonth <Int32> -DeviceDataSourceId <String>
+ [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Daily
 ```
-New-LMDeviceDatasourceSDT -Comment <String> -StartHour <Int32> -StartMinute <Int32> -EndHour <Int32>
- -EndMinute <Int32> -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm]
- [<CommonParameters>]
+New-LMDeviceDatasourceSDT -Comment <String> [-Timezone <String>] -StartHour <Int32> -StartMinute <Int32>
+ -EndHour <Int32> -EndMinute <Int32> -DeviceDataSourceId <String> [-ProgressAction <ActionPreference>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -120,6 +120,22 @@ Parameter Sets: OneTime
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Timezone
+Specifies the IANA timezone for SDTs.
+If omitted, the portal timezone is used.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -258,7 +274,8 @@ Accept wildcard characters: False
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
