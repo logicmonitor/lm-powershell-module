@@ -143,7 +143,10 @@ Accept wildcard characters: False
 ```
 
 ### -Timezone
-Specifies the IANA timezone for SDTs.
+Specifies the timezone for SDTs.
+Accepts IANA timezone IDs (e.g.
+America/New_York), Windows standard names (e.g.
+Eastern Standard Time), or the output of (Get-TimeZone).StandardName.
 If omitted, the portal timezone is used.
 
 ```yaml

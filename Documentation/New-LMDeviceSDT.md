@@ -92,6 +92,18 @@ New-LMDeviceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -
 Creates a one-time SDT for the device with ID "12345".
 ```
 
+### EXAMPLE 2
+```
+New-LMDeviceSDT -Comment "Maintenance window" -StartDate (Get-Date).AddHours(1) -EndDate (Get-Date).AddHours(3) -DeviceName "server01" -Timezone "Eastern Standard Time"
+Creates a one-time SDT using a Windows standard timezone name.
+```
+
+### EXAMPLE 3
+```
+New-LMDeviceSDT -Comment "Maintenance window" -StartDate (Get-Date).AddHours(1) -EndDate (Get-Date).AddHours(3) -DeviceName "server01" -Timezone (Get-TimeZone).StandardName
+Creates a one-time SDT using the local machine's timezone via Get-TimeZone.
+```
+
 ## PARAMETERS
 
 ### -Comment
@@ -142,7 +154,10 @@ Accept wildcard characters: False
 ```
 
 ### -Timezone
-Specifies the IANA timezone for SDTs.
+Specifies the timezone for SDTs.
+Accepts IANA timezone IDs (e.g.
+America/New_York), Windows standard names (e.g.
+Eastern Standard Time), or the output of (Get-TimeZone).StandardName.
 If omitted, the portal timezone is used.
 
 ```yaml

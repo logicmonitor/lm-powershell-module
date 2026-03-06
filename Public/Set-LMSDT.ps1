@@ -18,7 +18,7 @@ Specifies the start date and time for one-time SDT.
 Specifies the end date and time for one-time SDT.
 
 .PARAMETER Timezone
-Specifies the IANA timezone for SDTs. For one-time date conversion, if omitted, the portal timezone is used.
+Specifies the timezone for SDTs. Accepts IANA timezone IDs (e.g. America/New_York), Windows standard names (e.g. Eastern Standard Time), or the output of (Get-TimeZone).StandardName. For one-time date conversion, if omitted, the portal timezone is used.
 
 .PARAMETER StartHour
 Specifies the start hour (0-23) for recurring SDT.

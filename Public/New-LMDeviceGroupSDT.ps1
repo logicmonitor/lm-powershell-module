@@ -15,7 +15,7 @@ Specifies the start date and time for the scheduled downtime. This parameter is 
 Specifies the end date and time for the scheduled downtime. This parameter is mandatory when using the 'OneTime-DeviceGroupId' or 'OneTime-DeviceGroupName' parameter sets.
 
 .PARAMETER Timezone
-Specifies the IANA timezone for SDTs. If omitted, the portal timezone is used.
+Specifies the timezone for SDTs. Accepts IANA timezone IDs (e.g. America/New_York), Windows standard names (e.g. Eastern Standard Time), or the output of (Get-TimeZone).StandardName. If omitted, the portal timezone is used.
 
 .PARAMETER StartHour
 Specifies the start hour for the scheduled downtime. This parameter is mandatory when using recurring parameter sets. The value must be between 0 and 23.

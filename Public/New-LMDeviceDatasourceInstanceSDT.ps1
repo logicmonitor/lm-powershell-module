@@ -15,7 +15,7 @@ Specifies the start date for the new instance SDT. This parameter is mandatory w
 Specifies the end date for the new instance SDT. This parameter is mandatory when using the 'OneTime' parameter set.
 
 .PARAMETER Timezone
-Specifies the IANA timezone for SDTs. If omitted, the portal timezone is used.
+Specifies the timezone for SDTs. Accepts IANA timezone IDs (e.g. America/New_York), Windows standard names (e.g. Eastern Standard Time), or the output of (Get-TimeZone).StandardName. If omitted, the portal timezone is used.
 
 .PARAMETER StartHour
 Specifies the start hour for the new instance SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. The value must be between 0 and 23.

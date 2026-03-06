@@ -72,6 +72,10 @@ Connect-LMAccount -UseCachedCredential
 ```
 
 # Change List
+## 7.9.2
+### Bug Fixes
+- **SDT timezone compatibility with PowerShell 5.1**: Fixed an issue introduced in v7.9.1 where SDT commands would fail on PowerShell 5.1 with `Invalid timezone` errors due to .NET Framework not supporting IANA timezone IDs (e.g. `America/New_York`) directly.
+- **Cross-platform timezone support**: SDT commands now accept both IANA timezone IDs (e.g. `America/New_York`) and Windows standard timezone names (e.g. `Eastern Standard Time`). The module automatically resolves the input to the correct format for the API regardless of PowerShell version or operating system.
 
 ## 7.9.1
 

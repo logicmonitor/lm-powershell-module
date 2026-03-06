@@ -15,7 +15,7 @@ Specifies the start date and time for the SDT. This parameter is mandatory when 
 Specifies the end date and time for the SDT. This parameter is mandatory when using the 'OneTime-DeviceId' or 'OneTime-DeviceName' parameter sets.
 
 .PARAMETER Timezone
-Specifies the IANA timezone for SDTs. If omitted, the portal timezone is used.
+Specifies the timezone for SDTs. Accepts IANA timezone IDs (e.g. America/New_York), Windows standard names (e.g. Eastern Standard Time), or the output of (Get-TimeZone).StandardName. If omitted, the portal timezone is used.
 
 .PARAMETER StartHour
 Specifies the start hour for recurring SDTs. This parameter is mandatory when using recurring parameter sets. Must be between 0 and 23.
@@ -47,6 +47,14 @@ Specifies the name of the device. This parameter is mandatory when using name-ba
 .EXAMPLE
 New-LMDeviceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceId "12345"
 Creates a one-time SDT for the device with ID "12345".
+
+.EXAMPLE
+New-LMDeviceSDT -Comment "Maintenance window" -StartDate (Get-Date).AddHours(1) -EndDate (Get-Date).AddHours(3) -DeviceName "server01" -Timezone "Eastern Standard Time"
+Creates a one-time SDT using a Windows standard timezone name.
+
+.EXAMPLE
+New-LMDeviceSDT -Comment "Maintenance window" -StartDate (Get-Date).AddHours(1) -EndDate (Get-Date).AddHours(3) -DeviceName "server01" -Timezone (Get-TimeZone).StandardName
+Creates a one-time SDT using the local machine's timezone via Get-TimeZone.
 
 .NOTES
 You must run Connect-LMAccount before running this command.
