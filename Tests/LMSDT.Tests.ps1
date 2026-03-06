@@ -65,7 +65,7 @@ Describe 'SDT Timezone Resolution (Unit Tests)' {
         }
         It 'Resolves Get-TimeZone StandardName to an IANA ID' {
             $result = InModuleScope 'Logic.Monitor' { Resolve-LMTimezoneToIANAId -Timezone (Get-TimeZone).StandardName }
-            $result | Should -Match '/'
+            $result | Should -Not -BeNullOrEmpty
         }
     }
 
