@@ -72,6 +72,13 @@ Connect-LMAccount -UseCachedCredential
 ```
 
 # Change List
+## 7.9.3
+### Bug Fixes
+- **Set-LMWebsite**: Fixed an issue where `-WebsiteSteps` was omitted from the API request payload, so multi-step web check updates appeared to succeed but did not apply the supplied steps.
+- **Set-LMOpsNote**: Fixed an issue where scope updates (`-DeviceIds`, `-WebsiteIds`, `-DeviceGroupIds`) were not included in the request payload.
+- **Set-LMRole**: Fixed an issue where permission updates were omitted from the request payload when changing role privileges.
+- **Set-LMRecipientGroup**: Fixed `-Recipients` to accept an array of recipient objects instead of only binding a single recipient.
+
 ## 7.9.2
 ### Bug Fixes
 - **SDT timezone compatibility with PowerShell 5.1**: Fixed an issue introduced in v7.9.1 where SDT commands would fail on PowerShell 5.1 with `Invalid timezone` errors due to .NET Framework not supporting IANA timezone IDs (e.g. `America/New_York`) directly.
