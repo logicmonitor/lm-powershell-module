@@ -100,8 +100,8 @@ Specifies the request timeout in seconds for web check steps. Valid range is 1-3
 .PARAMETER FollowRedirection
 Indicates whether to follow HTTP redirects. Defaults to $true.
 
-.PARAMETER Host
-Specifies the host or IP for ping checks. Required for ping parameter sets.
+.PARAMETER Hostname
+Specifies the hostname or IP address to ping. Required for ping parameter sets (**PingInternal** and **PingExternal**).
 
 .PARAMETER Count
 Specifies ping attempts per collection for ping checks. Valid values: 5, 10, 15, 20, 30, 50.
@@ -132,12 +132,12 @@ New-LMUptimeDevice -Name "web-ext-01" -HostGroupIds 17 -Domain "app.example.com"
 Creates a new external web uptime check using the specified public locations.
 
 .EXAMPLE
-New-LMUptimeDevice -Name "ping-int-01" -HostGroupIds 17 -Host "intranet.local" -TestLocationCollectorIds 5
+New-LMUptimeDevice -Name "ping-int-01" -HostGroupIds 17 -Hostname "intranet.local" -TestLocationCollectorIds 5
 
 Creates an internal ping uptime check that targets intranet.local.
 
 .EXAMPLE
-New-LMUptimeDevice -Name "ping-ext-01" -HostGroupIds 17 -Host "api.example.net" -TestLocationSmgIds 2,4
+New-LMUptimeDevice -Name "ping-ext-01" -HostGroupIds 17 -Hostname "api.example.net" -TestLocationSmgIds 2,4
 
 Creates an external ping uptime check using the provided public locations.
 

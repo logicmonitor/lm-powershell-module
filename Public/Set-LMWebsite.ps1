@@ -66,6 +66,39 @@ Available collector group IDs correspond to LogicMonitor regions:
 - 5 = Asia - Singapore
 - 6 = Australia - Sydney
 
+.PARAMETER PingAddress
+Target hostname or IP address for **Ping** website checks (internal or external ping parameter set).
+
+.PARAMETER WebsiteDomain
+Domain or URL host portion for **Website** checks (HTTP/HTTPS monitoring).
+
+.PARAMETER HttpType
+HTTP scheme for website checks. Valid values: **http** or **https**.
+
+.PARAMETER PingCount
+Number of ICMP echo requests per poll for ping checks. Valid values: 5, 10, 15, 20, 30, 50.
+
+.PARAMETER PingTimeout
+Timeout in milliseconds for each ping request in ping checks.
+
+.PARAMETER PageLoadAlertTimeInMS
+Maximum acceptable page load time in milliseconds before a website check raises an alert.
+
+.PARAMETER PingPercentNotReceived
+Packet loss percentage threshold for ping checks. Valid values: 10 through 100 in tens.
+
+.PARAMETER FailedCount
+Number of consecutive failed checks before alerting. Valid values: 1-10, 30, or 60.
+
+.PARAMETER OverallAlertLevel
+Alert severity for overall website or ping check status. Valid values: **warn**, **error**, **critical**.
+
+.PARAMETER IndividualAlertLevel
+Alert severity for individual step or probe failures. Valid values: **warn**, **error**, **critical**.
+
+.PARAMETER WebsiteSteps
+Optional scripted steps for multi-step website checks (website parameter set).
+
 .EXAMPLE
 Set-LMWebsite -Id 123 -Name "Updated Site" -Description "New description" -DisableAlerting $false
 Updates the website with new name, description, and enables alerting.
@@ -160,7 +193,7 @@ function Set-LMWebsite {
         [Nullable[Int]]$PollingInterval,
 
         [Parameter(ParameterSetName = "Website")]
-        [String[]]$WebsiteSteps,
+        [Object[]]$WebsiteSteps,
 
         [Nullable[boolean]]$TestLocationAll, #Only valid for external checks
 
@@ -293,11 +326,11 @@ function Set-LMWebsite {
                 testLocation                = $testLocation
             }
 
-
             #Remove empty keys so we dont overwrite them
             $Data = Format-LMData `
                 -Data $Data `
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
+                -ConditionalKeep @{ 'steps' = 'WebsiteSteps' } `
                 -ConditionalValueKeep @{ 'PropertiesMethod' = @(@{ Value = 'Refresh'; KeepKeys = @('customProperties') }) } `
                 -Context @{ PropertiesMethod = $PropertiesMethod }
 

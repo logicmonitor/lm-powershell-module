@@ -1,3 +1,27 @@
+<#
+.SYNOPSIS
+Retrieves LogicMonitor account usage metrics from the API.
+
+.DESCRIPTION
+The Get-LMUsageMetric cmdlet calls the `/metrics/usage` endpoint and returns the usage payload
+for your LogicMonitor portal (for example device counts and related usage figures). You must
+call Connect-LMAccount before using this cmdlet.
+
+.EXAMPLE
+Get-LMUsageMetric
+
+Retrieves current usage metrics for the connected portal.
+
+.NOTES
+You must run Connect-LMAccount before running this command.
+
+.INPUTS
+None. You cannot pipe objects to this cmdlet.
+
+.OUTPUTS
+Returns the object returned by the LogicMonitor usage metrics API.
+
+#>
 function Get-LMUsageMetric {
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
