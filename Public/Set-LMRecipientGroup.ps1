@@ -18,7 +18,7 @@ The new name of the recipient group. This parameter is optional.
 The description of the recipient group. This parameter is optional.
 
 .PARAMETER Recipients
-A object containing the recipients for the recipient group.
+An array of recipient objects for the recipient group.
 
 .EXAMPLE
 $recipients = @(
@@ -56,7 +56,7 @@ function Set-LMRecipientGroup {
 
         [String]$Description,
 
-        [PSCustomObject]$Recipients
+        [Object[]]$Recipients
     )
 
     #Check if we are logged in and have valid api creds
@@ -90,14 +90,17 @@ function Set-LMRecipientGroup {
             $Data = @{
                 groupName   = $NewName
                 description = $Description
-                recipients  = $Recipients
+                recipients  = if ($PSBoundParameters.ContainsKey('Recipients')) { @($Recipients) } else { $null }
             }
 
             #Remove empty keys so we dont overwrite them
             $Data = Format-LMData `
                 -Data $Data `
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-                -ConditionalKeep @{ 'name' = 'NewName' }
+                -ConditionalKeep @{
+                    'groupName'  = 'NewName'
+                    'recipients' = 'Recipients'
+                }
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Recipient Group")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data

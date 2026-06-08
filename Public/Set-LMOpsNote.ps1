@@ -76,7 +76,7 @@ function Set-LMOpsNote {
             }
 
             $Scope = @()
-            if ($ResourceIds -or $WebsiteIds -or $DeviceGroupIds) {
+            if ($DeviceIds -or $WebsiteIds -or $DeviceGroupIds) {
                 foreach ($deviceId in $DeviceIds) {
                     $Scope += [PSCustomObject]@{
                         type     = "device"
@@ -128,10 +128,18 @@ function Set-LMOpsNote {
                 $Data.tags = @()
             }
 
+            $alwaysKeepKeys = @()
+            if ($ClearTags) {
+                $alwaysKeepKeys += 'tags'
+            }
+            if ($PSBoundParameters.ContainsKey('DeviceIds') -or $PSBoundParameters.ContainsKey('WebsiteIds') -or $PSBoundParameters.ContainsKey('DeviceGroupIds')) {
+                $alwaysKeepKeys += 'scopes'
+            }
+
             $Data = Format-LMData `
                 -Data $Data `
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-                -AlwaysKeepKeys @($(if ($ClearTags) { 'tags' } else { @() }))
+                -AlwaysKeepKeys $alwaysKeepKeys
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Ops Note")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data

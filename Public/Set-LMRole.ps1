@@ -461,6 +461,16 @@ function Set-LMRole {
                 }
             }
 
+            $privilegeBoundParams = @(
+                'DashboardsPermission', 'ResourcePermission', 'LMXToolBoxPermission', 'LMXPermission',
+                'LogsPermission', 'WebsitesPermission', 'SavedMapsPermission', 'ReportsPermission', 'SettingsPermission',
+                'CreatePrivateDashboards', 'AllowWidgetSharing', 'ConfigTabRequiresManagePermission',
+                'AllowedToViewMapsTab', 'AllowedToManageResourceDashboards', 'ViewTraces', 'ViewSupport', 'EnableRemoteSessionForResources'
+            )
+
+            $updatingPrivileges = $PSCmdlet.ParameterSetName -like '*Custom*' -or
+                ($privilegeBoundParams | Where-Object { $PSBoundParameters.ContainsKey($_) })
+
             $Data = @{
                 customHelpLabel = $CustomHelpLabel
                 customHelpURL   = $CustomHelpURL
@@ -469,14 +479,23 @@ function Set-LMRole {
                 requireEULA     = if ($RequireEULA.IsPresent) { "true" }else { "" }
                 roleGroupId     = $RoleGroupId
                 twoFARequired   = if ($TwoFARequired.IsPresent) { "true" }else { "" }
-                privileges      = if ($CustomPrivilegesObject) { $CustomPrivilegesObject }else { $Privileges }
+            }
+
+            if ($updatingPrivileges) {
+                $Data.privileges = if ($CustomPrivilegesObject) { $CustomPrivilegesObject } else { $Privileges }
+            }
+
+            $alwaysKeepKeys = @()
+            if ($updatingPrivileges) {
+                $alwaysKeepKeys += 'privileges'
             }
 
             #Remove empty keys so we dont overwrite them
             $Data = Format-LMData `
                 -Data $Data `
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
-                -ConditionalKeep @{ 'name' = 'NewName' }
+                -ConditionalKeep @{ 'name' = 'NewName' } `
+                -AlwaysKeepKeys $alwaysKeepKeys
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Role")) {
                 
