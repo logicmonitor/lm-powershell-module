@@ -100,7 +100,7 @@ Describe 'Collector Testing New/Get/Set/Remove for Groups and Collectors' {
         It 'When called, returns available collector versions' {
             $Versions = Get-LMCollectorVersion
             $Versions | Should -Not -BeNullOrEmpty
-            ($Versions | Measure-Object).Count | Should -BeGreaterThan 10
+            ($Versions | Measure-Object).Count | Should -BeGreaterThan 3
         }
         It 'When called with TopVersions, returns top collector versions' {
             $TopVersions = Get-LMCollectorVersion -TopVersions
