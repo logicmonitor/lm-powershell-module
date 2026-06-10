@@ -23,7 +23,7 @@ This function requires access to the Logic.Monitor vault where credentials are s
 None. You cannot pipe objects to this command.
 
 .OUTPUTS
-Returns an array of custom objects containing cached account information including CachedAccountName, Portal, Id, Modified date, and Type.
+Returns an array of custom objects containing cached account information including CachedAccountName, Portal, Id, Modified date, Type, and GovCloud.
 
 .LINK
 Get-SecretInfo
@@ -49,6 +49,7 @@ function Get-LMCachedAccount {
             Id                = if (!$Secret.Metadata["Id"]) { "N/A" }else { $Secret.Metadata["Id"] }
             Modified          = $Secret.Metadata["Modified"]
             Type              = if (!$Secret.Metadata["Type"]) { "LMv1" }else { $Secret.Metadata["Type"] }
+            GovCloud          = $Secret.Metadata["GovCloud"] -eq 'True'
         }
     }
     return $CachedAccounts

@@ -116,6 +116,8 @@ function Connect-LMAccount {
         $Script:InformationPreference = 'Continue'
     }
 
+    $CachedGovCloud = $null
+
     if ($UseCachedCredential -or $CachedAccountName) {
 
         try {
@@ -169,6 +171,7 @@ function Connect-LMAccount {
                 $AccountName = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Portal"]
                 $AccessId = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Id"]
                 $Type = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Type"]
+                $CachedGovCloud = $CachedAccountSecrets[$CachedAccountIndex].Metadata["GovCloud"]
                 if (($Type -eq "LMv1") -or ($null -eq $Type)) {
                     [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                 }
@@ -199,7 +202,8 @@ function Connect-LMAccount {
                     $CachedAccountName = $CachedAccountSecrets[$StoredCredentialIndex].Name
                     $AccessId = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Id"]
                     $Type = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Type"]
-                    if ($Type -eq "LMv1") {
+                    $CachedGovCloud = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["GovCloud"]
+                    if (($Type -eq "LMv1") -or ($null -eq $Type)) {
                         [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                     }
                     elseif ($Type -eq "Bearer") {
@@ -248,6 +252,7 @@ function Connect-LMAccount {
     if (!$Type) {
         $Type = "LMv1"
     }
+    $UseGovCloud = $GovCloud.IsPresent -or ($CachedGovCloud -eq 'True')
     $Version = Get-LMPortalVersion -ErrorAction SilentlyContinue
 
     #Create Credential Object for reuse in other functions
@@ -259,7 +264,7 @@ function Connect-LMAccount {
         Valid       = $true
         Type        = $Type
         Logging     = !$DisableConsoleLogging.IsPresent
-        GovCloud    = $GovCloud.IsPresent
+        GovCloud    = $UseGovCloud
         Version     = $Version
     }
 

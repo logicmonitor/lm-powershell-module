@@ -1,5 +1,49 @@
 # Previous module release notes
 
+## 7.9.3
+### Bug Fixes
+- **Set-LMWebsite**: Fixed an issue where `-WebsiteSteps` was omitted from the API request payload, so multi-step web check updates appeared to succeed but did not apply the supplied steps.
+- **Set-LMOpsNote**: Fixed an issue where scope updates (`-DeviceIds`, `-WebsiteIds`, `-DeviceGroupIds`) were not included in the request payload.
+- **Set-LMRole**: Fixed an issue where permission updates were omitted from the request payload when changing role privileges.
+- **Set-LMRecipientGroup**: Fixed `-Recipients` to accept an array of recipient objects instead of only binding a single recipient.
+
+## 7.9.2
+### Bug Fixes
+- **SDT timezone compatibility with PowerShell 5.1**: Fixed an issue introduced in v7.9.1 where SDT commands would fail on PowerShell 5.1 with `Invalid timezone` errors due to .NET Framework not supporting IANA timezone IDs (e.g. `America/New_York`) directly.
+- **Cross-platform timezone support**: SDT commands now accept both IANA timezone IDs (e.g. `America/New_York`) and Windows standard timezone names (e.g. `Eastern Standard Time`). The module automatically resolves the input to the correct format for the API regardless of PowerShell version or operating system.
+
+## 7.9.1
+### Bug Fixes & Changes
+- **SDT timezone consistency**: Added timezone-aware behavior across `New-LMDeviceSDT`, `New-LMDeviceGroupSDT`, `New-LMDeviceDatasourceSDT`, and `New-LMDeviceDatasourceInstanceSDT` so schedules are no longer interpreted based on the machine running the script.
+- **Portal timezone default for SDTs**: If `-Timezone` is omitted, SDT commands now resolve and use the portal timezone by default.
+- **Timezone validation improvements**: Replaced legacy commented timezone lists with active validation for timezone IDs and clearer error messages for invalid values.
+- **Set-LMSDT update alignment**: Added timezone handling and validation improvements for one-time SDT updates in `Set-LMSDT`.
+
+### Major Changes in v7:
+ - **API Headers**: Updated all API request headers to use a custom User-Agent (Logic.Monitor-PowerShell-Module/Version) for usage reporting on versions deployed.
+
+### Documentation Overhaul
+We're excited to announce our new comprehensive documentation site at [https://logicmonitor.github.io/lm-powershell-module-docs/](https://logicmonitor.github.io/lm-powershell-module-docs/). The site includes:
+- Detailed command reference information
+- Code examples and snippets
+- Best practices guides
+
+### New Filter Wizard
+Introducing the Filter Wizard, a new interactive tool to help build complex filters:
+- Visual filter construction
+- Support for all filter operators
+- Real-time filter preview
+- Available through `Build-LMFilter` or `-FilterWizard` parameter
+
+```powershell
+# Use the standalone filter builder
+Build-LMFilter
+
+# Use built-in filter wizard parameter
+Get-LMDeviceGroup -FilterWizard
+```
+![Filter Wizard Example](https://logicmonitor.github.io/lm-powershell-module-docs/_astro/LMFilter.4g625cq9_1boMAv.webp)
+
 ## 7.9
 
 ### New Cmdlets

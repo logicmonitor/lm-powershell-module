@@ -23,6 +23,9 @@ The name to use for the cached account. Defaults to AccountName.
 .PARAMETER OverwriteExisting
 Whether to overwrite an existing cached account. Defaults to false.
 
+.PARAMETER GovCloud
+Connect using the LM GovCloud (FedRAMP) portal when this cached account is used.
+
 .EXAMPLE
 #Cache LMv1 credentials
 New-LMCachedAccount -AccessId "id123" -AccessKey "key456" -AccountName "company"
@@ -30,6 +33,10 @@ New-LMCachedAccount -AccessId "id123" -AccessKey "key456" -AccountName "company"
 .EXAMPLE
 #Cache Bearer token
 New-LMCachedAccount -BearerToken "token123" -AccountName "company" -CachedAccountName "prod"
+
+.EXAMPLE
+#Cache FedRAMP GovCloud credentials
+New-LMCachedAccount -AccessId "id123" -AccessKey "key456" -AccountName "agency" -GovCloud
 
 .NOTES
 This command creates a secure vault to store credentials if one doesn't exist.
@@ -60,7 +67,9 @@ function New-LMCachedAccount {
 
         [String]$CachedAccountName = $AccountName,
 
-        [Boolean]$OverwriteExisting = $false
+        [Boolean]$OverwriteExisting = $false,
+
+        [Switch]$GovCloud
     )
 
     try {
@@ -84,6 +93,7 @@ function New-LMCachedAccount {
             Id       = "$($BearerToken.Substring(0,20))****"
             Modified = [DateTime]$CurrentDate
             Type     = "Bearer"
+            GovCloud = [String]$GovCloud.IsPresent
         }
     }
     else {
@@ -93,6 +103,7 @@ function New-LMCachedAccount {
             Id       = [String]$AccessId
             Modified = [DateTime]$CurrentDate
             Type     = "LMv1"
+            GovCloud = [String]$GovCloud.IsPresent
         }
     }
     $Message = "CachedAccountName: $CachedAccountName | Portal: $AccountName"
