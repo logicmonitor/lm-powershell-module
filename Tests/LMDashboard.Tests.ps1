@@ -1,7 +1,8 @@
 Describe 'Dashboard Testing New/Get/Import/Export/Copy/Remove' {
     BeforeAll {
         Import-Module $Module -Force
-        Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
+        . "$PSScriptRoot/Connect-LMTestAccount.ps1"
+        Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
         
         # Get the path to our test dashboard JSON
         $Script:TestDashboardJsonPath = Join-Path $PSScriptRoot "PesterTestDashboard.json"

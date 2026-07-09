@@ -53,8 +53,8 @@ Specifies the ID of the NetFlow collector group.
 .PARAMETER NetflowCollectorId
 Specifies the ID of the NetFlow collector.
 
-.PARAMETER EnableLogCollector
-Specifies whether to enable log collection for the device.
+.PARAMETER IsPreferredLogCollectorConfigured
+Specifies whether a preferred log collector is configured for the device. Alias: EnableLogCollector.
 
 .PARAMETER LogCollectorGroupId
 Specifies the ID of the log collector group.
@@ -114,7 +114,8 @@ function Set-LMDevice {
 
         [Nullable[Int]]$NetflowCollectorId,
 
-        [Nullable[boolean]]$EnableLogCollector,
+        [Alias('EnableLogCollector')]
+        [Nullable[boolean]]$IsPreferredLogCollectorConfigured,
 
         [Nullable[Int]]$LogCollectorGroupId,
 
@@ -168,7 +169,7 @@ function Set-LMDevice {
                 link                              = $Link
                 netflowCollectorGroupId           = $NetflowCollectorGroupId
                 netflowCollectorId                = $NetflowCollectorId
-                isPreferredLogCollectorConfigured = $EnableLogCollector
+                isPreferredLogCollectorConfigured = $IsPreferredLogCollectorConfigured
                 logCollectorGroupId               = $LogCollectorGroupId
                 logCollectorId                    = $LogCollectorId
                 hostGroupIds                      = $HostGroupIds -join ","

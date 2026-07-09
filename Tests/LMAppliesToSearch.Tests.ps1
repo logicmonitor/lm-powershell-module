@@ -1,7 +1,8 @@
 Describe 'AppliesToQuery Testing' {
     BeforeAll {
         Import-Module $Module -Force
-        Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
+        . "$PSScriptRoot/Connect-LMTestAccount.ps1"
+        Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
     }
     
     Describe 'Test-LMAppliesToQuery' {

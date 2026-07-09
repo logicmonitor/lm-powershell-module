@@ -88,6 +88,18 @@ function Get-LMLogPartition {
         }
 
         if ($null -eq $Results) { return }
+
+        foreach ($partition in @($Results)) {
+            if ($null -ne $partition.activeContract) {
+                $partition | Add-Member -NotePropertyName retention -NotePropertyValue $partition.activeContract.retention -Force
+                $partition | Add-Member -NotePropertyName sku -NotePropertyValue $partition.activeContract.sku -Force
+                $partition | Add-Member -NotePropertyName usageLimit -NotePropertyValue $partition.activeContract.usageLimit -Force
+                $partition | Add-Member -NotePropertyName stopIngestionOnLimit -NotePropertyValue $partition.activeContract.stopIngestionOnLimit -Force
+                $partition | Add-Member -NotePropertyName contractIntervalHours -NotePropertyValue $partition.activeContract.contractIntervalHours -Force
+                $partition | Add-Member -NotePropertyName autoRestartOnRenewal -NotePropertyValue $partition.activeContract.autoRestartOnRenewal -Force
+            }
+        }
+
         return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.LogPartition" )
     }
     else {

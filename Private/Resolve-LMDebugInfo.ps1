@@ -116,8 +116,8 @@ function Resolve-LMDebugInfo {
             # Parse JSON and redact sensitive fields
             $JsonObj = $Payload | ConvertFrom-Json
             $SensitiveFields = @('password', 'accessKey', 'token', 'secret', 'apiKey', 'bearerToken')
-
-            # Recursively redact sensitive fields
+    
+            # Recursively redact sensitive fields in-place
             function RedactSensitiveData($Object) {
                 if ($Object -is [PSCustomObject]) {
                     $Object.PSObject.Properties | ForEach-Object {
@@ -125,21 +125,29 @@ function Resolve-LMDebugInfo {
                             $_.Value = "[REDACTED]"
                         }
                         elseif ($_.Value -is [PSCustomObject] -or $_.Value -is [Array]) {
-                            $_.Value = RedactSensitiveData $_.Value
+                            # Invoke recursion. No assignment needed because objects modify by reference.
+                            RedactSensitiveData $_.Value
                         }
                     }
                 }
                 elseif ($Object -is [Array]) {
                     for ($i = 0; $i -lt $Object.Count; $i++) {
-                        $Object[$i] = RedactSensitiveData $Object[$i]
+                        if ($Object[$i] -is [PSCustomObject] -or $Object[$i] -is [Array]) {
+                            RedactSensitiveData $Object[$i]
+                        }
                     }
                 }
-                return $Object
+                # Crucial: Output nothing to the pipeline to eliminate unrolling risks
             }
-
-            $RedactedObj = RedactSensitiveData $JsonObj
-            $FormattedPayload = $RedactedObj | ConvertTo-Json -Depth 10 |
-                ForEach-Object { $_ -split "`n" | ForEach-Object { "    $_" } }
+    
+            # Modify the parsed object in-place (updates $JsonObj directly)
+            RedactSensitiveData $JsonObj
+            
+            # Use -InputObject to prevent ConvertTo-Json from altering the root structure
+            $JsonString = ConvertTo-Json -InputObject $JsonObj -Depth 10
+            
+            $FormattedPayload = $JsonString -split "`r?`n" | ForEach-Object { "    $_" }
+            
             Write-Debug "Request Payload:"
             $FormattedPayload | ForEach-Object { Write-Debug $_ }
         }

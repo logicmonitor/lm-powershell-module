@@ -82,11 +82,19 @@ function Get-LMDeviceDatasourceInstance {
 
         #Lookup DatasourceId
         if ($DatasourceName -or $DatasourceId) {
-            $LookupResult = (Get-LMDeviceDataSourceList -Id $Id | Where-Object { $_.dataSourceName -eq $DatasourceName -or $_.dataSourceId -eq $DatasourceId }).Id
-            if (Test-LookupResult -Result $LookupResult -LookupString $DatasourceName) {
-                return
+            $hdsMatch = @(Get-LMDeviceDataSourceList -Id $Id | Where-Object {
+                    ($DatasourceName -and $_.dataSourceName -eq $DatasourceName) -or
+                    ($DatasourceId -and ($_.id -eq $DatasourceId -or $_.dataSourceId -eq $DatasourceId))
+                }) | Select-Object -First 1
+
+            if (-not $hdsMatch) {
+                $lookupString = if ($DatasourceName) { $DatasourceName } else { [string]$DatasourceId }
+                if (Test-LookupResult -Result $null -LookupString $lookupString) {
+                    return
+                }
             }
-            $HdsId = $LookupResult
+
+            $HdsId = $hdsMatch.id
         }
 
         #Build header and uri

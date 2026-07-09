@@ -241,6 +241,15 @@
                   <Label>retention</Label>
                </TableColumnHeader>
                      <TableColumnHeader>
+                  <Label>sku</Label>
+               </TableColumnHeader>
+                     <TableColumnHeader>
+                  <Label>usageLimit</Label>
+               </TableColumnHeader>
+                     <TableColumnHeader>
+                  <Label>contractState</Label>
+               </TableColumnHeader>
+                     <TableColumnHeader>
                   <Label>active</Label>
                </TableColumnHeader>
             </TableHeaders>
@@ -260,10 +269,125 @@
                         <PropertyName>tenant</PropertyName>
                      </TableColumnItem>
                      <TableColumnItem>
-                        <PropertyName>retention</PropertyName>
+                        <ScriptBlock>if ($_.retention) { $_.retention } elseif ($_.activeContract) { $_.activeContract.retention }</ScriptBlock>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <ScriptBlock>if ($_.sku) { $_.sku } elseif ($_.activeContract) { $_.activeContract.sku }</ScriptBlock>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <ScriptBlock>if ($_.usageLimit) { $_.usageLimit } elseif ($_.activeContract) { $_.activeContract.usageLimit }</ScriptBlock>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <ScriptBlock>if ($_.activeContract) { $_.activeContract.state }</ScriptBlock>
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>active</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.LogAlertGroup-->
+      <View>
+         <Name>LogicMonitorLogAlertGroup</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.LogAlertGroup</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>query</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>partitions</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>query</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <ScriptBlock>if ($_.partitions) { @($_.partitions).Count } else { 0 }</ScriptBlock>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.LogAlert-->
+      <View>
+         <Name>LogicMonitorLogAlert</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.LogAlert</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>pipelineId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>severity</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>alertType</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>disabled</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>pipelineId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>severity</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>alertType</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>disabled</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
                      </TableColumnItem>
                   </TableColumnItems>
                </TableRowEntry>
@@ -3030,6 +3154,194 @@
                      </TableColumnItem>
                      <TableColumnItem>
                         <PropertyName>appliesTo</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.ActionChain-->
+      <View>
+         <Name>LogicMonitorActionChain</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.ActionChain</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>description</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>stages</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>description</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <ScriptBlock>if ($_.stages) { @($_.stages).Count } else { 0 }</ScriptBlock>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.ActionRule-->
+      <View>
+         <Name>LogicMonitorActionRule</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.ActionRule</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>enabled</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>levelStr</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>actionChainId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>deviceGroups</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>enabled</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>levelStr</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>actionChainId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>deviceGroups</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.DiagnosticRemediationModule-->
+      <View>
+         <Name>LogicMonitorDiagnosticRemediationModule</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DiagnosticRemediationModule</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>id</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>name</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>type</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>group</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>id</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>name</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>type</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>group</PropertyName>
+                     </TableColumnItem>
+                  </TableColumnItems>
+               </TableRowEntry>
+            </TableRowEntries>
+         </TableControl>
+      </View>
+      <!-- New View LogicMonitor.DiagnosticRemediationExecutionResult-->
+      <View>
+         <Name>LogicMonitorDiagnosticRemediationExecutionResult</Name>
+         <ViewSelectedBy>
+            <TypeName>LogicMonitor.DiagnosticRemediationExecutionResult</TypeName>
+         </ViewSelectedBy>
+         <TableControl>
+            <TableHeaders>
+               <TableColumnHeader>
+                  <Label>executionId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>moduleName</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>sourceType</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>executionStatus</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>hostId</Label>
+               </TableColumnHeader>
+               <TableColumnHeader>
+                  <Label>startTime</Label>
+               </TableColumnHeader>
+            </TableHeaders>
+            <TableRowEntries>
+               <TableRowEntry>
+                  <TableColumnItems>
+                     <TableColumnItem>
+                        <PropertyName>executionId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>moduleName</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>sourceType</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>executionStatus</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>hostId</PropertyName>
+                     </TableColumnItem>
+                     <TableColumnItem>
+                        <PropertyName>startTime</PropertyName>
                      </TableColumnItem>
                   </TableColumnItems>
                </TableRowEntry>

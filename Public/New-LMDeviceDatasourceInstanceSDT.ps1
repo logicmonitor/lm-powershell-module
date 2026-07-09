@@ -3,47 +3,64 @@
 Creates a new SDT entry for a Logic Monitor device datasource instance.
 
 .DESCRIPTION
-The New-LMDeviceDatasourceInstanceSDT function creates a new SDT entry for an instance of a Logic Monitor device datasource. It allows you to specify various parameters such as comment, start date, end date, timezone, start hour, and start minute.
+The New-LMDeviceDatasourceInstanceSDT function creates a new SDT entry for an instance of a Logic Monitor device datasource.
 
 .PARAMETER Comment
-Specifies the comment for the new instance SDT.
+Specifies the comment for the new instance SDT. Required in the Default parameter set; optional with -ScheduleWizard (prompted when omitted).
+
+.PARAMETER ScheduleWizard
+Launches an interactive wizard to create the SDT. Prompts only for values not already supplied, including device, datasource, and instance selection when needed.
+
+.PARAMETER Duration
+Duration in minutes for one-time SDTs. Use alone (starts now) or with -StartDate.
 
 .PARAMETER StartDate
-Specifies the start date for the new instance SDT. This parameter is mandatory when using the 'OneTime' parameter set.
+Start date and time. Required for OneTimeRange; optional for OneTimeDuration.
 
 .PARAMETER EndDate
-Specifies the end date for the new instance SDT. This parameter is mandatory when using the 'OneTime' parameter set.
+End date and time. Required for OneTimeRange.
 
 .PARAMETER Timezone
 Specifies the timezone for SDTs. Accepts IANA timezone IDs (e.g. America/New_York), Windows standard names (e.g. Eastern Standard Time), or the output of (Get-TimeZone).StandardName. If omitted, the portal timezone is used.
 
+.PARAMETER SdtType
+Recurring schedule type: Daily, Weekly, Monthly, or MonthlyByWeek.
+
 .PARAMETER StartHour
-Specifies the start hour for the new instance SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. The value must be between 0 and 23.
+Start hour (0-23) for recurring SDTs.
 
 .PARAMETER StartMinute
-Specifies the start minute for the new instance SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. The value must be between 0 and 59.
+Start minute (0-59) for recurring SDTs.
 
 .PARAMETER EndHour
-Specifies the end hour for the new instance SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. The value must be between 0 and 23.
+End hour (0-23) for recurring SDTs.
 
 .PARAMETER EndMinute
-Specifies the end minute for the new instance SDT. This parameter is mandatory when using the 'Daily', 'Monthly', 'MonthlyByWeek', or 'Weekly' parameter sets. The value must be between 0 and 59.
+End minute (0-59) for recurring SDTs.
 
 .PARAMETER WeekDay
-Specifies the day of the week for the new instance SDT. This parameter is mandatory when using the 'Weekly' or 'MonthlyByWeek' parameter sets.
+Day(s) of the week for Weekly or MonthlyByWeek SDTs. Accepts multiple values.
 
 .PARAMETER WeekOfMonth
-Specifies the week of the month for the new instance SDT. This parameter is mandatory when using the 'MonthlyByWeek' parameter set.
+Week of the month for MonthlyByWeek SDTs: First, Second, Third, Fourth, or Last.
 
 .PARAMETER DayOfMonth
-Specifies the day of the month for the new instance SDT. This parameter is mandatory when using the 'Monthly' parameter set.
+Day of the month for Monthly SDTs (1-31), or -3 for the last day of the month.
 
 .PARAMETER DeviceDataSourceInstanceId
 Specifies the ID of the device datasource instance for which to create the SDT.
 
 .EXAMPLE
-New-LMDeviceDatasourceInstanceSDT -Comment "Test SDT Instance" -StartDate (Get-Date) -EndDate (Get-Date).AddDays(7) -StartHour 8 -StartMinute 30 -DeviceDataSourceInstanceId 1234
-Creates a new one-time instance SDT with a comment, start date, end date, start hour, and start minute.
+New-LMDeviceDatasourceInstanceSDT -ScheduleWizard
+Launches the full interactive wizard to select a device, datasource, instance, comment, and schedule.
+
+.EXAMPLE
+New-LMDeviceDatasourceInstanceSDT -ScheduleWizard -Comment "Maintenance" -DeviceDataSourceInstanceId 1234
+Launches the schedule wizard only; instance and comment are pre-supplied.
+
+.EXAMPLE
+New-LMDeviceDatasourceInstanceSDT -Comment "Test SDT Instance" -StartDate (Get-Date) -EndDate (Get-Date).AddDays(7) -DeviceDataSourceInstanceId 1234
+Creates a one-time instance SDT with explicit start and end dates.
 
 .NOTES
 You must run Connect-LMAccount before running this command.
@@ -56,154 +73,110 @@ Returns LogicMonitor.SDT object.
 #>
 function New-LMDeviceDatasourceInstanceSDT {
 
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None', DefaultParameterSetName = 'Default')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Required for the ScheduleWizard to work')]
     param (
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [String]$Comment,
 
-        [Parameter(Mandatory, ParameterSetName = 'OneTime')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
+        [Switch]$ScheduleWizard,
+
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
+        [ValidateRange(1, [Int]::MaxValue)]
+        [Int]$Duration,
+
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [Datetime]$StartDate,
 
-        [Parameter(Mandatory, ParameterSetName = 'OneTime')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [Datetime]$EndDate,
 
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [ValidateScript({ Test-LMTimezoneId -Timezone $_ })]
         [String]$Timezone,
 
-        [Parameter(Mandatory, ParameterSetName = 'Daily')]
-        [Parameter(Mandatory, ParameterSetName = 'Monthly')]
-        [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek')]
-        [Parameter(Mandatory, ParameterSetName = 'Weekly')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
+        [ValidateSet('Daily', 'Weekly', 'Monthly', 'MonthlyByWeek')]
+        [String]$SdtType,
+
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [ValidateRange(0, 23)]
         [Int]$StartHour,
 
-        [Parameter(Mandatory, ParameterSetName = 'Daily')]
-        [Parameter(Mandatory, ParameterSetName = 'Monthly')]
-        [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek')]
-        [Parameter(Mandatory, ParameterSetName = 'Weekly')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [ValidateRange(0, 59)]
         [Int]$StartMinute,
 
-        [Parameter(Mandatory, ParameterSetName = 'Daily')]
-        [Parameter(Mandatory, ParameterSetName = 'Monthly')]
-        [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek')]
-        [Parameter(Mandatory, ParameterSetName = 'Weekly')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [ValidateRange(0, 23)]
         [Int]$EndHour,
 
-        [Parameter(Mandatory, ParameterSetName = 'Daily')]
-        [Parameter(Mandatory, ParameterSetName = 'Monthly')]
-        [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek')]
-        [Parameter(Mandatory, ParameterSetName = 'Weekly')]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [ValidateRange(0, 59)]
         [Int]$EndMinute,
 
-        [Parameter(Mandatory, ParameterSetName = 'Weekly')]
-        [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek')]
-        [ValidateSet("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")]
-        [String]$WeekDay,
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
+        [ValidateSet('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')]
+        [String[]]$WeekDay,
 
-        [Parameter(Mandatory, ParameterSetName = 'MonthlyByWeek')]
-        [ValidateSet("First", "Second", "Third", "Fourth", "Last")]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
+        [ValidateSet('First', 'Second', 'Third', 'Fourth', 'Last')]
         [String]$WeekOfMonth,
 
-        [Parameter(Mandatory, ParameterSetName = 'Monthly')]
-        [ValidateRange(1, 31)]
+        [Parameter(ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [Int]$DayOfMonth,
 
-        [Parameter(Mandatory)]
+        [Parameter(Mandatory, ParameterSetName = 'Default')]
+        [Parameter(ParameterSetName = 'ScheduleWizard')]
         [String]$DeviceDataSourceInstanceId
-
     )
-    #Check if we are logged in and have valid api creds
-    if ($Script:LMAuth.Valid) {
 
-        #Build header and uri
-        $ResourcePath = "/sdt/sdts"
+    process {
+        if ($ScheduleWizard) {
+            $EffectiveBound = Invoke-LMSDTCmdletWizard -ResourceType DeviceDatasourceInstance -BoundParameters $PSBoundParameters
+            if (-not $EffectiveBound) {
+                return
+            }
+        }
+        else {
+            if ([string]::IsNullOrWhiteSpace($DeviceDataSourceInstanceId)) {
+                throw 'DeviceDataSourceInstanceId is required.'
+            }
 
-        switch -Wildcard ($PSCmdlet.ParameterSetName) {
-            "OneTime*" { $Occurance = "oneTime" }
-            "Daily*" { $Occurance = "daily" }
-            "Monthly*" { $Occurance = "monthly" }
-            "MonthlyByWeek*" { $Occurance = "monthlyByWeek" }
-            "Weekly*" { $Occurance = "weekly" }
+            $EffectiveBound = @{}
+            foreach ($Key in $PSBoundParameters.Keys) {
+                $EffectiveBound[$Key] = $PSBoundParameters[$Key]
+            }
         }
 
-        $Data = $null
+        $Comment = $EffectiveBound['Comment']
+        $DeviceDataSourceInstanceId = $EffectiveBound['DeviceDataSourceInstanceId']
+        $SchedulePayload = Build-LMSDTSchedulePayload -BoundParameters $EffectiveBound
 
-        $Data = @{
+        $Payload = @{
             comment              = $Comment
             dataSourceInstanceId = $DeviceDataSourceInstanceId
-            sdtType              = $Occurance
-            type                 = "DeviceDataSourceInstanceSDT"
-        }
-        $EffectiveTimezone = Resolve-LMSDTTimezone -Timezone $Timezone
-
-        $Data.Add('timezone', $EffectiveTimezone)
-        switch ($Occurance) {
-            "onetime" {
-                $Data.Add('startDateTime', (ConvertTo-LMSDTEpochMillis -DateTime $StartDate -Timezone $EffectiveTimezone))
-                $Data.Add('endDateTime', (ConvertTo-LMSDTEpochMillis -DateTime $EndDate -Timezone $EffectiveTimezone))
-            }
-
-            "daily" {
-                $Data.Add('hour', $StartHour)
-                $Data.Add('minute', $StartMinute)
-                $Data.Add('endHour', $EndHour)
-                $Data.Add('endMinute', $EndMinute)
-            }
-
-            "weekly" {
-                $Data.Add('hour', $StartHour)
-                $Data.Add('minute', $StartMinute)
-                $Data.Add('endHour', $EndHour)
-                $Data.Add('endMinute', $EndMinute)
-                $Data.Add('weekDay', $WeekDay)
-            }
-
-            "monthly" {
-                $Data.Add('hour', $StartHour)
-                $Data.Add('minute', $StartMinute)
-                $Data.Add('endHour', $EndHour)
-                $Data.Add('endMinute', $EndMinute)
-                $Data.Add('monthDay', $DayOfMonth)
-            }
-
-            "monthlyByWeek" {
-                $Data.Add('hour', $StartHour)
-                $Data.Add('minute', $StartMinute)
-                $Data.Add('endHour', $EndHour)
-                $Data.Add('endMinute', $EndMinute)
-                $Data.Add('weekDay', $WeekDay)
-                $Data.Add('weekOfMonth', $WeekOfMonth)
-            }
-
-            default {}
+            type                 = 'DeviceDataSourceInstanceSDT'
         }
 
-        #Remove empty keys so we dont overwrite them
-        $Data = Format-LMData `
-            -Data $Data `
-            -UserSpecifiedKeys @()
-
-        $Message = "Comment: $Comment | DeviceDataSourceInstanceId: $DeviceDataSourceInstanceId"
-
-        if ($PSCmdlet.ShouldProcess($Message, "Create Device Datasource Instance SDT")) {
-            
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Data
-
-            #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Data
-
-            return $Response
-
+        foreach ($Key in $SchedulePayload.Keys) {
+            $Payload[$Key] = $SchedulePayload[$Key]
         }
-    }
-    else {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
+
+        Invoke-LMCreateSDT -CallerPSCmdlet $PSCmdlet -Payload $Payload -ShouldProcessTarget "Comment: $Comment | DeviceDataSourceInstanceId: $DeviceDataSourceInstanceId" -ShouldProcessAction 'Create Device Datasource Instance SDT'
     }
 }

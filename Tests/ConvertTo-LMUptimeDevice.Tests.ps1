@@ -2,7 +2,8 @@ Describe 'ConvertTo-LMUptimeDevice Testing' {
 
     BeforeAll {
         Import-Module $Module -Force
-        Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
+        . "$PSScriptRoot/Connect-LMTestAccount.ps1"
+        Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
 
         $script:SourceWebsite = New-LMWebsite -Name ("Website.Uptime.Migration." + ([guid]::NewGuid().ToString('N').Substring(0, 8))) -IsInternal $true -Webcheck -WebsiteDomain 'migration.example.com' -Description 'MigrationTest' -Properties @{ 'migrate' = 'true' } -TestLocationCollectorIds @($PreferredCollectorId)
     }

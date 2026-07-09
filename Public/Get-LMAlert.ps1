@@ -76,7 +76,7 @@ function Get-LMAlert {
         [ValidateSet("*", "websiteAlert", "dataSourceAlert", "eventAlert", "logAlert")]
         [String]$Type = "*",
 
-        [Boolean]$ClearedAlerts = $false,
+        [Nullable[Boolean]]$ClearedAlerts,
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
@@ -119,24 +119,46 @@ function Get-LMAlert {
         $CommandInvocation = $MyInvocation
         $CallerPSCmdlet = $PSCmdlet
 
+        if ($ClearedAlerts -ne $null) {
+            $ClearedAlertsString = $ClearedAlerts.ToString().ToLower()
+        } else {
+            $ClearedAlertsString = "*"
+        }
+
+        $ExtractResponse = {
+            param($r)
+            if ($null -eq $r) { return $null }
+            if (-not (Test-LMResponseHasPagination -Response $r) -and $r.items) { return $r.items }
+            return $r
+        }
+
         $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -MaxItems $QueryLimit -MaxItemsWarningMessage "[WARN]: Reached $QueryLimit record query limitation for this endpoint" -InvokeRequest {
             param($Offset, $PageSize)
 
             $RequestResourcePath = $ResourcePath
             $QueryParams = ""
+            $encodedSort = [System.Web.HttpUtility]::UrlEncode($Sort)
 
             switch ($ParameterSetName) {
                 "Id" { $RequestResourcePath = "$ResourcePath/$Id" }
-                "Range" { $QueryParams = "?filter=startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$PageSize&offset=$Offset&sort=$Sort" }
-                "All" { $QueryParams = "?filter=rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlerts`"&size=$PageSize&offset=$Offset&sort=$Sort" }
+                "Range" {
+                    $rawFilter = "startEpoch>:`"$StartDate`",startEpoch<:`"$EndDate`",rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlertsString`""
+                    $encodedFilter = [System.Web.HttpUtility]::UrlEncode($rawFilter)
+                    $QueryParams = "?filter=$encodedFilter&size=$PageSize&offset=$Offset&sort=$encodedSort"
+                }
+                "All" {
+                    $rawFilter = "rule:`"$Severity`",type:`"$Type`",cleared:`"$ClearedAlertsString`""
+                    $encodedFilter = [System.Web.HttpUtility]::UrlEncode($rawFilter)
+                    $QueryParams = "?filter=$encodedFilter&size=$PageSize&offset=$Offset&sort=$encodedSort"
+                }
                 "Filter" {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=$Sort"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=$encodedSort"
                 }
                 "FilterWizard" {
                     $Filter = Build-LMFilter -PassThru -ResourcePath $ResourcePath
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=$Sort"
+                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=$encodedSort"
                 }
             }
 
@@ -165,13 +187,14 @@ function Get-LMAlert {
             if ($null -eq $Response) { return }
 
             return $Response
-        }
+        } -ExtractResponse $ExtractResponse
 
         if ($null -eq $Results) {
             return
+        } else {
+            return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Alert" )
         }
 
-        return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Alert" )
     }
     else {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."

@@ -1,7 +1,8 @@
 Describe 'Collector Testing New/Get/Set/Remove for Groups and Collectors' {
     BeforeAll {
         Import-Module $Module -Force
-        Connect-LMAccount -AccessId $AccessId -AccessKey $AccessKey -AccountName $AccountName -DisableConsoleLogging -SkipCredValidation
+        . "$PSScriptRoot/Connect-LMTestAccount.ps1"
+        Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
         
         $Script:TimeNow = Get-Date -UFormat %m%d%Y-%H%M
     }

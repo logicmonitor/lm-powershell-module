@@ -53,6 +53,9 @@ The ID of the log collector group.
 .PARAMETER LogCollectorId
 The ID of the log collector.
 
+.PARAMETER IsPreferredLogCollectorConfigured
+Whether a preferred log collector is configured for the device. Alias: EnableLogCollector.
+
 .EXAMPLE
 #Create a new device
 New-LMDevice -Name "server1" -DisplayName "Server 1" -PreferredCollectorId 123 -Properties @{"location"="datacenter1"}
@@ -104,7 +107,10 @@ function New-LMDevice {
 
         [Nullable[Int]]$LogCollectorGroupId,
 
-        [Nullable[Int]]$LogCollectorId
+        [Nullable[Int]]$LogCollectorId,
+
+        [Alias('EnableLogCollector')]
+        [Nullable[boolean]]$IsPreferredLogCollectorConfigured
     )
     #Check if we are logged in and have valid api creds
     begin {}
@@ -134,11 +140,12 @@ function New-LMDevice {
                 preferredCollectorGroupId    = $PreferredCollectorGroupId
                 autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId
                 link                         = $Link
-                netflowCollectorGroupId      = $NetflowCollectorGroupId
-                netflowCollectorId           = $NetflowCollectorId
-                logCollectorGroupId          = $LogCollectorGroupId
-                logCollectorId               = $LogCollectorId
-                hostGroupIds                 = $HostGroupIds -join ","
+                netflowCollectorGroupId           = $NetflowCollectorGroupId
+                netflowCollectorId                = $NetflowCollectorId
+                logCollectorGroupId               = $LogCollectorGroupId
+                logCollectorId                    = $LogCollectorId
+                isPreferredLogCollectorConfigured = $IsPreferredLogCollectorConfigured
+                hostGroupIds                      = $HostGroupIds -join ","
             }
 
             #Remove empty keys so we dont overwrite them
