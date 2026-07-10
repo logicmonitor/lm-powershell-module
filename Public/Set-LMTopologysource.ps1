@@ -133,7 +133,7 @@ function Set-LMTopologysource {
                 -ConditionalKeep @{ 'name' = 'NewName' }
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Topology Source")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?forceUniqueIdentifier=true"
 

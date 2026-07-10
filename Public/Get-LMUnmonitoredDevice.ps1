@@ -30,6 +30,7 @@ Returns LogicMonitor.UnmonitoredDevice objects.
 #>
 
 function Get-LMUnmonitoredDevice {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding()]
     param (

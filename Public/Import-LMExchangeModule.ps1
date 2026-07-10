@@ -22,6 +22,7 @@ None. You cannot pipe objects to this command.
 Returns a success message if the import is successful.
 #>
 function Import-LMExchangeModule {
+    [OutputType([string])]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]

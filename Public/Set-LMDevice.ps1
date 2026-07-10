@@ -77,7 +77,7 @@ This function requires a valid LogicMonitor API authentication.
 #>
 function Set-LMDevice {
 
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,
@@ -185,7 +185,7 @@ function Set-LMDevice {
                 -Context @{ PropertiesMethod = $PropertiesMethod }
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Device")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 

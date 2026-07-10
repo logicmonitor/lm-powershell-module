@@ -41,6 +41,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.DeviceDatasourceInstance objects.
 #>
 function Get-LMDeviceDatasourceInstance {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding()]
     param (

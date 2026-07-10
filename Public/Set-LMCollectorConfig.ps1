@@ -92,6 +92,7 @@ This function requires a valid LogicMonitor API authentication and will restart 
 #>
 
 function Set-LMCollectorConfig {
+    [OutputType([string])]
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
@@ -274,7 +275,7 @@ function Set-LMCollectorConfig {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 collectorSize = $CollectorSize
                 collectorConf = $CollectorConfData

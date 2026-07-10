@@ -54,7 +54,7 @@ function Remove-LMNormalizedProperty {
             $Message = "Alias: $Alias"
 
             if ($PSCmdlet.ShouldProcess($Message, "Remove Normalized Property")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath -Version 4
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

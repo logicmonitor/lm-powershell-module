@@ -76,6 +76,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.SDT object.
 #>
 function New-LMDeviceDatasourceSDT {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Justification = 'ShouldProcess is invoked in Invoke-LMCreateSDT via CallerPSCmdlet')]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None', DefaultParameterSetName = 'Default')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Required for the ScheduleWizard to work')]
     param (

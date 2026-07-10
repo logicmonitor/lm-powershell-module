@@ -29,7 +29,7 @@ function Get-LMAWSExternalId {
         #Build header and uri
         $ResourcePath = "/aws/externalId"
 
-        
+
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
         $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 

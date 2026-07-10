@@ -67,6 +67,7 @@ Returns a LogicMonitor.NetScan object containing the updated scan configuration.
 This function requires a valid LogicMonitor API authentication.
 #>
 function Set-LMNetScan {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification = 'Parameter is a credential group identifier/name, not a secret value')]
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
@@ -166,7 +167,7 @@ function Set-LMNetScan {
                 }
             }
 
-            
+
             $Data = @{
                 id                        = $Id
                 name                      = $Name

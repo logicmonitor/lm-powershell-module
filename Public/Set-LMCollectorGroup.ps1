@@ -95,7 +95,7 @@ function Set-LMCollectorGroup {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 description                       = $Description
                 name                              = $NewName

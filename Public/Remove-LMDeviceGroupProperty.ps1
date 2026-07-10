@@ -69,7 +69,7 @@ function Remove-LMDeviceGroupProperty {
                 $Message = "Id: $Id | Property: $PropertyName"
             }
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Device Group Property")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

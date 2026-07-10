@@ -86,7 +86,7 @@ function Set-LMRecipientGroup {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 groupName   = $NewName
                 description = $Description
@@ -98,9 +98,9 @@ function Set-LMRecipientGroup {
                 -Data $Data `
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
                 -ConditionalKeep @{
-                    'groupName'  = 'NewName'
-                    'recipients' = 'Recipients'
-                }
+                'groupName'  = 'NewName'
+                'recipients' = 'Recipients'
+            }
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Recipient Group")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data

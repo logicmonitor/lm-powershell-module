@@ -71,7 +71,7 @@ function Set-LMPushModuleDeviceProperty {
                 $Message = "Id: $Id | Property: $PropertyName = $PropertyValue"
             }
 
-            
+
             $Data = @{
                 resourceIds        = @{"system.deviceid" = $Id }
                 resourceProperties = @{$PropertyName = $PropertyValue }

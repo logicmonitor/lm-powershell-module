@@ -42,6 +42,7 @@ Returns LogicMonitor.DashboardWidget objects.
 #>
 
 function Get-LMDashboardWidget {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

@@ -40,6 +40,7 @@ None. You cannot pipe objects to this command.
 Returns test results for each Azure service.
 #>
 function Invoke-LMAzureAccountTest {
+    [OutputType([object[]])]
 
     [CmdletBinding()]
     param (

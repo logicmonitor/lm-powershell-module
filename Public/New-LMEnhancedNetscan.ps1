@@ -53,6 +53,7 @@ This example creates a new enhanced network scan with the specified parameters.
 For more information about LogicMonitor network scans, refer to the LogicMonitor documentation.
 #>
 function New-LMEnhancedNetscan {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification = 'Parameter is a credential group identifier/name, not a secret value')]
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
@@ -156,7 +157,7 @@ function New-LMEnhancedNetscan {
             $Message = "Name: $Name | CollectorId: $CollectorId"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Enhanced Netscan")) {
-                
+
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

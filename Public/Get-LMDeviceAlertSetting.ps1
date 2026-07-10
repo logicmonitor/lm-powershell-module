@@ -36,6 +36,7 @@ Returns LogicMonitor.AlertSetting objects.
 #>
 
 function Get-LMDeviceAlertSetting {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

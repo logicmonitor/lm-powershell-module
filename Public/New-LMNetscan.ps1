@@ -52,6 +52,7 @@ New-LMNetScan -CollectorId "12345" -Name "MyNetScan" -SubnetRange "192.168.0.0/2
 Creates a new network scan with the specified collector ID, name, and subnet range.
 #>
 function New-LMNetscan {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification = 'Parameter is a credential group identifier/name, not a secret value')]
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
@@ -166,7 +167,7 @@ function New-LMNetscan {
             $Message = "Name: $Name | SubnetRange: $SubnetRange"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Netscan")) {
-                
+
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

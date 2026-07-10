@@ -74,7 +74,7 @@ function Set-LMDeviceGroupProperty {
                 $Message = "Id: $Id | Property: $PropertyName = $PropertyValue"
             }
 
-            
+
             $Data = @{
                 value = $PropertyValue
             }

@@ -113,7 +113,7 @@ function New-LMDeviceDatasourceInstanceGroup {
         $Message = "InstanceGroupName: $InstanceGroupName | DeviceId: $Id"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create Device Datasource Instance Group")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

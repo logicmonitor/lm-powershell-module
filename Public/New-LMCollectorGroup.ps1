@@ -82,7 +82,7 @@ function New-LMCollectorGroup {
             $Message = "Name: $Name"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Collector Group")) {
-                
+
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

@@ -88,7 +88,7 @@ function Set-LMAppliesToFunction {
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys `
                 -ConditionalKeep @{ 'name' = 'NewName' }
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Set AppliesTo Function")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

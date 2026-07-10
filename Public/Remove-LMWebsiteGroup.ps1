@@ -73,7 +73,7 @@ function Remove-LMWebsiteGroup {
                 $Message = "Id: $Id"
             }
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Website Group")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams

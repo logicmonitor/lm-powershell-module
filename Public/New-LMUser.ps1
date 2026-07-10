@@ -71,6 +71,8 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.User object.
 #>
 function New-LMUser {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification = 'LogicMonitor API requires plain-text password for user provisioning')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '', Justification = 'LogicMonitor API requires separate username and password fields')]
 
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Justification = 'Required for allowing auto generated passwords to be stored in a global variable')]
@@ -211,7 +213,7 @@ function New-LMUser {
         $Message = "Username: $Username | Email: $Email"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create User")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

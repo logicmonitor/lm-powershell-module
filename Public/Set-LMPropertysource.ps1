@@ -115,7 +115,7 @@ function Set-LMPropertysource {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 name         = $NewName
                 description  = $Description

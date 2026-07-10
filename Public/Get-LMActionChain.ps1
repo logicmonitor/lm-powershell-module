@@ -34,6 +34,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.ActionChain objects.
 #>
 function Get-LMActionChain {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
         [Parameter(ParameterSetName = 'Id')]

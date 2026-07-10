@@ -41,6 +41,7 @@ None. You cannot pipe objects to this command.
 Returns a success message if the collection is scheduled successfully.
 #>
 function Invoke-LMDeviceConfigSourceCollection {
+    [OutputType([string])]
 
     [CmdletBinding()]
     param (

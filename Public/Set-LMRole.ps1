@@ -469,7 +469,7 @@ function Set-LMRole {
             )
 
             $updatingPrivileges = $PSCmdlet.ParameterSetName -like '*Custom*' -or
-                ($privilegeBoundParams | Where-Object { $PSBoundParameters.ContainsKey($_) })
+            ($privilegeBoundParams | Where-Object { $PSBoundParameters.ContainsKey($_) })
 
             $Data = @{
                 customHelpLabel = $CustomHelpLabel
@@ -498,7 +498,7 @@ function Set-LMRole {
                 -AlwaysKeepKeys $alwaysKeepKeys
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Role")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

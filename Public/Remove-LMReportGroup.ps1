@@ -63,7 +63,7 @@ function Remove-LMReportGroup {
             #Build header and uri
             $ResourcePath = "/report/groups/$Id"
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Report Group")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

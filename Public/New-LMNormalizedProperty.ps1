@@ -65,7 +65,7 @@ function New-LMNormalizedProperty {
             $Message = "Alias: $Alias"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Normalized Property")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

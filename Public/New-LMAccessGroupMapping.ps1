@@ -68,7 +68,7 @@ function New-LMAccessGroupMapping {
             $Message = "LogicModuleType: $LogicModuleType | LogicModuleId: $LogicModuleId"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Access Group Mapping")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

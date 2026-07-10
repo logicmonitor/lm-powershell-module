@@ -157,7 +157,7 @@ function New-LMDeviceDatasourceInstance {
         $Message = "DisplayName: $DisplayName | DeviceId: $Id"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create Device Datasource Instance")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

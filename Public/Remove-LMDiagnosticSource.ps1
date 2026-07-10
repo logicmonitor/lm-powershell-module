@@ -44,7 +44,7 @@ function Remove-LMDiagnosticSource {
             }
             $ResourcePath = "/setting/diagnosticsources/$Id"
             $Message = "Id: $Id | Name: $Name"
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove DiagnosticSource")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
 

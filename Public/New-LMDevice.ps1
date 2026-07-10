@@ -129,17 +129,17 @@ function New-LMDevice {
             $ResourcePath = "/device/devices"
 
             $Data = @{
-                name                         = $Name
-                displayName                  = $DisplayName
-                description                  = $Description
-                disableAlerting              = $DisableAlerting
-                enableNetflow                = $EnableNetFlow
-                customProperties             = $customProperties
-                deviceType                   = $DeviceType
-                preferredCollectorId         = $PreferredCollectorId
-                preferredCollectorGroupId    = $PreferredCollectorGroupId
-                autoBalancedCollectorGroupId = $AutoBalancedCollectorGroupId
-                link                         = $Link
+                name                              = $Name
+                displayName                       = $DisplayName
+                description                       = $Description
+                disableAlerting                   = $DisableAlerting
+                enableNetflow                     = $EnableNetFlow
+                customProperties                  = $customProperties
+                deviceType                        = $DeviceType
+                preferredCollectorId              = $PreferredCollectorId
+                preferredCollectorGroupId         = $PreferredCollectorGroupId
+                autoBalancedCollectorGroupId      = $AutoBalancedCollectorGroupId
+                link                              = $Link
                 netflowCollectorGroupId           = $NetflowCollectorGroupId
                 netflowCollectorId                = $NetflowCollectorId
                 logCollectorGroupId               = $LogCollectorGroupId
@@ -156,7 +156,7 @@ function New-LMDevice {
             $Message = "Name: $Name | DisplayName: $DisplayName"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Device")) {
-                
+
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

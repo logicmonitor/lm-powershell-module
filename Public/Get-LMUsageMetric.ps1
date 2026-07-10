@@ -32,7 +32,7 @@ function Get-LMUsageMetric {
         #Build header and uri
         $ResourcePath = "/metrics/usage"
 
-        
+
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
         $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 

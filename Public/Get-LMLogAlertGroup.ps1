@@ -30,6 +30,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.LogAlertGroup objects.
 #>
 function Get-LMLogAlertGroup {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
         [Parameter(ParameterSetName = 'Id')]
@@ -47,7 +48,6 @@ function Get-LMLogAlertGroup {
         $CallerPSCmdlet = $PSCmdlet
 
         $Results = Invoke-LMPaginatedGet -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
-            param($Offset, $PageSize)
 
             $RequestResourcePath = $ResourcePath
             $QueryParams = ""

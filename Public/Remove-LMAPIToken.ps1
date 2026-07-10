@@ -89,7 +89,7 @@ function Remove-LMAPIToken {
                 $Message = "Id: $APITokenId"
             }
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove API Token")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

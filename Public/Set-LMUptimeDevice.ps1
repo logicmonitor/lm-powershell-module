@@ -266,12 +266,12 @@ function Set-LMUptimeDevice {
                 Write-Error "Failed to lookup device '$Name': $($_.Exception.Message)"
                 return
             }
-            
+
             if ($null -eq $lookupResult) {
                 Write-Error "Device '$Name' not found."
                 return
             }
-            
+
             if (Test-LookupResult -Result $lookupResult.Id -LookupString $Name) {
                 return
             }
@@ -326,9 +326,9 @@ function Set-LMUptimeDevice {
         }
 
         $testLocation = $null
-        if ($wasAllSpecified -or $wasCollectorSpecified -or $wasSmgSpecified -or $isInternal -ne $null) {
+        if ($wasAllSpecified -or $wasCollectorSpecified -or $wasSmgSpecified -or $null -ne $isInternal) {
             try {
-                $effectiveIsInternal = if ($isInternal -ne $null) { $isInternal } else { $true }
+                $effectiveIsInternal = if ($null -ne $isInternal) { $isInternal } else { $true }
                 $testLocation = Resolve-LMUptimeTestLocation -IsInternal $effectiveIsInternal -TestLocationAll $testLocationAllValue -TestLocationCollectorIds $collectorIdsValue -TestLocationSmgIds $smgIdsValue -AllowUnset:$UseDefaultLocationSetting -WasTestLocationAllSpecified:$wasAllSpecified -WasCollectorIdsSpecified:$wasCollectorSpecified -WasSmgIdsSpecified:$wasSmgSpecified
             }
             catch {

@@ -70,7 +70,7 @@ function Set-LMLogPartitionAction {
                 $Message = "Id: $Id | Action: $Action"
             }
 
-            
+
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Log Partition Action")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath

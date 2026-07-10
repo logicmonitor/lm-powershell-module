@@ -66,7 +66,7 @@ function Remove-LMReport {
             #Build header and uri
             $ResourcePath = "/report/reports/$Id"
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Report")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

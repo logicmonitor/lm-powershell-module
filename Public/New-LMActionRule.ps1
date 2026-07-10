@@ -83,10 +83,10 @@ function New-LMActionRule {
             $ResourcePath = "/setting/action/rules"
 
             $Data = @{
-                name           = $Name
-                actionChainId  = $ActionChainId
-                deviceGroups   = $DeviceGroups
-                levelStr       = $LevelStr
+                name          = $Name
+                actionChainId = $ActionChainId
+                deviceGroups  = $DeviceGroups
+                levelStr      = $LevelStr
             }
 
             if ($Devices) { $Data.Add("devices", $Devices) }

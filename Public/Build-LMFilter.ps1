@@ -42,7 +42,7 @@ function Build-LMFilter {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingWriteHost', '', Justification = 'Required for the function to work')]
     param(
         [Switch]$PassThru,
-        
+
         [String]$ResourcePath
     )
 
@@ -115,14 +115,14 @@ function Build-LMFilter {
     # Load validation config if ResourcePath is provided
     $ValidFields = @()
     $ValidationEnabled = $false
-    
+
     if ($ResourcePath) {
         $ConfigPath = Join-Path $PSScriptRoot "../Private/LMFilterValidationConfig.psd1"
         if (Test-Path $ConfigPath) {
             try {
                 $ValidationConfig = Import-PowerShellDataFile -Path $ConfigPath
                 $NormalizedPath = $ResourcePath -replace '/\{[^}]+\}', '/{id}'
-                
+
                 if ($ValidationConfig.ContainsKey($NormalizedPath)) {
                     $ValidFields = $ValidationConfig[$NormalizedPath] | Where-Object { $_ -notin @('customProperties', 'systemProperties', 'autoProperties', 'inheritedProperties') }
                     $ValidationEnabled = $true
@@ -189,44 +189,44 @@ function Build-LMFilter {
                 if ($ValidationEnabled -and $ValidFields.Count -gt 0) {
                     Write-Host ""
                     Write-Host "Available fields for this endpoint ($($ValidFields.Count) total):" -ForegroundColor Cyan
-                    
+
                     # Calculate column width based on longest field name
                     $maxFieldLength = ($ValidFields | Measure-Object -Property Length -Maximum).Maximum
                     $columnWidth = $maxFieldLength + 4  # Add padding between columns
-                    
+
                     # Calculate how many columns fit in the terminal width
                     $terminalWidth = $Host.UI.RawUI.WindowSize.Width
                     $columnsPerRow = [Math]::Floor(($terminalWidth - 4) / $columnWidth)
                     if ($columnsPerRow -lt 1) { $columnsPerRow = 1 }
                     if ($columnsPerRow -gt 4) { $columnsPerRow = 4 }  # Cap at 4 columns for readability
-                    
+
                     $currentColumn = 0
                     $line = "  "
-                    
+
                     foreach ($field in $ValidFields) {
                         $paddedField = $field.PadRight($columnWidth)
                         $line += $paddedField
                         $currentColumn++
-                        
+
                         if ($currentColumn -ge $columnsPerRow) {
                             Write-Host $line -ForegroundColor Gray
                             $line = "  "
                             $currentColumn = 0
                         }
                     }
-                    
+
                     # Print remaining fields if any
                     if ($currentColumn -gt 0) {
                         Write-Host $line -ForegroundColor Gray
                     }
-                    
+
                     Write-Host ""
                 }
-                
+
                 $validInput = $false
                 do {
                     $property = Read-Host "Enter attribute name"
-                    
+
                     # Validate field if validation is enabled
                     if ($ValidationEnabled -and $property -and $ValidFields.Count -gt 0) {
                         if ($ValidFields -ccontains $property) {
@@ -235,10 +235,10 @@ function Build-LMFilter {
                         }
                         else {
                             Write-Host "  [INVALID] Field not found: '$property'" -ForegroundColor Red
-                            
+
                             # Try to find similar fields
                             $suggestions = @()
-                            
+
                             # Case-insensitive match
                             $caseMatch = $ValidFields | Where-Object { $_ -ieq $property }
                             if ($caseMatch) {
@@ -258,11 +258,11 @@ function Build-LMFilter {
                                     }
                                 }
                             }
-                            
+
                             if ($suggestions.Count -gt 0) {
                                 Write-Host "  Did you mean: $($suggestions -join ', ')?" -ForegroundColor Yellow
                             }
-                            
+
                             $retry = Read-Host "  Try again? (y/n) [y]"
                             if ($retry -eq 'n') {
                                 Write-Host "  Warning: Using unvalidated field name" -ForegroundColor Yellow
@@ -274,7 +274,7 @@ function Build-LMFilter {
                         $validInput = $true
                     }
                 } while (-not $validInput)
-                
+
                 # Get operator
                 $selectedOperator = Get-UserSelection `
                     -Prompt "Select operator:" `

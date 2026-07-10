@@ -150,7 +150,7 @@ function Set-LMWebsiteGroup {
                 -Context @{ PropertiesMethod = $PropertiesMethod }
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Website Group")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 

@@ -42,7 +42,7 @@ Returns a LogicMonitor.ActionChain object.
 This function requires a valid LogicMonitor API authentication.
 #>
 function Set-LMActionChain {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,

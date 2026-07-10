@@ -169,7 +169,7 @@ function Set-LMNormalizedProperty {
             $PropertiesCount = ($Properties | Measure-Object).Count
             $Message = "Alias: $Alias | Action: $ActionType | Properties: $PropertiesCount"
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Set Normalized Properties")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Version 4
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

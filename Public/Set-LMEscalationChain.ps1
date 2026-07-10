@@ -54,7 +54,7 @@ Returns escalation chain object from LogicMonitor.
 This function requires a valid LogicMonitor API authentication.
 #>
 function Set-LMEscalationChain {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [String]$Id,

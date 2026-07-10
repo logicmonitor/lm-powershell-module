@@ -78,7 +78,7 @@ function Set-LMAPIToken {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 note   = $Note
                 status = $Status

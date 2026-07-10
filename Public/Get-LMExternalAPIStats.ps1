@@ -21,6 +21,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.ExternalAPIStats object.
 #>
 function Get-LMExternalAPIStats {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Matches LogicMonitor API naming')]
     [CmdletBinding()]
     param ()
 

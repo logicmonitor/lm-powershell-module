@@ -33,6 +33,7 @@ This function requires a valid API authentication. Make sure you are logged in b
 
 #>
 function Set-LMUserdata {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Matches LogicMonitor API naming')]
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
@@ -78,7 +79,7 @@ function Set-LMUserdata {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 id    = "$Id.user.default.dashboard"
                 value = $Value

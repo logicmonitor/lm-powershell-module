@@ -67,7 +67,7 @@ function Remove-LMLogPartition {
             }
 
             #Loop through requests
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Log Partition")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

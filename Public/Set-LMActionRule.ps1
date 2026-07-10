@@ -60,8 +60,7 @@ This function requires a valid LogicMonitor API authentication.
 function Set-LMActionRule {
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
-        [Parameter(ValueFromPipelineByPropertyName)]
-        [Parameter(Mandatory, ParameterSetName = 'Id')]
+        [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,
 
         [Parameter(Mandatory, ParameterSetName = 'Name')]

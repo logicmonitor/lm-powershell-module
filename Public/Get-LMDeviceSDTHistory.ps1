@@ -36,6 +36,7 @@ Returns historical SDT entry objects for the specified device.
 #>
 
 function Get-LMDeviceSDTHistory {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

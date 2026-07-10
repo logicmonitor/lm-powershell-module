@@ -26,7 +26,7 @@ Set-LMDeviceGroupDatasource -Id 15 -DatasourceId 790 -StopMonitoring $true
 
 .EXAMPLE
 #Enable monitoring using names
-Set-LMDeviceGroupDatasource -Name "Production Servers" -DatasourceName "CPU" -StopMonitoring $false 
+Set-LMDeviceGroupDatasource -Name "Production Servers" -DatasourceName "CPU" -StopMonitoring $false
 
 .INPUTS
 None. You cannot pipe objects to this command.
@@ -95,9 +95,9 @@ function Set-LMDeviceGroupDatasource {
                 $Message = "Id: $Id | DatasourceId: $DatasourceId"
             }
 
-            
+
             $Data = @{
-                stopMonitoring  = $StopMonitoring
+                stopMonitoring = $StopMonitoring
             }
 
             #Remove empty keys so we dont overwrite them

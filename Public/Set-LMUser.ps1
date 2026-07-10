@@ -76,6 +76,7 @@ Returns a LogicMonitor.User object containing the updated user configuration.
 This function requires a valid LogicMonitor API authentication.
 #>
 function Set-LMUser {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification = 'LogicMonitor API requires plain-text password for user provisioning')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '', Justification = 'Required for the FilterWizard to work')]
@@ -238,7 +239,7 @@ function Set-LMUser {
                 -UserSpecifiedKeys $MyInvocation.BoundParameters.Keys
 
             if ($PSCmdlet.ShouldProcess($Message, "Set User")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

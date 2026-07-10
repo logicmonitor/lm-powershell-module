@@ -60,7 +60,7 @@ function Remove-LMRecipientGroup {
             #Build header and uri
             $ResourcePath = "/setting/recipientgroups/$Id"
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Recipient Group")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

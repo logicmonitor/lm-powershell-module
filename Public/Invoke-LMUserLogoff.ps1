@@ -22,6 +22,7 @@ None. You cannot pipe objects to this command.
 Returns a success message if the logoff is completed successfully.
 #>
 function Invoke-LMUserLogoff {
+    [OutputType([string])]
 
     [CmdletBinding()]
     param (

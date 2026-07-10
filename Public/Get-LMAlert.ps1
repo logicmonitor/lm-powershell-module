@@ -121,7 +121,8 @@ function Get-LMAlert {
 
         if ($ClearedAlerts -ne $null) {
             $ClearedAlertsString = $ClearedAlerts.ToString().ToLower()
-        } else {
+        }
+        else {
             $ClearedAlertsString = "*"
         }
 
@@ -191,7 +192,8 @@ function Get-LMAlert {
 
         if ($null -eq $Results) {
             return
-        } else {
+        }
+        else {
             return (Add-ObjectTypeInfo -InputObject $Results -TypeName "LogicMonitor.Alert" )
         }
 

@@ -38,6 +38,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.Datasource objects.
 #>
 function Get-LMDatasource {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

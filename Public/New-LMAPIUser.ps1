@@ -102,7 +102,7 @@ function New-LMAPIUser {
         $Message = "Username: $Username"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create API User")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

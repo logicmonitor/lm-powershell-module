@@ -74,7 +74,7 @@ function Set-LMNetscanGroup {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 description = $Description
                 name        = $NewName

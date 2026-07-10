@@ -63,7 +63,7 @@ function Remove-LMEscalationChain {
             #Build header and uri
             $ResourcePath = "/setting/alert/chains/$Id"
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Escalation Chain")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

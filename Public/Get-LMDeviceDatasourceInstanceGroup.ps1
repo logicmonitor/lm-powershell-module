@@ -48,6 +48,7 @@ Returns instance group objects.
 #>
 
 function Get-LMDeviceDatasourceInstanceGroup {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding()]
     param (

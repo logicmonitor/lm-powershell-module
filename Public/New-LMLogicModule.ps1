@@ -75,7 +75,7 @@ function New-LMLogicModule {
             $Data = ($Data | ConvertTo-Json -Depth 10)
 
             if ($PSCmdlet.ShouldProcess($Message, "New LogicModule")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

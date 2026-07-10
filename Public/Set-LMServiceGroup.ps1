@@ -137,7 +137,7 @@ function Set-LMServiceGroup {
                 -Context @{ PropertiesMethod = $PropertiesMethod }
 
             if ($PSCmdlet.ShouldProcess($Message, "Set Service Group")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 

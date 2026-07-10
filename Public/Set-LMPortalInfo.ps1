@@ -96,7 +96,7 @@ function Set-LMPortalInfo {
 
             $Message = "Portal: $($Script:LMAuth.Portal)"
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Set Portal Info")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

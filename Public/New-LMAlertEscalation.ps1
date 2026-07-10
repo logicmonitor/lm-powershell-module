@@ -23,6 +23,7 @@ Returns a success message if the escalation is created successfully.
 #>
 
 function New-LMAlertEscalation {
+    [OutputType([string])]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -39,7 +40,7 @@ function New-LMAlertEscalation {
             $Message = "Alert ID: $Id"
 
             if ($PSCmdlet.ShouldProcess($Message, "Escalate Alert")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

@@ -42,6 +42,7 @@ Returns Netflow flow objects.
 #>
 
 function Get-LMDeviceNetflowFlow {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

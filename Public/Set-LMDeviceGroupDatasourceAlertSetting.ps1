@@ -139,7 +139,7 @@ function Set-LMDeviceGroupDatasourceAlertSetting {
                 $Message = "Id: $Id | DatasourceId: $DatasourceId | DatapointName: $DatapointName"
             }
 
-            
+
             $dpConfig = @{
                 disableAlerting              = $DisableAlerting
                 dataPointId                  = $DatapointId

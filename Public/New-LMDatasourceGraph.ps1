@@ -65,7 +65,7 @@ function New-LMDatasourceGraph {
         $Message = "DatasourceId: $DatasourceId"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create Datasource Graph")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

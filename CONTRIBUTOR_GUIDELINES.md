@@ -144,7 +144,7 @@ Invoke-Pester -Path "./tests/Get-Example.Tests.ps1"
 1. **Ensure all tests pass** locally before submitting
 2. **Run PSScriptAnalyzer** to check for style issues:
    ```powershell
-   Invoke-ScriptAnalyzer -Path ./path/to/your/script.ps1
+   Invoke-ScriptAnalyzer -Path ./Public/ -Recurse -Settings ./PSScriptAnalyzerSettings.psd1
    ```
 3. **Update documentation** as needed
 4. **Create a pull request** with a clear title and description

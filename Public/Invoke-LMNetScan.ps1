@@ -23,6 +23,7 @@ Returns a success message if the NetScan is scheduled successfully.
 #>
 
 function Invoke-LMNetScan {
+    [OutputType([string])]
 
     [CmdletBinding()]
     param (

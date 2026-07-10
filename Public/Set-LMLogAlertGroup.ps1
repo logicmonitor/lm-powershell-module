@@ -45,7 +45,7 @@ Returns LogicMonitor.LogAlertGroup object.
 This function requires a valid LogicMonitor API authentication.
 #>
 function Set-LMLogAlertGroup {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
+    [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
         [Parameter(Mandatory, ParameterSetName = 'Id', ValueFromPipelineByPropertyName)]
         [Int]$Id,

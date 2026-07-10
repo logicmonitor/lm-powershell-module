@@ -83,7 +83,7 @@ function New-LMDeviceGroupProperty {
             $Message = "PropertyName: $PropertyName | DeviceGroupId: $Id"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Device Group Property")) {
-                
+
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

@@ -35,6 +35,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.NetScanGroup objects.
 #>
 function Get-LMNetscanGroup {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

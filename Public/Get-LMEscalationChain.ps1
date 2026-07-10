@@ -36,6 +36,7 @@ Returns escalation chain objects from LogicMonitor.
 #>
 
 function Get-LMEscalationChain {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

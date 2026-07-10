@@ -83,7 +83,7 @@ function Set-LMPushModuleInstanceProperty {
                 $Message = "DeviceId: $DeviceId | DataSource: $DataSourceName | Instance: $InstanceName | Property: $PropertyName = $PropertyValue"
             }
 
-            
+
             $Data = @{
                 resourceIds        = @{"system.deviceid" = $DeviceId }
                 instanceName       = $InstanceName

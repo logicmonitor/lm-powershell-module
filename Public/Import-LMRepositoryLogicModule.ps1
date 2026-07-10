@@ -26,6 +26,7 @@ Returns a success message with the names of imported modules.
 #>
 
 function Import-LMRepositoryLogicModule {
+    [OutputType([string])]
 
     [CmdletBinding()]
     param (

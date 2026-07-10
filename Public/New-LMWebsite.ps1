@@ -355,7 +355,7 @@ function New-LMWebsite {
                 $testLocation = @{ all = $true }
             }
             elseif ($TestLocationCollectorIds) {
-                $testLocation = @{ 
+                $testLocation = @{
                     collectorIds = $TestLocationCollectorIds
                 }
             }
@@ -394,7 +394,7 @@ function New-LMWebsite {
             $Message = "Name: $Name | Type: $Type"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Website")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + "?opType=$($PropertiesMethod.ToLower())"
 

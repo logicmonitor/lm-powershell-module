@@ -36,6 +36,7 @@ Returns integration objects from LogicMonitor.
 #>
 
 function Get-LMIntegration {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
@@ -100,4 +101,3 @@ function Get-LMIntegration {
         Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
     }
 }
-

@@ -117,7 +117,11 @@ Hashtable describing an uptime web step.
 New-LMUptimeDevice
 #>
 function New-LMUptimeWebStep {
-
+    [OutputType([hashtable])]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Returns a definition object; does not mutate portal state')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingPlainTextForPassword', '', Justification = 'LogicMonitor API requires plain-text auth password in step definition payload')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingUsernameAndPasswordParams', '', Justification = 'LogicMonitor API requires separate username and password fields')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Type selects the External/Internal parameter set')]
     [CmdletBinding(DefaultParameterSetName = 'External')]
     param (
         [Parameter(ParameterSetName = 'External')]
@@ -306,4 +310,3 @@ function New-LMUptimeWebStep {
 
     return $step
 }
-

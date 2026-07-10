@@ -35,6 +35,7 @@ None. You cannot pipe objects to this command.
 Returns a success message if the export is completed successfully.
 #>
 function Export-LMLogicModule {
+    [OutputType([string])]
 
     [CmdletBinding(DefaultParameterSetName = "Id")]
     param (

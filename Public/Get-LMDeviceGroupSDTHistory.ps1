@@ -36,6 +36,7 @@ Returns SDT history objects for the specified device group.
 #>
 
 function Get-LMDeviceGroupSDTHistory {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

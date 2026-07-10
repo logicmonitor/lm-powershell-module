@@ -34,6 +34,7 @@ None. You cannot pipe objects to this command.
 Returns test results for each AWS service.
 #>
 function Invoke-LMAWSAccountTest {
+    [OutputType([object[]])]
     [CmdletBinding()]
 
     param (

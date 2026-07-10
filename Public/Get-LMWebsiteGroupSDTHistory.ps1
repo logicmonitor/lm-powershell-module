@@ -36,6 +36,7 @@ Returns historical website group SDT objects.
 #>
 
 function Get-LMWebsiteGroupSDTHistory {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

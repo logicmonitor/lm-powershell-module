@@ -36,6 +36,7 @@ Returns LogicMonitor.PropertySource objects.
 #>
 
 function Get-LMPropertySource {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

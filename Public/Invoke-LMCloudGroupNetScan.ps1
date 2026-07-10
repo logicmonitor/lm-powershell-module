@@ -29,6 +29,7 @@ None. You cannot pipe objects to this command.
 Returns a success message if the task is scheduled successfully.
 #>
 function Invoke-LMCloudGroupNetScan {
+    [OutputType([string])]
 
     [CmdletBinding()]
     param (

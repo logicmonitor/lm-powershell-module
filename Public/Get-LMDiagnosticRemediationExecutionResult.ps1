@@ -140,7 +140,7 @@ function Get-LMDiagnosticRemediationExecutionResult {
         $NextRemediationCursor = $Response.remediationCursor
 
         $HasMore = (-not [string]::IsNullOrWhiteSpace([string]$NextCursor)) -or
-            (-not [string]::IsNullOrWhiteSpace([string]$NextRemediationCursor))
+        (-not [string]::IsNullOrWhiteSpace([string]$NextRemediationCursor))
 
         if (-not $Response.items -or @($Response.items).Count -eq 0) {
             if ([string]::IsNullOrWhiteSpace([string]$NextCursor) -and [string]::IsNullOrWhiteSpace([string]$NextRemediationCursor)) {

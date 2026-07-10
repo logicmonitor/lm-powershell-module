@@ -74,12 +74,12 @@ function Remove-LMUptimeDevice {
                 Write-Error "Failed to lookup device '$Name': $($_.Exception.Message)"
                 return
             }
-            
+
             if ($null -eq $lookupResult) {
                 Write-Error "Device '$Name' not found."
                 return
             }
-            
+
             if (Test-LookupResult -Result $lookupResult.Id -LookupString $Name) {
                 return
             }

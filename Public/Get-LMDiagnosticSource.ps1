@@ -35,6 +35,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.DiagnosticSource objects.
 #>
 function Get-LMDiagnosticSource {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (
         [Parameter(ParameterSetName = 'Id')]

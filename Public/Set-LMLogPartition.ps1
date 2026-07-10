@@ -132,13 +132,13 @@ function Set-LMLogPartition {
             $activeContract = Build-LMLogPartitionActiveContract `
                 -BoundParameters $PSBoundParameters `
                 -Values @{
-                    Retention             = $Retention
-                    Sku                   = $Sku
-                    ContractIntervalHours = $ContractIntervalHours
-                    UsageLimit            = $UsageLimit
-                    AutoRestartOnRenewal  = $AutoRestartOnRenewal
-                    StopIngestionOnLimit  = $StopIngestionOnLimit
-                }
+                Retention             = $Retention
+                Sku                   = $Sku
+                ContractIntervalHours = $ContractIntervalHours
+                UsageLimit            = $UsageLimit
+                AutoRestartOnRenewal  = $AutoRestartOnRenewal
+                StopIngestionOnLimit  = $StopIngestionOnLimit
+            }
 
             if ($activeContract.Count -gt 0) {
                 if ($null -eq $ExistingPartition) {

@@ -25,6 +25,7 @@ None. You cannot pipe objects to this command.
 Returns a success message if the acknowledgment is created successfully.
 #>
 function New-LMAlertAck {
+    [OutputType([string])]
     [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'None')]
     param (
         [Parameter(Mandatory, ValueFromPipelineByPropertyName)]
@@ -51,7 +52,7 @@ function New-LMAlertAck {
             $Message = "Alert IDs: $($Ids -join ', ')"
 
             if ($PSCmdlet.ShouldProcess($Message, "Acknowledge Alerts")) {
-                
+
 
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

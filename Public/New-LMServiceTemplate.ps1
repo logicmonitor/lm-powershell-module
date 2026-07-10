@@ -134,7 +134,7 @@ function New-LMServiceTemplate {
         $Message = "Name: $Name"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create Service Template")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Version 4
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

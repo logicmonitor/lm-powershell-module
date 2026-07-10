@@ -3,7 +3,7 @@
 [DEPRECATED] Imports a LogicModule into LogicMonitor using legacy endpoints.
 
 .DESCRIPTION
-DEPRECATED: This function uses legacy import endpoints and will be removed in a future version. 
+DEPRECATED: This function uses legacy import endpoints and will be removed in a future version.
 Please use Import-LMLogicModuleFromFile instead, which uses the newer XML/JSON import endpoints with better error handling and additional features.
 
 The Import-LMLogicModule function imports a LogicModule from a file path or file data. Supports various module types including datasource, propertyrules, eventsource, topologysource, configsource, logsource, functions, and oids.
@@ -40,6 +40,7 @@ None. You cannot pipe objects to this command.
 Returns a success message if the import is successful.
 #>
 function Import-LMLogicModule {
+    [OutputType([string])]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory, ParameterSetName = 'FilePath')]

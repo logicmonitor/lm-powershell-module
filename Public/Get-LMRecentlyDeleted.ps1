@@ -40,6 +40,7 @@ Retrieves deleted resources from the past 24 hours in ascending order of deletio
 You must establish a session with Connect-LMAccount prior to calling this function.
 #>
 function Get-LMRecentlyDeleted {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding()]
     param (
@@ -63,7 +64,7 @@ function Get-LMRecentlyDeleted {
         return
     }
 
-    function Get-EpochMilliseconds {
+    function Get-EpochMillisecond {
         param ([Parameter(Mandatory)][DateTime]$InputDate)
         return [long][Math]::Round((New-TimeSpan -Start (Get-Date -Date '1/1/1970') -End $InputDate.ToUniversalTime()).TotalMilliseconds)
     }
@@ -91,11 +92,11 @@ function Get-LMRecentlyDeleted {
     $filterParts = @()
 
     if ($DeletedAfter) {
-        $filterParts += ('deletedOn>:"{0}"' -f (Get-EpochMilliseconds -InputDate $DeletedAfter))
+        $filterParts += ('deletedOn>:"{0}"' -f (Get-EpochMillisecond -InputDate $DeletedAfter))
     }
 
     if ($DeletedBefore) {
-        $filterParts += ('deletedOn<:"{0}"' -f (Get-EpochMilliseconds -InputDate $DeletedBefore))
+        $filterParts += ('deletedOn<:"{0}"' -f (Get-EpochMillisecond -InputDate $DeletedBefore))
     }
 
     if ($ResourceType -ne 'All') {

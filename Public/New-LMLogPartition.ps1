@@ -111,13 +111,13 @@ function New-LMLogPartition {
         $activeContract = Build-LMLogPartitionActiveContract `
             -BoundParameters $PSBoundParameters `
             -Values @{
-                Retention             = $Retention
-                Sku                   = $Sku
-                ContractIntervalHours = $ContractIntervalHours
-                UsageLimit            = $UsageLimit
-                AutoRestartOnRenewal  = $AutoRestartOnRenewal
-                StopIngestionOnLimit  = $StopIngestionOnLimit
-            } `
+            Retention             = $Retention
+            Sku                   = $Sku
+            ContractIntervalHours = $ContractIntervalHours
+            UsageLimit            = $UsageLimit
+            AutoRestartOnRenewal  = $AutoRestartOnRenewal
+            StopIngestionOnLimit  = $StopIngestionOnLimit
+        } `
             -AlwaysInclude @('Retention', 'Sku')
 
         $Data = @{
@@ -133,7 +133,7 @@ function New-LMLogPartition {
         $Message = "Name: $Name | Tenant: $Tenant"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create Log Partition")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

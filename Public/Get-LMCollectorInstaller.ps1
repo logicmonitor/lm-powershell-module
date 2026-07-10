@@ -41,6 +41,7 @@ None. You cannot pipe objects to this command.
 Returns the path to the downloaded installer file.
 #>
 function Get-LMCollectorInstaller {
+    [OutputType([string])]
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (
         [Parameter(Mandatory, ParameterSetName = "Id")]
@@ -82,7 +83,7 @@ function Get-LMCollectorInstaller {
             $DownloadPath += "\LogicMonitor_Collector_$OSandArch`_$Size`_$Id.exe"
         }
 
-        
+
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
         $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 

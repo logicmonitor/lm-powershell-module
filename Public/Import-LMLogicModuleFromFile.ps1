@@ -68,6 +68,7 @@ None. You cannot pipe objects to this command.
 Returns a success message if the import is successful.
 #>
 function Import-LMLogicModuleFromFile {
+    [OutputType([string])]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory, ParameterSetName = 'FilePath')]
@@ -131,20 +132,20 @@ function Import-LMLogicModuleFromFile {
 
             #Build resource path based on type and format
             $ResourcePath = "/setting/$Type/import$Format"
-            
+
             #Build query parameters if provided (only for JSON imports)
             $QueryParams = ""
             if ($Format -eq "json") {
                 $QueryParamsList = @()
-                
+
                 if ($FieldsToPreserve) {
                     $QueryParamsList += "fieldsToPreserve=$([System.Web.HttpUtility]::UrlEncode($FieldsToPreserve))"
                 }
-                
+
                 if ($HandleConflict) {
                     $QueryParamsList += "handleConflict=$([System.Web.HttpUtility]::UrlEncode($HandleConflict))"
                 }
-                
+
                 if ($QueryParamsList.Count -gt 0) {
                     $QueryParams = "?" + ($QueryParamsList -join "&")
                 }
@@ -161,19 +162,19 @@ function Import-LMLogicModuleFromFile {
                 # Create a temporary file with the correct extension for the upload
                 $TempFile = [System.IO.Path]::GetTempFileName()
                 $TempFileWithExtension = [System.IO.Path]::ChangeExtension($TempFile, $Format)
-                
+
                 # Remove the temp file without extension and use the one with extension
                 if (Test-Path $TempFile) {
                     Remove-Item $TempFile -Force
                 }
-                
+
                 # Write the file content to temp file
                 Set-Content -Path $TempFileWithExtension -Value $File -NoNewline
-                
+
                 try {
                     # Use the file path for the form upload
                     $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Form @{file = Get-Item $TempFileWithExtension }
-                    
+
                     if ($Response) {
                         return "Successfully imported LogicModule of type: $Type (format: $Format)"
                     }
@@ -195,4 +196,3 @@ function Import-LMLogicModuleFromFile {
     }
     end {}
 }
-

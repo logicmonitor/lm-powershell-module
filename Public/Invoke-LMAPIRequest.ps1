@@ -142,6 +142,7 @@ None. You cannot pipe objects to this command.
 Returns the API response as a PSCustomObject by default, or as specified by -AsHashtable.
 #>
 function Invoke-LMAPIRequest {
+    [OutputType([hashtable])]
 
     [CmdletBinding(DefaultParameterSetName = 'Data', SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (
@@ -255,7 +256,7 @@ function Invoke-LMAPIRequest {
     }
 
     if ($shouldPrompt) {
-        
+
         # Generate headers with custom version
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method $Method -ResourcePath $ResourcePath -Data $Body -Version $Version -ContentType $ContentType
 
@@ -333,4 +334,3 @@ function Invoke-LMAPIRequest {
         return $Response
     }
 }
-

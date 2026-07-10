@@ -83,7 +83,7 @@ function New-LMAPIToken {
         $Message = "User ID: $Id | Type: $Type"
 
         if ($PSCmdlet.ShouldProcess($Message, "Create API Token")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $Params
 

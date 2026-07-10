@@ -230,6 +230,21 @@ Describe 'Log Alert Cmdlet Tests' {
             $result = Set-LMLogAlert -Id 5 -Disabled $false -Confirm:$false
             $result.id | Should -Be 5
         }
+
+        It 'Accepts pipeline input by Id when updating with NewName' {
+            Mock Invoke-LMRestMethod {
+                param($Uri, $Body)
+                $Uri | Should -Match '/logpipelines/processors/5$'
+                $payload = $Body | ConvertFrom-Json
+                $payload.name | Should -Be 'Dynatrace Alerts Test'
+                return [PSCustomObject]@{ id = 5; name = 'Dynatrace Alerts Test' }
+            }
+
+            $alert = [PSCustomObject]@{ id = 5; name = 'Original Name'; pipelineId = 10 }
+            $alert = Add-ObjectTypeInfo -InputObject $alert -TypeName 'LogicMonitor.LogAlert'
+            $result = $alert | Set-LMLogAlert -NewName 'Dynatrace Alerts Test' -Confirm:$false
+            $result.name | Should -Be 'Dynatrace Alerts Test'
+        }
     }
 
     Context 'Remove-LMLogAlert' {

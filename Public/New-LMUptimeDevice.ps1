@@ -318,6 +318,7 @@ function New-LMUptimeDevice {
 
     begin {
         function New-LMUptimeDefaultWebStep {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Justification = 'Returns a definition object; does not mutate portal state')]
             param (
                 [String]$StepName = '__step0',
                 [bool]$IsInternalCheck = $false,
@@ -587,4 +588,3 @@ function New-LMUptimeDevice {
     }
     end {}
 }
-

@@ -36,6 +36,7 @@ Returns website group alert objects.
 #>
 
 function Get-LMWebsiteGroupAlert {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

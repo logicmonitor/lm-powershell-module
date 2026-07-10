@@ -38,6 +38,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.ModuleUpdateHistory objects.
 #>
 function Get-LMDatasourceUpdateHistory {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

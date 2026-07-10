@@ -69,7 +69,7 @@ function Remove-LMDeviceProperty {
                 $Message = "Id: $Id | Property: $PropertyName"
             }
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Device Property")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

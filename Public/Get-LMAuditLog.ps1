@@ -41,6 +41,7 @@ None. You cannot pipe objects to this command.
 Returns LogicMonitor.AuditLog objects.
 #>
 function Get-LMAuditLog {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Range')]
     param (

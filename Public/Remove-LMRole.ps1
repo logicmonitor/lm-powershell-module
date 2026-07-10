@@ -67,7 +67,7 @@ function Remove-LMRole {
             }
 
             #Loop through requests
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove User Role")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

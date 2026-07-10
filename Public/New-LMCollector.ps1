@@ -119,7 +119,7 @@ function New-LMCollector {
             $Message = "Description: $Description"
 
             if ($PSCmdlet.ShouldProcess($Message, "Create Collector")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Data
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

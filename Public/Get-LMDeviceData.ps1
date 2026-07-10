@@ -32,9 +32,6 @@ The end date and time for data collection. Defaults to current time if not speci
 .PARAMETER Datapoints
 Comma separated list of datapoints to retrieve. If not provided, all datapoints will be retrieved.
 
-.PARAMETER Filter
-A filter object to apply when retrieving data. This parameter is optional.
-
 .EXAMPLE
 #Retrieve data using IDs for datapoints "cpu" and "memory"
 Get-LMDeviceData -DeviceId 123 -DatasourceId 456 -InstanceId 789 -Datapoints "cpu,memory"
@@ -53,6 +50,7 @@ None. You cannot pipe objects to this command.
 Returns formatted monitoring data with timestamps and values.
 #>
 function Get-LMDeviceData {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding()]
     param (
@@ -95,8 +93,6 @@ function Get-LMDeviceData {
         [Datetime]$StartDate,
 
         [Datetime]$EndDate,
-
-        [Object]$Filter,
 
         [String]$Datapoints
 

@@ -39,6 +39,7 @@ Returns LogicMonitor.NetScanExecutionDevice objects.
 #>
 
 function Get-LMNetscanExecutionDevice {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

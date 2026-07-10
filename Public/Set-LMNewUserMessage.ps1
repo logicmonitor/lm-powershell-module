@@ -47,7 +47,7 @@ function Set-LMNewUserMessage {
 
             $Message = "New User Message Template"
 
-            
+
             $Data = @{
                 messageBody    = $MessageBody
                 messageSubject = $MessageSubject

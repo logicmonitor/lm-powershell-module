@@ -37,7 +37,7 @@ function Remove-LMOpsNote {
             $Message = "Id: $Id"
 
             #Loop through requests
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove OpsNote")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

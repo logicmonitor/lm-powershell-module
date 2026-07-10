@@ -70,7 +70,7 @@ function Remove-LMLogsource {
             }
 
             if ($PSCmdlet.ShouldProcess($Message, "Remove Logsource")) {
-                
+
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

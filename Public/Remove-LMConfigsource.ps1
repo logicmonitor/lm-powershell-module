@@ -68,7 +68,7 @@ function Remove-LMConfigsource {
                 $Message = "Id: $Id"
             }
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Configsource")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

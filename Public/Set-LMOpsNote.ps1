@@ -115,7 +115,7 @@ function Set-LMOpsNote {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 happenOnInSec = $NoteDate
                 note          = $Note

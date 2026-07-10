@@ -42,6 +42,7 @@ Returns LogicMonitor.IntegrationLog objects.
 #>
 
 function Get-LMIntegrationLog {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Range')]
     param (

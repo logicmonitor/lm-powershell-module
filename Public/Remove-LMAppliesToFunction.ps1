@@ -66,7 +66,7 @@ function Remove-LMAppliesToFunction {
                 $Message = "Id: $Id"
             }
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove AppliesTo Function")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

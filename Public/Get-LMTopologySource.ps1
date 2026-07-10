@@ -36,6 +36,7 @@ Returns LogicMonitor.Topologysource objects.
 #>
 
 function Get-LMTopologySource {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

@@ -114,7 +114,7 @@ function Set-LMConfigsource {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 name            = $NewName
                 displayName     = $DisplayName

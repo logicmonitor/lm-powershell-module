@@ -66,6 +66,7 @@ function ConvertTo-LMUptimeDevice {
 
     begin {
         function Convert-LMWebsiteProperties {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Matches LogicMonitor API naming')]
             param ([Object]$Properties)
 
             $converted = @{}
@@ -145,7 +146,7 @@ function ConvertTo-LMUptimeDevice {
             Write-Error 'Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again.'
             return
         }
-        
+
         if (-not $Website) { return }
 
         $type = if ($null -ne $Website.type) { $Website.type } else { '' }
@@ -163,7 +164,7 @@ function ConvertTo-LMUptimeDevice {
             Description  = $Website.description
         }
 
-        if ($Website.pollingInterval) { 
+        if ($Website.pollingInterval) {
             $pollingValue = [int]$Website.pollingInterval
             if ($pollingValue -gt 10) {
                 Write-Warning "Website '$($Website.name)' has PollingInterval of $pollingValue minutes. Uptime devices only support 1-10 minutes. Setting to 10 minutes."
@@ -254,7 +255,7 @@ function ConvertTo-LMUptimeDevice {
             $authWarningShown = $false
             foreach ($step in @($Website.steps)) {
                 $convertedStep = Convert-PSObjectToHashtable $step
-                if ($convertedStep) { 
+                if ($convertedStep) {
                     $stepObjects += $convertedStep
                     # Check if this step has authentication configured
                     if (-not $authWarningShown -and $convertedStep.requireAuth -eq $true) {
@@ -308,4 +309,3 @@ function ConvertTo-LMUptimeDevice {
         }
     }
 }
-

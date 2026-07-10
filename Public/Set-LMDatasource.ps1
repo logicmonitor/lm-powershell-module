@@ -115,7 +115,7 @@ function Set-LMDatasource {
                 $Message = "Id: $Id"
             }
 
-            
+
             $Data = @{
                 name            = $NewName
                 displayName     = $DisplayName

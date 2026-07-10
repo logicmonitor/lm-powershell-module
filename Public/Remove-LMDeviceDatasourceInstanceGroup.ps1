@@ -155,7 +155,7 @@ function Remove-LMDeviceDatasourceInstanceGroup {
 
 
         if ($PSCmdlet.ShouldProcess($Message, "Remove Device Datasource Instance Group")) {
-            
+
             $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
             $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 

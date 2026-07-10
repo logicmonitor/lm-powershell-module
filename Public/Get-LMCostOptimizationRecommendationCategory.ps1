@@ -29,6 +29,7 @@ No input is accepted.
 Returns LogicMonitor.CostOptimizationRecommendationCategory objects.
 #>
 function Get-LMCostOptimizationRecommendationCategory {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'All')]
     param (

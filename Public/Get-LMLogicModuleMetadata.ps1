@@ -47,6 +47,7 @@ Returns LogicMonitor.LogicModuleMetadata objects.
 
 
 function Get-LMLogicModuleMetadata {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Matches LogicMonitor API naming')]
 
     [CmdletBinding()]
     param (
@@ -80,7 +81,7 @@ function Get-LMLogicModuleMetadata {
         #Initialize vars
         $QueryParams = ""
 
-        
+
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
         $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath + $QueryParams
 

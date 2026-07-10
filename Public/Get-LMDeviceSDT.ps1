@@ -36,6 +36,7 @@ Returns LogicMonitor.SDT objects representing the device's SDT entries.
 #>
 
 function Get-LMDeviceSDT {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

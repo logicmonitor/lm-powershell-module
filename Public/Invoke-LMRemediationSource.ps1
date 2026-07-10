@@ -76,59 +76,63 @@ function Invoke-LMRemediationSource {
         [String]$AlertId
     )
 
-    if (-not $Script:LMAuth.Valid) {
-        Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
-        return
-    }
-
-    $HostId = $null
-    $ResolvedRemediationId = $null
-
-    switch -Wildcard ($PSCmdlet.ParameterSetName) {
-        'Id-*' {
-            $HostId = $Id
-        }
-        'Name-*' {
-            $HostLookupResult = (Get-LMDevice -Name $Name).Id
-            if (Test-LookupResult -Result $HostLookupResult -LookupString $Name) {
-                return
-            }
-            $HostId = $HostLookupResult
-        }
-        'DisplayName-*' {
-            $HostLookupResult = (Get-LMDevice -DisplayName $DisplayName).Id
-            if (Test-LookupResult -Result $HostLookupResult -LookupString $DisplayName) {
-                return
-            }
-            $HostId = $HostLookupResult
-        }
-    }
-
-    if ($PSCmdlet.ParameterSetName -like '*-remediationId') {
-        $ResolvedRemediationId = $RemediationId
-    }
-    else {
-        $RemediationLookupResult = (Get-LMRemediationSource -Name $RemediationName).Id
-        if (Test-LookupResult -Result $RemediationLookupResult -LookupString $RemediationName) {
+    begin {}
+    process {
+        if (-not $Script:LMAuth.Valid) {
+            Write-Error "Please ensure you are logged in before running any commands, use Connect-LMAccount to login and try again."
             return
         }
-        $ResolvedRemediationId = $RemediationLookupResult
+
+        $HostId = $null
+        $ResolvedRemediationId = $null
+
+        switch -Wildcard ($PSCmdlet.ParameterSetName) {
+            'Id-*' {
+                $HostId = $Id
+            }
+            'Name-*' {
+                $HostLookupResult = (Get-LMDevice -Name $Name).Id
+                if (Test-LookupResult -Result $HostLookupResult -LookupString $Name) {
+                    return
+                }
+                $HostId = $HostLookupResult
+            }
+            'DisplayName-*' {
+                $HostLookupResult = (Get-LMDevice -DisplayName $DisplayName).Id
+                if (Test-LookupResult -Result $HostLookupResult -LookupString $DisplayName) {
+                    return
+                }
+                $HostId = $HostLookupResult
+            }
+        }
+
+        if ($PSCmdlet.ParameterSetName -like '*-remediationId') {
+            $ResolvedRemediationId = $RemediationId
+        }
+        else {
+            $RemediationLookupResult = (Get-LMRemediationSource -Name $RemediationName).Id
+            if (Test-LookupResult -Result $RemediationLookupResult -LookupString $RemediationName) {
+                return
+            }
+            $ResolvedRemediationId = $RemediationLookupResult
+        }
+
+        $ResourcePath = "/setting/remediationsources/executemanually"
+        $Data = @{
+            remediationId = $ResolvedRemediationId
+            hostId        = $HostId
+            alertId       = $AlertId
+        }
+        $Body = Format-LMData -Data $Data -UserSpecifiedKeys $PSBoundParameters.Keys
+
+        $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Body
+        $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
+
+        Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
+
+        $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
+
+        return (Add-ObjectTypeInfo -InputObject $Response -TypeName 'LogicMonitor.RemediationSourceExecution')
     }
-
-    $ResourcePath = "/setting/remediationsources/executemanually"
-    $Data = @{
-        remediationId = $ResolvedRemediationId
-        hostId        = $HostId
-        alertId       = $AlertId
-    }
-    $Body = Format-LMData -Data $Data -UserSpecifiedKeys $PSBoundParameters.Keys
-
-    $Headers = New-LMHeader -Auth $Script:LMAuth -Method "POST" -ResourcePath $ResourcePath -Data $Body
-    $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
-
-    Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $MyInvocation -Payload $Body
-
-    $Response = Invoke-LMRestMethod -CallerPSCmdlet $PSCmdlet -Uri $Uri -Method "POST" -Headers $Headers[0] -WebSession $Headers[1] -Body $Body
-
-    return (Add-ObjectTypeInfo -InputObject $Response -TypeName 'LogicMonitor.RemediationSourceExecution')
+    end {}
 }

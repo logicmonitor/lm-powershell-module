@@ -75,7 +75,7 @@ function Set-LMAccessGroup {
             #Build header and uri
             $ResourcePath = "/setting/accessgroup/$Id"
 
-            
+
             $Data = @{
                 description = $Description
                 name        = $NewName

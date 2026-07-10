@@ -36,6 +36,7 @@ Returns event source objects.
 #>
 
 function Get-LMDeviceEventSourceList {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

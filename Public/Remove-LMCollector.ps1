@@ -66,7 +66,7 @@ function Remove-LMCollector {
             #Build header and uri
             $ResourcePath = "/setting/collector/collectors/$Id"
 
-            
+
             if ($PSCmdlet.ShouldProcess($Message, "Remove Collector")) {
                 $Headers = New-LMHeader -Auth $Script:LMAuth -Method "DELETE" -ResourcePath $ResourcePath
                 $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath

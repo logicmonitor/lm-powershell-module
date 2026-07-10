@@ -31,6 +31,7 @@ None. You cannot pipe objects to this command.
 Returns test results for each GCP service.
 #>
 function Invoke-LMGCPAccountTest {
+    [OutputType([object[]])]
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]

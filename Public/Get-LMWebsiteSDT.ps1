@@ -36,6 +36,7 @@ Returns website SDT objects.
 #>
 
 function Get-LMWebsiteSDT {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification = 'Parameters are referenced inside pagination/cursor script blocks')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id')]
     param (

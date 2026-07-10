@@ -55,6 +55,7 @@ Returns a LogicMonitor.DeviceGroup object containing the updated AWS account gro
 This function requires a valid LogicMonitor API authentication. Use Connect-LMAccount before running this command.
 #>
 function Set-LMAWSDiscoverySettings {
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Matches LogicMonitor API naming')]
 
     [CmdletBinding(DefaultParameterSetName = 'Id', SupportsShouldProcess, ConfirmImpact = 'Medium')]
     param (
@@ -102,7 +103,7 @@ function Set-LMAWSDiscoverySettings {
         if ($PSCmdlet.ParameterSetName -eq 'Csv') {
             $csv = Import-Csv -Path $CsvPath
             $accountIds = $csv.AccountId | Where-Object { $_ } | Sort-Object -Unique
-            
+
             if ($accountIds.Count -eq 0) {
                 Write-Error "No valid AccountId values found in CSV file: $CsvPath"
                 return
@@ -121,7 +122,7 @@ function Set-LMAWSDiscoverySettings {
                     ServiceName = $ServiceName
                     Regions     = $Regions
                 }
-                
+
                 if ($PSBoundParameters.ContainsKey('AutoDelete')) { $params['AutoDelete'] = $AutoDelete }
                 if ($PSBoundParameters.ContainsKey('DeleteDelayDays')) { $params['DeleteDelayDays'] = $DeleteDelayDays }
                 if ($PSBoundParameters.ContainsKey('DisableAlerting')) { $params['DisableAlerting'] = $DisableAlerting }
@@ -164,7 +165,7 @@ function Set-LMAWSDiscoverySettings {
             # Retrieve current AWS account group configuration
             try {
                 Write-Verbose "Retrieving AWS account group configuration for ID $AccountId"
-                
+
                 $GetHeaders = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
                 $GetUri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
@@ -190,8 +191,8 @@ function Set-LMAWSDiscoverySettings {
                 }
 
                 # Find the service (case-insensitive)
-                $serviceKey = $Response.extra.services.PSObject.Properties.Name | 
-                    Where-Object { $_.ToLower() -eq $ServiceName.ToLower() } | 
+                $serviceKey = $Response.extra.services.PSObject.Properties.Name |
+                    Where-Object { $_.ToLower() -eq $ServiceName.ToLower() } |
                     Select-Object -First 1
 
                 if (-not $serviceKey) {
@@ -239,7 +240,7 @@ function Set-LMAWSDiscoverySettings {
                 } | ConvertTo-Json -Depth 10
 
                 if ($PSCmdlet.ShouldProcess($Message, "Update AWS Discovery Settings")) {
-                    
+
                     $Headers = New-LMHeader -Auth $Script:LMAuth -Method "PATCH" -ResourcePath $ResourcePath -Data $Data
                     $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
@@ -260,7 +261,7 @@ function Set-LMAWSDiscoverySettings {
                 if ($errorMessage -match "Permissions are insufficient|Please see https://www\.logicmonitor\.com/support/lm-cloud") {
                     Write-Warning "Non-fatal LogicMonitor API warning: $errorMessage"
                     Write-Verbose "Settings may have been partially applied. Verify configuration in LogicMonitor portal."
-                    
+
                     # Still return the response if we have it
                     if ($PatchResponse) {
                         return (Add-ObjectTypeInfo -InputObject $PatchResponse -TypeName "LogicMonitor.DeviceGroup")

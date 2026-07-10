@@ -30,7 +30,7 @@ function Get-LMPortalInfo {
         #Build header and uri
         $ResourcePath = "/setting/companySetting"
 
-        
+
         $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $ResourcePath
         $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $ResourcePath
 
