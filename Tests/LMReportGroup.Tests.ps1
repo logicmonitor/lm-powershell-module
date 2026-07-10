@@ -3,13 +3,17 @@ Describe 'ReportGroup Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:ReportGroupTestName = "ReportGroup.Build.Test.$($script:TestSuffix)"
+        $script:ReportGroupUpdatedName = "ReportGroup.Build.Test.$($script:TestSuffix).Updated"
     }
     
     Describe 'New-LMReportGroup' {
         It 'When given mandatory parameters, returns a created Report group with matching values' {
-            $Script:NewReportGroup = New-LMReportGroup -Name "ReportGroup.Build.Test" -Description "BuildTest"
+            $Script:NewReportGroup = New-LMReportGroup -Name $script:ReportGroupTestName -Description "BuildTest"
             $Script:NewReportGroup | Should -Not -BeNullOrEmpty
-            $Script:NewReportGroup.Name | Should -Be "ReportGroup.Build.Test"
+            $Script:NewReportGroup.Name | Should -Be $script:ReportGroupTestName
             $Script:NewReportGroup.Description | Should -Be "BuildTest"
         }
     }
@@ -38,9 +42,9 @@ Describe 'ReportGroup Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMReportGroup' {
         It 'When given a set of parameters, returns an updated Report group with matching values' {
-            { $ReportGroup = Set-LMReportGroup -Id $Script:NewReportGroup.Id -Description "Updated" -NewName "ReportGroup.Build.Test.Updated" -ErrorAction Stop
+            { $ReportGroup = Set-LMReportGroup -Id $Script:NewReportGroup.Id -Description "Updated" -NewName $script:ReportGroupUpdatedName -ErrorAction Stop
                 $ReportGroup.Description | Should -Be "Updated"
-                $ReportGroup.Name | Should -Be "ReportGroup.Build.Test.Updated"
+                $ReportGroup.Name | Should -Be $script:ReportGroupUpdatedName
             } | Should -Not -Throw
         }
     }

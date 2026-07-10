@@ -682,15 +682,23 @@ Describe 'SDT Testing' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:DeviceGroupSdtComment = "DeviceGroupSDT.Build.Test.$($script:TestSuffix)"
+        $script:DeviceSdtComment = "DeviceSDT.Build.Test.$($script:TestSuffix)"
+        $script:DeviceSdtWindowsTzComment = "DeviceSDT.Windows.TZ.Test.$($script:TestSuffix)"
+        $script:DeviceSdtGetTzComment = "DeviceSDT.GetTZ.Test.$($script:TestSuffix)"
+        $script:DeviceSdtDurationComment = "DeviceSDT.Duration.Test.$($script:TestSuffix)"
+        $script:DeviceSdtWeeklyComment = "DeviceSDT.Weekly.Test.$($script:TestSuffix)"
     }
     
     Describe 'New-LMDeviceGroupSDT' {
         It 'When given mandatory parameters, returns a created DeviceGroup SDT with matching values' {
             $StartDate = (Get-Date).AddMinutes(5)
             $EndDate = $StartDate.AddHours(1)
-            $Script:NewDeviceGroupSDT = New-LMDeviceGroupSDT -DeviceGroupId 1 -StartDate $StartDate -EndDate $EndDate -Timezone "America/New_York" -Comment "DeviceGroupSDT.Build.Test"
+            $Script:NewDeviceGroupSDT = New-LMDeviceGroupSDT -DeviceGroupId 1 -StartDate $StartDate -EndDate $EndDate -Timezone "America/New_York" -Comment $script:DeviceGroupSdtComment
             $Script:NewDeviceGroupSDT | Should -Not -BeNullOrEmpty
-            $Script:NewDeviceGroupSDT.Comment | Should -Be "DeviceGroupSDT.Build.Test"
+            $Script:NewDeviceGroupSDT.Comment | Should -Be $script:DeviceGroupSdtComment
             $Script:NewDeviceGroupSDT.Type | Should -Be "ResourceGroupSDT"
             $Script:NewDeviceGroupSDT.Timezone | Should -Be "America/New_York"
         }
@@ -700,37 +708,37 @@ Describe 'SDT Testing' {
         It 'When given mandatory parameters with IANA timezone, returns a created Device SDT with matching values' {
             $StartDate = (Get-Date).AddMinutes(5)
             $EndDate = $StartDate.AddHours(1)
-            $Script:NewDeviceSDT = New-LMDeviceSDT -DeviceId 123 -StartDate $StartDate -EndDate $EndDate -Timezone "America/New_York" -Comment "DeviceSDT.Build.Test"
+            $Script:NewDeviceSDT = New-LMDeviceSDT -DeviceId 123 -StartDate $StartDate -EndDate $EndDate -Timezone "America/New_York" -Comment $script:DeviceSdtComment
             $Script:NewDeviceSDT | Should -Not -BeNullOrEmpty
-            $Script:NewDeviceSDT.Comment | Should -Be "DeviceSDT.Build.Test"
+            $Script:NewDeviceSDT.Comment | Should -Be $script:DeviceSdtComment
             $Script:NewDeviceSDT.Type | Should -Be "ResourceSDT"
             $Script:NewDeviceSDT.Timezone | Should -Be "America/New_York"
         }
         It 'When given a Windows timezone name, converts to IANA and creates SDT successfully' {
             $StartDate = (Get-Date).AddMinutes(5)
             $EndDate = $StartDate.AddHours(1)
-            $Script:NewDeviceSDTWindows = New-LMDeviceSDT -DeviceId 123 -StartDate $StartDate -EndDate $EndDate -Timezone "Eastern Standard Time" -Comment "DeviceSDT.Windows.TZ.Test"
+            $Script:NewDeviceSDTWindows = New-LMDeviceSDT -DeviceId 123 -StartDate $StartDate -EndDate $EndDate -Timezone "Eastern Standard Time" -Comment $script:DeviceSdtWindowsTzComment
             $Script:NewDeviceSDTWindows | Should -Not -BeNullOrEmpty
-            $Script:NewDeviceSDTWindows.Comment | Should -Be "DeviceSDT.Windows.TZ.Test"
+            $Script:NewDeviceSDTWindows.Comment | Should -Be $script:DeviceSdtWindowsTzComment
             $Script:NewDeviceSDTWindows.Type | Should -Be "ResourceSDT"
             $Script:NewDeviceSDTWindows.Timezone | Should -Be "America/New_York"
         }
         It 'When given Get-TimeZone StandardName, creates SDT successfully' {
             $StartDate = (Get-Date).AddMinutes(5)
             $EndDate = $StartDate.AddHours(1)
-            $Script:NewDeviceSDTGetTZ = New-LMDeviceSDT -DeviceId 123 -StartDate $StartDate -EndDate $EndDate -Timezone (Get-TimeZone).StandardName -Comment "DeviceSDT.GetTZ.Test"
+            $Script:NewDeviceSDTGetTZ = New-LMDeviceSDT -DeviceId 123 -StartDate $StartDate -EndDate $EndDate -Timezone (Get-TimeZone).StandardName -Comment $script:DeviceSdtGetTzComment
             $Script:NewDeviceSDTGetTZ | Should -Not -BeNullOrEmpty
-            $Script:NewDeviceSDTGetTZ.Comment | Should -Be "DeviceSDT.GetTZ.Test"
+            $Script:NewDeviceSDTGetTZ.Comment | Should -Be $script:DeviceSdtGetTzComment
             $Script:NewDeviceSDTGetTZ.Type | Should -Be "ResourceSDT"
         }
         It 'Creates a one-time duration SDT' {
-            $Script:NewDeviceSDTDuration = New-LMDeviceSDT -DeviceId 123 -Duration 60 -Timezone "America/New_York" -Comment "DeviceSDT.Duration.Test"
+            $Script:NewDeviceSDTDuration = New-LMDeviceSDT -DeviceId 123 -Duration 60 -Timezone "America/New_York" -Comment $script:DeviceSdtDurationComment
             $Script:NewDeviceSDTDuration | Should -Not -BeNullOrEmpty
             $Script:NewDeviceSDTDuration.SdtType | Should -Be "oneTime"
             $Script:NewDeviceSDTDuration.Duration | Should -Be 60
         }
         It 'Creates a weekly recurring SDT with multiple weekdays' {
-            $Script:NewDeviceSDTWeekly = New-LMDeviceSDT -DeviceId 123 -SdtType Weekly -StartHour 13 -StartMinute 7 -EndHour 14 -EndMinute 7 -WeekDay Monday, Thursday -Timezone "America/New_York" -Comment "DeviceSDT.Weekly.Test"
+            $Script:NewDeviceSDTWeekly = New-LMDeviceSDT -DeviceId 123 -SdtType Weekly -StartHour 13 -StartMinute 7 -EndHour 14 -EndMinute 7 -WeekDay Monday, Thursday -Timezone "America/New_York" -Comment $script:DeviceSdtWeeklyComment
             $Script:NewDeviceSDTWeekly | Should -Not -BeNullOrEmpty
             $Script:NewDeviceSDTWeekly.SdtType | Should -Be "weekly"
             $Script:NewDeviceSDTWeekly.WeekDay | Should -Be "Monday,Thursday"

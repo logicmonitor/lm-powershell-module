@@ -3,11 +3,15 @@ Describe 'AppliesToFunction Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:AppliesToFunctionTestName = "AppliesToFunction.Build.Test.$($script:TestSuffix)"
+        $script:AppliesToFunctionUpdatedName = "AppliesToFunction.Build.Test.$($script:TestSuffix).UpdatedName"
     }
     
     Describe 'New-LMAppliesToFunction' {
         It 'When given mandatory parameters, returns a created AppliesToFunction with matching values' {
-            $Script:NewAppliesToFunction = New-LMAppliesToFunction -Name "AppliesToFunction.Build.Test" -Description "Testing123" -AppliesTo "false()"
+            $Script:NewAppliesToFunction = New-LMAppliesToFunction -Name $script:AppliesToFunctionTestName -Description "Testing123" -AppliesTo "false()"
             $Script:NewAppliesToFunction | Should -Not -BeNullOrEmpty
             $Script:NewAppliesToFunction.Description | Should -Be "Testing123"
             $Script:NewAppliesToFunction.Code | Should -Be "false()"
@@ -35,9 +39,9 @@ Describe 'AppliesToFunction Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMAppliesToFunction' {
         It 'When given a set of parameters, returns an updated AppliesToFunction with matching values' {
-            { $AppliesToFunction = Set-LMAppliesToFunction -Id $Script:NewAppliesToFunction.Id -Description "Updated" -NewName "AppliesToFunction.Build.Test.UpdatedName" -ErrorAction Stop
+            { $AppliesToFunction = Set-LMAppliesToFunction -Id $Script:NewAppliesToFunction.Id -Description "Updated" -NewName $script:AppliesToFunctionUpdatedName -ErrorAction Stop
                 $AppliesToFunction.Description | Should -Be "Updated"
-                $AppliesToFunction.Name | Should -Be "AppliesToFunction.Build.Test.UpdatedName"
+                $AppliesToFunction.Name | Should -Be $script:AppliesToFunctionUpdatedName
             } | Should -Not -Throw
         }
     }

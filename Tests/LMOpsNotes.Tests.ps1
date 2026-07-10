@@ -3,14 +3,18 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:OpsNoteTestText = "OpsNote.Build.Test: $($script:TestSuffix)"
+        $script:OpsNoteTestTag = "OpsNote.Build.Test-$($script:TestSuffix)"
+        $script:OpsNoteUpdatedText = "OpsNote.Build.Test: $($script:TestSuffix) Updated"
     }
     
     Describe 'New-LMOpsNote' {
         It 'When given mandatory parameters, returns a created opsnote with matching values' {
-            $Script:TimeNow = Get-Date -UFormat %m%d%Y-%H%M
-            $Script:NewOpsNote = New-LMOpsNote -Note "OpsNote.Build.Test: $Script:TimeNow" -Tags "OpsNote.Build.Test-$Script:TimeNow"
+            $Script:NewOpsNote = New-LMOpsNote -Note $script:OpsNoteTestText -Tags $script:OpsNoteTestTag
             $Script:NewOpsNote | Should -Not -BeNullOrEmpty
-            $Script:NewOpsNote.note | Should -Be "OpsNote.Build.Test: $Script:TimeNow"
+            $Script:NewOpsNote.note | Should -Be $script:OpsNoteTestText
             $Script:NewOpsNote.tags | Should -Not -BeNullOrEmpty
             $Script:NewOpsNote.scopes | Should -BeNullOrEmpty
             
@@ -101,8 +105,8 @@ Describe 'OpsNotes Testing New/Get/Set/Remove' {
             
             for ($Attempt = 1; $Attempt -le $MaxAttempts; $Attempt++) {
                 try {
-                    $OpsNote = Set-LMOpsNote -Id $Script:NewOpsNote.Id -Note "OpsNote.Build.Test: $Script:TimeNow Updated"-ErrorAction Stop
-                    $OpsNote.Note | Should -Be "OpsNote.Build.Test: $Script:TimeNow Updated"
+                    $OpsNote = Set-LMOpsNote -Id $Script:NewOpsNote.Id -Note $script:OpsNoteUpdatedText -ErrorAction Stop
+                    $OpsNote.Note | Should -Be $script:OpsNoteUpdatedText
                     $Success = $true
                     break
                 }

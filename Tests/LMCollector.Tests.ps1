@@ -4,19 +4,19 @@ Describe 'Collector Testing New/Get/Set/Remove for Groups and Collectors' {
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
         
-        $Script:TimeNow = Get-Date -UFormat %m%d%Y-%H%M
+        $script:TestSuffix = Get-LMTestSuffix
     }
     
     Describe 'New-LMCollectorGroup' {
         It 'When given mandatory parameters, returns a created collector group with matching values' {
             $TestProperties = @{
-                "location" = "datacenter-test-$Script:TimeNow"
+                "location" = "datacenter-test-$Script:TestSuffix"
                 "environment" = "testing"
             }
             
-            $Script:NewCollectorGroup = New-LMCollectorGroup -Name "Collector.Group.Build.Test-$Script:TimeNow" -Description "Test collector group for Pester tests" -Properties $TestProperties -AutoBalance $true -AutoBalanceInstanceCountThreshold 5000
+            $Script:NewCollectorGroup = New-LMCollectorGroup -Name "Collector.Group.Build.Test-$Script:TestSuffix" -Description "Test collector group for Pester tests" -Properties $TestProperties -AutoBalance $true -AutoBalanceInstanceCountThreshold 5000
             $Script:NewCollectorGroup | Should -Not -BeNullOrEmpty
-            $Script:NewCollectorGroup.name | Should -Be "Collector.Group.Build.Test-$Script:TimeNow"
+            $Script:NewCollectorGroup.name | Should -Be "Collector.Group.Build.Test-$Script:TestSuffix"
             $Script:NewCollectorGroup.description | Should -Be "Test collector group for Pester tests"
             $Script:NewCollectorGroup.autoBalance | Should -Be $true
             $Script:NewCollectorGroup.autoBalanceInstanceCountThreshold | Should -Be 5000
@@ -46,13 +46,13 @@ Describe 'Collector Testing New/Get/Set/Remove for Groups and Collectors' {
     Describe 'New-LMCollector' {
         It 'When given mandatory parameters, returns a created collector with matching values' {
             $TestProperties = @{
-                "test.property" = "value-$Script:TimeNow"
+                "test.property" = "value-$Script:TestSuffix"
                 "build.test" = "true"
             }
             
-            $Script:NewCollector = New-LMCollector -Description "Collector.Build.Test-$Script:TimeNow" -CollectorGroupId $Script:NewCollectorGroup.id -Properties $TestProperties -EnableFailBack $true -SuppressAlertClear $false
+            $Script:NewCollector = New-LMCollector -Description "Collector.Build.Test-$Script:TestSuffix" -CollectorGroupId $Script:NewCollectorGroup.id -Properties $TestProperties -EnableFailBack $true -SuppressAlertClear $false
             $Script:NewCollector | Should -Not -BeNullOrEmpty
-            $Script:NewCollector.description | Should -Be "Collector.Build.Test-$Script:TimeNow"
+            $Script:NewCollector.description | Should -Be "Collector.Build.Test-$Script:TestSuffix"
             $Script:NewCollector.collectorGroupId | Should -Be $Script:NewCollectorGroup.id
             $Script:NewCollector.enableFailBack | Should -Be $true
             $Script:NewCollector.suppressAlertClear | Should -Be $false
@@ -76,9 +76,9 @@ Describe 'Collector Testing New/Get/Set/Remove for Groups and Collectors' {
 
     Describe 'Set-LMCollector' {
         It 'When given parameters, updates collector with matching values' {
-            $UpdatedDescription = "Collector.Build.Test-Updated-$Script:TimeNow"
+            $UpdatedDescription = "Collector.Build.Test-Updated-$Script:TestSuffix"
             $UpdatedProperties = @{
-                "test.property.updated" = "updated-value-$Script:TimeNow"
+                "test.property.updated" = "updated-value-$Script:TestSuffix"
                 "updated.test" = "true"
             }
             
@@ -93,7 +93,7 @@ Describe 'Collector Testing New/Get/Set/Remove for Groups and Collectors' {
             # Verify the updated property values
             $testProperty = $UpdatedCollector.customProperties | Where-Object { $_.name -eq "test.property.updated" }
             $testProperty | Should -Not -BeNullOrEmpty
-            $testProperty.value | Should -Be "updated-value-$Script:TimeNow"
+            $testProperty.value | Should -Be "updated-value-$Script:TestSuffix"
         }
     }
 

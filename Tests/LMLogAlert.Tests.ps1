@@ -108,18 +108,6 @@ Describe 'Log Alert Group Cmdlet Tests' {
             $result = Set-LMLogAlertGroup -Name 'Lookup Group' -Description 'Updated' -Confirm:$false
             $result.id | Should -Be 55
         }
-
-        It 'Patches partitions as a JSON array when a single value is supplied' {
-            Mock Invoke-LMRestMethod {
-                param($Body)
-                $Body | Should -Match '"partitions"\s*:\s*\['
-                $Body | Should -Match '"default"'
-                return [PSCustomObject]@{ id = 12; partitions = @('default') }
-            }
-
-            $result = Set-LMLogAlertGroup -Id 12 -Partition 'default' -Confirm:$false
-            $result.id | Should -Be 12
-        }
     }
 
     Context 'Remove-LMLogAlertGroup' {

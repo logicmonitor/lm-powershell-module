@@ -6,7 +6,7 @@ Describe 'Dashboard Testing New/Get/Import/Export/Copy/Remove' {
         
         # Get the path to our test dashboard JSON
         $Script:TestDashboardJsonPath = Join-Path $PSScriptRoot "PesterTestDashboard.json"
-        $Script:TimeNow = Get-Date -UFormat %m%d%Y-%H%M
+        $script:TestSuffix = Get-LMTestSuffix
         
         # Use appropriate temp directory for different environments
         $Script:TempDir = if ($env:RUNNER_TEMP) { 
@@ -22,9 +22,9 @@ Describe 'Dashboard Testing New/Get/Import/Export/Copy/Remove' {
     
     Describe 'New-LMDashboardGroup' {
         It 'When given mandatory parameters, returns a created dashboard group with matching values' {
-            $Script:NewDashboardGroup = New-LMDashboardGroup -Name "Dashboard.Build.Test-$Script:TimeNow" -Description "Test dashboard group for Pester tests" -ParentGroupId 1
+            $Script:NewDashboardGroup = New-LMDashboardGroup -Name "Dashboard.Build.Test-$Script:TestSuffix" -Description "Test dashboard group for Pester tests" -ParentGroupId 1
             $Script:NewDashboardGroup | Should -Not -BeNullOrEmpty
-            $Script:NewDashboardGroup.name | Should -Be "Dashboard.Build.Test-$Script:TimeNow"
+            $Script:NewDashboardGroup.name | Should -Be "Dashboard.Build.Test-$Script:TestSuffix"
             $Script:NewDashboardGroup.description | Should -Be "Test dashboard group for Pester tests"
         }
     }
@@ -50,12 +50,12 @@ Describe 'Dashboard Testing New/Get/Import/Export/Copy/Remove' {
         It 'When given a JSON file path, imports and returns a dashboard with matching values' {
             # Read and modify the test dashboard JSON to include our test group and unique name
             $DashboardJson = Get-Content $Script:TestDashboardJsonPath -Raw | ConvertFrom-Json
-            $DashboardJson.name = "Dashboard.Build.Test-$Script:TimeNow"
+            $DashboardJson.name = "Dashboard.Build.Test-$Script:TestSuffix"
             $DashboardJson.description = "Imported test dashboard for Pester tests"
             
             $Script:ImportedDashboard = Import-LMDashboard -File $($DashboardJson | ConvertTo-Json -Depth 10) -ErrorAction Stop -ParentGroupId $Script:NewDashboardGroup.id
             $Script:ImportedDashboard | Should -Not -BeNullOrEmpty
-            $Script:ImportedDashboard.name | Should -Be "Dashboard.Build.Test-$Script:TimeNow"
+            $Script:ImportedDashboard.name | Should -Be "Dashboard.Build.Test-$Script:TestSuffix"
         }
     }
 
@@ -88,12 +88,12 @@ Describe 'Dashboard Testing New/Get/Import/Export/Copy/Remove' {
 
     Describe 'Copy-LMDashboard' {
         It 'When given a dashboard id and new name, creates a copy with matching properties and widget tokens' {
-            $CopyName = "Dashboard.Build.Test-Copy-$Script:TimeNow"
+            $CopyName = "Dashboard.Build.Test-Copy-$Script:TestSuffix"
             
             # Define test widget tokens
             $TestTokens = @{
-                "defaultResourceName" = "TestResource-$Script:TimeNow"
-                "defaultResourceGroup" = "TestGroup-$Script:TimeNow"
+                "defaultResourceName" = "TestResource-$Script:TestSuffix"
+                "defaultResourceGroup" = "TestGroup-$Script:TestSuffix"
                 "testToken" = "TestValue123"
             }
             
@@ -110,12 +110,12 @@ Describe 'Dashboard Testing New/Get/Import/Export/Copy/Remove' {
             # Check each token was set with correct values
             $defaultResourceToken = $Script:CopiedDashboard.widgetTokens | Where-Object { $_.name -eq "defaultResourceName" }
             $defaultResourceToken | Should -Not -BeNullOrEmpty
-            $defaultResourceToken.value | Should -Be "TestResource-$Script:TimeNow"
+            $defaultResourceToken.value | Should -Be "TestResource-$Script:TestSuffix"
             $defaultResourceToken.type | Should -Be "owned"
             
             $defaultGroupToken = $Script:CopiedDashboard.widgetTokens | Where-Object { $_.name -eq "defaultResourceGroup" }
             $defaultGroupToken | Should -Not -BeNullOrEmpty
-            $defaultGroupToken.value | Should -Be "TestGroup-$Script:TimeNow"
+            $defaultGroupToken.value | Should -Be "TestGroup-$Script:TestSuffix"
             $defaultGroupToken.type | Should -Be "owned"
             
             $testToken = $Script:CopiedDashboard.widgetTokens | Where-Object { $_.name -eq "testToken" }

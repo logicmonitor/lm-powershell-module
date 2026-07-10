@@ -32,7 +32,7 @@ Describe 'Device Testing New/Get/Set/Remove' {
             throw "$OperationName failed after $MaxAttempts attempts. Last error: $($lastError.Exception.Message)"
         }
 
-        $script:DeviceTestSuffix = [guid]::NewGuid().ToString('N').Substring(0, 8)
+        $script:DeviceTestSuffix = Get-LMTestSuffix
         $script:DeviceTestName = "device-build-test-$($script:DeviceTestSuffix).example.com"
         $script:DeviceTestDisplayName = "Device.Build.Test.$($script:DeviceTestSuffix)"
     }

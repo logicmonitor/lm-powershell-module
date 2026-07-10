@@ -3,13 +3,17 @@ Describe 'AccessGroup Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:AccessGroupTestName = "AccessGroup.Build.Test.$($script:TestSuffix)"
+        $script:AccessGroupUpdatedName = "AccessGroup.Build.Test.$($script:TestSuffix).Updated"
     }
     
     Describe 'New-LMAccessGroup' {
         It 'When given mandatory parameters, returns a created access group with matching values' {
-            $Script:NewAccessGroup = New-LMAccessGroup -Name "AccessGroup.Build.Test" -Description "BuildTest"
+            $Script:NewAccessGroup = New-LMAccessGroup -Name $script:AccessGroupTestName -Description "BuildTest"
             $Script:NewAccessGroup | Should -Not -BeNullOrEmpty
-            $Script:NewAccessGroup.Name | Should -Be "AccessGroup.Build.Test"
+            $Script:NewAccessGroup.Name | Should -Be $script:AccessGroupTestName
             $Script:NewAccessGroup.Description | Should -Be "BuildTest"
         }
     }
@@ -35,9 +39,9 @@ Describe 'AccessGroup Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMAccessGroup' {
         It 'When given a set of parameters, returns an updated access group with matching values' {
-            { $AccessGroup = Set-LMAccessGroup -Id $Script:NewAccessGroup.Id -Description "Updated" -NewName "AccessGroup.Build.Test.Updated" -ErrorAction Stop
+            { $AccessGroup = Set-LMAccessGroup -Id $Script:NewAccessGroup.Id -Description "Updated" -NewName $script:AccessGroupUpdatedName -ErrorAction Stop
                 $AccessGroup.Description | Should -Be "Updated"
-                $AccessGroup.Name | Should -Be "AccessGroup.Build.Test.Updated"
+                $AccessGroup.Name | Should -Be $script:AccessGroupUpdatedName
             } | Should -Not -Throw
         }
     }

@@ -3,13 +3,17 @@ Describe 'NetScanGroup Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:NetScanGroupTestName = "NetScanGroup.Build.Test.$($script:TestSuffix)"
+        $script:NetScanGroupUpdatedName = "NetScanGroup.Build.Test.$($script:TestSuffix).Updated"
     }
     
     Describe 'New-LMNetScanGroup' {
         It 'When given mandatory parameters, returns a created NetScan group with matching values' {
-            $Script:NewNetScanGroup = New-LMNetScanGroup -Name "NetScanGroup.Build.Test" -Description "BuildTest"
+            $Script:NewNetScanGroup = New-LMNetScanGroup -Name $script:NetScanGroupTestName -Description "BuildTest"
             $Script:NewNetScanGroup | Should -Not -BeNullOrEmpty
-            $Script:NewNetScanGroup.Name | Should -Be "NetScanGroup.Build.Test"
+            $Script:NewNetScanGroup.Name | Should -Be $script:NetScanGroupTestName
             $Script:NewNetScanGroup.Description | Should -Be "BuildTest"
         }
     }
@@ -38,9 +42,9 @@ Describe 'NetScanGroup Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMNetScanGroup' {
         It 'When given a set of parameters, returns an updated NetScan group with matching values' {
-            { $NetScanGroup = Set-LMNetScanGroup -Id $Script:NewNetScanGroup.Id -Description "Updated" -NewName "NetScanGroup.Build.Test.Updated" -ErrorAction Stop
+            { $NetScanGroup = Set-LMNetScanGroup -Id $Script:NewNetScanGroup.Id -Description "Updated" -NewName $script:NetScanGroupUpdatedName -ErrorAction Stop
                 $NetScanGroup.Description | Should -Be "Updated"
-                $NetScanGroup.Name | Should -Be "NetScanGroup.Build.Test.Updated"
+                $NetScanGroup.Name | Should -Be $script:NetScanGroupUpdatedName
             } | Should -Not -Throw
         }
     }

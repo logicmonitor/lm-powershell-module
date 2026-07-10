@@ -3,11 +3,17 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:UserTestName = "User.Build.Test.$($script:TestSuffix)"
+        $script:UserUpdatedName = "User.Build.Test.$($script:TestSuffix).Updated"
+        $script:RoleTestName = "Role.Build.Test.$($script:TestSuffix)"
+        $script:RoleUpdatedName = "Role.Build.Test.$($script:TestSuffix).Updated"
     }
     
     Describe 'New-LMApiUser' {
         It 'When given mandatory parameters, returns a created user with matching values' {
-            $Script:NewUser = New-LMApiUser -UserName "User.Build.Test" -Note "BuildNote" -RoleName @("no_access") -Status suspended
+            $Script:NewUser = New-LMApiUser -UserName $script:UserTestName -Note "BuildNote" -RoleName @("no_access") -Status suspended
             $Script:NewUser | Should -Not -BeNullOrEmpty
             $Script:NewUser.Note | Should -BeLike "BuildNote"
             $Script:NewUser.Status | Should -BeLike "suspended"
@@ -16,7 +22,7 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
 
     Describe 'New-LMRole' {
         It 'When given mandatory parameters, returns a created role with matching values' {
-            $Script:NewRole = New-LMRole -Name "Role.Build.Test" -Description "BuildNote"
+            $Script:NewRole = New-LMRole -Name $script:RoleTestName -Description "BuildNote"
             $Script:NewRole | Should -Not -BeNullOrEmpty
             $Script:NewRole.Description | Should -BeLike "BuildNote"
         }
@@ -63,18 +69,18 @@ Describe 'User & Role Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMUser' {
         It 'When given a set of parameters, returns an updated user with matching values' {
-            { $User = Set-LMUser -Id $Script:NewUser.Id -Note "Updated" -NewUsername "User.Build.Test.Updated" -ErrorAction Stop
+            { $User = Set-LMUser -Id $Script:NewUser.Id -Note "Updated" -NewUsername $script:UserUpdatedName -ErrorAction Stop
                 $User.Note | Should -Be "Updated"
-                $User.Username | Should -Be "User.Build.Test.Updated"
+                $User.Username | Should -Be $script:UserUpdatedName
             } | Should -Not -Throw
         }
     }
 
     Describe 'Set-LMRole' {
         It 'When given a set of parameters, returns an updated role with matching values' {
-            { $Role = Set-LMRole -Id $Script:NewRole.Id -Description "Updated" -NewName "Role.Build.Test.Updated" -CustomHelpLabel "Example Help" -CustomHelpURL "https://logicmonitor.com" -ErrorAction Stop
+            { $Role = Set-LMRole -Id $Script:NewRole.Id -Description "Updated" -NewName $script:RoleUpdatedName -CustomHelpLabel "Example Help" -CustomHelpURL "https://logicmonitor.com" -ErrorAction Stop
                 $Role.Description | Should -Be "Updated"
-                $Role.Name | Should -Be "Role.Build.Test.Updated"
+                $Role.Name | Should -Be $script:RoleUpdatedName
                 $Role.CustomHelpLabel | Should -Be "Example Help"
                 $Role.CustomHelpURL | Should -Be "https://logicmonitor.com"
             } | Should -Not -Throw

@@ -5,7 +5,8 @@ Describe 'ConvertTo-LMUptimeDevice Testing' {
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
 
-        $script:SourceWebsite = New-LMWebsite -Name ("Website.Uptime.Migration." + ([guid]::NewGuid().ToString('N').Substring(0, 8))) -IsInternal $true -Webcheck -WebsiteDomain 'migration.example.com' -Description 'MigrationTest' -Properties @{ 'migrate' = 'true' } -TestLocationCollectorIds @($PreferredCollectorId)
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:SourceWebsite = New-LMWebsite -Name ("Website.Uptime.Migration." + $script:TestSuffix) -IsInternal $true -Webcheck -WebsiteDomain 'migration.example.com' -Description 'MigrationTest' -Properties @{ 'migrate' = 'true' } -TestLocationCollectorIds @($PreferredCollectorId)
     }
 
     Describe 'ConvertTo-LMUptimeDevice' {

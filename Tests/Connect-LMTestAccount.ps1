@@ -1,3 +1,7 @@
+function Get-LMTestSuffix {
+    return [guid]::NewGuid().ToString('N').Substring(0, 8)
+}
+
 function Connect-LMTestAccount {
     <#
     .SYNOPSIS

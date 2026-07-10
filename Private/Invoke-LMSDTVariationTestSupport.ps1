@@ -255,7 +255,12 @@ function Invoke-LMSDTVariationCreateTest {
         [System.Collections.Generic.List[string]]$CreatedSdtIds
     )
 
-    $comment = "Logic.Monitor.SDT.Test.$Name"
+    $comment = if ($script:LMSDTVariationTestSuffix) {
+        "Logic.Monitor.SDT.Test.$Name.$($script:LMSDTVariationTestSuffix)"
+    }
+    else {
+        "Logic.Monitor.SDT.Test.$Name"
+    }
     $params = @{}
     foreach ($key in $ResourceParameters.Keys) { $params[$key] = $ResourceParameters[$key] }
     foreach ($key in $ScheduleParameters.Keys) { $params[$key] = $ScheduleParameters[$key] }

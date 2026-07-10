@@ -3,11 +3,14 @@ Describe 'DeviceGroup Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:DeviceGroupTestName = "DeviceGroup.Build.Test.$($script:TestSuffix)"
     }
     
     Describe 'New-LMDeviceGroup' {
         It 'When given mandatory parameters, returns a created group with matching values' {
-            $Script:NewDeviceGroup = New-LMDeviceGroup -Name "DeviceGroup.Build.Test" -Description "Testing123" -ParentGroupId 1 -Properties @{"testing" = "123" } -DisableAlerting $true -AppliesTo "false()"
+            $Script:NewDeviceGroup = New-LMDeviceGroup -Name $script:DeviceGroupTestName -Description "Testing123" -ParentGroupId 1 -Properties @{"testing" = "123" } -DisableAlerting $true -AppliesTo "false()"
             $Script:NewDeviceGroup | Should -Not -BeNullOrEmpty
             $Script:NewDeviceGroup.Description | Should -Be "Testing123"
             $Script:NewDeviceGroup.DisableAlerting | Should -Be $true

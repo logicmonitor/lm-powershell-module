@@ -46,6 +46,7 @@ function Invoke-LMSDTVariationTests {
         return
     }
 
+    $script:LMSDTVariationTestSuffix = [guid]::NewGuid().ToString('N').Substring(0, 8)
     $createdSdtIds = [System.Collections.Generic.List[string]]::new()
     $results = [System.Collections.Generic.List[object]]::new()
 
@@ -86,12 +87,12 @@ function Invoke-LMSDTVariationTests {
             foreach ($updateTest in @(
                     @{
                         Name   = 'Set.CommentOnly'
-                        Params = @{ Comment = 'Logic.Monitor.SDT.Test.Set.CommentOnly' }
+                        Params = @{ Comment = "Logic.Monitor.SDT.Test.Set.CommentOnly.$($script:LMSDTVariationTestSuffix)" }
                     },
                     @{
                         Name   = 'Set.OneTimeDuration'
                         Params = @{
-                            Comment  = 'Logic.Monitor.SDT.Test.Set.Duration'
+                            Comment  = "Logic.Monitor.SDT.Test.Set.Duration.$($script:LMSDTVariationTestSuffix)"
                             Duration = 60
                             Timezone = 'America/New_York'
                         }
@@ -99,7 +100,7 @@ function Invoke-LMSDTVariationTests {
                     @{
                         Name   = 'Set.Weekly'
                         Params = @{
-                            Comment     = 'Logic.Monitor.SDT.Test.Set.Weekly'
+                            Comment     = "Logic.Monitor.SDT.Test.Set.Weekly.$($script:LMSDTVariationTestSuffix)"
                             SdtType     = 'Weekly'
                             StartHour   = 10
                             StartMinute = 0

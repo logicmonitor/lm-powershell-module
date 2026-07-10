@@ -3,11 +3,14 @@ Describe 'WebsiteGroup Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:WebsiteGroupTestName = "WebsiteGroup.Build.Test.$($script:TestSuffix)"
     }
     
     Describe 'New-LMWebsiteGroup' {
         It 'When given mandatory parameters, returns a created group with matching values' {
-            $Script:NewWebsiteGroup = New-LMWebsiteGroup -Name "WebsiteGroup.Build.Test" -Description "Testing123" -ParentGroupId 1 -Properties @{"testing" = "123" } -DisableAlerting $true
+            $Script:NewWebsiteGroup = New-LMWebsiteGroup -Name $script:WebsiteGroupTestName -Description "Testing123" -ParentGroupId 1 -Properties @{"testing" = "123" } -DisableAlerting $true
             $Script:NewWebsiteGroup | Should -Not -BeNullOrEmpty
             $Script:NewWebsiteGroup.Description | Should -Be "Testing123"
             $Script:NewWebsiteGroup.DisableAlerting | Should -Be $true

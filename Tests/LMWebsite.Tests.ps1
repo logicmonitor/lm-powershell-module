@@ -3,11 +3,14 @@ Describe 'Website Testing New/Get/Set/Remove' {
         Import-Module $Module -Force
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
+
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:WebsiteTestName = "Website.Build.Test.$($script:TestSuffix)"
     }
     
     Describe 'New-LMWebsite' {
         It 'When given mandatory parameters, returns a created website with matching values' {
-            $Script:NewWebsite = New-LMWebsite -Name "Website.Build.Test" -Webcheck -WebsiteDomain "example.com" -Description "BuildTest" -Properties @{"testprop" = "BuildTest" }
+            $Script:NewWebsite = New-LMWebsite -Name $script:WebsiteTestName -Webcheck -WebsiteDomain "example.com" -Description "BuildTest" -Properties @{"testprop" = "BuildTest" }
             $Script:NewWebsite | Should -Not -BeNullOrEmpty
             $Script:NewWebsite.Description | Should -BeExactly "BuildTest"
             $Script:NewWebsite.properties.name.IndexOf("testprop") | Should -Not -BeExactly -1

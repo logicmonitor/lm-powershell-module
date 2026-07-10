@@ -32,9 +32,10 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
             throw "$OperationName failed after $MaxAttempts attempts. Last error: $($lastError.Exception.Message)"
         }
 
-        $script:UptimeDeviceName = "Uptime.Build.Test." + ([guid]::NewGuid().ToString('N').Substring(0, 8))
-        $script:UptimeDomain = "uptime-" + ([guid]::NewGuid().ToString('N').Substring(0, 6)) + ".example.com"
-        $script:UptimePingHost = "ping-" + ([guid]::NewGuid().ToString('N').Substring(0, 6)) + ".example.com"
+        $script:TestSuffix = Get-LMTestSuffix
+        $script:UptimeDeviceName = "Uptime.Build.Test.$($script:TestSuffix)"
+        $script:UptimeDomain = "uptime-$($script:TestSuffix).example.com"
+        $script:UptimePingHost = "ping-$($script:TestSuffix).example.com"
     }
 
     Describe 'New-LMUptimeDevice' {
