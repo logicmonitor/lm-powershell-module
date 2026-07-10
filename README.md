@@ -72,28 +72,28 @@ Connect-LMAccount -UseCachedCredential
 ```
 
 # Change List
-## 7.9.4
+## 7.9.5
+### New Cmdlets
+- **Action chains**: `Get-LMActionChain`, `New-LMActionChain`, `Set-LMActionChain`, `Remove-LMActionChain`
+- **Action rules**: `Get-LMActionRule`, `New-LMActionRule`, `Set-LMActionRule`, `Remove-LMActionRule`
+- **Log alert pipelines**: `Get-LMLogAlertGroup`, `New-LMLogAlertGroup`, `Set-LMLogAlertGroup`, `Remove-LMLogAlertGroup`
+- **Log alert processors**: `Get-LMLogAlert`, `New-LMLogAlert`, `Set-LMLogAlert`, `Remove-LMLogAlert`
+- **Diagnostic & remediation**: `Get-LMDiagnosticRemediationModule`, `Get-LMDiagnosticRemediationExecutionResult`
+- **Escalation chains**: `New-LMEscalationChain`, `Set-LMEscalationChain`
+- **SDTs**: `New-LMCollectorSDT`, `New-LMWebsiteSDT`, `New-LMWebsiteGroupSDT`
+
+### Updated Cmdlets
+- **SDT scheduling overhaul**: `New-LMDeviceSDT`, `New-LMDeviceGroupSDT`, `New-LMDeviceDatasourceSDT`, `New-LMDeviceDatasourceInstanceSDT`, and `Set-LMSDT` now support `-ScheduleWizard` for interactive schedule creation, `-Duration` for length-based one-time SDTs, multiple weekdays for recurring schedules, and `-3` for last-day-of-month monthly SDTs.
+- **Log partition contracts**: `New-LMLogPartition` and `Set-LMLogPartition` now support contract interval, usage limit, stop-on-limit, and auto-restart-on-renewal settings. `Get-LMLogPartition` surfaces `activeContract` fields (`retention`, `sku`, `usageLimit`, etc.) as top-level properties.
+- **Device log collector**: `New-LMDevice` and `Set-LMDevice` now expose `-IsPreferredLogCollectorConfigured` (with `-EnableLogCollector` alias on `Set-LMDevice`) for the preferred log collector setting.
+
 ### Bug Fixes
-- **Connect-LMAccount / New-LMCachedAccount / Get-LMCachedAccount**: Fixed an issue where cached credentials did not work for FedRAMP (GovCloud) portals on `lmgov.us`. `New-LMCachedAccount` now supports `-GovCloud` to persist the portal type in cached metadata, `Connect-LMAccount` restores that setting when connecting via `-UseCachedCredential` or `-CachedAccountName`, and `Get-LMCachedAccount` now includes a `GovCloud` property. Existing FedRAMP cached entries must be re-cached with `-GovCloud -OverwriteExisting $true`.
-
-### Migration Example (FedRAMP / GovCloud cached credentials)
-```powershell
-# Review existing cached accounts and confirm GovCloud is not set
-Get-LMCachedAccount
-
-# Re-cache FedRAMP credentials with GovCloud enabled (overwrite the existing entry)
-New-LMCachedAccount -AccessId "lm_access_id" -AccessKey "lm_access_key" -AccountName "agency" -CachedAccountName "agency-fedramp" -GovCloud -OverwriteExisting $true
-
-# Verify GovCloud is now stored in metadata
-Get-LMCachedAccount -CachedAccountName "agency-fedramp"
-
-# Connect using the updated cached credential
-Connect-LMAccount -CachedAccountName "agency-fedramp"
-```
+- **Get-LMAlert**: `-ClearedAlerts` is now optional and nullable; omitting it returns both cleared and active alerts instead of defaulting to uncleared only. Filter and sort query parameters are now URL-encoded correctly.
+- **Get-LMDeviceDatasourceInstance**: Fixed datasource lookup when filtering by `-DatasourceName` or `-DatasourceId`.
 
 [Previous Release Notes](RELEASENOTES.md)
 
 # License
-Copyright, 2024, LogicMonitor, Inc.
+Copyright, 2026, LogicMonitor, Inc.
 
 This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/.

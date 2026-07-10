@@ -28,6 +28,7 @@ New-LMLogAlertGroup -Name "Production Logs" -Query "environment:production" -Par
 $config = @{
     name = "Production Logs"
     query = "environment:production"
+    partitions = @("default")
 }
 New-LMLogAlertGroup -InputObject $config
 

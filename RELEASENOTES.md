@@ -1,5 +1,24 @@
 # Previous module release notes
 
+## 7.9.4
+### Bug Fixes
+- **Connect-LMAccount / New-LMCachedAccount / Get-LMCachedAccount**: Fixed an issue where cached credentials did not work for FedRAMP (GovCloud) portals on `lmgov.us`. `New-LMCachedAccount` now supports `-GovCloud` to persist the portal type in cached metadata, `Connect-LMAccount` restores that setting when connecting via `-UseCachedCredential` or `-CachedAccountName`, and `Get-LMCachedAccount` now includes a `GovCloud` property. Existing FedRAMP cached entries must be re-cached with `-GovCloud -OverwriteExisting $true`.
+
+### Migration Example (FedRAMP / GovCloud cached credentials)
+```powershell
+# Review existing cached accounts and confirm GovCloud is not set
+Get-LMCachedAccount
+
+# Re-cache FedRAMP credentials with GovCloud enabled (overwrite the existing entry)
+New-LMCachedAccount -AccessId "lm_access_id" -AccessKey "lm_access_key" -AccountName "agency" -CachedAccountName "agency-fedramp" -GovCloud -OverwriteExisting $true
+
+# Verify GovCloud is now stored in metadata
+Get-LMCachedAccount -CachedAccountName "agency-fedramp"
+
+# Connect using the updated cached credential
+Connect-LMAccount -CachedAccountName "agency-fedramp"
+```
+
 ## 7.9.3
 ### Bug Fixes
 - **Set-LMWebsite**: Fixed an issue where `-WebsiteSteps` was omitted from the API request payload, so multi-step web check updates appeared to succeed but did not apply the supplied steps.
