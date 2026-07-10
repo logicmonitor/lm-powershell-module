@@ -1,74 +1,82 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Invoke-LMNetScan
 ---
 
 # Invoke-LMNetScan
 
 ## SYNOPSIS
+
 Invokes a NetScan task in LogicMonitor.
 
 ## SYNTAX
 
+### __AllParameterSets
+
 ```
-Invoke-LMNetScan [-Id] <String> [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Invoke-LMNetScan [-Id] <string> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Invoke-LMNetScan function schedules execution of a specified NetScan task in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 #Execute a NetScan
 Invoke-LMNetScan -Id "12345"
-```
 
 ## PARAMETERS
 
 ### -Id
+
 The ID of the NetScan to execute.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 0
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to this command.
+
 ## OUTPUTS
 
 ### Returns a success message if the NetScan is scheduled successfully.
+
+### System.String
+
 ## NOTES
+
 You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
+

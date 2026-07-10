@@ -1,395 +1,528 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Set-LMDevice
 ---
 
 # Set-LMDevice
 
 ## SYNOPSIS
+
 Updates a LogicMonitor device configuration.
 
 ## SYNTAX
 
-### Id
+### Id (Default)
+
 ```
-Set-LMDevice -Id <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
- [-PreferredCollectorId <Int32>] [-PreferredCollectorGroupId <Int32>] [-AutoBalancedCollectorGroupId <Int32>]
- [-Properties <Hashtable>] [-HostGroupIds <String[]>] [-PropertiesMethod <String>] [-Link <String>]
- [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-NetflowCollectorGroupId <Int32>]
- [-NetflowCollectorId <Int32>] [-EnableLogCollector <Boolean>] [-LogCollectorGroupId <Int32>]
- [-LogCollectorId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMDevice -Id <string> [-NewName <string>] [-DisplayName <string>] [-Description <string>]
+ [-PreferredCollectorId <int>] [-PreferredCollectorGroupId <int>]
+ [-AutoBalancedCollectorGroupId <int>] [-Properties <hashtable>] [-HostGroupIds <string[]>]
+ [-PropertiesMethod <string>] [-Link <string>] [-DisableAlerting <bool>] [-EnableNetFlow <bool>]
+ [-NetflowCollectorGroupId <int>] [-NetflowCollectorId <int>]
+ [-IsPreferredLogCollectorConfigured <bool>] [-LogCollectorGroupId <int>] [-LogCollectorId <int>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
+
 ```
-Set-LMDevice -Name <String> [-NewName <String>] [-DisplayName <String>] [-Description <String>]
- [-PreferredCollectorId <Int32>] [-PreferredCollectorGroupId <Int32>] [-AutoBalancedCollectorGroupId <Int32>]
- [-Properties <Hashtable>] [-HostGroupIds <String[]>] [-PropertiesMethod <String>] [-Link <String>]
- [-DisableAlerting <Boolean>] [-EnableNetFlow <Boolean>] [-NetflowCollectorGroupId <Int32>]
- [-NetflowCollectorId <Int32>] [-EnableLogCollector <Boolean>] [-LogCollectorGroupId <Int32>]
- [-LogCollectorId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMDevice -Name <string> [-NewName <string>] [-DisplayName <string>] [-Description <string>]
+ [-PreferredCollectorId <int>] [-PreferredCollectorGroupId <int>]
+ [-AutoBalancedCollectorGroupId <int>] [-Properties <hashtable>] [-HostGroupIds <string[]>]
+ [-PropertiesMethod <string>] [-Link <string>] [-DisableAlerting <bool>] [-EnableNetFlow <bool>]
+ [-NetflowCollectorGroupId <int>] [-NetflowCollectorId <int>]
+ [-IsPreferredLogCollectorConfigured <bool>] [-LogCollectorGroupId <int>] [-LogCollectorId <int>]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Set-LMDevice function modifies an existing device in LogicMonitor, allowing updates to its name, display name, description, collector settings, and various other properties.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 Set-LMDevice -Id 123 -NewName "UpdatedDevice" -Description "New description"
 Updates the device with ID 123 with a new name and description.
-```
 
 ## PARAMETERS
 
+### -AutoBalancedCollectorGroupId
+
+Specifies the ID of the auto-balanced collector group for the device.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Description
+
+Specifies the new description for the device.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -DisableAlerting
+
+Specifies whether to disable alerting for the device.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -DisplayName
+
+Specifies the new display name for the device.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -EnableNetFlow
+
+Specifies whether to enable NetFlow for the device.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -HostGroupIds
+
+Specifies an array of host group IDs to associate with the device.
+
+```yaml
+Type: System.String[]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -Id
+
 Specifies the ID of the device to modify.
 This parameter is mandatory when using the 'Id' parameter set.
 
 ```yaml
-Type: String
-Parameter Sets: Id
-Aliases:
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
+### -IsPreferredLogCollectorConfigured
+
+Specifies whether a preferred log collector is configured for the device.
+Alias: EnableLogCollector.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- EnableLogCollector
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Link
+
+Specifies the URL link associated with the device.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -LogCollectorGroupId
+
+Specifies the ID of the log collector group.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -LogCollectorId
+
+Specifies the ID of the log collector.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -Name
+
 Specifies the current name of the device.
 This parameter is mandatory when using the 'Name' parameter set.
 
 ```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -NetflowCollectorGroupId
+
+Specifies the ID of the NetFlow collector group.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -NetflowCollectorId
+
+Specifies the ID of the NetFlow collector.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -NewName
+
 Specifies the new name for the device.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisplayName
-Specifies the new display name for the device.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-Specifies the new description for the device.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PreferredCollectorId
-Specifies the ID of the preferred collector for the device.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -PreferredCollectorGroupId
+
 Specifies the ID of the preferred collector group for the device.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -AutoBalancedCollectorGroupId
-Specifies the ID of the auto-balanced collector group for the device.
+### -PreferredCollectorId
+
+Specifies the ID of the preferred collector for the device.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -Properties
+
 Specifies a hashtable of custom properties for the device.
 
 ```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HostGroupIds
-Specifies an array of host group IDs to associate with the device.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Collections.Hashtable
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -PropertiesMethod
+
 Specifies how to handle existing properties.
 Valid values are "Add", "Replace", or "Refresh".
 Default is "Replace".
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Replace
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Link
-Specifies the URL link associated with the device.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableAlerting
-Specifies whether to disable alerting for the device.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableNetFlow
-Specifies whether to enable NetFlow for the device.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NetflowCollectorGroupId
-Specifies the ID of the NetFlow collector group.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NetflowCollectorId
-Specifies the ID of the NetFlow collector.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EnableLogCollector
-Specifies whether to enable log collection for the device.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -LogCollectorGroupId
-Specifies the ID of the log collector group.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -LogCollectorId
-Specifies the ID of the log collector.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: Replace
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### You can pipe objects containing Id properties to this function.
+
+### System.String
+
 ## OUTPUTS
 
 ### Returns a LogicMonitor.Device object containing the updated device information.
+
 ## NOTES
+
 This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS
+

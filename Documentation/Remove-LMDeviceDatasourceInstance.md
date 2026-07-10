@@ -1,235 +1,285 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Remove-LMDeviceDatasourceInstance
 ---
 
 # Remove-LMDeviceDatasourceInstance
 
 ## SYNOPSIS
+
 Removes a device datasource instance from Logic Monitor.
 
 ## SYNTAX
 
 ### Name-dsName
+
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceName <String> [-WildValue <String>]
- [-InstanceId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceName <string> -DeviceName <string>
+ [-WildValue <string>] [-InstanceId <int>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsName
+
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceName <String> -DeviceId <Int32> [-WildValue <String>]
- [-InstanceId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceName <string> -DeviceId <int> [-WildValue <string>]
+ [-InstanceId <int>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-dsId
+
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceName <String> [-WildValue <String>]
- [-InstanceId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceId <int> -DeviceName <string> [-WildValue <string>]
+ [-InstanceId <int>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsId
+
 ```
-Remove-LMDeviceDatasourceInstance -DatasourceId <Int32> -DeviceId <Int32> [-WildValue <String>]
- [-InstanceId <Int32>] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMDeviceDatasourceInstance -DatasourceId <int> -DeviceId <int> [-WildValue <string>]
+ [-InstanceId <int>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Remove-LMDeviceDatasourceInstance function removes a device datasource instance from Logic Monitor.
 It requires valid API credentials and the user must be logged in before running this command.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 Remove-LMDeviceDatasourceInstance -Name "MyDevice" -DatasourceName "MyDatasource" -WildValue "12345"
 Removes the device datasource instance with the specified device name, datasource name, and wildcard value.
-```
 
 ### EXAMPLE 2
-```
+
 Remove-LMDeviceDatasourceInstance -Id 123 -DatasourceId 456 -WildValue "67890"
 Removes the device datasource instance with the specified device ID, datasource ID, and wildcard value.
-```
 
 ## PARAMETERS
 
-### -DatasourceName
-Specifies the name of the datasource.
-This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: String
-Parameter Sets: Name-dsName, Id-dsName
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
 Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -DatasourceId
+
 Specifies the ID of the datasource.
 This parameter is mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
 
 ```yaml
-Type: Int32
-Parameter Sets: Name-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-```yaml
-Type: Int32
-Parameter Sets: Id-dsId
-Aliases:
+### -DatasourceName
 
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+Specifies the name of the datasource.
+This parameter is mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -DeviceId
+
 Specifies the ID of the device.
 This parameter is mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id-dsName
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-```yaml
-Type: Int32
-Parameter Sets: Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -DeviceName
+
 Specifies the name of the device.
 This parameter is mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
 
 ```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WildValue
-Specifies the wildcard value associated with the datasource instance.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -InstanceId
+
 Specifies the instance ID.
 Can also use the alias Id.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases: Id
-
-Required: False
-Position: Named
-Default value: 0
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases:
+- Id
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
+### -WildValue
+
+Specifies the wildcard value associated with the datasource instance.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None.
+### System.String
+
 ## OUTPUTS
 
 ### Returns a PSCustomObject containing the instance ID and a message confirming the successful removal of the datasource instance.
+
 ## NOTES
 
 ## RELATED LINKS
+

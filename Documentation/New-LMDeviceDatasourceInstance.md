@@ -1,305 +1,419 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: New-LMDeviceDatasourceInstance
 ---
 
 # New-LMDeviceDatasourceInstance
 
 ## SYNOPSIS
+
 Creates a new instance of a LogicMonitor device datasource.
 
 ## SYNTAX
 
 ### Name-dsName
+
 ```
-New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildValue2 <String>]
- [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -DatasourceName <String> -Name <String> [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceDatasourceInstance -DisplayName <string> -WildValue <string> -DatasourceName <string>
+ -Name <string> [-WildValue2 <string>] [-Description <string>] [-Properties <hashtable>]
+ [-StopMonitoring <bool>] [-DisableAlerting <bool>] [-InstanceGroupId <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Id-dsName
+
 ```
-New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildValue2 <String>]
- [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -DatasourceName <String> -Id <Int32> [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceDatasourceInstance -DisplayName <string> -WildValue <string> -DatasourceName <string>
+ -Id <int> [-WildValue2 <string>] [-Description <string>] [-Properties <hashtable>]
+ [-StopMonitoring <bool>] [-DisableAlerting <bool>] [-InstanceGroupId <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Name-dsId
+
 ```
-New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildValue2 <String>]
- [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -DatasourceId <Int32> -Name <String> [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceDatasourceInstance -DisplayName <string> -WildValue <string> -DatasourceId <int>
+ -Name <string> [-WildValue2 <string>] [-Description <string>] [-Properties <hashtable>]
+ [-StopMonitoring <bool>] [-DisableAlerting <bool>] [-InstanceGroupId <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Id-dsId
+
 ```
-New-LMDeviceDatasourceInstance -DisplayName <String> -WildValue <String> [-WildValue2 <String>]
- [-Description <String>] [-Properties <Hashtable>] [-StopMonitoring <Boolean>] [-DisableAlerting <Boolean>]
- [-InstanceGroupId <String>] -DatasourceId <Int32> -Id <Int32> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+New-LMDeviceDatasourceInstance -DisplayName <string> -WildValue <string> -DatasourceId <int>
+ -Id <int> [-WildValue2 <string>] [-Description <string>] [-Properties <hashtable>]
+ [-StopMonitoring <bool>] [-DisableAlerting <bool>] [-InstanceGroupId <string>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The New-LMDeviceDatasourceInstance function creates a new instance of a LogicMonitor device datasource.
 It requires valid API credentials and a logged-in session.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 New-LMDeviceDatasourceInstance -DisplayName "Instance 1" -WildValue "Value 1" -Description "This is a new instance" -DatasourceName "DataSource 1" -Name "Host Device 1"
-```
 
 This example creates a new instance of a LogicMonitor device datasource with the specified display name, wild value, description, datasource name, and host device name.
 
 ## PARAMETERS
 
-### -DisplayName
-The display name of the new instance.
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
 Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WildValue
-The wild value of the new instance.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WildValue2
-The second wild value of the new instance.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-The description of the new instance.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Properties
-A hashtable of custom properties for the new instance.
-
-```yaml
-Type: Hashtable
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StopMonitoring
-Specifies whether to stop monitoring the new instance.
-Default is $false.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableAlerting
-Specifies whether to disable alerting for the new instance.
-Default is $false.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InstanceGroupId
-The ID of the instance group to which the new instance belongs.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatasourceName
-The name of the datasource associated with the new instance.
-Mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Id-dsName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -DatasourceId
+
 The ID of the datasource associated with the new instance.
 Mandatory when using the 'Id-dsId' or 'Name-dsId' parameter sets.
 
 ```yaml
-Type: Int32
-Parameter Sets: Name-dsId, Id-dsId
-Aliases:
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -DatasourceName
+
+The name of the datasource associated with the new instance.
+Mandatory when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Description
+
+The description of the new instance.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -DisableAlerting
+
+Specifies whether to disable alerting for the new instance.
+Default is $false.
+
+```yaml
+Type: System.Boolean
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -DisplayName
+
+The display name of the new instance.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -Id
+
 The ID of the host device associated with the new instance.
 Mandatory when using the 'Id-dsId' or 'Id-dsName' parameter sets.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id-dsName, Id-dsId
-Aliases: DeviceId
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases:
+- DeviceId
+ParameterSets:
+- Name: Id-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+### -InstanceGroupId
+
+The ID of the instance group to which the new instance belongs.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -Name
+
 The name of the host device associated with the new instance.
 Mandatory when using the 'Name-dsName' or 'Name-dsId' parameter sets.
 
 ```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId
-Aliases: DeviceName
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- DeviceName
+ParameterSets:
+- Name: Name-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -Properties
+
+A hashtable of custom properties for the new instance.
+
+```yaml
+Type: System.Collections.Hashtable
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -StopMonitoring
+
+Specifies whether to stop monitoring the new instance.
+Default is $false.
+
+```yaml
+Type: System.Boolean
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs. The cmdlet is not run.
+
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
+### -WildValue
+
+The wild value of the new instance.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -WildValue2
+
+The second wild value of the new instance.
 
 ```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to this command.
+
 ## OUTPUTS
 
 ### Returns LogicMonitor.DeviceDatasourceInstance object.
+
 ## NOTES
+
 You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
+

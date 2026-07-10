@@ -1,30 +1,36 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Remove-LMUptimeDevice
 ---
 
 # Remove-LMUptimeDevice
 
 ## SYNOPSIS
+
 Removes a LogicMonitor Uptime device using the v3 device endpoint.
 
 ## SYNTAX
 
 ### Id (Default)
+
 ```
-Remove-LMUptimeDevice -Id <Int32> [-HardDelete <Boolean>] [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-LMUptimeDevice -Id <int> [-HardDelete <bool>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name
+
 ```
-Remove-LMUptimeDevice -Name <String> [-HardDelete <Boolean>] [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
+Remove-LMUptimeDevice -Name <string> [-HardDelete <bool>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Remove-LMUptimeDevice cmdlet deletes an Uptime monitor (web or ping) from LogicMonitor via
 the v3 device endpoint.
 It accepts either the numerical identifier or resolves the identifier
@@ -33,133 +39,153 @@ from a device name, and submits a DELETE request with the required X-Version hea
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 Remove-LMUptimeDevice -Id 42
-```
 
 Removes the Uptime device with ID 42.
 
 ### EXAMPLE 2
-```
+
 Remove-LMUptimeDevice -Name "web-int-01"
-```
 
 Resolves the device ID by name and removes the corresponding Uptime device.
 
 ## PARAMETERS
 
-### -Id
-Specifies the device identifier to remove.
-Accepts pipeline input by property name.
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
 Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Name
-Specifies the device name to remove.
-The cmdlet resolves the device and then removes it.
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -HardDelete
+
 Indicates whether to permanently delete the device.
 When $false (default), the device is moved
 to the recycle bin.
 
 ```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
+Type: System.Boolean
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
+### -Id
+
+Specifies the device identifier to remove.
+Accepts pipeline input by property name.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Name
+
+Specifies the device name to remove.
+The cmdlet resolves the device and then removes it.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### System.Int32. You can pipe an Id to this cmdlet.
+
+### System.Int32
+
 ## OUTPUTS
 
 ### System.Management.Automation.PSCustomObject
+
 ## NOTES
+
 You must run Connect-LMAccount before invoking this cmdlet.
 
 ## RELATED LINKS
 
-[Get-LMUptimeDevice]()
-
-[New-LMUptimeDevice]()
-
-[Set-LMUptimeDevice]()
-
+- [Get-LMUptimeDevice]()
+- [New-LMUptimeDevice]()
+- [Set-LMUptimeDevice]()

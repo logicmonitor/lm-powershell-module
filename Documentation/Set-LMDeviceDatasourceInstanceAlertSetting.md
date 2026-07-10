@@ -1,305 +1,416 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Set-LMDeviceDatasourceInstanceAlertSetting
 ---
 
 # Set-LMDeviceDatasourceInstanceAlertSetting
 
 ## SYNOPSIS
+
 Updates alert settings for a LogicMonitor device datasource instance.
 
 ## SYNTAX
 
 ### Name-dsName
+
 ```
-Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Name <String> -DatapointName <String>
- -InstanceName <String> [-DisableAlerting <Boolean>] [-AlertExpressionNote <String>] -AlertExpression <String>
- -AlertClearTransitionInterval <Int32> -AlertTransitionInterval <Int32> -AlertForNoData <Int32>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <string> -Name <string>
+ -DatapointName <string> -InstanceName <string> -AlertExpression <string>
+ -AlertClearTransitionInterval <int> -AlertTransitionInterval <int> -AlertForNoData <int>
+ [-DisableAlerting <bool>] [-AlertExpressionNote <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsName
+
 ```
-Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <String> -Id <Int32> -DatapointName <String>
- -InstanceName <String> [-DisableAlerting <Boolean>] [-AlertExpressionNote <String>] -AlertExpression <String>
- -AlertClearTransitionInterval <Int32> -AlertTransitionInterval <Int32> -AlertForNoData <Int32>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceName <string> -Id <int>
+ -DatapointName <string> -InstanceName <string> -AlertExpression <string>
+ -AlertClearTransitionInterval <int> -AlertTransitionInterval <int> -AlertForNoData <int>
+ [-DisableAlerting <bool>] [-AlertExpressionNote <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-dsId
+
 ```
-Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Name <String> -DatapointName <String>
- -InstanceName <String> [-DisableAlerting <Boolean>] [-AlertExpressionNote <String>] -AlertExpression <String>
- -AlertClearTransitionInterval <Int32> -AlertTransitionInterval <Int32> -AlertForNoData <Int32>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <int> -Name <string>
+ -DatapointName <string> -InstanceName <string> -AlertExpression <string>
+ -AlertClearTransitionInterval <int> -AlertTransitionInterval <int> -AlertForNoData <int>
+ [-DisableAlerting <bool>] [-AlertExpressionNote <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-dsId
+
 ```
-Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <Int32> -Id <Int32> -DatapointName <String>
- -InstanceName <String> [-DisableAlerting <Boolean>] [-AlertExpressionNote <String>] -AlertExpression <String>
- -AlertClearTransitionInterval <Int32> -AlertTransitionInterval <Int32> -AlertForNoData <Int32>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMDeviceDatasourceInstanceAlertSetting -DatasourceId <int> -Id <int> -DatapointName <string>
+ -InstanceName <string> -AlertExpression <string> -AlertClearTransitionInterval <int>
+ -AlertTransitionInterval <int> -AlertForNoData <int> [-DisableAlerting <bool>]
+ [-AlertExpressionNote <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Set-LMDeviceDatasourceInstanceAlertSetting function modifies alert settings for a specific device datasource instance in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 90"
 Updates the alert settings for the CPU Usage datapoint on the specified device.
-```
 
 ## PARAMETERS
 
-### -DatasourceName
-Specifies the name of the datasource.
-Required when using the 'Id-dsName' or 'Name-dsName' parameter sets.
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Id-dsName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatasourceId
-Specifies the ID of the datasource.
-Required when using the 'Id-dsId' or 'Name-dsId' parameter sets.
-
-```yaml
-Type: Int32
-Parameter Sets: Name-dsId, Id-dsId
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-Specifies the ID of the device.
-Can be specified using the 'DeviceId' alias.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-dsName, Id-dsId
-Aliases: DeviceId
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-Specifies the name of the device.
-Can be specified using the 'DeviceName' alias.
-
-```yaml
-Type: String
-Parameter Sets: Name-dsName, Name-dsId
-Aliases: DeviceName
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DatapointName
-Specifies the name of the datapoint for which to configure alerts.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InstanceName
-Specifies the name of the instance for which to configure alerts.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DisableAlerting
-Specifies whether to disable alerting for this instance.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AlertExpressionNote
-Specifies a note for the alert expression.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AlertExpression
-Specifies the alert expression in the format "(01:00 02:00) \> -100 timezone=America/New_York".
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -AlertClearTransitionInterval
+
 Specifies the interval for alert clear transitions.
 Must be between 0 and 60.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -AlertTransitionInterval
-Specifies the interval for alert transitions.
-Must be between 0 and 60.
+### -AlertExpression
+
+Specifies the alert expression in the format "(01:00 02:00) > -100 timezone=America/New_York".
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+### -AlertExpressionNote
+
+Specifies a note for the alert expression.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -AlertForNoData
+
 Specifies the alert level for no data conditions.
 Must be between 1 and 4.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+### -AlertTransitionInterval
+
+Specifies the interval for alert transitions.
+Must be between 0 and 60.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -Confirm
+
 Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -DatapointName
+
+Specifies the name of the datapoint for which to configure alerts.
 
 ```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -DatasourceId
+
+Specifies the ID of the datasource.
+Required when using the 'Id-dsId' or 'Name-dsId' parameter sets.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -DatasourceName
+
+Specifies the name of the datasource.
+Required when using the 'Id-dsName' or 'Name-dsName' parameter sets.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -DisableAlerting
+
+Specifies whether to disable alerting for this instance.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Id
+
+Specifies the ID of the device.
+Can be specified using the 'DeviceId' alias.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases:
+- DeviceId
+ParameterSets:
+- Name: Id-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -InstanceName
+
+Specifies the name of the instance for which to configure alerts.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Name
+
+Specifies the name of the device.
+Can be specified using the 'DeviceName' alias.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- DeviceName
+ParameterSets:
+- Name: Name-dsId
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-dsName
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -WhatIf
+
+Runs the command in a mode that only reports what would happen without performing the actions.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None.
 ## OUTPUTS
 
 ### Returns a LogicMonitor.AlertSetting object containing the updated alert settings.
+
 ## NOTES
+
 This function requires a valid LogicMonitor API authentication.
 
 ## RELATED LINKS
+

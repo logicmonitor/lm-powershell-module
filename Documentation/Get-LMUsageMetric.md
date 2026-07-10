@@ -1,59 +1,63 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Get-LMUsageMetric
 ---
 
 # Get-LMUsageMetric
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+
+Retrieves LogicMonitor account usage metrics from the API.
 
 ## SYNTAX
 
+### All (Default)
+
 ```
-Get-LMUsageMetric [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMUsageMetric [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+
+The Get-LMUsageMetric cmdlet calls the `/metrics/usage` endpoint and returns the usage payload
+for your LogicMonitor portal (for example device counts and related usage figures).
+You must
+call Connect-LMAccount before using this cmdlet.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
-```
+### EXAMPLE 1
 
-{{ Add example description here }}
+Get-LMUsageMetric
+
+Retrieves current usage metrics for the connected portal.
 
 ## PARAMETERS
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this cmdlet.
+
 ## OUTPUTS
 
-### System.Object
+### Returns the object returned by the LogicMonitor usage metrics API.
+
 ## NOTES
 
+You must run Connect-LMAccount before running this command.
+
 ## RELATED LINKS
+

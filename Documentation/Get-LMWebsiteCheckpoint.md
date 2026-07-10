@@ -1,104 +1,114 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Get-LMWebsiteCheckpoint
 ---
 
 # Get-LMWebsiteCheckpoint
 
 ## SYNOPSIS
+
 Retrieves website checkpoints from LogicMonitor.
 
 ## SYNTAX
 
 ### All (Default)
+
 ```
-Get-LMWebsiteCheckpoint [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMWebsiteCheckpoint [-BatchSize <int>] [<CommonParameters>]
 ```
 
 ### Filter
+
 ```
-Get-LMWebsiteCheckpoint [-Filter <Object>] [-BatchSize <Int32>] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Get-LMWebsiteCheckpoint [-Filter <Object>] [-BatchSize <int>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Get-LMWebsiteCheckpoint function retrieves checkpoint configurations used for website monitoring in LogicMonitor.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 #Retrieve all website checkpoints
 Get-LMWebsiteCheckpoint
-```
 
 ### EXAMPLE 2
-```
+
 #Retrieve checkpoints using a filter
 Get-LMWebsiteCheckpoint -Filter $filterObject
-```
 
 ## PARAMETERS
 
-### -Filter
-A filter object to apply when retrieving checkpoints.
-
-```yaml
-Type: Object
-Parameter Sets: Filter
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -BatchSize
+
 The number of results to return per request.
 Must be between 1 and 1000.
 Defaults to 1000.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: 1000
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 1000
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -Filter
+
+A filter object to apply when retrieving checkpoints.
 
 ```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Object
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Filter
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to this command.
+
 ## OUTPUTS
 
 ### Returns website checkpoint objects.
+
 ## NOTES
+
 You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
+

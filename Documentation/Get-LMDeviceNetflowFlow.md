@@ -1,171 +1,206 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Get-LMDeviceNetflowFlow
 ---
 
 # Get-LMDeviceNetflowFlow
 
 ## SYNOPSIS
+
 Retrieves Netflow flow data for a LogicMonitor device.
 
 ## SYNTAX
 
 ### Id (Default)
+
 ```
-Get-LMDeviceNetflowFlow -Id <Int32> [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceNetflowFlow -Id <int> [-Filter <Object>] [-StartDate <datetime>] [-EndDate <datetime>]
+ [-BatchSize <int>] [<CommonParameters>]
 ```
 
 ### Name
+
 ```
-Get-LMDeviceNetflowFlow [-Name <String>] [-Filter <Object>] [-StartDate <DateTime>] [-EndDate <DateTime>]
- [-BatchSize <Int32>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceNetflowFlow [-Name <string>] [-Filter <Object>] [-StartDate <datetime>]
+ [-EndDate <datetime>] [-BatchSize <int>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Get-LMDeviceNetflowFlow function retrieves Netflow flow information for a specified device.
 It supports time range filtering and can identify the device by either ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 #Retrieve Netflow flows by device ID
 Get-LMDeviceNetflowFlow -Id 123
-```
 
 ### EXAMPLE 2
-```
+
 #Retrieve Netflow flows with date range
 Get-LMDeviceNetflowFlow -Name "Router1" -StartDate (Get-Date).AddDays(-7)
-```
 
 ## PARAMETERS
 
-### -Id
-The ID of the device to retrieve Netflow flows from.
-Required for Id parameter set.
-
-```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-The name of the device to retrieve Netflow flows from.
-Required for Name parameter set.
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-A filter object to apply when retrieving flows.
-This parameter is optional.
-
-```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartDate
-The start date for retrieving Netflow data.
-Defaults to 24 hours ago if not specified.
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndDate
-The end date for retrieving Netflow data.
-Defaults to current time if not specified.
-
-```yaml
-Type: DateTime
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
 ### -BatchSize
+
 The number of results to return per request.
 Must be between 1 and 1000.
 Defaults to 1000.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: 1000
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 1000
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -EndDate
+
+The end date for retrieving Netflow data.
+Defaults to current time if not specified.
 
 ```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
+Type: System.DateTime
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -Filter
+
+A filter object to apply when retrieving flows.
+This parameter is optional.
+
+```yaml
+Type: System.Object
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Id
+
+The ID of the device to retrieve Netflow flows from.
+Required for Id parameter set.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Name
+
+The name of the device to retrieve Netflow flows from.
+Required for Name parameter set.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -StartDate
+
+The start date for retrieving Netflow data.
+Defaults to 24 hours ago if not specified.
+
+```yaml
+Type: System.DateTime
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to this command.
+
 ## OUTPUTS
 
 ### Returns Netflow flow objects.
+
 ## NOTES
+
 You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
+

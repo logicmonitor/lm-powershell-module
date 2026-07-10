@@ -148,8 +148,6 @@ Accept wildcard characters: False
 ```
 
 ### -ProgressAction
-{{ Fill ProgressAction Description }}
-
 ```yaml
 Type: ActionPreference
 Parameter Sets: (All)

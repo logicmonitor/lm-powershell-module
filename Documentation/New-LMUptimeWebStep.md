@@ -1,42 +1,49 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: New-LMUptimeWebStep
 ---
 
 # New-LMUptimeWebStep
 
 ## SYNOPSIS
+
 Creates a LogicMonitor Uptime web step definition.
 
 ## SYNTAX
 
 ### External (Default)
+
 ```
-New-LMUptimeWebStep [-Name <String>] [-Url <String>] [-HttpMethod <String>] [-HttpVersion <String>]
- -Type <String> [-Enable <Boolean>] [-UseDefaultRoot <Boolean>] [-Schema <String>]
- [-FollowRedirection <Boolean>] [-FullPageLoad <Boolean>] [-RequireAuth <Boolean>] [-AuthType <String>]
- [-AuthUserName <String>] [-AuthPassword <String>] [-AuthDomain <String>] [-HttpHeaders <String>]
- [-HttpBody <String>] [-RequestType <String>] [-ResponseType <String>] [-MatchType <String>]
- [-Keyword <String>] [-InvertMatch] [-StatusCode <String>] [-Path <String>] [-Label <String>]
- [-Description <String>] [-TimeoutInSeconds <Int32>] [-PostDataEditType <String>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+New-LMUptimeWebStep -Type <string> [-Name <string>] [-Url <string>] [-HttpMethod <string>]
+ [-HttpVersion <string>] [-Enable <bool>] [-UseDefaultRoot <bool>] [-Schema <string>]
+ [-FollowRedirection <bool>] [-FullPageLoad <bool>] [-RequireAuth <bool>] [-AuthType <string>]
+ [-AuthUserName <string>] [-AuthPassword <string>] [-AuthDomain <string>] [-HttpHeaders <string>]
+ [-HttpBody <string>] [-RequestType <string>] [-ResponseType <string>] [-MatchType <string>]
+ [-Keyword <string>] [-InvertMatch] [-StatusCode <string>] [-Path <string>] [-Label <string>]
+ [-Description <string>] [-TimeoutInSeconds <int>] [-PostDataEditType <string>] [<CommonParameters>]
 ```
 
 ### Internal
+
 ```
-New-LMUptimeWebStep [-Name <String>] [-Url <String>] [-HttpMethod <String>] [-HttpVersion <String>]
- -Type <String> [-Enable <Boolean>] [-UseDefaultRoot <Boolean>] [-Schema <String>]
- [-FollowRedirection <Boolean>] [-FullPageLoad <Boolean>] [-RequireAuth <Boolean>] [-AuthType <String>]
- [-AuthUserName <String>] [-AuthPassword <String>] [-AuthDomain <String>] [-HttpHeaders <String>]
- [-HttpBody <String>] [-RequestType <String>] [-ResponseType <String>] [-MatchType <String>]
- [-Keyword <String>] [-InvertMatch] [-StatusCode <String>] [-Path <String>] [-Label <String>]
- [-Description <String>] [-TimeoutInSeconds <Int32>] [-PostDataEditType <String>] [-ResponseScript <String>]
- [-RequestScript <String>] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+New-LMUptimeWebStep -Type <string> [-Name <string>] [-Url <string>] [-HttpMethod <string>]
+ [-HttpVersion <string>] [-Enable <bool>] [-UseDefaultRoot <bool>] [-Schema <string>]
+ [-FollowRedirection <bool>] [-FullPageLoad <bool>] [-RequireAuth <bool>] [-AuthType <string>]
+ [-AuthUserName <string>] [-AuthPassword <string>] [-AuthDomain <string>] [-HttpHeaders <string>]
+ [-HttpBody <string>] [-RequestType <string>] [-ResponseType <string>] [-MatchType <string>]
+ [-Keyword <string>] [-InvertMatch] [-StatusCode <string>] [-Path <string>] [-Label <string>]
+ [-Description <string>] [-TimeoutInSeconds <int>] [-PostDataEditType <string>]
+ [-ResponseScript <string>] [-RequestScript <string>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 New-LMUptimeWebStep generates a hashtable describing a single web step compatible with the
 New-LMUptimeDevice and Set-LMUptimeDevice cmdlets.
 Separate parameter sets target external
@@ -46,511 +53,849 @@ constraints.
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 New-LMUptimeWebStep -Type External -Name '__home' -Url '/' -Keyword 'Welcome' -StatusCode '200'
-```
 
 ### EXAMPLE 2
-```
+
 New-LMUptimeWebStep -Type Internal -RequestType script -RequestScript $scriptBlock
-```
 
 ## PARAMETERS
 
-### -Name
-Step name.
-Defaults to "__step0".
+### -AuthDomain
+
+Authentication domain.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: __step0
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -Url
-Relative or absolute URL to execute.
-Defaults to empty string.
+### -AuthPassword
+
+Authentication password.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -AuthType
+
+Authentication type when RequireAuth is true.
+Defaults to basic.
+
+```yaml
+Type: System.String
+DefaultValue: basic
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -AuthUserName
+
+Authentication username.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Description
+
+Optional step description.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Enable
+
+Indicates whether the step is enabled.
+Defaults to $true.
+
+```yaml
+Type: System.Boolean
+DefaultValue: True
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -FollowRedirection
+
+Indicates whether redirects are automatically followed.
+Defaults to $true.
+
+```yaml
+Type: System.Boolean
+DefaultValue: True
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -FullPageLoad
+
+Indicates whether full page load is required.
+Defaults to $false.
+
+```yaml
+Type: System.Boolean
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -HttpBody
+
+Optional HTTP body content.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -HttpHeaders
+
+Optional HTTP headers string.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -HttpMethod
+
 HTTP method executed by the step.
 Valid values: GET, HEAD, POST.
 Defaults to GET.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: GET
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: GET
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -HttpVersion
+
 HTTP protocol version.
 Valid values: 1, 1.1.
 Defaults to 1.1.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: 1.1
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: 1.1
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -Type
-Controls whether the step is treated as external (config) or internal (script).
-External set uses Type "config"; internal may use "script" or "config".
+### -InvertMatch
+
+Switch to invert keyword matching behaviour.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -Enable
-Indicates whether the step is enabled.
-Defaults to $true.
+### -Keyword
+
+Keyword used during response evaluation.
 
 ```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: True
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -UseDefaultRoot
-Indicates whether the default root should be used.
-Defaults to $true.
+### -Label
+
+Optional step label.
 
 ```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: True
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Schema
-HTTP schema value (http or https).
-Defaults to https.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Https
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -FollowRedirection
-Indicates whether redirects are automatically followed.
-Defaults to $true.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: True
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -FullPageLoad
-Indicates whether full page load is required.
-Defaults to $false.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RequireAuth
-Indicates whether authentication is required.
-Defaults to $false.
-
-```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AuthType
-Authentication type when RequireAuth is true.
-Defaults to basic.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Basic
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AuthUserName
-Authentication username.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AuthPassword
-Authentication password.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -AuthDomain
-Authentication domain.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HttpHeaders
-Optional HTTP headers string.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -HttpBody
-Optional HTTP body content.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -RequestType
-Request type.
-External steps support config only; internal steps allow config or script.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Config
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResponseType
-Response type.
-External steps support plain text/string, glob expression, JSON, XML, multi line key value pair; internal steps additionally support script.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Plain text/string
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -MatchType
+
 Match type used for response evaluation.
 Defaults to plain.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: Plain
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: plain
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -Keyword
-Keyword used during response evaluation.
+### -Name
+
+Step name.
+Defaults to "__step0".
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -InvertMatch
-Switch to invert keyword matching behaviour.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StatusCode
-Expected status code string.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: __step0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -Path
+
 Optional path field for JSON/XPATH matching.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Label
-Optional step label.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Description
-Optional step description.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -TimeoutInSeconds
-Optional timeout expressed in seconds.
-
-```yaml
-Type: Int32
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -PostDataEditType
+
 POST data edit type (Raw or Formatted Data).
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ResponseScript
-Response script content (internal parameter set only).
-
-```yaml
-Type: String
-Parameter Sets: Internal
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -RequestScript
+
 Request script content (internal parameter set only).
 
 ```yaml
-Type: String
-Parameter Sets: Internal
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -RequestType
+
+Request type.
+External steps support config only; internal steps allow config or script.
 
 ```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
+Type: System.String
+DefaultValue: config
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -RequireAuth
+
+Indicates whether authentication is required.
+Defaults to $false.
+
+```yaml
+Type: System.Boolean
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -ResponseScript
+
+Response script content (internal parameter set only).
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -ResponseType
+
+Response type.
+External steps support plain text/string, glob expression, JSON, XML, multi line key value pair; internal steps additionally support script.
+
+```yaml
+Type: System.String
+DefaultValue: Plain text/string
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Schema
+
+HTTP schema value (http or https).
+Defaults to https.
+
+```yaml
+Type: System.String
+DefaultValue: https
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -StatusCode
+
+Expected status code string.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -TimeoutInSeconds
+
+Optional timeout expressed in seconds.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Type
+
+Controls whether the step is treated as external (config) or internal (script).
+External set uses Type "config"; internal may use "script" or "config".
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Url
+
+Relative or absolute URL to execute.
+Defaults to empty string.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -UseDefaultRoot
+
+Indicates whether the default root should be used.
+Defaults to $true.
+
+```yaml
+Type: System.Boolean
+DefaultValue: True
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Internal
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: External
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to this cmdlet.
+
 ## OUTPUTS
 
 ### Hashtable describing an uptime web step.
+
+### System.Collections.Hashtable
+
 ## NOTES
 
 ## RELATED LINKS
 
-[New-LMUptimeDevice]()
-
+- [New-LMUptimeDevice]()

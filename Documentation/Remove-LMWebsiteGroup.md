@@ -1,151 +1,182 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Remove-LMWebsiteGroup
 ---
 
 # Remove-LMWebsiteGroup
 
 ## SYNOPSIS
+
 Removes a website group from LogicMonitor.
 
 ## SYNTAX
 
 ### Id (Default)
+
 ```
-Remove-LMWebsiteGroup -Id <Int32> [-DeleteHostsandChildren <Boolean>] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMWebsiteGroup -Id <int> [-DeleteHostsandChildren <bool>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ### Name
+
 ```
-Remove-LMWebsiteGroup -Name <String> [-DeleteHostsandChildren <Boolean>] [-ProgressAction <ActionPreference>]
- [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-LMWebsiteGroup -Name <string> [-DeleteHostsandChildren <bool>] [-WhatIf] [-Confirm]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Remove-LMWebsiteGroup function removes a website group from LogicMonitor using either its ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 Remove-LMWebsiteGroup -Id 123
 Removes the website group with ID 123.
-```
 
 ### EXAMPLE 2
-```
+
 Remove-LMWebsiteGroup -Name "MyGroup" -DeleteHostsandChildren $true
 Removes the website group named "MyGroup" and all its child items.
-```
 
 ## PARAMETERS
 
-### -Id
-Specifies the ID of the website group to remove.
-This parameter is mandatory when using the 'Id' parameter set.
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
 Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -Name
-Specifies the name of the website group to remove.
-This parameter is mandatory when using the 'Name' parameter set.
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -DeleteHostsandChildren
+
 Specifies whether to delete the hosts and their children within the website group.
 Default value is $false.
 
 ```yaml
-Type: Boolean
-Parameter Sets: (All)
-Aliases:
+Type: System.Boolean
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
+### -Id
+
+Specifies the ID of the website group to remove.
+This parameter is mandatory when using the 'Id' parameter set.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Name
+
+Specifies the name of the website group to remove.
+This parameter is mandatory when using the 'Name' parameter set.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### You can pipe objects to this function.
+
+### System.Int32
+
 ## OUTPUTS
 
 ### Returns a PSCustomObject containing the ID of the removed website group and a success message confirming the removal.
+
 ## NOTES
 
 ## RELATED LINKS
+

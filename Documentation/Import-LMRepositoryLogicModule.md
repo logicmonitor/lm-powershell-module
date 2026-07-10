@@ -1,91 +1,107 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Import-LMRepositoryLogicModule
 ---
 
 # Import-LMRepositoryLogicModule
 
 ## SYNOPSIS
+
 Imports LogicMonitor repository logic modules.
 
 ## SYNTAX
 
+### __AllParameterSets
+
 ```
-Import-LMRepositoryLogicModule [-Type] <String> [-LogicModuleNames] <String[]>
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Import-LMRepositoryLogicModule [-Type] <string> [-LogicModuleNames] <string[]> [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Import-LMRepositoryLogicModule function imports specified logic modules from the LogicMonitor repository into your portal.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 #Import specific datasources
 Import-LMRepositoryLogicModule -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"
-```
 
 ## PARAMETERS
 
+### -LogicModuleNames
+
+An array of logic module names to import.
+
+```yaml
+Type: System.String[]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- Name
+ParameterSets:
+- Name: (All)
+  Position: 1
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
 ### -Type
+
 The type of logic modules to import.
 Valid values are "datasources", "propertyrules", "eventsources", "topologysources", "configsources".
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: 1
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -LogicModuleNames
-An array of logic module names to import.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases: Name
-
-Required: True
-Position: 2
-Default value: None
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: 0
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to this command.
+
+### System.String[]
+
 ## OUTPUTS
 
 ### Returns a success message with the names of imported modules.
+
+### System.String
+
 ## NOTES
+
 You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
+

@@ -31,8 +31,6 @@ Get-LMNormalizedProperty
 ## PARAMETERS
 
 ### -ProgressAction
-{{ Fill ProgressAction Description }}
-
 ```yaml
 Type: ActionPreference
 Parameter Sets: (All)

@@ -1,159 +1,445 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: New-LMDeviceSDT
 ---
 
 # New-LMDeviceSDT
 
 ## SYNOPSIS
+
 Creates a new Logic Monitor Device Scheduled Down Time (SDT).
 
 ## SYNTAX
 
-### OneTime-DeviceName
+### Default (Default)
+
 ```
-New-LMDeviceSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> [-Timezone <String>]
- -DeviceName <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+New-LMDeviceSDT -Comment <string> [-Duration <int>] [-StartDate <datetime>] [-EndDate <datetime>]
+ [-Timezone <string>] [-SdtType <string>] [-StartHour <int>] [-StartMinute <int>] [-EndHour <int>]
+ [-EndMinute <int>] [-WeekDay <string[]>] [-WeekOfMonth <string>] [-DayOfMonth <int>]
+ [-DeviceId <string>] [-DeviceName <string>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
-### OneTime-DeviceId
-```
-New-LMDeviceSDT -Comment <String> -StartDate <DateTime> -EndDate <DateTime> [-Timezone <String>]
- -DeviceId <String> [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
+### ScheduleWizard
 
-### Weekly-DeviceId
 ```
-New-LMDeviceSDT -Comment <String> [-Timezone <String>] -DeviceId <String> -StartHour <Int32>
- -StartMinute <Int32> -EndHour <Int32> -EndMinute <Int32> -WeekDay <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### MonthlyByWeek-DeviceId
-```
-New-LMDeviceSDT -Comment <String> [-Timezone <String>] -DeviceId <String> -StartHour <Int32>
- -StartMinute <Int32> -EndHour <Int32> -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### Monthly-DeviceId
-```
-New-LMDeviceSDT -Comment <String> [-Timezone <String>] -DeviceId <String> -StartHour <Int32>
- -StartMinute <Int32> -EndHour <Int32> -EndMinute <Int32> -DayOfMonth <Int32>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### Daily-DeviceId
-```
-New-LMDeviceSDT -Comment <String> [-Timezone <String>] -DeviceId <String> -StartHour <Int32>
- -StartMinute <Int32> -EndHour <Int32> -EndMinute <Int32> [-ProgressAction <ActionPreference>] [-WhatIf]
- [-Confirm] [<CommonParameters>]
-```
-
-### Weekly-DeviceName
-```
-New-LMDeviceSDT -Comment <String> [-Timezone <String>] -DeviceName <String> -StartHour <Int32>
- -StartMinute <Int32> -EndHour <Int32> -EndMinute <Int32> -WeekDay <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### MonthlyByWeek-DeviceName
-```
-New-LMDeviceSDT -Comment <String> [-Timezone <String>] -DeviceName <String> -StartHour <Int32>
- -StartMinute <Int32> -EndHour <Int32> -EndMinute <Int32> -WeekDay <String> -WeekOfMonth <String>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### Monthly-DeviceName
-```
-New-LMDeviceSDT -Comment <String> [-Timezone <String>] -DeviceName <String> -StartHour <Int32>
- -StartMinute <Int32> -EndHour <Int32> -EndMinute <Int32> -DayOfMonth <Int32>
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
-```
-
-### Daily-DeviceName
-```
-New-LMDeviceSDT -Comment <String> [-Timezone <String>] -DeviceName <String> -StartHour <Int32>
- -StartMinute <Int32> -EndHour <Int32> -EndMinute <Int32> [-ProgressAction <ActionPreference>] [-WhatIf]
+New-LMDeviceSDT [-Comment <string>] [-ScheduleWizard] [-Duration <int>] [-StartDate <datetime>]
+ [-EndDate <datetime>] [-Timezone <string>] [-SdtType <string>] [-StartHour <int>]
+ [-StartMinute <int>] [-EndHour <int>] [-EndMinute <int>] [-WeekDay <string[]>]
+ [-WeekOfMonth <string>] [-DayOfMonth <int>] [-DeviceId <string>] [-DeviceName <string>] [-WhatIf]
  [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The New-LMDeviceSDT function creates a new SDT for a Logic Monitor device.
-It allows you to specify the comment, start date, end date, timezone, and device ID or device name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
-New-LMDeviceSDT -Comment "Maintenance window" -StartDate "2022-01-01 00:00:00" -EndDate "2022-01-01 06:00:00" -DeviceId "12345"
-Creates a one-time SDT for the device with ID "12345".
-```
+
+New-LMDeviceSDT -ScheduleWizard
+Launches the full interactive wizard to select a device, comment, and schedule.
 
 ### EXAMPLE 2
-```
-New-LMDeviceSDT -Comment "Maintenance window" -StartDate (Get-Date).AddHours(1) -EndDate (Get-Date).AddHours(3) -DeviceName "server01" -Timezone "Eastern Standard Time"
-Creates a one-time SDT using a Windows standard timezone name.
-```
+
+New-LMDeviceSDT -ScheduleWizard -Comment "Maintenance" -DeviceId 123
+Launches the schedule wizard only; device and comment are pre-supplied.
 
 ### EXAMPLE 3
-```
-New-LMDeviceSDT -Comment "Maintenance window" -StartDate (Get-Date).AddHours(1) -EndDate (Get-Date).AddHours(3) -DeviceName "server01" -Timezone (Get-TimeZone).StandardName
-Creates a one-time SDT using the local machine's timezone via Get-TimeZone.
-```
+
+New-LMDeviceSDT -Comment "Maintenance" -Duration 60 -DeviceId 123
+Creates a one-time SDT starting now for 60 minutes.
+
+### EXAMPLE 4
+
+New-LMDeviceSDT -Comment "Weekly window" -SdtType Weekly -StartHour 13 -StartMinute 7 -EndHour 14 -EndMinute 7 -WeekDay Monday, Thursday -DeviceId 123
+Creates a weekly recurring SDT on Monday and Thursday.
 
 ## PARAMETERS
 
 ### -Comment
+
 Specifies the comment for the SDT.
+Required in the Default parameter set; optional with -ScheduleWizard (prompted when omitted).
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -StartDate
-Specifies the start date and time for the SDT.
-This parameter is mandatory when using the 'OneTime-DeviceId' or 'OneTime-DeviceName' parameter sets.
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: DateTime
-Parameter Sets: OneTime-DeviceName, OneTime-DeviceId
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
 Aliases:
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -DayOfMonth
+
+Day of the month for Monthly SDTs (1-31), or -3 for the last day of the month.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -DeviceId
+
+ID of the device.
+Provide either -DeviceId or -DeviceName.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -DeviceName
+
+Name of the device.
+Provide either -DeviceId or -DeviceName.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -Duration
+
+Duration in minutes for one-time SDTs.
+Use alone (starts now) or with -StartDate.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -EndDate
-Specifies the end date and time for the SDT.
-This parameter is mandatory when using the 'OneTime-DeviceId' or 'OneTime-DeviceName' parameter sets.
+
+End date and time.
+Required for OneTimeRange.
 
 ```yaml
-Type: DateTime
-Parameter Sets: OneTime-DeviceName, OneTime-DeviceId
-Aliases:
+Type: System.DateTime
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -EndHour
+
+End hour (0-23) for recurring SDTs.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -EndMinute
+
+End minute (0-59) for recurring SDTs.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -ScheduleWizard
+
+Launches an interactive wizard to create the SDT.
+Prompts only for values not already supplied, so you can pass resource and comment parameters and receive schedule help only.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SdtType
+
+Recurring schedule type: Daily, Weekly, Monthly, or MonthlyByWeek.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -StartDate
+
+Start date and time.
+Required for OneTimeRange; optional for OneTimeDuration.
+
+```yaml
+Type: System.DateTime
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -StartHour
+
+Start hour (0-23) for recurring SDTs.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -StartMinute
+
+Start minute (0-59) for recurring SDTs.
+
+```yaml
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -Timezone
+
 Specifies the timezone for SDTs.
 Accepts IANA timezone IDs (e.g.
 America/New_York), Windows standard names (e.g.
@@ -161,218 +447,123 @@ Eastern Standard Time), or the output of (Get-TimeZone).StandardName.
 If omitted, the portal timezone is used.
 
 ```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeviceId
-Specifies the ID of the device.
-This parameter is mandatory when using ID-based parameter sets.
-
-```yaml
-Type: String
-Parameter Sets: OneTime-DeviceId, Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DeviceName
-Specifies the name of the device.
-This parameter is mandatory when using name-based parameter sets.
-
-```yaml
-Type: String
-Parameter Sets: OneTime-DeviceName, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartHour
-Specifies the start hour for recurring SDTs.
-This parameter is mandatory when using recurring parameter sets.
-Must be between 0 and 23.
-
-```yaml
-Type: Int32
-Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartMinute
-Specifies the start minute for recurring SDTs.
-This parameter is mandatory when using recurring parameter sets.
-Must be between 0 and 59.
-
-```yaml
-Type: Int32
-Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndHour
-Specifies the end hour for recurring SDTs.
-This parameter is mandatory when using recurring parameter sets.
-Must be between 0 and 23.
-
-```yaml
-Type: Int32
-Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndMinute
-Specifies the end minute for recurring SDTs.
-This parameter is mandatory when using recurring parameter sets.
-Must be between 0 and 59.
-
-```yaml
-Type: Int32
-Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Monthly-DeviceId, Daily-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName, Monthly-DeviceName, Daily-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WeekDay
-Specifies the day of the week for weekly or monthly by week SDTs.
+
+Day(s) of the week for Weekly or MonthlyByWeek SDTs.
+Accepts multiple values.
 
 ```yaml
-Type: String
-Parameter Sets: Weekly-DeviceId, MonthlyByWeek-DeviceId, Weekly-DeviceName, MonthlyByWeek-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String[]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WeekOfMonth
-Specifies which week of the month for monthly by week SDTs.
+
+Week of the month for MonthlyByWeek SDTs: First, Second, Third, Fourth, or Last.
 
 ```yaml
-Type: String
-Parameter Sets: MonthlyByWeek-DeviceId, MonthlyByWeek-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -DayOfMonth
-Specifies the day of the month for monthly SDTs.
-
-```yaml
-Type: Int32
-Parameter Sets: Monthly-DeviceId, Monthly-DeviceName
-Aliases:
-
-Required: True
-Position: Named
-Default value: 0
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: ScheduleWizard
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Default
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. You cannot pipe objects to this command.
+
 ## OUTPUTS
 
 ### Returns LogicMonitor.SDT object.
+
 ## NOTES
+
 You must run Connect-LMAccount before running this command.
 
 ## RELATED LINKS
+

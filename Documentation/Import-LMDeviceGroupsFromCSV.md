@@ -1,113 +1,129 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Import-LMDeviceGroupsFromCSV
 ---
 
 # Import-LMDeviceGroupsFromCSV
 
 ## SYNOPSIS
+
 Imports list of device groups based on specified CSV file.
 
 ## SYNTAX
 
 ### Import (Default)
+
 ```
-Import-LMDeviceGroupsFromCSV -FilePath <String> [-PassThru] [-ProgressAction <ActionPreference>]
- [<CommonParameters>]
+Import-LMDeviceGroupsFromCSV -FilePath <string> [-PassThru] [<CommonParameters>]
 ```
 
 ### Sample
+
 ```
-Import-LMDeviceGroupsFromCSV [-GenerateExampleCSV] [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Import-LMDeviceGroupsFromCSV [-GenerateExampleCSV] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 Imports list of device groups based on specified CSV file.
 You can generate a sample of the CSV file by specifying the -GenerateExampleCSV parameter.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 Import-LMDeviceGroupsFromCSV -FilePath ./ImportList.csv -PassThru
-```
 
 ## PARAMETERS
 
 ### -FilePath
+
 Path to the CSV file containing device groups to import.
 Required for Import parameter set.
 
 ```yaml
-Type: String
-Parameter Sets: Import
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Import
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -GenerateExampleCSV
+
 Generates a sample CSV file to use as a template for importing device groups.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Sample
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Sample
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -PassThru
+
 Returns the imported device group objects.
 By default, no output is returned.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: Import
-Aliases:
-
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Import
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### None. Does not accept pipeline input.
+
 ## OUTPUTS
 
 ## NOTES
-Assumes csv with the headers name,fullpath,description,appliesTo,property1,property2,property\[n\].
+
+Assumes csv with the headers name,fullpath,description,appliesTo,property1,property2,property[n].
 Name and fullpath are the only required fields.
 
 ## RELATED LINKS
+

@@ -1,485 +1,786 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Set-LMCollectorConfig
 ---
 
 # Set-LMCollectorConfig
 
 ## SYNOPSIS
+
 Updates a LogicMonitor collector's configuration settings.
 
 ## SYNTAX
 
 ### Id-SnippetConf
+
 ```
-Set-LMCollectorConfig [-Id <Int32>] [-SnmpThreadPool <Int32>] [-SnmpPduTimeout <Int32>]
- [-ScriptThreadPool <Int32>] [-ScriptTimeout <Int32>] [-BatchScriptThreadPool <Int32>]
- [-BatchScriptTimeout <Int32>] [-PowerShellSPSEProcessCountMin <Int32>]
- [-PowerShellSPSEProcessCountMax <Int32>] [-NetflowEnable <Boolean>] [-NbarEnable <Boolean>]
- [-NetflowPorts <String[]>] [-SflowPorts <String[]>] [-LMLogsSyslogEnable <Boolean>]
- [-LMLogsSyslogHostnameFormat <String>] [-LMLogsSyslogPropertyName <String>] [-WaitForRestart]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMCollectorConfig [-Id <int>] [-SnmpThreadPool <int>] [-SnmpPduTimeout <int>]
+ [-ScriptThreadPool <int>] [-ScriptTimeout <int>] [-BatchScriptThreadPool <int>]
+ [-BatchScriptTimeout <int>] [-PowerShellSPSEProcessCountMin <int>]
+ [-PowerShellSPSEProcessCountMax <int>] [-NetflowEnable <bool>] [-NbarEnable <bool>]
+ [-NetflowPorts <string[]>] [-SflowPorts <string[]>] [-LMLogsSyslogEnable <bool>]
+ [-LMLogsSyslogHostnameFormat <string>] [-LMLogsSyslogPropertyName <string>] [-WaitForRestart]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Id-Conf
+
 ```
-Set-LMCollectorConfig [-Id <Int32>] [-CollectorSize <String>] [-CollectorConf <String>] [-SbproxyConf <String>]
- [-WatchdogConf <String>] [-WebsiteConf <String>] [-WrapperConf <String>] [-WaitForRestart]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMCollectorConfig [-Id <int>] [-CollectorSize <string>] [-CollectorConf <string>]
+ [-SbproxyConf <string>] [-WatchdogConf <string>] [-WebsiteConf <string>] [-WrapperConf <string>]
+ [-WaitForRestart] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-SnippetConf
+
 ```
-Set-LMCollectorConfig [-Name <String>] [-SnmpThreadPool <Int32>] [-SnmpPduTimeout <Int32>]
- [-ScriptThreadPool <Int32>] [-ScriptTimeout <Int32>] [-BatchScriptThreadPool <Int32>]
- [-BatchScriptTimeout <Int32>] [-PowerShellSPSEProcessCountMin <Int32>]
- [-PowerShellSPSEProcessCountMax <Int32>] [-NetflowEnable <Boolean>] [-NbarEnable <Boolean>]
- [-NetflowPorts <String[]>] [-SflowPorts <String[]>] [-LMLogsSyslogEnable <Boolean>]
- [-LMLogsSyslogHostnameFormat <String>] [-LMLogsSyslogPropertyName <String>] [-WaitForRestart]
- [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMCollectorConfig [-Name <string>] [-SnmpThreadPool <int>] [-SnmpPduTimeout <int>]
+ [-ScriptThreadPool <int>] [-ScriptTimeout <int>] [-BatchScriptThreadPool <int>]
+ [-BatchScriptTimeout <int>] [-PowerShellSPSEProcessCountMin <int>]
+ [-PowerShellSPSEProcessCountMax <int>] [-NetflowEnable <bool>] [-NbarEnable <bool>]
+ [-NetflowPorts <string[]>] [-SflowPorts <string[]>] [-LMLogsSyslogEnable <bool>]
+ [-LMLogsSyslogHostnameFormat <string>] [-LMLogsSyslogPropertyName <string>] [-WaitForRestart]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ### Name-Conf
+
 ```
-Set-LMCollectorConfig [-Name <String>] [-CollectorSize <String>] [-CollectorConf <String>]
- [-SbproxyConf <String>] [-WatchdogConf <String>] [-WebsiteConf <String>] [-WrapperConf <String>]
- [-WaitForRestart] [-ProgressAction <ActionPreference>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Set-LMCollectorConfig [-Name <string>] [-CollectorSize <string>] [-CollectorConf <string>]
+ [-SbproxyConf <string>] [-WatchdogConf <string>] [-WebsiteConf <string>] [-WrapperConf <string>]
+ [-WaitForRestart] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
+
 The Set-LMCollectorConfig function modifies detailed configuration settings for a collector, including SNMP settings, script settings, and various other parameters.
 This operation will restart the collector.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
-```
+
 Set-LMCollectorConfig -Id 123 -CollectorSize "medium" -WaitForRestart
 Updates the collector size and waits for the restart to complete.
-```
 
 ## PARAMETERS
 
-### -Id
-Specifies the ID of the collector to configure.
+### -BatchScriptThreadPool
+
+Specifies the batch script thread pool size for snippet configuration.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Id-Conf
-Aliases:
-
-Required: False
-Position: Named
-Default value: 0
-Accept pipeline input: True (ByPropertyName)
-Accept wildcard characters: False
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -Name
-Specifies the name of the collector to configure.
+### -BatchScriptTimeout
+
+Specifies the batch script timeout in seconds for snippet configuration.
 
 ```yaml
-Type: String
-Parameter Sets: Name-SnippetConf, Name-Conf
-Aliases:
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -CollectorConf
+
+Specifies the collector configuration file content.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -CollectorSize
+
 Specifies the size of the collector.
 Valid values are "nano", "small", "medium", "large", "extra_large", "double_extra_large".
 
 ```yaml
-Type: String
-Parameter Sets: Id-Conf, Name-Conf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -CollectorConf
-Specifies the collector configuration file content.
+### -Confirm
+
+Prompts you for confirmation before running the cmdlet.
 
 ```yaml
-Type: String
-Parameter Sets: Id-Conf, Name-Conf
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
 Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+- cf
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -SbproxyConf
-Specifies the sbproxy configuration file content.
+### -Id
+
+Specifies the ID of the collector to configure.
 
 ```yaml
-Type: String
-Parameter Sets: Id-Conf, Name-Conf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WatchdogConf
-Specifies the watchdog configuration file content.
-
-```yaml
-Type: String
-Parameter Sets: Id-Conf, Name-Conf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WebsiteConf
-Specifies the website configuration file content.
-
-```yaml
-Type: String
-Parameter Sets: Id-Conf, Name-Conf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -WrapperConf
-Specifies the wrapper configuration file content.
-
-```yaml
-Type: String
-Parameter Sets: Id-Conf, Name-Conf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SnmpThreadPool
-Specifies the SNMP thread pool size for snippet configuration.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SnmpPduTimeout
-Specifies the SNMP PDU timeout in milliseconds for snippet configuration.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ScriptThreadPool
-Specifies the script thread pool size for snippet configuration.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ScriptTimeout
-Specifies the script timeout in seconds for snippet configuration.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BatchScriptThreadPool
-Specifies the batch script thread pool size for snippet configuration.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BatchScriptTimeout
-Specifies the batch script timeout in seconds for snippet configuration.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PowerShellSPSEProcessCountMin
-Specifies the minimum PowerShell SPSE process count for snippet configuration.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PowerShellSPSEProcessCountMax
-Specifies the maximum PowerShell SPSE process count for snippet configuration.
-
-```yaml
-Type: Int32
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NetflowEnable
-Indicates whether Netflow is enabled for snippet configuration.
-
-```yaml
-Type: Boolean
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NbarEnable
-Indicates whether NBAR is enabled for snippet configuration.
-
-```yaml
-Type: Boolean
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NetflowPorts
-Specifies the Netflow ports for snippet configuration.
-
-```yaml
-Type: String[]
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -SflowPorts
-Specifies the sFlow ports for snippet configuration.
-
-```yaml
-Type: String[]
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+- Name: Id-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: true
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -LMLogsSyslogEnable
+
 Indicates whether LM Logs syslog is enabled for snippet configuration.
 
 ```yaml
-Type: Boolean
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Nullable`1[System.Boolean]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -LMLogsSyslogHostnameFormat
+
 Specifies the hostname format for LM Logs syslog.
 Valid values: "IP", "FQDN", "HOSTNAME".
 
 ```yaml
-Type: String
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -LMLogsSyslogPropertyName
+
 Specifies the property name for LM Logs syslog configuration.
 
 ```yaml
-Type: String
-Parameter Sets: Id-SnippetConf, Name-SnippetConf
-Aliases:
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+### -Name
+
+Specifies the name of the collector to configure.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -NbarEnable
+
+Indicates whether NBAR is enabled for snippet configuration.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -NetflowEnable
+
+Indicates whether Netflow is enabled for snippet configuration.
+
+```yaml
+Type: System.Nullable`1[System.Boolean]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -NetflowPorts
+
+Specifies the Netflow ports for snippet configuration.
+
+```yaml
+Type: System.String[]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -PowerShellSPSEProcessCountMax
+
+Specifies the maximum PowerShell SPSE process count for snippet configuration.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -PowerShellSPSEProcessCountMin
+
+Specifies the minimum PowerShell SPSE process count for snippet configuration.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SbproxyConf
+
+Specifies the sbproxy configuration file content.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -ScriptThreadPool
+
+Specifies the script thread pool size for snippet configuration.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -ScriptTimeout
+
+Specifies the script timeout in seconds for snippet configuration.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SflowPorts
+
+Specifies the sFlow ports for snippet configuration.
+
+```yaml
+Type: System.String[]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SnmpPduTimeout
+
+Specifies the SNMP PDU timeout in milliseconds for snippet configuration.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -SnmpThreadPool
+
+Specifies the SNMP thread pool size for snippet configuration.
+
+```yaml
+Type: System.Nullable`1[System.Int32]
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Id-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Name-SnippetConf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WaitForRestart
+
 Indicates whether to wait for the collector restart to complete.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases:
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: False
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
 
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
-Accept wildcard characters: False
+### -WatchdogConf
+
+Specifies the watchdog configuration file content.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
+```
+
+### -WebsiteConf
+
+Specifies the website configuration file content.
+
+```yaml
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+
+Runs the command in a mode that only reports what would happen without performing the actions.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: wi
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Management.Automation.SwitchParameter
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- wi
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
+### -WrapperConf
+
+Specifies the wrapper configuration file content.
 
 ```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: cf
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ProgressAction
-{{ Fill ProgressAction Description }}
-
-```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: Name-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+- Name: Id-Conf
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
 ### You can pipe objects containing Id properties to this function.
+
+### System.Int32
+
 ## OUTPUTS
 
 ### Returns a string indicating the status of the configuration update and restart operation.
+
+### System.String
+
 ## NOTES
+
 This function requires a valid LogicMonitor API authentication and will restart the collector.
 
 ## RELATED LINKS
+

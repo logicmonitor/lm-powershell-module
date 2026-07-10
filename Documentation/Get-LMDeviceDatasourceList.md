@@ -1,127 +1,165 @@
 ---
+document type: cmdlet
 external help file: Logic.Monitor-help.xml
+HelpUri: ''
+Locale: en-US
 Module Name: Logic.Monitor
-online version:
-schema: 2.0.0
+ms.date: 07/10/2026
+PlatyPS schema version: 2024-05-01
+title: Get-LMDeviceDataSourceList
 ---
 
 # Get-LMDeviceDataSourceList
 
 ## SYNOPSIS
-{{ Fill in the Synopsis }}
+
+Retrieves a list of device data sources from LogicMonitor.
 
 ## SYNTAX
 
 ### Id (Default)
+
 ```
-Get-LMDeviceDataSourceList -Id <Int32> [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDataSourceList -Id <int> [-Filter <Object>] [-BatchSize <int>] [<CommonParameters>]
 ```
 
 ### Name
+
 ```
-Get-LMDeviceDataSourceList [-Name <String>] [-Filter <Object>] [-BatchSize <Int32>]
- [-ProgressAction <ActionPreference>] [<CommonParameters>]
+Get-LMDeviceDataSourceList [-Name <string>] [-Filter <Object>] [-BatchSize <int>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-{{ Fill in the Description }}
+
+The Get-LMDeviceDatasourceList function retrieves all data sources associated with a specific device.
+The device can be identified by either ID or name, and the results can be filtered.
 
 ## EXAMPLES
 
-### Example 1
-```powershell
-PS C:\> {{ Add example code here }}
-```
+### EXAMPLE 1
 
-{{ Add example description here }}
+#Retrieve data sources by device ID
+Get-LMDeviceDatasourceList -Id 1234
+
+### EXAMPLE 2
+
+#Retrieve data sources by device name with filter
+Get-LMDeviceDatasourceList -Name "MyDevice" -Filter $filterObject
 
 ## PARAMETERS
 
-### -Id
-{{ Fill Id Description }}
+### -BatchSize
+
+The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.
 
 ```yaml
-Type: Int32
-Parameter Sets: Id
-Aliases: DeviceId
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-{{ Fill Name Description }}
-
-```yaml
-Type: String
-Parameter Sets: Name
-Aliases: DeviceName
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Int32
+DefaultValue: 1000
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### -Filter
-{{ Fill Filter Description }}
+
+A filter object to apply when retrieving data sources.
+This parameter is optional.
 
 ```yaml
-Type: Object
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.Object
+DefaultValue: ''
+SupportsWildcards: false
+Aliases: []
+ParameterSets:
+- Name: (All)
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -BatchSize
-{{ Fill BatchSize Description }}
+### -Id
+
+The ID of the device.
+Can be specified using the DeviceId alias.
+Required for Id parameter set.
 
 ```yaml
-Type: Int32
-Parameter Sets: (All)
+Type: System.Int32
+DefaultValue: 0
+SupportsWildcards: false
 Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+- DeviceId
+ParameterSets:
+- Name: Id
+  Position: Named
+  IsRequired: true
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
-### -ProgressAction
-{{ Fill ProgressAction Description }}
+### -Name
+
+The name of the device.
+Can be specified using the DeviceName alias.
+Required for Name parameter set.
 
 ```yaml
-Type: ActionPreference
-Parameter Sets: (All)
-Aliases: proga
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
+Type: System.String
+DefaultValue: ''
+SupportsWildcards: false
+Aliases:
+- DeviceName
+ParameterSets:
+- Name: Name
+  Position: Named
+  IsRequired: false
+  ValueFromPipeline: false
+  ValueFromPipelineByPropertyName: false
+  ValueFromRemainingArguments: false
+DontShow: false
+AcceptedValues: []
+HelpMessage: ''
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable,
+-InformationAction, -InformationVariable, -OutBuffer, -OutVariable, -PipelineVariable,
+-ProgressAction, -Verbose, -WarningAction, and -WarningVariable. For more information, see
+[about_CommonParameters](https://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 
-### None
+### None. You cannot pipe objects to this command.
+
 ## OUTPUTS
 
-### System.Object
+### Returns LogicMonitor.DeviceDatasourceList objects.
+
 ## NOTES
 
+You must run Connect-LMAccount before running this command.
+
 ## RELATED LINKS
+
