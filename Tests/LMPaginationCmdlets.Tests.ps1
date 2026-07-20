@@ -1,14 +1,14 @@
 Describe 'Pagination Cmdlet Regression Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/Add-ObjectTypeInfo.ps1"
-        . "$PSScriptRoot/../Private/Get-LMPortalURI.ps1"
-        . "$PSScriptRoot/../Private/New-LMHeader.ps1"
-        . "$PSScriptRoot/../Private/Resolve-LMDebugInfo.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMRestMethod.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMPaginatedPostV4.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMCursorPagedGet.ps1"
-        . "$PSScriptRoot/../Public/Get-LMNormalizedProperty.ps1"
-        . "$PSScriptRoot/../Public/Get-LMDeviceData.ps1"
+        . "$PSScriptRoot/../Private/Shared/Add-ObjectTypeInfo.ps1"
+        . "$PSScriptRoot/../Private/LM/Get-LMPortalURI.ps1"
+        . "$PSScriptRoot/../Private/LM/New-LMHeader.ps1"
+        . "$PSScriptRoot/../Private/LM/Resolve-LMDebugInfo.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMRestMethod.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedPostV4.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMCursorPagedGet.ps1"
+        . "$PSScriptRoot/../Public/LM/Get-LMNormalizedProperty.ps1"
+        . "$PSScriptRoot/../Public/LM/Get-LMDeviceData.ps1"
 
         function Get-LMDeviceDataSourceList { }
         function Test-LookupResult { }

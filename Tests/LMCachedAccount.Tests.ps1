@@ -27,7 +27,7 @@ Describe 'Connect-LMAccount cached GovCloud metadata' {
             }
         }
 
-        . "$PSScriptRoot/../Public/Connect-LMAccount.ps1"
+        . "$PSScriptRoot/../Public/LM/Connect-LMAccount.ps1"
     }
 
     BeforeEach {
@@ -77,7 +77,7 @@ Describe 'Connect-LMAccount cached GovCloud metadata' {
 
 Describe 'Get-LMCachedAccount GovCloud metadata' {
     BeforeAll {
-        . "$PSScriptRoot/../Public/Get-LMCachedAccount.ps1"
+        . "$PSScriptRoot/../Public/LM/Get-LMCachedAccount.ps1"
     }
 
     It 'Returns GovCloud true when metadata GovCloud is True' {

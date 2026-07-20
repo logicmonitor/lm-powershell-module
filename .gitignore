@@ -7,3 +7,4 @@ Dev.Logic.Monitor.psd1
 Public/Test-LMDeviceRateLimit.ps1
 
 CLAUDE.md
+.env

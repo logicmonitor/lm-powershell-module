@@ -1,18 +1,18 @@
 Describe 'Log Alert Group Cmdlet Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/Test-LMResponseHasPagination.ps1"
-        . "$PSScriptRoot/../Private/Add-ObjectTypeInfo.ps1"
-        . "$PSScriptRoot/../Private/Format-LMData.ps1"
-        . "$PSScriptRoot/../Private/Get-LMPortalURI.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMPaginatedGet.ps1"
-        . "$PSScriptRoot/../Private/New-LMHeader.ps1"
-        . "$PSScriptRoot/../Private/Resolve-LMDebugInfo.ps1"
-        . "$PSScriptRoot/../Private/Test-LookupResult.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMRestMethod.ps1"
-        . "$PSScriptRoot/../Public/Get-LMLogAlertGroup.ps1"
-        . "$PSScriptRoot/../Public/New-LMLogAlertGroup.ps1"
-        . "$PSScriptRoot/../Public/Set-LMLogAlertGroup.ps1"
-        . "$PSScriptRoot/../Public/Remove-LMLogAlertGroup.ps1"
+        . "$PSScriptRoot/../Private/LM/Test-LMResponseHasPagination.ps1"
+        . "$PSScriptRoot/../Private/Shared/Add-ObjectTypeInfo.ps1"
+        . "$PSScriptRoot/../Private/LM/Format-LMData.ps1"
+        . "$PSScriptRoot/../Private/LM/Get-LMPortalURI.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedGet.ps1"
+        . "$PSScriptRoot/../Private/LM/New-LMHeader.ps1"
+        . "$PSScriptRoot/../Private/LM/Resolve-LMDebugInfo.ps1"
+        . "$PSScriptRoot/../Private/Shared/Test-LookupResult.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMRestMethod.ps1"
+        . "$PSScriptRoot/../Public/LM/Get-LMLogAlertGroup.ps1"
+        . "$PSScriptRoot/../Public/LM/New-LMLogAlertGroup.ps1"
+        . "$PSScriptRoot/../Public/LM/Set-LMLogAlertGroup.ps1"
+        . "$PSScriptRoot/../Public/LM/Remove-LMLogAlertGroup.ps1"
     }
 
     BeforeEach {
@@ -123,19 +123,19 @@ Describe 'Log Alert Group Cmdlet Tests' {
 
 Describe 'Log Alert Cmdlet Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/Test-LMResponseHasPagination.ps1"
-        . "$PSScriptRoot/../Private/Add-ObjectTypeInfo.ps1"
-        . "$PSScriptRoot/../Private/Format-LMData.ps1"
-        . "$PSScriptRoot/../Private/Get-LMPortalURI.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMPaginatedGet.ps1"
-        . "$PSScriptRoot/../Private/New-LMHeader.ps1"
-        . "$PSScriptRoot/../Private/Resolve-LMDebugInfo.ps1"
-        . "$PSScriptRoot/../Private/Test-LookupResult.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMRestMethod.ps1"
-        . "$PSScriptRoot/../Public/Get-LMLogAlert.ps1"
-        . "$PSScriptRoot/../Public/New-LMLogAlert.ps1"
-        . "$PSScriptRoot/../Public/Set-LMLogAlert.ps1"
-        . "$PSScriptRoot/../Public/Remove-LMLogAlert.ps1"
+        . "$PSScriptRoot/../Private/LM/Test-LMResponseHasPagination.ps1"
+        . "$PSScriptRoot/../Private/Shared/Add-ObjectTypeInfo.ps1"
+        . "$PSScriptRoot/../Private/LM/Format-LMData.ps1"
+        . "$PSScriptRoot/../Private/LM/Get-LMPortalURI.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedGet.ps1"
+        . "$PSScriptRoot/../Private/LM/New-LMHeader.ps1"
+        . "$PSScriptRoot/../Private/LM/Resolve-LMDebugInfo.ps1"
+        . "$PSScriptRoot/../Private/Shared/Test-LookupResult.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMRestMethod.ps1"
+        . "$PSScriptRoot/../Public/LM/Get-LMLogAlert.ps1"
+        . "$PSScriptRoot/../Public/LM/New-LMLogAlert.ps1"
+        . "$PSScriptRoot/../Public/LM/Set-LMLogAlert.ps1"
+        . "$PSScriptRoot/../Public/LM/Remove-LMLogAlert.ps1"
     }
 
     BeforeEach {

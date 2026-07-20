@@ -117,7 +117,7 @@ function Build-LMFilter {
     $ValidationEnabled = $false
 
     if ($ResourcePath) {
-        $ConfigPath = Join-Path $PSScriptRoot "../Private/LMFilterValidationConfig.psd1"
+        $ConfigPath = Join-Path $PSScriptRoot '../../Private/LM/LMFilterValidationConfig.psd1'
         if (Test-Path $ConfigPath) {
             try {
                 $ValidationConfig = Import-PowerShellDataFile -Path $ConfigPath

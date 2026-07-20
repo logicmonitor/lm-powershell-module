@@ -38,7 +38,7 @@ If (!(Get-Module PwshSpectreConsole -ListAvailable)) {
 $manifestContent = (Get-Content -Path $manifestPath -Raw) -replace '<ModuleVersion>', $buildVersion
 
 If (Test-Path -Path $publicFuncFolderPath) {
-    $allFunctions = Get-ChildItem -Path $publicFuncFolderPath -Filter '*.ps1'
+    $allFunctions = Get-ChildItem -Path $publicFuncFolderPath -Filter '*.ps1' -Recurse
     
     # Apply exclusion patterns
     $filteredFunctions = $allFunctions

@@ -1,19 +1,19 @@
 Describe 'Log Partition Cmdlet Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/Test-LMResponseHasPagination.ps1"
-        . "$PSScriptRoot/../Private/Add-ObjectTypeInfo.ps1"
-        . "$PSScriptRoot/../Private/Build-LMLogPartitionActiveContract.ps1"
-        . "$PSScriptRoot/../Private/Format-LMData.ps1"
-        . "$PSScriptRoot/../Private/Format-LMFilter.ps1"
-        . "$PSScriptRoot/../Private/Get-LMPortalURI.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMPaginatedGet.ps1"
-        . "$PSScriptRoot/../Private/New-LMHeader.ps1"
-        . "$PSScriptRoot/../Private/Resolve-LMDebugInfo.ps1"
-        . "$PSScriptRoot/../Private/Test-LookupResult.ps1"
-        . "$PSScriptRoot/../Private/Invoke-LMRestMethod.ps1"
-        . "$PSScriptRoot/../Public/Get-LMLogPartition.ps1"
-        . "$PSScriptRoot/../Public/New-LMLogPartition.ps1"
-        . "$PSScriptRoot/../Public/Set-LMLogPartition.ps1"
+        . "$PSScriptRoot/../Private/LM/Test-LMResponseHasPagination.ps1"
+        . "$PSScriptRoot/../Private/Shared/Add-ObjectTypeInfo.ps1"
+        . "$PSScriptRoot/../Private/LM/Build-LMLogPartitionActiveContract.ps1"
+        . "$PSScriptRoot/../Private/LM/Format-LMData.ps1"
+        . "$PSScriptRoot/../Private/LM/Format-LMFilter.ps1"
+        . "$PSScriptRoot/../Private/LM/Get-LMPortalURI.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedGet.ps1"
+        . "$PSScriptRoot/../Private/LM/New-LMHeader.ps1"
+        . "$PSScriptRoot/../Private/LM/Resolve-LMDebugInfo.ps1"
+        . "$PSScriptRoot/../Private/Shared/Test-LookupResult.ps1"
+        . "$PSScriptRoot/../Private/LM/Invoke-LMRestMethod.ps1"
+        . "$PSScriptRoot/../Public/LM/Get-LMLogPartition.ps1"
+        . "$PSScriptRoot/../Public/LM/New-LMLogPartition.ps1"
+        . "$PSScriptRoot/../Public/LM/Set-LMLogPartition.ps1"
     }
 
     BeforeEach {
