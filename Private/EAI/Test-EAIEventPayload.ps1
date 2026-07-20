@@ -69,6 +69,20 @@ function Test-EAIEventPayload {
     $cef['event_severity'] = Get-EAISeverityValue -Value $cef['event_severity']
     $cef['event_time'] = Format-EAIEventTime -DateTime $cef['event_time']
 
+    $optionalCefFields = @(
+        'event_details',
+        'event_ci_link',
+        'event_name_link',
+        'event_source_id',
+        'event_source_id_link'
+    )
+
+    foreach ($field in $optionalCefFields) {
+        if ($cef.Contains($field) -and ($null -eq $cef[$field] -or ([string]$cef[$field]).Length -eq 0)) {
+            $cef.Remove($field) | Out-Null
+        }
+    }
+
     if (-not $eventObject.Contains('enrichments') -or $null -eq $eventObject['enrichments']) {
         $eventObject['enrichments'] = @{}
     }

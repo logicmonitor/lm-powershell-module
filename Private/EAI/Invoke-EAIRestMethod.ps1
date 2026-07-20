@@ -27,6 +27,14 @@ function Format-EAIErrorMessage {
         else { 'Error' }
 
         $message = if ($null -ne $parsed.PSObject.Properties['message']) { [string]$parsed.message } else { $null }
+        $traceId = if ($null -ne $parsed.PSObject.Properties['id'] -and -not [string]::IsNullOrWhiteSpace([string]$parsed.id)) {
+            [string]$parsed.id
+        }
+        else {
+            $null
+        }
+
+        $formattedMessage = $null
 
         if ($parsed.errors) {
             $details = if ($parsed.errors -is [System.Array]) {
@@ -37,14 +45,22 @@ function Format-EAIErrorMessage {
             }
 
             if ($message) {
-                return "${code}: ${message} [$details]"
+                $formattedMessage = "${code}: ${message} [$details]"
             }
-
-            return "${code}: $details"
+            else {
+                $formattedMessage = "${code}: $details"
+            }
+        }
+        elseif ($message) {
+            $formattedMessage = "${code}: ${message}"
         }
 
-        if ($message) {
-            return "${code}: ${message}"
+        if ($formattedMessage) {
+            if ($traceId) {
+                $formattedMessage = "$formattedMessage (trace id: $traceId)"
+            }
+
+            return $formattedMessage
         }
     }
     catch {

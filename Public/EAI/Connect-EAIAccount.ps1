@@ -26,7 +26,7 @@ Load credentials from the Logic.Monitor secret vault using interactive selection
 The cached Edwin account name to use from the Logic.Monitor secret vault.
 
 .PARAMETER SkipCredValidation
-Skip local validation of required credential fields.
+Skip local validation of required credential fields and the remote credential check.
 
 .PARAMETER DisableConsoleLogging
 Disables informational messages for subsequent commands. Console logging is enabled by default.
@@ -78,6 +78,8 @@ function Connect-EAIAccount {
     }
 
     $authType = 'Basic'
+    $secureClientSecret = $null
+    $cachedAccountLabel = $null
 
     if ($PsCmdlet.ParameterSetName -eq 'File') {
         $authFromFile = Read-EAIAuthFile -AuthFilePath $AuthFilePath
@@ -140,21 +142,40 @@ function Connect-EAIAccount {
 
         $EdwinOrg = $selected.Metadata['Portal']
         $ClientId = $selected.Metadata['Id']
-        [SecureString]$secureSecret = Get-Secret -Vault Logic.Monitor -Name $selected.Name -AsPlainText | ConvertTo-SecureString
-        Set-EAIAuthState -EdwinOrg $EdwinOrg -ClientId $ClientId -ClientSecret $secureSecret -Type $authType -Logging (!$DisableConsoleLogging.IsPresent)
-        Write-Information "[INFO]: Connected to Edwin portal $EdwinOrg using cached account $($selected.Name)."
-        return
+        $cachedAccountLabel = $selected.Name
+        $secureClientSecret = Get-Secret -Vault Logic.Monitor -Name $selected.Name -AsPlainText | ConvertTo-SecureString
     }
 
     if (-not $SkipCredValidation) {
+        $clientSecretPlain = if ($secureClientSecret) {
+            [System.Net.NetworkCredential]::new('', $secureClientSecret).Password
+        }
+        else {
+            $ClientSecret
+        }
+
         if ([string]::IsNullOrWhiteSpace($EdwinOrg) -or
             [string]::IsNullOrWhiteSpace($ClientId) -or
-            [string]::IsNullOrWhiteSpace($ClientSecret)) {
+            [string]::IsNullOrWhiteSpace($clientSecretPlain)) {
             throw 'EdwinOrg, ClientId, and ClientSecret are required to connect to Edwin.'
         }
+
+        if (-not $secureClientSecret) {
+            $secureClientSecret = $ClientSecret | ConvertTo-SecureString -AsPlainText -Force
+        }
+
+        Test-EAIConnection -EdwinOrg $EdwinOrg -ClientId $ClientId -ClientSecret $secureClientSecret -CallerPSCmdlet $PSCmdlet
+    }
+    elseif (-not $secureClientSecret) {
+        $secureClientSecret = $ClientSecret | ConvertTo-SecureString -AsPlainText -Force
     }
 
-    $secureClientSecret = $ClientSecret | ConvertTo-SecureString -AsPlainText -Force
     Set-EAIAuthState -EdwinOrg $EdwinOrg -ClientId $ClientId -ClientSecret $secureClientSecret -Type $authType -Logging (!$DisableConsoleLogging.IsPresent)
-    Write-Information "[INFO]: Connected to Edwin portal $EdwinOrg."
+
+    if ($cachedAccountLabel) {
+        Write-Information "[INFO]: Connected to Edwin portal $EdwinOrg using cached account $cachedAccountLabel."
+    }
+    else {
+        Write-Information "[INFO]: Connected to Edwin portal $EdwinOrg."
+    }
 }

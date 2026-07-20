@@ -93,6 +93,108 @@ client_secret: file-secret
             $clientSecret | Should -Be 'client-secret'
         }
     }
+
+    It 'Validates credentials via remote ping when SkipCredValidation is not set' {
+        InModuleScope -ModuleName $script:DevModuleName {
+            Mock Invoke-RestMethod {
+                $httpResponse = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
+                $httpResponse.Content = [System.Net.Http.StringContent]::new(
+                    '{"code":400,"message":"Invalid empty request"}',
+                    [System.Text.Encoding]::UTF8,
+                    'application/json'
+                )
+
+                $exception = [Microsoft.PowerShell.Commands.HttpResponseException]::new(
+                    'Response status code does not indicate success: 400 (Bad Request).',
+                    $httpResponse
+                )
+
+                throw [System.Management.Automation.ErrorRecord]::new(
+                    $exception,
+                    'InvokeRestMethod',
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $null
+                )
+            }
+
+            { Connect-EAIAccount -EdwinOrg 'myorg' -ClientId 'client' -ClientSecret 'secret' } | Should -Not -Throw
+
+            Should -Invoke Invoke-RestMethod -Times 1 -ParameterFilter {
+                $Uri -eq 'https://myorg.dexda.ai/integration/event/v1' -and
+                $Method -eq 'POST' -and
+                $Body -eq '[]'
+            }
+        }
+    }
+
+    It 'Fails connect when remote ping returns HTTP 401' {
+        InModuleScope -ModuleName $script:DevModuleName {
+            Mock Invoke-RestMethod {
+                $httpResponse = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::Unauthorized)
+                $httpResponse.Content = [System.Net.Http.StringContent]::new(
+                    '{"code":401,"message":"Credentials are required to access this resource."}',
+                    [System.Text.Encoding]::UTF8,
+                    'application/json'
+                )
+
+                $exception = [Microsoft.PowerShell.Commands.HttpResponseException]::new(
+                    'Response status code does not indicate success: 401 (Unauthorized).',
+                    $httpResponse
+                )
+
+                throw [System.Management.Automation.ErrorRecord]::new(
+                    $exception,
+                    'InvokeRestMethod',
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $null
+                )
+            }
+
+            $errorRecord = { Connect-EAIAccount -EdwinOrg 'myorg' -ClientId 'client' -ClientSecret 'secret' } |
+                Should -Throw -ExpectedMessage '*Invalid Edwin credentials for portal*myorg*Verify EdwinOrg, ClientId, and ClientSecret*' -PassThru
+
+            $errorRecord.FullyQualifiedErrorId | Should -Be 'EAI.AuthenticationError,Connect-EAIAccount'
+            $errorRecord.CategoryInfo.Category | Should -Be 'AuthenticationError'
+        }
+    }
+
+    It 'Includes trace id in invalid credential errors when Edwin returns one' {
+        InModuleScope -ModuleName $script:DevModuleName {
+            Mock Invoke-RestMethod {
+                $httpResponse = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::Unauthorized)
+                $httpResponse.Content = [System.Net.Http.StringContent]::new(
+                    '{"code":401,"message":"Credentials are required to access this resource.","id":"7eec5062-abcd-efgh-ijkl-1234567890ab"}',
+                    [System.Text.Encoding]::UTF8,
+                    'application/json'
+                )
+
+                $exception = [Microsoft.PowerShell.Commands.HttpResponseException]::new(
+                    'Response status code does not indicate success: 401 (Unauthorized).',
+                    $httpResponse
+                )
+
+                throw [System.Management.Automation.ErrorRecord]::new(
+                    $exception,
+                    'InvokeRestMethod',
+                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                    $null
+                )
+            }
+
+            { Connect-EAIAccount -EdwinOrg 'myorg' -ClientId 'client' -ClientSecret 'secret' } |
+                Should -Throw '*Invalid Edwin credentials for portal*trace id: 7eec5062-abcd-efgh-ijkl-1234567890ab*'
+        }
+    }
+
+    It 'Skips remote ping when SkipCredValidation is set' {
+        InModuleScope -ModuleName $script:DevModuleName {
+            Mock Invoke-RestMethod { throw 'Should not be called' }
+
+            { Connect-EAIAccount -EdwinOrg 'myorg' -ClientId 'client' -ClientSecret 'secret' -SkipCredValidation } | Should -Not -Throw
+
+            Should -Invoke Invoke-RestMethod -Times 0 -Exactly
+        }
+    }
 }
 
 Describe 'New-EAIHeader' {
