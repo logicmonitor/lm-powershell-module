@@ -26,7 +26,14 @@ $data | Convert-EAIEvent -PropertyMap @{
     event_object = 'Component'
     event_severity = 'Severity'
     event_source = { 'VendorX' }
-}
+} | Send-EAIEvents
+
+.NOTES
+LogicMonitor portal authentication is not required for Edwin event ingestion.
+Use Connect-EAIAccount before sending events when Bearer authentication is required.
+
+.INPUTS
+You can pipe third-party objects to this command.
 
 .OUTPUTS
 PSCustomObject with cef and enrichments properties.

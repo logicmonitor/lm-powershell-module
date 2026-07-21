@@ -3,9 +3,8 @@
 Connect to an Edwin portal for event ingestion.
 
 .DESCRIPTION
-Connect-EAIAccount establishes a session for sending custom third-party events to Edwin.
-This is separate from Connect-LMAccount. LogicMonitor alerts are already sent to Edwin natively;
-use these cmdlets to ingest events from external systems such as Meraki, ServiceNow, or custom applications.
+Connect-EAIAccount establishes a session for Edwin APIs including event ingestion and
+scheduled downtime (SDT) management. This is separate from Connect-LMAccount.
 
 .PARAMETER EdwinOrg
 The Edwin organization subdomain (the name before ".dexda.ai").
@@ -38,7 +37,11 @@ Connect-EAIAccount -EdwinOrg "myorg" -ClientId "client-id" -ClientSecret "client
 Connect-EAIAccount -CachedAccountName "EAI:myorg"
 
 .NOTES
-LM portal authentication is not required for Edwin event ingestion.
+LM portal authentication is not required for Edwin APIs.
+Requires credentials with the appropriate API scopes (for example event_write, sdt_read, sdt_write).
+
+.INPUTS
+None. You cannot pipe objects to this command.
 
 .OUTPUTS
 None.

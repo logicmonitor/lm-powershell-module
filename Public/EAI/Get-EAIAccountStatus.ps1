@@ -10,6 +10,7 @@ Get-EAIAccountStatus
 
 .NOTES
 Use Connect-EAIAccount to establish an Edwin session before running event ingestion commands.
+Requires sdt_read scope for SDT cmdlets.
 
 .INPUTS
 None. You cannot pipe objects to this command.

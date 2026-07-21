@@ -185,9 +185,9 @@ function New-EAISdt {
     $target = "Name: $($effectiveBound['Name'])"
     $enableDebugLogging = $DebugPreference -ne 'SilentlyContinue'
 
-    Resolve-EAIDebugInfo -Url $uri -Headers $headers -Command $MyInvocation
-
     if ($PSCmdlet.ShouldProcess($target, 'Create Edwin SDT')) {
+        Resolve-EAIDebugInfo -Url $uri -Headers $headers -Command $MyInvocation -Payload $body
+
         $null = Invoke-EAIRestMethod -Uri $uri -Method POST -Headers $headers -Auth $Script:EAIAuth -Body $body `
             -CallerPSCmdlet $PSCmdlet -EnableDebugLogging:$enableDebugLogging
 

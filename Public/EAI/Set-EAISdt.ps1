@@ -257,7 +257,7 @@ function Set-EAISdt {
                 $metadataBody = $metadataPayload | ConvertTo-Json -Depth 10 -Compress
                 $metadataUri = Join-EAIUri -PortalUrl $Script:EAIAuth.PortalUrl -ResourcePath "/action/sdt/$Id/update/metadata"
 
-                Resolve-EAIDebugInfo -Url $metadataUri -Headers $headers -Command $MyInvocation
+                Resolve-EAIDebugInfo -Url $metadataUri -Headers $headers -Command $MyInvocation -Payload $metadataBody
 
                 $null = Invoke-EAIRestMethod -Uri $metadataUri -Method POST -Headers $headers -Auth $Script:EAIAuth `
                     -Body $metadataBody -CallerPSCmdlet $PSCmdlet -EnableDebugLogging:$enableDebugLogging
@@ -269,7 +269,7 @@ function Set-EAISdt {
                 $filterBody = $filterPayload | ConvertTo-Json -Depth 20 -Compress
                 $filterUri = Join-EAIUri -PortalUrl $Script:EAIAuth.PortalUrl -ResourcePath "/action/sdt/$Id/update/filter"
 
-                Resolve-EAIDebugInfo -Url $filterUri -Headers $headers -Command $MyInvocation
+                Resolve-EAIDebugInfo -Url $filterUri -Headers $headers -Command $MyInvocation -Payload $filterBody
 
                 $null = Invoke-EAIRestMethod -Uri $filterUri -Method POST -Headers $headers -Auth $Script:EAIAuth `
                     -Body $filterBody -CallerPSCmdlet $PSCmdlet -EnableDebugLogging:$enableDebugLogging
@@ -281,7 +281,7 @@ function Set-EAISdt {
                 $recurrenceBody = $recurrencePayload | ConvertTo-Json -Depth 20 -Compress
                 $recurrenceUri = Join-EAIUri -PortalUrl $Script:EAIAuth.PortalUrl -ResourcePath "/action/sdt/$Id/update/recurrence"
 
-                Resolve-EAIDebugInfo -Url $recurrenceUri -Headers $headers -Command $MyInvocation
+                Resolve-EAIDebugInfo -Url $recurrenceUri -Headers $headers -Command $MyInvocation -Payload $recurrenceBody
 
                 $null = Invoke-EAIRestMethod -Uri $recurrenceUri -Method POST -Headers $headers -Auth $Script:EAIAuth `
                     -Body $recurrenceBody -CallerPSCmdlet $PSCmdlet -EnableDebugLogging:$enableDebugLogging

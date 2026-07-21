@@ -57,6 +57,17 @@ Optional enrichment key/value pairs.
 .EXAMPLE
 New-EAIEvent -EventCi "server01" -EventObject "disk" -EventSource "VendorX" -EventName "Disk full" -EventDescription "Disk usage exceeded 90%" -Severity Major -SourceRecord @{ host = "server01" }
 
+.EXAMPLE
+$event = New-EAIEvent -EventCi "server01" -EventObject "CPU" -EventSource "Meraki" -EventName "High CPU" -EventDescription "CPU above threshold" -Severity 4
+Send-EAIEvents -Events $event
+
+.NOTES
+Use Format-EAIEventTime for event_time when building payloads manually.
+LogicMonitor portal authentication is not required for Edwin event ingestion.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
 .OUTPUTS
 PSCustomObject with cef and enrichments properties.
 #>

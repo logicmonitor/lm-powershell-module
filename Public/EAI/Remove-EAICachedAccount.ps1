@@ -17,6 +17,12 @@ Remove-EAICachedAccount -CachedAccountName "EAI:myorg"
 .EXAMPLE
 Remove-EAICachedAccount -RemoveAllEntries
 
+.NOTES
+Use Connect-EAIAccount with -UseCachedCredential to consume cached Edwin credentials.
+
+.INPUTS
+None. You cannot pipe objects to this command.
+
 .OUTPUTS
 None.
 #>

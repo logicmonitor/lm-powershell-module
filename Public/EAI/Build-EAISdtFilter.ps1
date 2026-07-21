@@ -26,6 +26,7 @@ Build-EAISdtFilter -ExistingFilter (Get-EAISdt -Id $id).filter
 
 .NOTES
 Use Connect-EAIAccount before running Edwin cmdlets that submit the filter.
+Requires sdt_read scope to load field metadata from the API when available.
 
 .INPUTS
 None. You cannot pipe objects to this command.
