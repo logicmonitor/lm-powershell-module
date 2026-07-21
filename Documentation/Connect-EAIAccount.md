@@ -45,6 +45,8 @@ This is separate from Connect-LMAccount.
 LogicMonitor alerts are already sent to Edwin natively;
 use these cmdlets to ingest events from external systems such as Meraki, ServiceNow, or custom applications.
 
+When credential validation is enabled, Connect-EAIAccount exchanges client credentials for a Bearer access token via POST /auth/token.
+
 ## EXAMPLES
 
 ### EXAMPLE 1
@@ -101,7 +103,7 @@ HelpMessage: ''
 
 ### -ClientId
 
-The client ID used for Edwin HTTP Basic authentication.
+The client ID used for Edwin OAuth2 client credentials authentication.
 
 ```yaml
 Type: System.String
@@ -122,7 +124,7 @@ HelpMessage: ''
 
 ### -ClientSecret
 
-The client secret used for Edwin HTTP Basic authentication.
+The client secret used for Edwin OAuth2 client credentials authentication.
 
 ```yaml
 Type: System.String
@@ -186,7 +188,7 @@ HelpMessage: ''
 
 ### -SkipCredValidation
 
-Skip local validation of required credential fields.
+Skip local validation of required credential fields and the remote token grant check.
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

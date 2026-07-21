@@ -41,7 +41,7 @@ Get-EAIAccountStatus
 
 ## OUTPUTS
 
-### Returns a PSCustomObject with EdwinOrg
+### Returns a PSCustomObject with EdwinOrg, PortalUrl, Valid, Type, ClientId, TokenExpiresAt, and Logging; otherwise a string when not connected.
 
 ## NOTES
 

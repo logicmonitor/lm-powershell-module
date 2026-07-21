@@ -220,15 +220,10 @@ function Invoke-EAIRestMethod {
         $headers.Remove('__EAIMethod') | Out-Null
     }
 
-    if ($headers.ContainsKey('Authorization')) {
-        $headers.Remove('Authorization') | Out-Null
-    }
-
-    $credential = [PSCredential]::new($Auth.ClientId, $Auth.ClientSecret)
-    $useBasicAuthentication = $PSVersionTable.PSVersion.Major -ge 7
     $retryBackoff = 5
     $attempt = 0
     $lastResolvedError = $null
+    $refreshedAfter401 = $false
 
     while ($attempt -lt $MaxRetries) {
         $attempt++
@@ -239,16 +234,6 @@ function Invoke-EAIRestMethod {
                 Headers     = $headers
                 TimeoutSec  = 30
                 ErrorAction = 'Stop'
-            }
-
-            if ($useBasicAuthentication) {
-                $params.Authentication = 'Basic'
-                $params.Credential = $credential
-            }
-            else {
-                $clientSecret = [System.Net.NetworkCredential]::new('', $Auth.ClientSecret).Password
-                $token = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes("$($Auth.ClientId):$clientSecret"))
-                $params.Headers['Authorization'] = "Basic $token"
             }
 
             if ($Body) {
@@ -278,6 +263,19 @@ function Invoke-EAIRestMethod {
             $errorDetails = Get-EAIHttpErrorDetails -ErrorRecord $_
             $resolvedError = Resolve-EAIException -StatusCode $errorDetails.StatusCode -ResponseBody $errorDetails.Body
             $lastResolvedError = $resolvedError
+
+            if ($errorDetails.StatusCode -eq 401 -and -not $refreshedAfter401) {
+                $refreshedAfter401 = $true
+                $null = Get-EAIBearerToken -Auth $Auth -ForceRefresh -CallerPSCmdlet $CallerPSCmdlet
+                $refreshedHeaders = New-EAIHeader -Auth $Auth -Method $Method
+                $headers = @{} + $refreshedHeaders
+                if ($headers.ContainsKey('__EAIMethod')) {
+                    $headers.Remove('__EAIMethod') | Out-Null
+                }
+
+                $attempt--
+                continue
+            }
 
             if ($resolvedError.ShouldRetry -and $attempt -lt $MaxRetries) {
                 if ($EnableDebugLogging -or $VerbosePreference -ne 'SilentlyContinue') {

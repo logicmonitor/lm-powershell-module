@@ -10,20 +10,26 @@ function Set-EAIAuthState {
         [Parameter(Mandatory)]
         [SecureString]$ClientSecret,
 
-        [ValidateSet('Basic', 'Cached')]
-        [String]$Type = 'Basic',
+        [ValidateSet('Bearer', 'Cached')]
+        [String]$Type = 'Bearer',
+
+        [SecureString]$AccessToken,
+
+        [Nullable[DateTime]]$TokenExpiresAt,
 
         [Boolean]$Logging = $true
     )
 
     $Script:EAIAuth = [PSCustomObject]@{
-        EdwinOrg     = $EdwinOrg
-        ClientId     = $ClientId
-        ClientSecret = $ClientSecret
-        PortalUrl    = "https://$EdwinOrg.dexda.ai"
-        Valid        = $true
-        Type         = $Type
-        Logging      = $Logging
+        EdwinOrg       = $EdwinOrg
+        ClientId       = $ClientId
+        ClientSecret   = $ClientSecret
+        PortalUrl      = "https://$EdwinOrg.dexda.ai"
+        Valid          = $true
+        Type           = $Type
+        Logging        = $Logging
+        AccessToken    = $AccessToken
+        TokenExpiresAt = $TokenExpiresAt
     }
 }
 

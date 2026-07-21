@@ -94,40 +94,30 @@ client_secret: file-secret
         }
     }
 
-    It 'Validates credentials via remote ping when SkipCredValidation is not set' {
+    It 'Validates credentials via token grant when SkipCredValidation is not set' {
         InModuleScope -ModuleName $script:DevModuleName {
             Mock Invoke-RestMethod {
-                $httpResponse = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::BadRequest)
-                $httpResponse.Content = [System.Net.Http.StringContent]::new(
-                    '{"code":400,"message":"Invalid empty request"}',
-                    [System.Text.Encoding]::UTF8,
-                    'application/json'
-                )
-
-                $exception = [Microsoft.PowerShell.Commands.HttpResponseException]::new(
-                    'Response status code does not indicate success: 400 (Bad Request).',
-                    $httpResponse
-                )
-
-                throw [System.Management.Automation.ErrorRecord]::new(
-                    $exception,
-                    'InvokeRestMethod',
-                    [System.Management.Automation.ErrorCategory]::InvalidOperation,
-                    $null
-                )
+                return [PSCustomObject]@{
+                    access_token = 'issued-token'
+                    token_type   = 'Bearer'
+                    expires_in   = 1800
+                }
             }
 
             { Connect-EAIAccount -EdwinOrg 'myorg' -ClientId 'client' -ClientSecret 'secret' } | Should -Not -Throw
 
             Should -Invoke Invoke-RestMethod -Times 1 -ParameterFilter {
-                $Uri -eq 'https://myorg.dexda.ai/integration/event/v1' -and
+                $Uri -eq 'https://myorg.dexda.ai/auth/token' -and
                 $Method -eq 'POST' -and
-                $Body -eq '[]'
+                $ContentType -eq 'application/x-www-form-urlencoded'
             }
+
+            $status = Get-EAIAccountStatus
+            $status.TokenExpiresAt | Should -Not -BeNullOrEmpty
         }
     }
 
-    It 'Fails connect when remote ping returns HTTP 401' {
+    It 'Fails connect when token grant returns HTTP 401' {
         InModuleScope -ModuleName $script:DevModuleName {
             Mock Invoke-RestMethod {
                 $httpResponse = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::Unauthorized)
@@ -186,7 +176,7 @@ client_secret: file-secret
         }
     }
 
-    It 'Skips remote ping when SkipCredValidation is set' {
+    It 'Skips token grant when SkipCredValidation is set' {
         InModuleScope -ModuleName $script:DevModuleName {
             Mock Invoke-RestMethod { throw 'Should not be called' }
 
@@ -198,17 +188,19 @@ client_secret: file-secret
 }
 
 Describe 'New-EAIHeader' {
-    It 'Builds a Basic auth header' {
+    It 'Builds a Bearer auth header' {
         InModuleScope -ModuleName $script:DevModuleName {
             $auth = [PSCustomObject]@{
-                ClientId     = 'user'
-                ClientSecret = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                EdwinOrg       = 'myorg'
+                ClientId       = 'user'
+                ClientSecret   = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                AccessToken    = 'bearer-token' | ConvertTo-SecureString -AsPlainText -Force
+                TokenExpiresAt = (Get-Date).ToUniversalTime().AddHours(1)
             }
 
             $headers = New-EAIHeader -Auth $auth
 
-            $expected = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes('user:pass'))
-            $headers.Authorization | Should -Be "Basic $expected"
+            $headers.Authorization | Should -Be 'Bearer bearer-token'
             $headers.'Content-Type' | Should -Be 'application/json'
             $headers.'__EAIMethod' | Should -Be 'POST'
         }
@@ -223,8 +215,11 @@ Describe 'Resolve-EAIDebugInfo' {
             }
 
             $auth = [PSCustomObject]@{
-                ClientId     = 'user'
-                ClientSecret = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                EdwinOrg       = 'myorg'
+                ClientId       = 'user'
+                ClientSecret   = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                AccessToken    = 'bearer-token' | ConvertTo-SecureString -AsPlainText -Force
+                TokenExpiresAt = (Get-Date).ToUniversalTime().AddHours(1)
             }
 
             $headers = New-EAIHeader -Auth $auth -Method 'POST'
@@ -232,7 +227,8 @@ Describe 'Resolve-EAIDebugInfo' {
             Invoke-EAIRestMethod -Uri 'https://myorg.dexda.ai/integration/event/v1' -Method POST -Headers $headers -Auth $auth -Body '[]'
 
             Should -Invoke Invoke-RestMethod -ParameterFilter {
-                -not $Headers.ContainsKey('__EAIMethod')
+                -not $Headers.ContainsKey('__EAIMethod') -and
+                $Headers.Authorization -eq 'Bearer bearer-token'
             }
         }
     }
@@ -302,6 +298,10 @@ Describe 'Send-EAIEvents' {
     BeforeEach {
         Disconnect-EAIAccount
         Connect-EAIAccount -EdwinOrg 'myorg' -ClientId 'client' -ClientSecret 'secret' -SkipCredValidation
+        InModuleScope -ModuleName $script:DevModuleName {
+            $Script:EAIAuth.AccessToken = 'test-token' | ConvertTo-SecureString -AsPlainText -Force
+            $Script:EAIAuth.TokenExpiresAt = (Get-Date).ToUniversalTime().AddHours(1)
+        }
     }
 
     It 'Requires an active Edwin connection' {
@@ -337,11 +337,14 @@ Describe 'Invoke-EAIRestMethod' {
             }
 
             $auth = [PSCustomObject]@{
-                ClientId     = 'user'
-                ClientSecret = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                EdwinOrg       = 'myorg'
+                ClientId       = 'user'
+                ClientSecret   = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                AccessToken    = 'bearer-token' | ConvertTo-SecureString -AsPlainText -Force
+                TokenExpiresAt = (Get-Date).ToUniversalTime().AddHours(1)
             }
 
-            $result = Invoke-EAIRestMethod -Uri 'https://myorg.dexda.ai/integration/event/v1' -Method POST -Headers @{} -Auth $auth
+            $result = Invoke-EAIRestMethod -Uri 'https://myorg.dexda.ai/integration/event/v1' -Method POST -Headers @{ Authorization = 'Bearer bearer-token' } -Auth $auth
 
             $result[0].acceptedStatus | Should -Be $true
         }
@@ -357,6 +360,13 @@ Describe 'Invoke-EAIRestMethod' {
 
     It 'Throws a formatted authentication error for HTTP 401' {
         InModuleScope -ModuleName $script:DevModuleName {
+            Mock Request-EAIAccessToken {
+                return [PSCustomObject]@{
+                    AccessToken = ('refreshed-token' | ConvertTo-SecureString -AsPlainText -Force)
+                    ExpiresAt   = (Get-Date).ToUniversalTime().AddHours(1)
+                }
+            }
+
             Mock Invoke-RestMethod {
                 $httpResponse = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::Unauthorized)
                 $httpResponse.Content = [System.Net.Http.StringContent]::new(
@@ -379,12 +389,70 @@ Describe 'Invoke-EAIRestMethod' {
             }
 
             $auth = [PSCustomObject]@{
-                ClientId     = 'user'
-                ClientSecret = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                EdwinOrg       = 'myorg'
+                ClientId       = 'user'
+                ClientSecret   = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                AccessToken    = 'bearer-token' | ConvertTo-SecureString -AsPlainText -Force
+                TokenExpiresAt = (Get-Date).ToUniversalTime().AddHours(1)
             }
 
-            { Invoke-EAIRestMethod -Uri 'https://myorg.dexda.ai/integration/event/v1' -Method POST -Headers @{} -Auth $auth } |
+            { Invoke-EAIRestMethod -Uri 'https://myorg.dexda.ai/integration/event/v1' -Method POST -Headers @{ Authorization = 'Bearer bearer-token' } -Auth $auth } |
                 Should -Throw '*401: Credentials are required to access this resource.*Connect-EAIAccount*'
+
+            Should -Invoke Request-EAIAccessToken -Times 1 -Exactly
+        }
+    }
+
+    It 'Refreshes the token and retries once after HTTP 401' {
+        InModuleScope -ModuleName $script:DevModuleName {
+            $script:invokeCount = 0
+
+            Mock Request-EAIAccessToken {
+                return [PSCustomObject]@{
+                    AccessToken = ('refreshed-token' | ConvertTo-SecureString -AsPlainText -Force)
+                    ExpiresAt   = (Get-Date).ToUniversalTime().AddHours(1)
+                }
+            }
+
+            Mock Invoke-RestMethod {
+                $script:invokeCount++
+                if ($script:invokeCount -eq 1) {
+                    $httpResponse = [System.Net.Http.HttpResponseMessage]::new([System.Net.HttpStatusCode]::Unauthorized)
+                    $httpResponse.Content = [System.Net.Http.StringContent]::new(
+                        '{"code":401,"message":"Credentials are required to access this resource."}',
+                        [System.Text.Encoding]::UTF8,
+                        'application/json'
+                    )
+
+                    $exception = [Microsoft.PowerShell.Commands.HttpResponseException]::new(
+                        'Response status code does not indicate success: 401 (Unauthorized).',
+                        $httpResponse
+                    )
+
+                    throw [System.Management.Automation.ErrorRecord]::new(
+                        $exception,
+                        'InvokeRestMethod',
+                        [System.Management.Automation.ErrorCategory]::InvalidOperation,
+                        $null
+                    )
+                }
+
+                return @([PSCustomObject]@{ eventId = '123'; acceptedStatus = $true })
+            }
+
+            $auth = [PSCustomObject]@{
+                EdwinOrg       = 'myorg'
+                ClientId       = 'user'
+                ClientSecret   = 'pass' | ConvertTo-SecureString -AsPlainText -Force
+                AccessToken    = 'bearer-token' | ConvertTo-SecureString -AsPlainText -Force
+                TokenExpiresAt = (Get-Date).ToUniversalTime().AddHours(1)
+            }
+
+            $result = Invoke-EAIRestMethod -Uri 'https://myorg.dexda.ai/integration/event/v1' -Method POST -Headers @{ Authorization = 'Bearer bearer-token' } -Auth $auth
+
+            $result[0].acceptedStatus | Should -Be $true
+            $script:invokeCount | Should -Be 2
+            Should -Invoke Request-EAIAccessToken -Times 1 -Exactly
         }
     }
 

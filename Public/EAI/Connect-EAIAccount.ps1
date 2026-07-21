@@ -11,10 +11,10 @@ use these cmdlets to ingest events from external systems such as Meraki, Service
 The Edwin organization subdomain (the name before ".dexda.ai").
 
 .PARAMETER ClientId
-The client ID used for Edwin HTTP Basic authentication.
+The client ID used for Edwin OAuth2 client credentials authentication.
 
 .PARAMETER ClientSecret
-The client secret used for Edwin HTTP Basic authentication.
+The client secret used for Edwin OAuth2 client credentials authentication.
 
 .PARAMETER AuthFilePath
 Path to a YAML auth file containing edwin_org, client_id, and client_secret.
@@ -26,7 +26,7 @@ Load credentials from the Logic.Monitor secret vault using interactive selection
 The cached Edwin account name to use from the Logic.Monitor secret vault.
 
 .PARAMETER SkipCredValidation
-Skip local validation of required credential fields and the remote credential check.
+Skip local validation of required credential fields and the remote token grant check.
 
 .PARAMETER DisableConsoleLogging
 Disables informational messages for subsequent commands. Console logging is enabled by default.
@@ -77,9 +77,10 @@ function Connect-EAIAccount {
         $Script:InformationPreference = 'Continue'
     }
 
-    $authType = 'Basic'
+    $authType = 'Bearer'
     $secureClientSecret = $null
     $cachedAccountLabel = $null
+    $tokenResult = $null
 
     if ($PsCmdlet.ParameterSetName -eq 'File') {
         $authFromFile = Read-EAIAuthFile -AuthFilePath $AuthFilePath
@@ -164,13 +165,26 @@ function Connect-EAIAccount {
             $secureClientSecret = $ClientSecret | ConvertTo-SecureString -AsPlainText -Force
         }
 
-        Test-EAIConnection -EdwinOrg $EdwinOrg -ClientId $ClientId -ClientSecret $secureClientSecret -CallerPSCmdlet $PSCmdlet
+        $tokenResult = Test-EAIConnection -EdwinOrg $EdwinOrg -ClientId $ClientId -ClientSecret $secureClientSecret -CallerPSCmdlet $PSCmdlet
     }
     elseif (-not $secureClientSecret) {
         $secureClientSecret = $ClientSecret | ConvertTo-SecureString -AsPlainText -Force
     }
 
-    Set-EAIAuthState -EdwinOrg $EdwinOrg -ClientId $ClientId -ClientSecret $secureClientSecret -Type $authType -Logging (!$DisableConsoleLogging.IsPresent)
+    $setAuthParams = @{
+        EdwinOrg     = $EdwinOrg
+        ClientId     = $ClientId
+        ClientSecret = $secureClientSecret
+        Type         = $authType
+        Logging      = (!$DisableConsoleLogging.IsPresent)
+    }
+
+    if ($tokenResult) {
+        $setAuthParams.AccessToken = $tokenResult.AccessToken
+        $setAuthParams.TokenExpiresAt = $tokenResult.ExpiresAt
+    }
+
+    Set-EAIAuthState @setAuthParams
 
     if ($cachedAccountLabel) {
         Write-Information "[INFO]: Connected to Edwin portal $EdwinOrg using cached account $cachedAccountLabel."

@@ -8,12 +8,10 @@ function New-EAIHeader {
         [String]$Method = 'POST'
     )
 
-    $clientId = [System.Net.NetworkCredential]::new('', $Auth.ClientSecret).Password
-    $credentials = "$($Auth.ClientId):$clientId"
-    $token = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($credentials))
+    $bearerToken = Get-EAIBearerToken -Auth $Auth
 
     return @{
-        'Authorization' = "Basic $token"
+        'Authorization' = "Bearer $bearerToken"
         'Content-Type'  = 'application/json'
         'Accept'        = 'application/json'
         '__EAIMethod'   = $Method
