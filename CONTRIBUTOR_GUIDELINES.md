@@ -55,6 +55,9 @@ cd powershell-module
 - Group related functions in appropriately named subdirectories
 - Use the standard PowerShell module structure
 - Place internal/helper functions in a `Private` directory
+- LogicMonitor cmdlets and helpers live under `Public/LM/` and `Private/LM/`
+- Cross-cutting helpers shared across product areas live under `Private/Shared/`
+- Edwin (EAI) cmdlets and helpers live under `Public/EAI/` and `Private/EAI/`
 
 ### Style Guidelines
 - Use 4 spaces for indentation (not tabs)

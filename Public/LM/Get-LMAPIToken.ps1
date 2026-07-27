@@ -73,10 +73,12 @@ function Get-LMAPIToken {
         #Build header and uri
         $ResourcePath = "/setting/admins/apitokens"
 
-        #Initialize vars
-        $BearerParam = ""
-        if ($Type -eq "Bearer") {
-            $BearerParam = "&type=bearer"
+        #The API returns LMv1 tokens when type is omitted and only accepts bearer
+        #as an explicit type, so requesting all token types requires both queries.
+        $TypeQueryParams = switch ($Type) {
+            "Bearer" { @("&type=bearer") }
+            "*" { @("", "&type=bearer") }
+            default { @("") }
         }
 
         $ParameterSetName = $PSCmdlet.ParameterSetName
@@ -92,37 +94,44 @@ function Get-LMAPIToken {
         $CommandInvocation = $MyInvocation
         $CallerPSCmdlet = $PSCmdlet
 
-        $Results = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
-            param($Offset, $PageSize)
+        $Results = @()
+        foreach ($TypeQueryParam in $TypeQueryParams) {
+            $TypeResults = Invoke-LMPaginatedGet -BatchSize $BatchSize -SingleObjectWhenNotPaged:$SingleObjectWhenNotPaged -InvokeRequest {
+                param($Offset, $PageSize)
 
-            $RequestResourcePath = $ResourcePath
-            $QueryParams = ""
+                $RequestResourcePath = $ResourcePath
+                $QueryParams = ""
 
-            switch ($ParameterSetName) {
-                "All" { $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id$BearerParam" }
-                "Id" { $QueryParams = "?filter=id:$Id&size=$PageSize&offset=$Offset&sort=+id$BearerParam" }
-                "AccessId" { $QueryParams = "?filter=accessId:`"$AccessId`"&size=$PageSize&offset=$Offset&sort=+id$BearerParam" }
-                "AdminId" {
-                    $RequestResourcePath = "/setting/admins/$AdminId/apitokens"
-                    $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id$BearerParam"
+                switch ($ParameterSetName) {
+                    "All" { $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id$TypeQueryParam" }
+                    "Id" { $QueryParams = "?filter=id:$Id&size=$PageSize&offset=$Offset&sort=+id$TypeQueryParam" }
+                    "AccessId" { $QueryParams = "?filter=accessId:`"$AccessId`"&size=$PageSize&offset=$Offset&sort=+id$TypeQueryParam" }
+                    "AdminId" {
+                        $RequestResourcePath = "/setting/admins/$AdminId/apitokens"
+                        $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id$TypeQueryParam"
+                    }
+                    "Filter" {
+                        $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
+                        $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id$TypeQueryParam"
+                    }
                 }
-                "Filter" {
-                    $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
-                    $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id$BearerParam"
-                }
+
+                $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
+                $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
+
+                Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
+
+                #Issue request
+                $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
+                if ($null -eq $Response) { return }
+
+                return $Response
+            } -ExtractResponse $ExtractResponse
+
+            if ($null -ne $TypeResults) {
+                $Results += @($TypeResults)
             }
-
-            $Headers = New-LMHeader -Auth $Script:LMAuth -Method "GET" -ResourcePath $RequestResourcePath
-            $Uri = "https://$($Script:LMAuth.Portal).$(Get-LMPortalURI)" + $RequestResourcePath + $QueryParams
-
-            Resolve-LMDebugInfo -Url $Uri -Headers $Headers[0] -Command $CommandInvocation
-
-            #Issue request
-            $Response = Invoke-LMRestMethod -CallerPSCmdlet $CallerPSCmdlet -Uri $Uri -Method "GET" -Headers $Headers[0] -WebSession $Headers[1]
-            if ($null -eq $Response) { return }
-
-            return $Response
-        } -ExtractResponse $ExtractResponse
+        }
 
         if ($null -eq $Results) {
             return

@@ -11,7 +11,7 @@ used at runtime to validate filter fields before sending API requests.
 .EXAMPLE
 .\Build-LMFilterValidationConfig.ps1
 
-This will generate Private/LMFilterValidationConfig.psd1 with all endpoint-to-fields mappings.
+This will generate Private/LM/LMFilterValidationConfig.psd1 with all endpoint-to-fields mappings.
 
 .NOTES
 This is a development-time tool and should be run whenever endpoint filter fields
@@ -24,7 +24,7 @@ param(
     [String]$SwaggerUrl = 'https://www.logicmonitor.com/swagger-ui-master/api-v3/dist/swagger.json',
 
     [Parameter()]
-    [String]$OutputPath = (Join-Path $PSScriptRoot 'Private/LMFilterValidationConfig.psd1')
+    [String]$OutputPath = (Join-Path $PSScriptRoot 'Private/LM/LMFilterValidationConfig.psd1')
 )
 
 Write-Host "Fetching Swagger file: $SwaggerUrl" -ForegroundColor Cyan

@@ -2,9 +2,9 @@ BeforeAll {
     Import-Module $Module -Force
     
     # Dot source the validation functions for unit testing
-    . "$PSScriptRoot/../Private/Test-LMFilterField.ps1"
-    . "$PSScriptRoot/../Private/Format-LMFilter-v1.ps1"
-    . "$PSScriptRoot/../Private/Format-LMFilter.ps1"
+    . "$PSScriptRoot/../Private/LM/Test-LMFilterField.ps1"
+    . "$PSScriptRoot/../Private/LM/Format-LMFilter-v1.ps1"
+    . "$PSScriptRoot/../Private/LM/Format-LMFilter.ps1"
 }
 
 Describe 'Filter Field Validation' {
@@ -128,7 +128,7 @@ Describe 'Filter Field Validation' {
     
     Context 'Configuration Loading' {
         It 'Should load validation config successfully' {
-            $ConfigPath = "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $ConfigPath = "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             $ConfigPath | Should -Exist
             
             $Config = Import-PowerShellDataFile -Path $ConfigPath
@@ -137,31 +137,31 @@ Describe 'Filter Field Validation' {
         }
         
         It 'Should have device endpoint in config' {
-            $ConfigPath = "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $ConfigPath = "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             $Config = Import-PowerShellDataFile -Path $ConfigPath
             $Config.ContainsKey('/device/devices') | Should -Be $true
         }
         
         It 'Should have alert endpoint in config' {
-            $ConfigPath = "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $ConfigPath = "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             $Config = Import-PowerShellDataFile -Path $ConfigPath
             $Config.ContainsKey('/alert/alerts') | Should -Be $true
         }
         
         It 'Should have device group endpoint in config' {
-            $ConfigPath = "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $ConfigPath = "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             $Config = Import-PowerShellDataFile -Path $ConfigPath
             $Config.ContainsKey('/device/groups') | Should -Be $true
         }
         
         It 'Should have displayName in device fields' {
-            $ConfigPath = "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $ConfigPath = "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             $Config = Import-PowerShellDataFile -Path $ConfigPath
             $Config['/device/devices'] | Should -Contain 'displayName'
         }
         
         It 'Should have severity in alert fields' {
-            $ConfigPath = "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $ConfigPath = "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             $Config = Import-PowerShellDataFile -Path $ConfigPath
             $Config['/alert/alerts'] | Should -Contain 'severity'
         }
@@ -223,25 +223,25 @@ Describe 'Filter Validation Config Generator' {
     
     Context 'Generated Config File' {
         It 'Should exist in Private directory' {
-            "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1" | Should -Exist
+            "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1" | Should -Exist
         }
         
         It 'Should be a valid PowerShell data file' {
-            { Import-PowerShellDataFile "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1" -ErrorAction Stop } | Should -Not -Throw
+            { Import-PowerShellDataFile "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1" -ErrorAction Stop } | Should -Not -Throw
         }
         
         It 'Should contain hashtable structure' {
-            $Config = Import-PowerShellDataFile "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $Config = Import-PowerShellDataFile "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             $Config | Should -BeOfType [hashtable]
         }
         
         It 'Should have multiple endpoints configured' {
-            $Config = Import-PowerShellDataFile "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $Config = Import-PowerShellDataFile "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             $Config.Keys.Count | Should -BeGreaterThan 10
         }
         
         It 'Should have arrays of field names for each endpoint' {
-            $Config = Import-PowerShellDataFile "$PSScriptRoot/../Private/LMFilterValidationConfig.psd1"
+            $Config = Import-PowerShellDataFile "$PSScriptRoot/../Private/LM/LM/LMFilterValidationConfig.psd1"
             foreach ($endpoint in $Config.Keys) {
                 # PowerShell data files with single items may be strings, so ensure it's an array
                 $fields = @($Config[$endpoint])

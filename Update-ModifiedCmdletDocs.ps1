@@ -72,10 +72,10 @@ function Get-ModifiedPublicCmdletsFromGitPaths {
     )
 
     return $ChangedPaths | Where-Object {
-        $_ -replace '\\', '/' -match '^Public/[^/]+\.ps1$'
+        $_ -replace '\\', '/' -match '^Public/.+\.ps1$'
     } | ForEach-Object {
         $normalizedPath = $_ -replace '\\', '/'
-        if ($normalizedPath -match 'Public/([^/]+)\.ps1$') {
+        if ($normalizedPath -match 'Public/(?:.+/)*([^/]+)\.ps1$') {
             $Matches[1]
         }
     } | Select-Object -Unique
