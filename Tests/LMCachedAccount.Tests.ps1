@@ -73,6 +73,48 @@ Describe 'Connect-LMAccount cached GovCloud metadata' {
 
         $Script:LMAuth.GovCloud | Should -Be $true
     }
+
+    It 'Excludes Edwin cached credentials from -CachedAccountName lookup' {
+        Mock Get-SecretInfo {
+            @(
+                New-MockCachedSecretInfo -Name 'commercial-account' -Portal 'company'
+                New-MockCachedSecretInfo -Name 'EAI:myorg' -Portal 'myorg' -Id 'client-id' -Type 'EAI'
+            )
+        }
+
+        { Connect-LMAccount -CachedAccountName 'EAI:myorg' -SkipCredValidation -SkipVersionCheck -DisableConsoleLogging -ErrorAction Stop } |
+            Should -Throw '*does not match one of the stored credentials*'
+    }
+
+    It 'Excludes Edwin cached credentials from -UseCachedCredential selection list' {
+        Mock Get-SecretInfo {
+            @(
+                New-MockCachedSecretInfo -Name 'commercial-account' -Portal 'company'
+                New-MockCachedSecretInfo -Name 'EAI:myorg' -Portal 'myorg' -Id 'client-id' -Type 'EAI'
+            )
+        }
+        Mock Read-Host { '0' }
+
+        Connect-LMAccount -UseCachedCredential -SkipCredValidation -SkipVersionCheck -DisableConsoleLogging
+
+        $Script:LMAuth.Portal | Should -Be 'company'
+        Should -Invoke Read-Host -Times 1 -Exactly
+    }
+
+    It 'Uses normalized selection numbers when session sync credentials are present' {
+        Mock Get-SecretInfo {
+            @(
+                New-MockCachedSecretInfo -Name 'first-account' -Portal 'first'
+                New-MockCachedSecretInfo -Name 'LMSessionSync-hidden' -Portal 'hidden'
+                New-MockCachedSecretInfo -Name 'second-account' -Portal 'second'
+            )
+        }
+        Mock Read-Host { '1' }
+
+        Connect-LMAccount -UseCachedCredential -SkipCredValidation -SkipVersionCheck -DisableConsoleLogging
+
+        $Script:LMAuth.Portal | Should -Be 'second'
+    }
 }
 
 Describe 'Get-LMCachedAccount GovCloud metadata' {

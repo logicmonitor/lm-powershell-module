@@ -75,7 +75,9 @@ function Resolve-EAIException {
     param(
         [Nullable[int]]$StatusCode,
 
-        [String]$ResponseBody
+        [String]$ResponseBody,
+
+        [PSCustomObject]$ErrorContext
     )
 
     $message = Format-EAIErrorMessage -ResponseBody $ResponseBody -StatusCode $StatusCode
@@ -88,6 +90,17 @@ function Resolve-EAIException {
     }
 
     switch ($StatusCode) {
+        400 {
+            if ($message -match 'Cannot evaluate query') {
+                $result.ErrorType = 'QueryEvaluationError'
+                $result.ErrorId = 'EAI.QueryEvaluationError'
+                $result.Category = [System.Management.Automation.ErrorCategory]::InvalidData
+                $hint = Format-EAIQueryEvaluationErrorHint -ErrorContext $ErrorContext
+                if ($hint) {
+                    $result.Message = "$message$hint"
+                }
+            }
+        }
         401 {
             $result.ErrorType = 'AuthenticationError'
             $result.ErrorId = 'EAI.AuthenticationError'
@@ -212,7 +225,9 @@ function Invoke-EAIRestMethod {
 
         [Switch]$EnableDebugLogging,
 
-        [System.Management.Automation.PSCmdlet]$CallerPSCmdlet
+        [System.Management.Automation.PSCmdlet]$CallerPSCmdlet,
+
+        [PSCustomObject]$ErrorContext
     )
 
     $headers = @{} + $Headers
@@ -261,7 +276,7 @@ function Invoke-EAIRestMethod {
             }
 
             $errorDetails = Get-EAIHttpErrorDetails -ErrorRecord $_
-            $resolvedError = Resolve-EAIException -StatusCode $errorDetails.StatusCode -ResponseBody $errorDetails.Body
+            $resolvedError = Resolve-EAIException -StatusCode $errorDetails.StatusCode -ResponseBody $errorDetails.Body -ErrorContext $ErrorContext
             $lastResolvedError = $resolvedError
 
             if ($errorDetails.StatusCode -eq 401 -and -not $refreshedAfter401) {

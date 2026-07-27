@@ -94,6 +94,50 @@ client_secret: file-secret
         }
     }
 
+    It 'Connects using normalized selection numbers from -UseCachedCredential' {
+        InModuleScope -ModuleName $script:DevModuleName {
+            Mock Get-SecretVault { }
+            Mock Get-SecretInfo {
+                @(
+                    [PSCustomObject]@{
+                        Name     = 'EAI:first'
+                        Metadata = @{
+                            Portal = 'first'
+                            Id     = 'client-one'
+                            Type   = 'EAI'
+                        }
+                    }
+                    [PSCustomObject]@{
+                        Name     = 'commercial-account'
+                        Metadata = @{
+                            Portal = 'company'
+                            Id     = 'lm-id'
+                            Type   = 'LMv1'
+                        }
+                    }
+                    [PSCustomObject]@{
+                        Name     = 'EAI:second'
+                        Metadata = @{
+                            Portal = 'second'
+                            Id     = 'client-two'
+                            Type   = 'EAI'
+                        }
+                    }
+                )
+            }
+            Mock Get-Secret {
+                'client-two-secret' | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
+            }
+            Mock Read-Host { '1' }
+
+            Connect-EAIAccount -UseCachedCredential -SkipCredValidation
+
+            $status = Get-EAIAccountStatus
+            $status.EdwinOrg | Should -Be 'second'
+            $status.ClientId | Should -Be 'client-two'
+        }
+    }
+
     It 'Validates credentials via token grant when SkipCredValidation is not set' {
         InModuleScope -ModuleName $script:DevModuleName {
             Mock Invoke-RestMethod {

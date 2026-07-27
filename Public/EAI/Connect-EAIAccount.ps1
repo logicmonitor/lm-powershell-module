@@ -3,8 +3,8 @@
 Connect to an Edwin portal for event ingestion.
 
 .DESCRIPTION
-Connect-EAIAccount establishes a session for Edwin APIs including event ingestion and
-scheduled downtime (SDT) management. This is separate from Connect-LMAccount.
+Connect-EAIAccount establishes a session for Edwin APIs including event ingestion, scheduled
+downtime (SDT) management, and UI Query record search.
 
 .PARAMETER EdwinOrg
 The Edwin organization subdomain (the name before ".dexda.ai").
@@ -38,7 +38,7 @@ Connect-EAIAccount -CachedAccountName "EAI:myorg"
 
 .NOTES
 LM portal authentication is not required for Edwin APIs.
-Requires credentials with the appropriate API scopes (for example event_write, sdt_read, sdt_write).
+Requires credentials with the appropriate API scopes (for example event_write, sdt_read, sdt_write, query_records, query_record).
 
 .INPUTS
 None. You cannot pipe objects to this command.
@@ -123,15 +123,18 @@ function Connect-EAIAccount {
                 return
             }
 
-            $i = 0
             Write-Host 'Selection Number | Cached Account Name'
-            foreach ($credential in $cachedSecrets) {
-                Write-Host "$i)     $($credential.Name)"
-                $i++
+            for ($i = 0; $i -lt $cachedSecrets.Count; $i++) {
+                Write-Host "$i)     $($cachedSecrets[$i].Name)"
             }
 
-            $storedCredentialIndex = Read-Host -Prompt 'Enter the number for the cached Edwin credential you wish to use'
-            if ($cachedSecrets[$storedCredentialIndex]) {
+            $storedCredentialIndex = $null
+            $storedCredentialSelection = Read-Host -Prompt 'Enter the number for the cached Edwin credential you wish to use'
+            if ($storedCredentialSelection -match '^\d+$') {
+                $storedCredentialIndex = [int]$storedCredentialSelection
+            }
+
+            if ($null -ne $storedCredentialIndex -and $cachedSecrets[$storedCredentialIndex]) {
                 $selected = $cachedSecrets[$storedCredentialIndex]
             }
             else {

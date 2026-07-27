@@ -163,9 +163,12 @@ function Connect-LMAccount {
             }
         }
 
+        $CachedAccountSecrets = @(Get-SecretInfo -Vault Logic.Monitor | Where-Object {
+                $_.Metadata['Type'] -ne 'EAI' -and $_.Name -notlike '*LMSessionSync*'
+            })
+
         if ($CachedAccountName) {
             #If supplied and account name just use that vs showing a list of accounts
-            $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor
             $CachedAccountIndex = $CachedAccountSecrets.Name.IndexOf($CachedAccountName)
             if ($CachedAccountIndex -ne -1) {
                 $AccountName = $CachedAccountSecrets[$CachedAccountIndex].Metadata["Portal"]
@@ -186,41 +189,42 @@ function Connect-LMAccount {
         }
         else {
             #List out current portals with saved credentials and let users chose which to use
-            $i = 0
-            $CachedAccountSecrets = Get-SecretInfo -Vault Logic.Monitor
-            if ($CachedAccountSecrets) {
-                Write-Host "Selection Number | Portal Name"
-                foreach ($Credential in $CachedAccountSecrets) {
-                    if ($Credential.Name -notlike "*LMSessionSync*") {
-                        Write-Host "$i)     $($Credential.Name)"
-                    }
-                    $i++
+            if ($CachedAccountSecrets.Count -eq 0) {
+                Write-Error "No entries currently found in secret vault Logic.Monitor"
+                return
+            }
+
+            Write-Host "Selection Number | Portal Name"
+            for ($i = 0; $i -lt $CachedAccountSecrets.Count; $i++) {
+                Write-Host "$i)     $($CachedAccountSecrets[$i].Name)"
+            }
+
+            $StoredCredentialIndex = $null
+            $StoredCredentialSelection = Read-Host -Prompt "Enter the number for the cached credential you wish to use"
+            if ($StoredCredentialSelection -match '^\d+$') {
+                $StoredCredentialIndex = [int]$StoredCredentialSelection
+            }
+
+            if ($null -ne $StoredCredentialIndex -and $CachedAccountSecrets[$StoredCredentialIndex]) {
+                $SelectedCredential = $CachedAccountSecrets[$StoredCredentialIndex]
+                $AccountName = $SelectedCredential.Metadata["Portal"]
+                $CachedAccountName = $SelectedCredential.Name
+                $AccessId = $SelectedCredential.Metadata["Id"]
+                $Type = $SelectedCredential.Metadata["Type"]
+                $CachedGovCloud = $SelectedCredential.Metadata["GovCloud"]
+                if (($Type -eq "LMv1") -or ($null -eq $Type)) {
+                    [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                 }
-                $StoredCredentialIndex = Read-Host -Prompt "Enter the number for the cached credential you wish to use"
-                if ($CachedAccountSecrets[$StoredCredentialIndex]) {
-                    $AccountName = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Portal"]
-                    $CachedAccountName = $CachedAccountSecrets[$StoredCredentialIndex].Name
-                    $AccessId = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Id"]
-                    $Type = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["Type"]
-                    $CachedGovCloud = $CachedAccountSecrets[$StoredCredentialIndex].Metadata["GovCloud"]
-                    if (($Type -eq "LMv1") -or ($null -eq $Type)) {
-                        [SecureString]$AccessKey = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
-                    }
-                    elseif ($Type -eq "Bearer") {
-                        [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
-                    }
-                    else {
-                        Write-Error "Invalid credential type detected for selection: $Type"
-                        return
-                    }
+                elseif ($Type -eq "Bearer") {
+                    [SecureString]$BearerToken = Get-Secret -Vault "Logic.Monitor" -Name $CachedAccountName -AsPlainText | ConvertTo-SecureString
                 }
                 else {
-                    Write-Error "Entered value does not match one of the listed credentials, please check the selected entry and try again"
+                    Write-Error "Invalid credential type detected for selection: $Type"
                     return
                 }
             }
             else {
-                Write-Error "No entries currently found in secret vault Logic.Monitor"
+                Write-Error "Entered value does not match one of the listed credentials, please check the selected entry and try again"
                 return
             }
         }

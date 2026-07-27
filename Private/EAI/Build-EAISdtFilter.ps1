@@ -26,16 +26,6 @@ $Script:EAISdtFilterOperatorsByFieldType = @{
     long    = @('GREATER_THAN', 'LESS_THAN', 'OLDER_THAN', 'WITHIN', 'IS_EMPTY', 'NOT_EMPTY')
 }
 
-$Script:EAISdtCommonFilterFields = @(
-    @{ Name = 'Event severity (cf.eventSeverity)'; Field = 'cf.eventSeverity'; Type = 'integer' }
-    @{ Name = 'Configuration item (cf.eventCI)'; Field = 'cf.eventCI'; Type = 'string' }
-    @{ Name = 'Event name (cf.eventName)'; Field = 'cf.eventName'; Type = 'string' }
-    @{ Name = 'Event source (cf.eventSource)'; Field = 'cf.eventSource'; Type = 'string' }
-    @{ Name = 'Event object (cf.eventObject)'; Field = 'cf.eventObject'; Type = 'string' }
-    @{ Name = 'Event description (cf.eventDescription)'; Field = 'cf.eventDescription'; Type = 'string' }
-    @{ Name = 'Event time (cf.eventTime)'; Field = 'cf.eventTime'; Type = 'long' }
-)
-
 function New-EAISdtFilterFieldReference {
     [CmdletBinding()]
     param (
@@ -127,7 +117,7 @@ function Read-EAISdtFilterFieldSelection {
     param ()
 
     $choices = @(
-        $Script:EAISdtCommonFilterFields | ForEach-Object {
+        Get-EAISdtCommonFilterFieldsFromCatalog | ForEach-Object {
             @{
                 Name  = $_.Name
                 Value = $_

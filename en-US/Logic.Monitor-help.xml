@@ -2,6 +2,114 @@
 <helpItems xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" schema="maml" xmlns="http://msh">
   <command:command>
     <command:details>
+      <command:name>Build-EAIQueryFilter</command:name>
+      <maml:description>
+        <maml:para>Builds a filter expression for Edwin record queries.</maml:para>
+      </maml:description>
+      <command:verb>Build</command:verb>
+      <command:noun>EAIQueryFilter</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Build-EAIQueryFilter interactively creates a filterCondition schema version 4 object for use with Invoke-EAIRecordsQuery and other Edwin UI Query cmdlets.</maml:para>
+      <maml:para>The completed filter is saved to the global `$EAIQueryFilter` variable. The same filter DSL is used for SDT schedules and record queries.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Build-EAIQueryFilter</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>ExistingFilter</maml:name>
+          <maml:description>
+            <maml:para>Optional current filter to keep or replace when refining a query.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>PassThru</maml:name>
+          <maml:description>
+            <maml:para>Returns the filter object instead of only saving it to `$EAIQueryFilter`.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>ExistingFilter</maml:name>
+        <maml:description>
+          <maml:para>Optional current filter to keep or replace when refining a query.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>PassThru</maml:name>
+        <maml:description>
+          <maml:para>Returns the filter object instead of only saving it to `$EAIQueryFilter`.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns an Edwin filter object when using -PassThru.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Use Connect-EAIAccount before running Edwin query cmdlets.
+Requires query_records scope on the credentials used for Invoke-EAIRecordsQuery.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Build-EAIQueryFilter</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>$filter = Build-EAIQueryFilter -PassThru
+Invoke-EAIRecordsQuery -RecordType events -Field '_id','cf.eventName' -Filter $filter</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 3 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Build-EAIQueryFilter -ExistingFilter $filter</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
       <command:name>Build-EAISdtFilter</command:name>
       <maml:description>
         <maml:para>Builds a filter expression for Edwin SDT schedules.</maml:para>
@@ -3324,6 +3432,234 @@ If omitted, all Edwin cached accounts are returned.</maml:para>
         <maml:title>--------- EXAMPLE 2 ---------</maml:title>
         <maml:introduction>
           <maml:para>Get-EAICachedAccount -CachedAccountName "EAI:myorg"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-EAIQueryField</command:name>
+      <maml:description>
+        <maml:para>Lists common Edwin query field names for filters, sorting, and field projection.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>EAIQueryField</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-EAIQueryField returns the query-path field names used by Invoke-EAIRecordsQuery, Build-EAIQueryFilter, and related Edwin UI Query APIs. These names often differ from properties on objects returned by the API (for example meta.eventTimestamp vs cf.eventTime).</maml:para>
+      <maml:para>Use this cmdlet to discover valid -OrderField, -Field, and filter field references before building queries.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-EAIQueryField</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>RecordType</maml:name>
+          <maml:description>
+            <maml:para>Optional record table filter: events, alerts, or insights.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+          <maml:name>Usage</maml:name>
+          <maml:description>
+            <maml:para>Optional usage filter: Filter, Order, or Return (field projection).</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>RecordType</maml:name>
+        <maml:description>
+          <maml:para>Optional record table filter: events, alerts, or insights.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+        <maml:name>Usage</maml:name>
+        <maml:description>
+          <maml:para>Optional usage filter: Filter, Order, or Return (field projection).</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns Edwin.Query.Field objects describing each catalog entry.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Use Connect-EAIAccount before running Edwin query cmdlets.
+The catalog lists commonly used fields; the API may support additional custom fields.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-EAIQueryField</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-EAIQueryField -RecordType events -Usage Order</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 3 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-EAIQueryField -RecordType alerts -Usage Filter | Format-Table Field, Label, Type</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-EAIQueryRecord</command:name>
+      <maml:description>
+        <maml:para>Retrieves a single Edwin record by type and ID.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>EAIQueryRecord</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-EAIQueryRecord fetches one record via GET /ui/query/record/{recordType}/{recordId}. Record IDs may contain slash characters; the cmdlet URL-encodes the path segment automatically.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-EAIQueryRecord</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>AsResponse</maml:name>
+          <maml:description>
+            <maml:para>Returns the full API envelope (meta and results) instead of a single record object.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+          <maml:name>RecordId</maml:name>
+          <maml:description>
+            <maml:para>Record identifier (often the _id value from a records search).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>RecordType</maml:name>
+          <maml:description>
+            <maml:para>Record table: events, alerts, or insights.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>AsResponse</maml:name>
+        <maml:description>
+          <maml:para>Returns the full API envelope (meta and results) instead of a single record object.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+        <maml:name>RecordId</maml:name>
+        <maml:description>
+          <maml:para>Record identifier (often the _id value from a records search).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>RecordType</maml:name>
+        <maml:description>
+          <maml:para>Record table: events, alerts, or insights.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>By default</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Use Connect-EAIAccount before running this command.
+Requires query_record API scope on the Edwin credentials.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-EAIQueryRecord -RecordType events -RecordId 'LNDP-RTRPRD001_event_name_1537191059903'</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>$record = Invoke-EAIRecordsQuery -RecordType events -Field '_id' -Size 1 | Select-Object -First 1
+Get-EAIQueryRecord -RecordType events -RecordId $record._id</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 3 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-EAIQueryRecord -RecordType events -RecordId 'eventId/12345abc'</maml:para>
         </maml:introduction>
         <dev:code />
         <dev:remarks />
@@ -25835,6 +26171,373 @@ Valid values are "datasources", "propertyrules", "eventsources", "topologysource
         <maml:introduction>
           <maml:para>#Import specific datasources
 Import-LMRepositoryLogicModule -Type "datasources" -LogicModuleNames "DataSource1", "DataSource2"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Invoke-EAIRecordsQuery</command:name>
+      <maml:description>
+        <maml:para>Searches Edwin records using the UI Query API.</maml:para>
+      </maml:description>
+      <command:verb>Invoke</command:verb>
+      <command:noun>EAIRecordsQuery</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Invoke-EAIRecordsQuery posts a filter-based search to POST /ui/query/records and returns matching records for events, alerts, or insights.</maml:para>
+      <maml:para>Use -RequestBody to pass a complete JSON request when cmdlet parameters are insufficient.</maml:para>
+      <maml:para>Run Get-EAIQueryField to list common query field names for -Field, -OrderField, and filters. Query field paths (for example meta.eventTimestamp) often differ from properties on returned records.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Invoke-EAIRecordsQuery</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>AsResponse</maml:name>
+          <maml:description>
+            <maml:para>Returns the full API envelope (meta and results) instead of unwrapped record objects.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ElasticQuery</maml:name>
+          <maml:description>
+            <maml:para>Optional raw OpenSearch query object (advanced).</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Field</maml:name>
+          <maml:description>
+            <maml:para>Optional field names to return (for example _id, cf.eventName).
+When omitted, fields is sent as
+null and the API returns all available source fields (same as the Edwin UI).</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Filter</maml:name>
+          <maml:description>
+            <maml:para>Optional filterCondition object from Build-EAIQueryFilter or a manual expression.
+When omitted, the Edwin UI default filter for the record type is used (last 24 hours and
+standard insightType handling).</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Order</maml:name>
+          <maml:description>
+            <maml:para>Optional advanced sort clauses as hashtables or objects with field and type (asc or desc).
+Cannot be combined with -OrderField or -OrderDirection.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>OrderDirection</maml:name>
+          <maml:description>
+            <maml:para>Sort direction: asc or desc.
+Defaults to desc when -OrderField is specified alone.
+When neither order parameters are specified, results sort by the record-type timestamp field descending.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>OrderField</maml:name>
+          <maml:description>
+            <maml:para>Field to sort by (for example meta.eventTimestamp).
+Defaults to the record-type timestamp field
+when -OrderDirection is specified alone.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>RecordType</maml:name>
+          <maml:description>
+            <maml:para>Record table to query: events, alerts, or insights.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Size</maml:name>
+          <maml:description>
+            <maml:para>Maximum records to return (1-200).
+Omit to use the API default of 10.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Nullable`1[System.Int32]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Timezone</maml:name>
+          <maml:description>
+            <maml:para>IANA timezone for relative time filters.
+Defaults to the local system timezone.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Invoke-EAIRecordsQuery</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>AsResponse</maml:name>
+          <maml:description>
+            <maml:para>Returns the full API envelope (meta and results) instead of unwrapped record objects.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>RequestBody</maml:name>
+          <maml:description>
+            <maml:para>Complete request object or JSON string.
+When specified, other body parameters are ignored.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>AsResponse</maml:name>
+        <maml:description>
+          <maml:para>Returns the full API envelope (meta and results) instead of unwrapped record objects.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>ElasticQuery</maml:name>
+        <maml:description>
+          <maml:para>Optional raw OpenSearch query object (advanced).</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Field</maml:name>
+        <maml:description>
+          <maml:para>Optional field names to return (for example _id, cf.eventName).
+When omitted, fields is sent as
+null and the API returns all available source fields (same as the Edwin UI).</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Filter</maml:name>
+        <maml:description>
+          <maml:para>Optional filterCondition object from Build-EAIQueryFilter or a manual expression.
+When omitted, the Edwin UI default filter for the record type is used (last 24 hours and
+standard insightType handling).</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Order</maml:name>
+        <maml:description>
+          <maml:para>Optional advanced sort clauses as hashtables or objects with field and type (asc or desc).
+Cannot be combined with -OrderField or -OrderDirection.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>OrderDirection</maml:name>
+        <maml:description>
+          <maml:para>Sort direction: asc or desc.
+Defaults to desc when -OrderField is specified alone.
+When neither order parameters are specified, results sort by the record-type timestamp field descending.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>OrderField</maml:name>
+        <maml:description>
+          <maml:para>Field to sort by (for example meta.eventTimestamp).
+Defaults to the record-type timestamp field
+when -OrderDirection is specified alone.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>RecordType</maml:name>
+        <maml:description>
+          <maml:para>Record table to query: events, alerts, or insights.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>RequestBody</maml:name>
+        <maml:description>
+          <maml:para>Complete request object or JSON string.
+When specified, other body parameters are ignored.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Size</maml:name>
+        <maml:description>
+          <maml:para>Maximum records to return (1-200).
+Omit to use the API default of 10.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Nullable`1[System.Int32]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Timezone</maml:name>
+        <maml:description>
+          <maml:para>IANA timezone for relative time filters.
+Defaults to the local system timezone.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe a filter object to override the UI default when -RecordType is specified.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Object</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>By default</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Use Connect-EAIAccount before running this command.
+Requires query_records API scope on the Edwin credentials.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Invoke-EAIRecordsQuery -RecordType events</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Invoke-EAIRecordsQuery -RecordType events -Field '_id','cf.eventName','cf.eventSeverity'</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 3 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>$filter = Build-EAIQueryFilter -PassThru
+Invoke-EAIRecordsQuery -RecordType events -Field '_id','cf.eventName','cf.eventSeverity' -Filter $filter</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 4 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Invoke-EAIRecordsQuery -RecordType events `
+    -Field '_id','cf.eventName' `
+    -Filter (New-EAISdtFilterObject -Expression @{
+        WITHIN = @(
+            (New-EAISdtFilterFieldReference -Field 'cf.eventTime' -Type 'long')
+            @{ unit = 'hour'; duration = 24 }
+        )
+    }) `
+    -Size 25</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 5 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Invoke-EAIRecordsQuery -RecordType events -OrderField 'cf.eventName' -OrderDirection asc</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 6 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Invoke-EAIRecordsQuery -RequestBody (Get-Content ./query.json -Raw)</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 7 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-EAIQueryField -RecordType events -Usage Order</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 8 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Invoke-EAIRecordsQuery -RecordType events -AsResponse</maml:para>
         </maml:introduction>
         <dev:code />
         <dev:remarks />
