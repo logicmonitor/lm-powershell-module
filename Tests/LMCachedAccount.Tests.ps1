@@ -86,6 +86,18 @@ Describe 'Connect-LMAccount cached GovCloud metadata' {
             Should -Throw '*does not match one of the stored credentials*'
     }
 
+    It 'Excludes Catchpoint cached credentials from -CachedAccountName lookup' {
+        Mock Get-SecretInfo {
+            @(
+                New-MockCachedSecretInfo -Name 'commercial-account' -Portal 'company'
+                New-MockCachedSecretInfo -Name 'CP:prod' -Portal 'prod' -Id 'prod' -Type 'CP'
+            )
+        }
+
+        { Connect-LMAccount -CachedAccountName 'CP:prod' -SkipCredValidation -SkipVersionCheck -DisableConsoleLogging -ErrorAction Stop } |
+            Should -Throw '*does not match one of the stored credentials*'
+    }
+
     It 'Excludes Edwin cached credentials from -UseCachedCredential selection list' {
         Mock Get-SecretInfo {
             @(
