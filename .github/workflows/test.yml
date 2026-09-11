@@ -18,11 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
-        with:
-          repository: logicmonitor/Logic.Monitor.SE
-          path: Logic.Monitor.SE
-
       - name: Install Pester
         shell: pwsh
         run: |
@@ -44,7 +39,7 @@ jobs:
           $Version = $PSVersionTable.PSVersion
           Write-Host "Powershell version: $Version"
 
-          $Result = ./Run-Tests.ps1 -SEModulePath ./Logic.Monitor.SE -PassThru
+          $Result = ./Run-Tests.ps1 -PassThru
 
           if ($env:LM_ACCESS_ID -and $env:LM_ACCESS_KEY -and $env:LM_PORTAL) {
             Connect-LMAccount -AccessId $env:LM_ACCESS_ID -AccessKey $env:LM_ACCESS_KEY -AccountName $env:LM_PORTAL -DisableConsoleLogging

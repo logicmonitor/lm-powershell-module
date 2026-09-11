@@ -3,8 +3,7 @@
     Loads local Dev module builds and runs the Pester test suite.
 
 .DESCRIPTION
-    Imports Dev.Logic.Monitor.psd1 from this repository and Dev.Logic.Monitor.SE.psd1
-    from the sibling Logic.Monitor.SE repository, then runs Invoke-Pester.
+    Imports Dev.Logic.Monitor.psd1 from this repository, then runs Invoke-Pester.
 
     Credentials are resolved in order:
       1. Explicit parameters
@@ -16,9 +15,6 @@
 
 .PARAMETER SkipBuild
     Skip running ./Build.ps1 before loading modules.
-
-.PARAMETER SEModulePath
-    Path to the Logic.Monitor.SE repository. Defaults to ../Logic.Monitor.SE
 
 .PARAMETER CachedAccountName
     Name of a cached Logic.Monitor vault entry to use for test credentials.
@@ -48,14 +44,13 @@
     ./Run-Tests.ps1 -CachedAccountName "dev-portal"
 
 .EXAMPLE
-    ./Run-Tests.ps1 -Path ./Tests/LMDevice.Tests.ps1 -SkipBuild
+    ./Run-Tests.ps1 -Path ./Tests/LM/LMDevice.Tests.ps1 -SkipBuild
 #>
 
 [CmdletBinding()]
 param(
     [string]$Path = (Join-Path $PSScriptRoot 'Tests'),
     [switch]$SkipBuild,
-    [string]$SEModulePath = (Join-Path $PSScriptRoot '..' 'Logic.Monitor.SE'),
     [string]$CachedAccountName,
     [string]$AccessId,
     [string]$AccessKey,
@@ -203,13 +198,9 @@ if (-not $SkipBuild) {
 }
 
 $devModulePath = Resolve-LMDevModulePath -SearchPath $PSScriptRoot -Label 'Logic.Monitor'
-$seDevModulePath = Resolve-LMDevModulePath -SearchPath $SEModulePath -Label 'Logic.Monitor.SE'
 
 Write-Host "Importing $([IO.Path]::GetFileName($devModulePath))..." -ForegroundColor Cyan
 Import-Module $devModulePath -Force
-
-Write-Host "Importing $([IO.Path]::GetFileName($seDevModulePath))..." -ForegroundColor Cyan
-Import-Module $seDevModulePath -Force
 
 $credentials = Resolve-LMTestCredentials @PSBoundParameters
 

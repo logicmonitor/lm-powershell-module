@@ -10,8 +10,6 @@ jobs:
   publish_to_gallery:
     runs-on: ubuntu-latest
     environment: publish
-    outputs: 
-      githubReleaseMessage: ${{steps.psgallery_publish.outputs.githubReleaseMessage}}
     steps:
       - uses: actions/checkout@v4
       - name: Build and publish
@@ -33,129 +31,147 @@ jobs:
           Rename-Item -Path ./Logic.Monitor -NewName ./lm-powershell-module -Force
           Set-Location ./lm-powershell-module
 
-          $GithubReleaseMessage = @'
-          ${{github.event.release.body}}
-          '@
-          $GithubReleaseMessage = $GithubReleaseMessage.Replace("`n","\n").Replace("`"","\`"").Replace("**","*").Replace("  - ",">").Replace("- ","• ").Replace("###","").Replace("##","").Replace("powershell","").Replace("`r","")
-          "githubReleaseMessage=$GithubReleaseMessage" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
   push_to_slack:
     needs: publish_to_gallery
     runs-on: ubuntu-latest
     environment: publish
     continue-on-error: true
     steps:
-      - name: Send custom JSON data to Slack workflow
-        uses: slackapi/slack-github-action@v1.25.0
-        id: slack-post
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+      - name: Build Slack payload
+        id: slack_payload
+        shell: pwsh
+        run: |
+          function ConvertTo-SlackMrkdwn {
+              param([string]$Text)
+
+              if ([string]::IsNullOrWhiteSpace($Text)) {
+                  return '_No release notes provided._'
+              }
+
+              $normalized = $Text -replace "`r`n", "`n" -replace "`r", "`n"
+              $escaped = $normalized -replace '&', '&amp;' -replace '<', '&lt;' -replace '>', '&gt;'
+
+              if ($escaped.Length -gt 2900) {
+                  return ($escaped.Substring(0, 2897) + '...')
+              }
+
+              return $escaped
+          }
+
+          $event = Get-Content -Raw $env:GITHUB_EVENT_PATH | ConvertFrom-Json
+          $release = $event.release
+
+          if ($null -eq $release) {
+              $tagName = $env:GITHUB_REF_NAME
+              $publishedAt = (Get-Date).ToString('o')
+              $releaseNotes = '_Release metadata was not available for this workflow run._'
+          }
+          else {
+              $tagName = [string]$release.tag_name
+              $publishedAt = [string]$release.published_at
+              $releaseNotes = ConvertTo-SlackMrkdwn -Text ([string]$release.body)
+          }
+
+          $payload = [ordered]@{
+              blocks = @(
+                  [ordered]@{
+                      type = 'header'
+                      text = [ordered]@{
+                          type  = 'plain_text'
+                          text  = ":party-lm-bug: Logic.Monitor PowerShell Module Release ($tagName) :party-lm-bug:"
+                          emoji = $true
+                      }
+                  }
+                  [ordered]@{
+                      type = 'context'
+                      elements = @(
+                          [ordered]@{
+                              type = 'mrkdwn'
+                              text = "*$publishedAt* | Logic.Monitor Update Announcements"
+                          }
+                      )
+                  }
+                  [ordered]@{ type = 'divider' }
+                  [ordered]@{
+                      type = 'header'
+                      text = [ordered]@{
+                          type  = 'plain_text'
+                          text  = ':powershell-core: Release Notes :powershell-core:'
+                          emoji = $true
+                      }
+                  }
+                  [ordered]@{
+                      type = 'section'
+                      text = [ordered]@{
+                          type = 'mrkdwn'
+                          text = $releaseNotes
+                      }
+                  }
+                  [ordered]@{ type = 'divider' }
+                  [ordered]@{
+                      type = 'section'
+                      text = [ordered]@{
+                          type = 'mrkdwn'
+                          text = '*Logic.Monitor* Release Notes'
+                      }
+                      accessory = [ordered]@{
+                          type      = 'button'
+                          text      = [ordered]@{ type = 'plain_text'; text = 'Release Notes'; emoji = $true }
+                          url       = 'https://github.com/logicmonitor/lm-powershell-module/releases'
+                          action_id = 'logicmonitor_release_notes'
+                      }
+                  }
+                  [ordered]@{
+                      type = 'section'
+                      text = [ordered]@{
+                          type = 'mrkdwn'
+                          text = '*Logic.Monitor.SE* Toolkit Release Notes'
+                      }
+                      accessory = [ordered]@{
+                          type      = 'button'
+                          text      = [ordered]@{ type = 'plain_text'; text = 'Release Notes'; emoji = $true }
+                          url       = 'https://github.com/logicmonitor/Logic.Monitor.SE/releases'
+                          action_id = 'logicmonitor_se_release_notes'
+                      }
+                  }
+                  [ordered]@{ type = 'divider' }
+                  [ordered]@{
+                      type = 'header'
+                      text = [ordered]@{
+                          type  = 'plain_text'
+                          text  = ':rocket: How to get the latest version :rocket:'
+                          emoji = $true
+                      }
+                  }
+                  [ordered]@{
+                      type = 'section'
+                      text = [ordered]@{
+                          type = 'mrkdwn'
+                          text = '```Update-Module -Name Logic.Monitor -Force```'
+                      }
+                  }
+                  [ordered]@{ type = 'divider' }
+                  [ordered]@{
+                      type = 'context'
+                      elements = @(
+                          [ordered]@{
+                              type = 'mrkdwn'
+                              text = ':pushpin: Do you have a feature request or bug report? <https://github.com/logicmonitor/lm-powershell-module/issues|Submit a GitHub Issue>.'
+                          }
+                      )
+                  }
+              )
+          }
+
+          $json = $payload | ConvertTo-Json -Depth 20 -Compress
+          [System.IO.File]::WriteAllText("$PWD/slack-payload.json", $json, [System.Text.UTF8Encoding]::new($false))
+
+          # Validate before sending to Slack.
+          $null = Get-Content -Raw ./slack-payload.json | ConvertFrom-Json
+
+      - name: Post release announcement to Slack
+        uses: slackapi/slack-github-action@v2.1.1
         with:
-          payload: |
-            {
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":party-lm-bug: Logic.Monitor PowerShell Module Release (${{github.event.release.tag_name}})  :party-lm-bug:"
-                  }
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "text": "*${{github.event.release.published_at}}*  | Logic.Monitor Update Announcements",
-                      "type": "mrkdwn"
-                    }
-                  ]
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":powershell-core: Release Notes :powershell-core:",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{needs.publish_to_gallery.outputs.githubReleaseMessage}}"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Logic.Monitor* Release Notes"
-                  },
-                  "accessory": {
-                    "type": "button",
-                    "text": {
-                      "type": "plain_text",
-                      "text": "Release Notes",
-                      "emoji": true
-                    },
-                    "value": "click_me_123",
-                    "url": "https://github.com/logicmonitor/lm-powershell-module/releases",
-                    "action_id": "button-action"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "*Logic.Monitor.SE* Toolkit Release Notes:"
-                  },
-                  "accessory": {
-                    "type": "button",
-                    "text": {
-                      "type": "plain_text",
-                      "text": "Release Notes",
-                      "emoji": true
-                    },
-                    "value": "click_me_123",
-                    "url": "https://github.com/logicmonitor/Logic.Monitor.SE/releases",
-                    "action_id": "button-action"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": ":rocket: How to get the latest version :rocket:",
-                    "emoji": true
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "```Update-Module -Name Logic.Monitor -Force```"
-                  }
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "context",
-                  "elements": [
-                    {
-                      "type": "mrkdwn",
-                      "text": ":pushpin: Do you have a feature request or bug report? <https://github.com/logicmonitor/lm-powershell-module/issues|Submit a Github Issue>."
-                    }
-                  ]
-                }
-              ]
-            }
+          webhook: ${{ secrets.SLACK_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload-file-path: ./slack-payload.json
