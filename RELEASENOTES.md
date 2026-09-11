@@ -1,4 +1,38 @@
 # Previous module release notes
+## 7.10.0
+### New Cmdlets — Catchpoint
+- **Authentication**: `Connect-CPAccount`, `Disconnect-CPAccount`, `Get-CPAccountStatus`
+- **Cached credentials**: `New-CPCachedAccount`, `Get-CPCachedAccount`, `Remove-CPCachedAccount`
+- **Tests**: `Get-CPTests`, `New-CPTest`, `Set-CPTest`, `Get-CPTestAlertState`, `Set-CPTestAlertState`, `Get-CPTestEnumeration`, `Convert-CPTestScript`
+- **Instant tests**: `New-CPInstantTest`, `Get-CPInstantTest`, `Get-CPInstantTestConfiguration`, `Invoke-CPInstantTest`
+
+### New Cmdlets — LogicMonitor
+- **Collector events**: `Get-LMCollectorEvent`
+
+### Updated Cmdlets
+- **Export-LMLogicModule**: Added `-Type` values `remediationsources` and `diagnosticsources`. Export query strings no longer append `v=3`.
+- **Get-LMSDT**: Renamed `-Name` to `-Note` to reflect the API filter field (SDT comment).
+
+### Bug Fixes & Changes
+- **Connect-LMAccount**: Cached credential selection now also excludes Catchpoint (CP) entries stored in the shared SecretManagement vault.
+- **Connect-CPAccount**: Validates credentials with a GET `/v2/products` request on connect. Use `-SkipCredValidation` to skip the remote probe.
+- **Module layout**: Catchpoint cmdlets are organized under `Public/CP/`. Cmdlet names and behavior are unchanged; only internal file paths differ.
+
+## 7.9.6
+### New Cmdlets — Edwin (EdwinAI)
+- **Authentication**: `Connect-EAIAccount`, `Disconnect-EAIAccount`, `Get-EAIAccountStatus`
+- **Cached credentials**: `New-EAICachedAccount`, `Get-EAICachedAccount`, `Remove-EAICachedAccount`
+- **Event ingestion**: `New-EAIEvent`, `Convert-EAIEvent`, `Send-EAIEvents`
+- **Edwin SDT**: `Get-EAISdt`, `Get-EAISdtInstance`, `New-EAISdt`, `Set-EAISdt`, `Build-EAISdtFilter`, `New-EAISdtOverride`, `Set-EAISdtOverride`, `Remove-EAISdtOverride`
+- **Record query**: `Build-EAIQueryFilter`, `Get-EAIQueryField`, `Invoke-EAIRecordsQuery`, `Get-EAIQueryRecord`
+
+### Updated Cmdlets
+- **Get-LMAPIToken**: When `-Type` is `*` (default), now queries both LMv1 and Bearer token endpoints. The API only returns LMv1 tokens when `type` is omitted, so a second request with `type=bearer` is required to return all token types.
+
+### Bug Fixes & Changes
+- **Connect-LMAccount**: Cached credential selection now excludes Edwin (EAI) entries stored in the shared SecretManagement vault, so `Connect-LMAccount -UseCachedCredential` only lists LM portal accounts.
+- **Connect-EAIAccount**: Validates credentials with an OAuth token grant on connect. Use `-SkipCredValidation` to skip local field checks and the remote probe.
+- **Module layout**: Public cmdlets are organized under `Public/LM/` and `Public/EAI/`. Cmdlet names and behavior are unchanged; only internal file paths differ.
 
 ## 7.9.5
 ### New Cmdlets
