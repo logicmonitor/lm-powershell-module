@@ -30,7 +30,16 @@ function Initialize-LMTestSecretManagement {
         Register-SecretVault -Name Logic.Monitor -ModuleName Microsoft.PowerShell.SecretStore -VaultParameters @{
             Path = $testVaultPath
         }
-        Set-SecretStoreConfiguration -Authentication None -InteractionLimit None -Scope CurrentUser
+
+        $storeConfigParams = @{
+            Authentication = 'None'
+            Scope          = 'CurrentUser'
+        }
+        if ((Get-Command Set-SecretStoreConfiguration).Parameters.ContainsKey('Interaction')) {
+            $storeConfigParams.Interaction = 'None'
+        }
+
+        Set-SecretStoreConfiguration @storeConfigParams
     }
 
     $script:LMTestSecretManagementInitialized = $true
@@ -48,8 +57,8 @@ function Initialize-LMTestSecretManagementMocks {
     Mock Register-SecretVault { }
     Mock Get-SecretStoreConfiguration {
         [PSCustomObject]@{
-            Authentication   = 'None'
-            InteractionLimit = 'None'
+            Authentication = 'None'
+            Interaction    = 'None'
         }
     }
     Mock Set-SecretStoreConfiguration { }
