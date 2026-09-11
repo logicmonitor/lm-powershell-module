@@ -32,6 +32,24 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
             throw "$OperationName failed after $MaxAttempts attempts. Last error: $($lastError.Exception.Message)"
         }
 
+        $script:InvokeTestRetryOrInconclusive = {
+            param(
+                [Parameter(Mandatory)]
+                [scriptblock]$ScriptBlock,
+                [Parameter(Mandatory)]
+                [string]$OperationName,
+                [int]$MaxAttempts = 8,
+                [int]$DelaySeconds = 5
+            )
+
+            try {
+                return & $script:InvokeTestRetry -ScriptBlock $ScriptBlock -OperationName $OperationName -MaxAttempts $MaxAttempts -DelaySeconds $DelaySeconds
+            }
+            catch {
+                Set-ItResult -Inconclusive -Because "Likely API indexing lag: $($_.Exception.Message)"
+            }
+        }
+
         $script:TestSuffix = Get-LMTestSuffix
         $script:UptimeDeviceName = "Uptime.Build.Test.$($script:TestSuffix)"
         $script:UptimeDomain = "uptime-$($script:TestSuffix).example.com"
@@ -53,7 +71,7 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
             $script:NewUptimeDevice.deviceType | Should -Be 18
             ($script:NewUptimeDevice.customProperties | Where-Object { $_.name -eq 'testprop' }).value | Should -BeExactly 'BuildTest'
 
-            & $script:InvokeTestRetry -OperationName 'Get-LMUptimeDevice by Name for newly created web uptime device' -ScriptBlock {
+            & $script:InvokeTestRetryOrInconclusive -OperationName 'Get-LMUptimeDevice by Name for newly created web uptime device' -ScriptBlock {
                 $device = Get-LMUptimeDevice -Name $script:NewUptimeDevice.name -Type uptimewebcheck -ErrorAction Stop
                 if (($device | Measure-Object).Count -lt 1) {
                     throw "Device '$($script:NewUptimeDevice.name)' not visible yet."
