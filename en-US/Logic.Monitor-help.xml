@@ -332,6 +332,215 @@ This example builds a filter and returns the expression as a string.</maml:para>
   </command:command>
   <command:command>
     <command:details>
+      <command:name>Connect-CPAccount</command:name>
+      <maml:description>
+        <maml:para>Connect to Catchpoint using a REST API v2 bearer token.</maml:para>
+      </maml:description>
+      <command:verb>Connect</command:verb>
+      <command:noun>CPAccount</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Connect-CPAccount establishes a session for Catchpoint REST API v2 commands. Catchpoint authenticates with the v2 API key from the Catchpoint portal API settings page. That key is an OAuth bearer token and is valid for two years from generation unless it is regenerated or revoked.</maml:para>
+      <maml:para>Use a client-level key to access data at the client level, or a division-level key to access data within a specific division.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Connect-CPAccount</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>AccountName</maml:name>
+          <maml:description>
+            <maml:para>Optional display name for this Catchpoint connection.
+Used as a label in
+status output and when selecting cached credentials.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ApiBaseUrl</maml:name>
+          <maml:description>
+            <maml:para>Catchpoint REST API v2 base URL.
+Defaults to https://io.catchpoint.com/api.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>BearerToken</maml:name>
+          <maml:description>
+            <maml:para>REST API v2 key from the Catchpoint portal API settings page.
+Passed as a
+bearer token in the Authorization header of subsequent requests.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>DisableConsoleLogging</maml:name>
+          <maml:description>
+            <maml:para>Disables informational messages for subsequent commands.
+Console logging is enabled by default.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>SkipCredValidation</maml:name>
+          <maml:description>
+            <maml:para>Skip the remote token check against the Catchpoint API.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Connect-CPAccount</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>CachedAccountName</maml:name>
+          <maml:description>
+            <maml:para>The cached Catchpoint account name to use from the Logic.Monitor secret vault.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>DisableConsoleLogging</maml:name>
+          <maml:description>
+            <maml:para>Disables informational messages for subsequent commands.
+Console logging is enabled by default.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>SkipCredValidation</maml:name>
+          <maml:description>
+            <maml:para>Skip the remote token check against the Catchpoint API.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>UseCachedCredential</maml:name>
+          <maml:description>
+            <maml:para>Load credentials from the Logic.Monitor secret vault using interactive selection.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>AccountName</maml:name>
+        <maml:description>
+          <maml:para>Optional display name for this Catchpoint connection.
+Used as a label in
+status output and when selecting cached credentials.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>ApiBaseUrl</maml:name>
+        <maml:description>
+          <maml:para>Catchpoint REST API v2 base URL.
+Defaults to https://io.catchpoint.com/api.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>BearerToken</maml:name>
+        <maml:description>
+          <maml:para>REST API v2 key from the Catchpoint portal API settings page.
+Passed as a
+bearer token in the Authorization header of subsequent requests.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>CachedAccountName</maml:name>
+        <maml:description>
+          <maml:para>The cached Catchpoint account name to use from the Logic.Monitor secret vault.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>DisableConsoleLogging</maml:name>
+        <maml:description>
+          <maml:para>Disables informational messages for subsequent commands.
+Console logging is enabled by default.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>SkipCredValidation</maml:name>
+        <maml:description>
+          <maml:para>Skip the remote token check against the Catchpoint API.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>UseCachedCredential</maml:name>
+        <maml:description>
+          <maml:para>Load credentials from the Logic.Monitor secret vault using interactive selection.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>None.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run this command before other Catchpoint commands.
+The bearer token is the only required credential.
+AccountName is optional
+and is used only as a local label.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Connect-CPAccount -BearerToken "your-catchpoint-api-key"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Connect-CPAccount -BearerToken "your-catchpoint-api-key" -AccountName "prod"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 3 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Connect-CPAccount -CachedAccountName "CP:prod"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
       <command:name>Connect-EAIAccount</command:name>
       <maml:description>
         <maml:para>Connect to an Edwin portal for event ingestion.</maml:para>
@@ -940,6 +1149,121 @@ Connect-LMAccount -UseCachedCredential -CachedAccountName "CachedAccountName"
       </command:example>
     </command:examples>
     <command:relatedLinks />
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Convert-CPTestScript</command:name>
+      <maml:description>
+        <maml:para>Converts a Catchpoint transaction script to another language.</maml:para>
+      </maml:description>
+      <command:verb>Convert</command:verb>
+      <command:noun>CPTestScript</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Convert-CPTestScript converts a script via POST /v4/Tests/scriptconvert. Only Selenium (1) to Playwright (3) is currently supported.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Convert-CPTestScript</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>Script</maml:name>
+          <maml:description>
+            <maml:para>Source transaction script.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+          <maml:name>ScriptLanguage</maml:name>
+          <maml:description>
+            <maml:para>ApiTransactionScriptType enum value of the original script format.
+Defaults to 1 (Selenium).</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="2" aliases="none">
+          <maml:name>TargetLanguage</maml:name>
+          <maml:description>
+            <maml:para>ApiTransactionScriptType enum value of the target script format.
+Defaults to 3 (Playwright).</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>Script</maml:name>
+        <maml:description>
+          <maml:para>Source transaction script.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+        <maml:name>ScriptLanguage</maml:name>
+        <maml:description>
+          <maml:para>ApiTransactionScriptType enum value of the original script format.
+Defaults to 1 (Selenium).</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="2" aliases="none">
+        <maml:name>TargetLanguage</maml:name>
+        <maml:description>
+          <maml:para>ApiTransactionScriptType enum value of the target script format.
+Defaults to 3 (Playwright).</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe a script string to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.String</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a Catchpoint.Test.ScriptConversion object.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Convert-CPTestScript -Script $seleniumScript</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command>
     <command:details>
@@ -2134,6 +2458,66 @@ Copy-LMReport -Name "New Report" -Description "New report description" -ParentGr
   </command:command>
   <command:command>
     <command:details>
+      <command:name>Disconnect-CPAccount</command:name>
+      <maml:description>
+        <maml:para>Disconnect from a previously connected Catchpoint account.</maml:para>
+      </maml:description>
+      <command:verb>Disconnect</command:verb>
+      <command:noun>CPAccount</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Disconnect-CPAccount clears stored Catchpoint API credentials from the current PowerShell session.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Disconnect-CPAccount</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>None.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Once disconnected you will need to reconnect to Catchpoint before running Catchpoint commands again.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Disconnect-CPAccount</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
       <command:name>Disconnect-EAIAccount</command:name>
       <maml:description>
         <maml:para>Disconnect from a previously connected Edwin account.</maml:para>
@@ -3287,6 +3671,946 @@ Defaults to "*" (all dashboards).</maml:para>
         <maml:title>--------- EXAMPLE 1 ---------</maml:title>
         <maml:introduction>
           <maml:para>Find-LMDashboardWidget -DatasourceNames @("SNMP_NETWORK_INTERFACES","VMWARE_VCETNER_VM_PERFORMANCE")</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-CPAccountStatus</command:name>
+      <maml:description>
+        <maml:para>Retrieves the current Catchpoint account connection status.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>CPAccountStatus</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-CPAccountStatus returns connection details for the active Catchpoint session established by Connect-CPAccount.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-CPAccountStatus</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a PSCustomObject with AccountName</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Use Connect-CPAccount to establish a Catchpoint session before running Catchpoint commands.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPAccountStatus</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-CPCachedAccount</command:name>
+      <maml:description>
+        <maml:para>Retrieves cached Catchpoint account credentials.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>CPCachedAccount</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-CPCachedAccount returns metadata for Catchpoint credentials stored in the Logic.Monitor secret vault.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-CPCachedAccount</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>CachedAccountName</maml:name>
+          <maml:description>
+            <maml:para>The cached Catchpoint account name to retrieve.
+If omitted, all Catchpoint cached accounts are returned.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>CachedAccountName</maml:name>
+        <maml:description>
+          <maml:para>The cached Catchpoint account name to retrieve.
+If omitted, all Catchpoint cached accounts are returned.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns PSCustomObject entries with CachedAccountName</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This function requires access to the Logic.Monitor vault where credentials are stored.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPCachedAccount</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPCachedAccount -CachedAccountName "CP:prod"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Get-SecretInfo</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-CPInstantTest</command:name>
+      <maml:description>
+        <maml:para>Retrieves Catchpoint instant test results.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>CPInstantTest</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-CPInstantTest returns performance data for an instant test via GET /v4/InstantTests/{id}. Results are for one node and a single step. If -StepId is omitted, the first step is returned.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-CPInstantTest</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>Instant test ID.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+          <maml:name>NodeId</maml:name>
+          <maml:description>
+            <maml:para>Node ID to retrieve results for.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="2" aliases="none">
+          <maml:name>StepId</maml:name>
+          <maml:description>
+            <maml:para>Step ID for multi-step transaction tests.
+Defaults to 0 (first step).</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>Id</maml:name>
+        <maml:description>
+          <maml:para>Instant test ID.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+        <maml:name>NodeId</maml:name>
+        <maml:description>
+          <maml:para>Node ID to retrieve results for.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="2" aliases="none">
+        <maml:name>StepId</maml:name>
+        <maml:description>
+          <maml:para>Step ID for multi-step transaction tests.
+Defaults to 0 (first step).</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe objects with an Id property to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Int64</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a Catchpoint.InstantTest.Result object.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.
+This is an analytics endpoint and counts against Catchpoint usage limits.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPInstantTest -Id 12345 -NodeId 17</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>$run = New-CPInstantTest -Url "https://example.com" -NodeId 17
+Get-CPInstantTest -Id $run.id -NodeId 17</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-CPInstantTestConfiguration</command:name>
+      <maml:description>
+        <maml:para>Retrieves Catchpoint instant test configuration.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>CPInstantTestConfiguration</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-CPInstantTestConfiguration returns the properties used to create an instant test via GET /v4/InstantTests/configuration/{id}. Pass -Id 0 to get a sample payload for New-CPInstantTest.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-CPInstantTestConfiguration</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>Instant test ID.
+Pass 0 to return post data for creating a new instant test.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>Id</maml:name>
+        <maml:description>
+          <maml:para>Instant test ID.
+Pass 0 to return post data for creating a new instant test.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe objects with an Id property to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Int64</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a Catchpoint.InstantTest.Configuration object.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPInstantTestConfiguration -Id 0</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPInstantTestConfiguration -Id 12345</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-CPTestAlertState</command:name>
+      <maml:description>
+        <maml:para>Retrieves Catchpoint test alert pause state.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>CPTestAlertState</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-CPTestAlertState returns whether alerts are paused or unpaused for one or more tests via GET /v4/Tests/alert/state/{testIds}.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-CPTestAlertState</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>One or more Catchpoint test IDs.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64[]</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>Id</maml:name>
+        <maml:description>
+          <maml:para>One or more Catchpoint test IDs.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int64[]</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe Catchpoint.Test objects or objects with an Id property.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Int64</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns Catchpoint.Test.AlertState objects.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.
+Status ID 0 is Paused and 1 is Unpaused.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTestAlertState -Id 12345, 67890</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTests -Name "Homepage" | Get-CPTestAlertState</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-CPTestEnumeration</command:name>
+      <maml:description>
+        <maml:para>Retrieves Catchpoint test enumerations.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>CPTestEnumeration</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-CPTestEnumeration returns name/ID enumerations used to create and update tests via GET /v4/Tests/enumeration. When -Include is omitted, all enumerations are returned.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-CPTestEnumeration</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>Include</maml:name>
+          <maml:description>
+            <maml:para>One or more enumeration sections to return.
+When omitted, all sections are returned.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String[]</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>Include</maml:name>
+        <maml:description>
+          <maml:para>One or more enumeration sections to return.
+When omitted, all sections are returned.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String[]</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a Catchpoint.Test.Enumeration object.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTestEnumeration</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTestEnumeration -Include DisplayTestType, DisplayMonitorType</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Get-CPTests</command:name>
+      <maml:description>
+        <maml:para>Retrieves Catchpoint tests.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>CPTests</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Get-CPTests lists Catchpoint tests from GET /v4/Tests, or retrieves one or more tests by ID. List results are paginated automatically while the API returns hasMore = true, unless -PageNumber is specified.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-CPTests</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>AlertsPaused</maml:name>
+          <maml:description>
+            <maml:para>When specified, filter tests with alerts paused ($true) or unpaused ($false).</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Nullable`1[System.Boolean]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeAdvancedSettings</maml:name>
+          <maml:description>
+            <maml:para>Include advanced settings in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeAlerts</maml:name>
+          <maml:description>
+            <maml:para>Include alert settings in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeInsight</maml:name>
+          <maml:description>
+            <maml:para>Include insights in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeRequest</maml:name>
+          <maml:description>
+            <maml:para>Include request settings in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeTargeting</maml:name>
+          <maml:description>
+            <maml:para>Include targeting and scheduling in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>MonitorId</maml:name>
+          <maml:description>
+            <maml:para>One or more monitor IDs.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>Filter tests by name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>PageNumber</maml:name>
+          <maml:description>
+            <maml:para>Return only this page instead of automatically paging through all results.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>PageSize</maml:name>
+          <maml:description>
+            <maml:para>Number of results per page.
+Maximum is 100.
+Defaults to 100.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ParentFolderId</maml:name>
+          <maml:description>
+            <maml:para>One or more folder IDs.
+Only tests contained immediately in the specified
+folders are returned.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ProductId</maml:name>
+          <maml:description>
+            <maml:para>One or more product IDs to filter by.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ShowInheritedProperties</maml:name>
+          <maml:description>
+            <maml:para>Include inherited properties in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Status</maml:name>
+          <maml:description>
+            <maml:para>Test status.
+Active maps to statusId 0; Inactive maps to statusId 1.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>TypeId</maml:name>
+          <maml:description>
+            <maml:para>One or more test type IDs.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Url</maml:name>
+          <maml:description>
+            <maml:para>Filter web tests by URL.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-CPTests</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>One or more Catchpoint test IDs.
+When specified, retrieves those tests via
+GET /v4/Tests/{id}.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int32[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeAdvancedSettings</maml:name>
+          <maml:description>
+            <maml:para>Include advanced settings in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeAlerts</maml:name>
+          <maml:description>
+            <maml:para>Include alert settings in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeInsight</maml:name>
+          <maml:description>
+            <maml:para>Include insights in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeRequest</maml:name>
+          <maml:description>
+            <maml:para>Include request settings in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>IncludeTargeting</maml:name>
+          <maml:description>
+            <maml:para>Include targeting and scheduling in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>PageNumber</maml:name>
+          <maml:description>
+            <maml:para>Return only this page instead of automatically paging through all results.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>PageSize</maml:name>
+          <maml:description>
+            <maml:para>Number of results per page.
+Maximum is 100.
+Defaults to 100.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ShowInheritedProperties</maml:name>
+          <maml:description>
+            <maml:para>Include inherited properties in the response.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>AlertsPaused</maml:name>
+        <maml:description>
+          <maml:para>When specified, filter tests with alerts paused ($true) or unpaused ($false).</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Nullable`1[System.Boolean]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Id</maml:name>
+        <maml:description>
+          <maml:para>One or more Catchpoint test IDs.
+When specified, retrieves those tests via
+GET /v4/Tests/{id}.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int32[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>IncludeAdvancedSettings</maml:name>
+        <maml:description>
+          <maml:para>Include advanced settings in the response.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>IncludeAlerts</maml:name>
+        <maml:description>
+          <maml:para>Include alert settings in the response.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>IncludeInsight</maml:name>
+        <maml:description>
+          <maml:para>Include insights in the response.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>IncludeRequest</maml:name>
+        <maml:description>
+          <maml:para>Include request settings in the response.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>IncludeTargeting</maml:name>
+        <maml:description>
+          <maml:para>Include targeting and scheduling in the response.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>MonitorId</maml:name>
+        <maml:description>
+          <maml:para>One or more monitor IDs.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>Filter tests by name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>PageNumber</maml:name>
+        <maml:description>
+          <maml:para>Return only this page instead of automatically paging through all results.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>PageSize</maml:name>
+        <maml:description>
+          <maml:para>Number of results per page.
+Maximum is 100.
+Defaults to 100.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>ParentFolderId</maml:name>
+        <maml:description>
+          <maml:para>One or more folder IDs.
+Only tests contained immediately in the specified
+folders are returned.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>ProductId</maml:name>
+        <maml:description>
+          <maml:para>One or more product IDs to filter by.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>ShowInheritedProperties</maml:name>
+        <maml:description>
+          <maml:para>Include inherited properties in the response.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Status</maml:name>
+        <maml:description>
+          <maml:para>Test status.
+Active maps to statusId 0; Inactive maps to statusId 1.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>TypeId</maml:name>
+        <maml:description>
+          <maml:para>One or more test type IDs.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Url</maml:name>
+        <maml:description>
+          <maml:para>Filter web tests by URL.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns Catchpoint.Test objects.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTests</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTests -Name "Homepage"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 3 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTests -Id 12345</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 4 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTests -Status Active -ProductId 10, 20</maml:para>
         </maml:introduction>
         <dev:code />
         <dev:remarks />
@@ -26318,6 +27642,245 @@ Import-LMRepositoryLogicModule -Type "datasources" -LogicModuleNames "DataSource
   </command:command>
   <command:command>
     <command:details>
+      <command:name>Invoke-CPInstantTest</command:name>
+      <maml:description>
+        <maml:para>Runs an instant test from an existing Catchpoint test.</maml:para>
+      </maml:description>
+      <command:verb>Invoke</command:verb>
+      <command:noun>CPInstantTest</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Invoke-CPInstantTest runs an existing scheduled test as an instant test via POST /v4/InstantTests/{testId}. The response contains the instant test ID and node status, not result data. Use Get-CPInstantTest to retrieve results.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Invoke-CPInstantTest</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>NodeId</maml:name>
+          <maml:description>
+            <maml:para>One or more node IDs to run from.
+Maximum of five nodes.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>OnDemand</maml:name>
+          <maml:description>
+            <maml:para>Run the instant test from public nodes instead of enterprise nodes.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Password</maml:name>
+          <maml:description>
+            <maml:para>Optional authentication password.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>TestId</maml:name>
+          <maml:description>
+            <maml:para>Existing Catchpoint test ID to run as an instant test.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>TokenId</maml:name>
+          <maml:description>
+            <maml:para>Optional token IDs to include in the request.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>UserName</maml:name>
+          <maml:description>
+            <maml:para>Optional authentication user name.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Invoke-CPInstantTest</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Body</maml:name>
+          <maml:description>
+            <maml:para>Full InstantTestPostRequest payload.
+Use instead of the convenience parameters.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>OnDemand</maml:name>
+          <maml:description>
+            <maml:para>Run the instant test from public nodes instead of enterprise nodes.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>TestId</maml:name>
+          <maml:description>
+            <maml:para>Existing Catchpoint test ID to run as an instant test.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Body</maml:name>
+        <maml:description>
+          <maml:para>Full InstantTestPostRequest payload.
+Use instead of the convenience parameters.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>NodeId</maml:name>
+        <maml:description>
+          <maml:para>One or more node IDs to run from.
+Maximum of five nodes.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int64[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>OnDemand</maml:name>
+        <maml:description>
+          <maml:para>Run the instant test from public nodes instead of enterprise nodes.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Password</maml:name>
+        <maml:description>
+          <maml:para>Optional authentication password.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>TestId</maml:name>
+        <maml:description>
+          <maml:para>Existing Catchpoint test ID to run as an instant test.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>TokenId</maml:name>
+        <maml:description>
+          <maml:para>Optional token IDs to include in the request.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>UserName</maml:name>
+        <maml:description>
+          <maml:para>Optional authentication user name.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe Catchpoint.Test objects or objects with a TestId or Id property.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Int64</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a Catchpoint.InstantTest object.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.
+An instant test can run from up to five nodes.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Invoke-CPInstantTest -TestId 12345 -NodeId 17, 22</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTests -Id 12345 | Invoke-CPInstantTest -NodeId 17 -OnDemand</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
       <command:name>Invoke-EAIRecordsQuery</command:name>
       <maml:description>
         <maml:para>Searches Edwin records using the UI Query API.</maml:para>
@@ -29691,6 +31254,525 @@ Invoke-LMReportExecution -Name "Monthly Availability" -WithAdminId 101 -ReceiveE
         <maml:introduction>
           <maml:para>#Log off multiple users
 Invoke-LMUserLogoff -Usernames "user1", "user2"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>New-CPCachedAccount</command:name>
+      <maml:description>
+        <maml:para>Creates a cached Catchpoint account connection.</maml:para>
+      </maml:description>
+      <command:verb>New</command:verb>
+      <command:noun>CPCachedAccount</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>New-CPCachedAccount stores a Catchpoint REST API v2 bearer token securely for use with Connect-CPAccount.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-CPCachedAccount</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+          <maml:name>AccountName</maml:name>
+          <maml:description>
+            <maml:para>Optional display name for this Catchpoint connection.
+Used as the default cached account label.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="2" aliases="none">
+          <maml:name>ApiBaseUrl</maml:name>
+          <maml:description>
+            <maml:para>Catchpoint REST API v2 base URL.
+Defaults to https://io.catchpoint.com/api.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>BearerToken</maml:name>
+          <maml:description>
+            <maml:para>REST API v2 key from the Catchpoint portal API settings page.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="3" aliases="none">
+          <maml:name>CachedAccountName</maml:name>
+          <maml:description>
+            <maml:para>The name to use for the cached account.
+Defaults to CP:{AccountName} or CP:Catchpoint.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="4" aliases="none">
+          <maml:name>OverwriteExisting</maml:name>
+          <maml:description>
+            <maml:para>Whether to overwrite an existing cached account.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Boolean</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="1" aliases="none">
+        <maml:name>AccountName</maml:name>
+        <maml:description>
+          <maml:para>Optional display name for this Catchpoint connection.
+Used as the default cached account label.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="2" aliases="none">
+        <maml:name>ApiBaseUrl</maml:name>
+        <maml:description>
+          <maml:para>Catchpoint REST API v2 base URL.
+Defaults to https://io.catchpoint.com/api.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>BearerToken</maml:name>
+        <maml:description>
+          <maml:para>REST API v2 key from the Catchpoint portal API settings page.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="3" aliases="none">
+        <maml:name>CachedAccountName</maml:name>
+        <maml:description>
+          <maml:para>The name to use for the cached account.
+Defaults to CP:{AccountName} or CP:Catchpoint.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="4" aliases="none">
+        <maml:name>OverwriteExisting</maml:name>
+        <maml:description>
+          <maml:para>Whether to overwrite an existing cached account.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Boolean</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>None. Returns a success message if the account is cached successfully.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>This command creates a secure vault to store credentials if one does not exist.
+Catchpoint cached accounts share the Logic.Monitor vault with LM credentials and are identified by Metadata.Type = 'CP'.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>New-CPCachedAccount -BearerToken "your-catchpoint-api-key" -AccountName "prod"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>New-CPInstantTest</command:name>
+      <maml:description>
+        <maml:para>Runs a new Catchpoint instant test.</maml:para>
+      </maml:description>
+      <command:verb>New</command:verb>
+      <command:noun>CPInstantTest</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>New-CPInstantTest creates and runs an instant test via POST /v4/InstantTests. Supply a full payload with -Body, or a URL and node IDs for a simple run. The response contains the instant test ID and node status, not result data. Use Get-CPInstantTest to retrieve results after the run completes.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-CPInstantTest</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Body</maml:name>
+          <maml:description>
+            <maml:para>Instant test payload.
+Accepts a hashtable, PSCustomObject, or JSON string.
+Get a sample payload from Get-CPInstantTestConfiguration -Id 0.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>OnDemand</maml:name>
+          <maml:description>
+            <maml:para>Run the instant test from public nodes instead of enterprise nodes.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>New-CPInstantTest</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>InstantTestType</maml:name>
+          <maml:description>
+            <maml:para>Catchpoint instant test type ID.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>MonitorType</maml:name>
+          <maml:description>
+            <maml:para>Catchpoint monitor type ID.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>NodeId</maml:name>
+          <maml:description>
+            <maml:para>One or more node IDs to run the instant test from.
+Maximum of five nodes.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>OnDemand</maml:name>
+          <maml:description>
+            <maml:para>Run the instant test from public nodes instead of enterprise nodes.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Url</maml:name>
+          <maml:description>
+            <maml:para>Target URL for a simple instant test.
+Used when -Body is not supplied.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Body</maml:name>
+        <maml:description>
+          <maml:para>Instant test payload.
+Accepts a hashtable, PSCustomObject, or JSON string.
+Get a sample payload from Get-CPInstantTestConfiguration -Id 0.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>InstantTestType</maml:name>
+        <maml:description>
+          <maml:para>Catchpoint instant test type ID.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>MonitorType</maml:name>
+        <maml:description>
+          <maml:para>Catchpoint monitor type ID.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>NodeId</maml:name>
+        <maml:description>
+          <maml:para>One or more node IDs to run the instant test from.
+Maximum of five nodes.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int64[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>OnDemand</maml:name>
+        <maml:description>
+          <maml:para>Run the instant test from public nodes instead of enterprise nodes.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Url</maml:name>
+        <maml:description>
+          <maml:para>Target URL for a simple instant test.
+Used when -Body is not supplied.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe an instant test payload to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Object</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a Catchpoint.InstantTest object.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.
+An instant test can run from up to five nodes.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>New-CPInstantTest -Url "https://example.com" -NodeId 1, 2</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>$config = Get-CPInstantTestConfiguration -Id 0
+New-CPInstantTest -Body $config.instantTest -OnDemand</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>New-CPTest</command:name>
+      <maml:description>
+        <maml:para>Creates a Catchpoint test.</maml:para>
+      </maml:description>
+      <command:verb>New</command:verb>
+      <command:noun>CPTest</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>New-CPTest creates a test via POST /v4/Tests. Supply the full test payload returned by Get-CPTests -Id 0 or an existing test object.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-CPTest</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+          <maml:name>Body</maml:name>
+          <maml:description>
+            <maml:para>Test payload.
+Accepts a hashtable, PSCustomObject, or JSON string.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ObjectDetails</maml:name>
+          <maml:description>
+            <maml:para>Return the created test object instead of only the created object ID.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="0" aliases="none">
+        <maml:name>Body</maml:name>
+        <maml:description>
+          <maml:para>Test payload.
+Accepts a hashtable, PSCustomObject, or JSON string.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>ObjectDetails</maml:name>
+        <maml:description>
+          <maml:para>Return the created test object instead of only the created object ID.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe a test payload to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Object</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a Catchpoint.Test object.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.
+Test Type, Test ID, and Division ID cannot be changed after creation.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>$template = Get-CPTests -Id 0
+$template.name = "Homepage"
+New-CPTest -Body $template -ObjectDetails</maml:para>
         </maml:introduction>
         <dev:code />
         <dev:remarks />
@@ -47522,6 +49604,156 @@ Creates a one-time SDT starting now for 60 minutes.</maml:para>
   </command:command>
   <command:command>
     <command:details>
+      <command:name>Remove-CPCachedAccount</command:name>
+      <maml:description>
+        <maml:para>Removes cached Catchpoint account credentials.</maml:para>
+      </maml:description>
+      <command:verb>Remove</command:verb>
+      <command:noun>CPCachedAccount</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Remove-CPCachedAccount removes Catchpoint cached credentials from the Logic.Monitor secret vault.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Remove-CPCachedAccount</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>CachedAccountName</maml:name>
+          <maml:description>
+            <maml:para>The cached Catchpoint account name to remove.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Remove-CPCachedAccount</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>RemoveAllEntries</maml:name>
+          <maml:description>
+            <maml:para>Remove all cached Catchpoint accounts from the vault.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>CachedAccountName</maml:name>
+        <maml:description>
+          <maml:para>The cached Catchpoint account name to remove.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>RemoveAllEntries</maml:name>
+        <maml:description>
+          <maml:para>Remove all cached Catchpoint accounts from the vault.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.String</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>None.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Use Connect-CPAccount with -UseCachedCredential to consume cached Catchpoint credentials.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Remove-CPCachedAccount -CachedAccountName "CP:prod"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Remove-CPCachedAccount -RemoveAllEntries</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
       <command:name>Remove-EAICachedAccount</command:name>
       <maml:description>
         <maml:para>Removes cached Edwin account credentials.</maml:para>
@@ -56563,6 +58795,408 @@ Sends each event in `$Messages` to the Meraki webhook LogSource, appending the `
       </command:example>
     </command:examples>
     <command:relatedLinks />
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Set-CPTest</command:name>
+      <maml:description>
+        <maml:para>Updates a Catchpoint test property.</maml:para>
+      </maml:description>
+      <command:verb>Set</command:verb>
+      <command:noun>CPTest</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Set-CPTest applies a JSON Patch to an existing test via PATCH /v4/Tests/{id}. Only the properties being changed should be sent. Test Type, Test ID, and Division ID cannot be updated. Changing Product ID or Folder ID moves the test.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Set-CPTest</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>Test ID to update.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ObjectDetails</maml:name>
+          <maml:description>
+            <maml:para>Return the updated test object instead of only the updated object ID.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Operation</maml:name>
+          <maml:description>
+            <maml:para>JSON Patch operation: Add, Remove, or Replace.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Path</maml:name>
+          <maml:description>
+            <maml:para>JSON Pointer path of the property to update, for example /status/id.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Value</maml:name>
+          <maml:description>
+            <maml:para>New value for Add or Replace operations.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-CPTest</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>Test ID to update.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>ObjectDetails</maml:name>
+          <maml:description>
+            <maml:para>Return the updated test object instead of only the updated object ID.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Patch</maml:name>
+          <maml:description>
+            <maml:para>One or more JSON Patch operations as hashtables or objects with op, path, and value.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Object[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Id</maml:name>
+        <maml:description>
+          <maml:para>Test ID to update.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int64</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>ObjectDetails</maml:name>
+        <maml:description>
+          <maml:para>Return the updated test object instead of only the updated object ID.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Operation</maml:name>
+        <maml:description>
+          <maml:para>JSON Patch operation: Add, Remove, or Replace.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Patch</maml:name>
+        <maml:description>
+          <maml:para>One or more JSON Patch operations as hashtables or objects with op, path, and value.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Object[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Path</maml:name>
+        <maml:description>
+          <maml:para>JSON Pointer path of the property to update, for example /status/id.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Value</maml:name>
+        <maml:description>
+          <maml:para>New value for Add or Replace operations.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe Catchpoint.Test objects or objects with an Id property.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Int64</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns a Catchpoint.Test object.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Set-CPTest -Id 12345 -Operation Replace -Path "/status/id" -Value 1</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Set-CPTest -Id 12345 -Patch @(
+    @{ op = 'replace'; path = '/name'; value = 'Homepage' }
+)</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
+      <command:name>Set-CPTestAlertState</command:name>
+      <maml:description>
+        <maml:para>Pauses or unpauses alerts for Catchpoint tests.</maml:para>
+      </maml:description>
+      <command:verb>Set</command:verb>
+      <command:noun>CPTestAlertState</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>Set-CPTestAlertState updates alert pause state via PATCH /v4/Tests/alert/state. An alert can be paused for a duration with -PauseExpiration.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Set-CPTestAlertState</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>One or more Catchpoint test IDs.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int64[]</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>PauseExpiration</maml:name>
+          <maml:description>
+            <maml:para>Pause duration as HH:MM when Status is Paused.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Status</maml:name>
+          <maml:description>
+            <maml:para>Paused (0) or Unpaused (1).</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Set-CPTestAlertState</maml:name>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Body</maml:name>
+          <maml:description>
+            <maml:para>Full alert state payload with a tests array.
+Use instead of the convenience parameters.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Confirm</maml:name>
+          <maml:description>
+            <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>WhatIf</maml:name>
+          <maml:description>
+            <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Body</maml:name>
+        <maml:description>
+          <maml:para>Full alert state payload with a tests array.
+Use instead of the convenience parameters.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Object</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Confirm</maml:name>
+        <maml:description>
+          <maml:para>Prompts you for confirmation before running the cmdlet.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Id</maml:name>
+        <maml:description>
+          <maml:para>One or more Catchpoint test IDs.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int64[]</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>PauseExpiration</maml:name>
+        <maml:description>
+          <maml:para>Pause duration as HH:MM when Status is Paused.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Status</maml:name>
+        <maml:description>
+          <maml:para>Paused (0) or Unpaused (1).</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>WhatIf</maml:name>
+        <maml:description>
+          <maml:para>Runs the command in a mode that only reports what would happen without performing the actions.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Management.Automation.SwitchParameter</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>You can pipe Catchpoint.Test objects or objects with an Id property.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <dev:name>System.Int64</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns Catchpoint.Test.AlertState objects.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-CPAccount before running this command.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Set-CPTestAlertState -Id 12345 -Status Paused -PauseExpiration "01:00"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>Get-CPTests -Name "Homepage" | Set-CPTestAlertState -Status Unpaused</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
   </command:command>
   <command:command>
     <command:details>

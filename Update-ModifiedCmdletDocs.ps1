@@ -8,6 +8,9 @@ been pushed to the upstream tracking branch, then updates their markdown documen
 
 Use -ChangeSource WorkingTree to instead process staged and/or unstaged working tree changes.
 
+Use -AllPublicCmdlets to regenerate documentation for every Public/*.ps1 cmdlet file.
+Use -CmdletName to regenerate one or more cmdlets by name.
+
 .PARAMETER Path
 The base path to the repository. Defaults to current directory.
 
@@ -29,11 +32,23 @@ When true, existing markdown files are deleted and regenerated. When false, exis
 .PARAMETER RepairAllDocumentation
 When true, repairs PlatyPS placeholder text in all markdown files under DocumentationPath and regenerates external help.
 
+.PARAMETER AllPublicCmdlets
+When true, regenerates documentation for all Public/*.ps1 files under PublicPath, ignoring git changes.
+
+.PARAMETER CmdletName
+One or more cmdlet names to regenerate regardless of git changes.
+
 .EXAMPLE
 .\Update-ModifiedCmdletDocs.ps1
 
 .EXAMPLE
 .\Update-ModifiedCmdletDocs.ps1 -ChangeSource WorkingTree
+
+.EXAMPLE
+.\Update-ModifiedCmdletDocs.ps1 -AllPublicCmdlets
+
+.EXAMPLE
+.\Update-ModifiedCmdletDocs.ps1 -CmdletName Get-LMSDT,Get-LMCollectorEvent
 
 .EXAMPLE
 .\Update-ModifiedCmdletDocs.ps1 -RepairAllDocumentation
@@ -48,7 +63,9 @@ param(
     [string]$ChangeSource = 'Unpushed',
     [bool]$IncludeStaged = $true,
     [bool]$RecreateUpdatedDocs = $true,
-    [bool]$RepairAllDocumentation = $false
+    [bool]$RepairAllDocumentation = $false,
+    [switch]$AllPublicCmdlets,
+    [string[]]$CmdletName
 )
 
 function Get-UnpushedGitRange {
@@ -112,6 +129,153 @@ function Get-ModifiedPublicCmdletsFromGitPaths {
             $Matches[1]
         }
     } | Select-Object -Unique
+}
+
+function Get-PublicCmdletNamesFromPath {
+    param(
+        [Parameter(Mandatory)]
+        [string]$PublicPath
+    )
+
+    $resolvedPublicPath = Resolve-Path -Path $PublicPath -ErrorAction Stop
+
+    return @(Get-ChildItem -Path $resolvedPublicPath -Filter '*.ps1' -Recurse -File | ForEach-Object {
+        [IO.Path]::GetFileNameWithoutExtension($_.Name)
+    } | Sort-Object -Unique)
+}
+
+function Get-CmdletsToDocument {
+    param(
+        [string]$PublicPath,
+        [ValidateSet('Unpushed', 'WorkingTree')]
+        [string]$ChangeSource,
+        [bool]$IncludeStaged,
+        [switch]$AllPublicCmdlets,
+        [string[]]$CmdletName
+    )
+
+    if ($CmdletName) {
+        return @($CmdletName | Sort-Object -Unique)
+    }
+
+    if ($AllPublicCmdlets) {
+        $publicCmdlets = Get-PublicCmdletNamesFromPath -PublicPath $PublicPath
+        return @($publicCmdlets | Where-Object { Get-Command $_ -ErrorAction SilentlyContinue })
+    }
+
+    if ($ChangeSource -eq 'Unpushed') {
+        $gitRange = Get-UnpushedGitRange
+        Write-Host "Checking for cmdlet changes in unpushed commits ($gitRange)..." -ForegroundColor Cyan
+
+        $changedPaths = @(git diff --name-only $gitRange)
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to list changed files for git range '$gitRange'."
+        }
+
+        $script:noChangesMessage = "No modified cmdlet files found in unpushed commits."
+    }
+    else {
+        Write-Host "Checking for modified PowerShell files in working tree..." -ForegroundColor Cyan
+
+        $changedPaths = @(Get-WorkingTreeChangedPaths -IncludeStaged $IncludeStaged)
+
+        $script:noChangesMessage = "No modified cmdlet files found in git status."
+    }
+
+    if (-not $changedPaths -or $changedPaths.Count -eq 0) {
+        return @()
+    }
+
+    return @(Get-ModifiedPublicCmdletsFromGitPaths -ChangedPaths $changedPaths)
+}
+
+function Update-CmdletDocumentationFiles {
+    param(
+        [Parameter(Mandatory)]
+        [string[]]$Cmdlets,
+
+        [Parameter(Mandatory)]
+        [string]$DocumentationPath,
+
+        [Parameter(Mandatory)]
+        [string]$DevModuleName,
+
+        [Parameter(Mandatory)]
+        [string]$ProductionModuleName,
+
+        [Parameter(Mandatory)]
+        [string]$RepositoryRoot,
+
+        [bool]$RecreateUpdatedDocs = $true
+    )
+
+    $successCount = 0
+    $failCount = 0
+    $createCount = 0
+
+    foreach ($cmdlet in $Cmdlets) {
+        $mdPath = Join-Path $DocumentationPath "$cmdlet.md"
+
+        if (Test-Path $mdPath) {
+            try {
+                Write-Host "Updating $mdPath..." -ForegroundColor Cyan
+                if ($RecreateUpdatedDocs) {
+                    Remove-Item $mdPath -ErrorAction SilentlyContinue
+                    New-FlatMarkdownCommandHelp -CommandName $cmdlet -OutputFolder $DocumentationPath -TargetPath $mdPath
+                }
+                else {
+                    Update-FlatMarkdownCommandHelp -MarkdownPath $mdPath
+                }
+
+                Set-FlatMarkdownModuleMetadata -MarkdownPath $mdPath -DevModuleName $DevModuleName -ProductionModuleName $ProductionModuleName
+                Repair-PlatyPSMarkdownPlaceholders -MarkdownPath $mdPath
+
+                Write-Host "  ✓ Successfully updated $cmdlet.md" -ForegroundColor Green
+                $successCount++
+            }
+            catch {
+                Write-Host "  ✗ Failed to update $cmdlet.md: $_" -ForegroundColor Red
+                $failCount++
+            }
+        }
+        else {
+            Write-Host "Creating $mdPath..." -ForegroundColor Cyan
+            try {
+                New-FlatMarkdownCommandHelp -CommandName $cmdlet -OutputFolder $DocumentationPath -TargetPath $mdPath
+
+                Set-FlatMarkdownModuleMetadata -MarkdownPath $mdPath -DevModuleName $DevModuleName -ProductionModuleName $ProductionModuleName
+                Repair-PlatyPSMarkdownPlaceholders -MarkdownPath $mdPath
+
+                Write-Host "  ✓ Successfully created $cmdlet.md" -ForegroundColor Green
+                $createCount++
+            }
+            catch {
+                Write-Host "  ✗ Failed to create $cmdlet.md: $_" -ForegroundColor Red
+                $failCount++
+            }
+        }
+    }
+
+    Write-Host ""
+    Write-Host "Summary:" -ForegroundColor Cyan
+    Write-Host "  Updated: $successCount" -ForegroundColor Green
+    Write-Host "  Created: $createCount" -ForegroundColor Green
+    if ($failCount -gt 0) {
+        Write-Host "  Failed/Missing: $failCount" -ForegroundColor Yellow
+    }
+
+    if ($successCount -gt 0 -or $createCount -gt 0) {
+        Write-Host ""
+        Write-Host "Regenerating external help files..." -ForegroundColor Cyan
+        try {
+            $enUSPath = Join-Path $RepositoryRoot "en-US"
+            Export-FlatExternalHelp -DocumentationPath $DocumentationPath -OutputPath $enUSPath -ProductionModuleName $ProductionModuleName
+            Write-Host "  ✓ Successfully regenerated external help in $enUSPath" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "  ✗ Failed to regenerate external help: $_" -ForegroundColor Red
+        }
+    }
 }
 
 function Test-PlatyPSV1 {
@@ -354,110 +518,23 @@ try {
         return
     }
 
-    if ($ChangeSource -eq 'Unpushed') {
-        $gitRange = Get-UnpushedGitRange
-        Write-Host "Checking for cmdlet changes in unpushed commits ($gitRange)..." -ForegroundColor Cyan
-
-        $changedPaths = @(git diff --name-only $gitRange)
-        if ($LASTEXITCODE -ne 0) {
-            throw "Failed to list changed files for git range '$gitRange'."
-        }
-
-        $noChangesMessage = "No modified cmdlet files found in unpushed commits."
-    }
-    else {
-        Write-Host "Checking for modified PowerShell files in working tree..." -ForegroundColor Cyan
-
-        $changedPaths = @(Get-WorkingTreeChangedPaths -IncludeStaged $IncludeStaged)
-
-        $noChangesMessage = "No modified cmdlet files found in git status."
+    if ($AllPublicCmdlets) {
+        Write-Host "Generating documentation for all Public cmdlets under $PublicPath..." -ForegroundColor Cyan
     }
 
-    if (-not $changedPaths -or $changedPaths.Count -eq 0) {
-        Write-Host $noChangesMessage -ForegroundColor Yellow
+    $script:noChangesMessage = "No modified cmdlet files found."
+    $modifiedCmdlets = @(Get-CmdletsToDocument -PublicPath $PublicPath -ChangeSource $ChangeSource -IncludeStaged $IncludeStaged -AllPublicCmdlets:$AllPublicCmdlets -CmdletName $CmdletName)
+
+    if (-not $modifiedCmdlets -or $modifiedCmdlets.Count -eq 0) {
+        Write-Host $script:noChangesMessage -ForegroundColor Yellow
         return
     }
 
-    $modifiedCmdlets = Get-ModifiedPublicCmdletsFromGitPaths -ChangedPaths $changedPaths
-
-    if (-not $modifiedCmdlets) {
-        Write-Host $noChangesMessage -ForegroundColor Yellow
-        return
-    }
-    
-    Write-Host "Found $($modifiedCmdlets.Count) modified cmdlet(s):" -ForegroundColor Green
+    Write-Host "Found $($modifiedCmdlets.Count) cmdlet(s) to document:" -ForegroundColor Green
     $modifiedCmdlets | ForEach-Object { Write-Host "  - $_" -ForegroundColor Gray }
     Write-Host ""
-    
-    # Update markdown documentation for each modified cmdlet
-    $successCount = 0
-    $failCount = 0
-    $createCount = 0
-    
-    foreach ($cmdlet in $modifiedCmdlets) {
-        $mdPath = Join-Path $DocumentationPath "$cmdlet.md"
-        
-        if (Test-Path $mdPath) {
-            try {
-                Write-Host "Updating $mdPath..." -ForegroundColor Cyan
-                if ($RecreateUpdatedDocs) {
-                    Remove-Item $mdPath -ErrorAction SilentlyContinue
-                    New-FlatMarkdownCommandHelp -CommandName $cmdlet -OutputFolder $DocumentationPath -TargetPath $mdPath
-                }
-                else {
-                    Update-FlatMarkdownCommandHelp -MarkdownPath $mdPath
-                }
-                
-                Set-FlatMarkdownModuleMetadata -MarkdownPath $mdPath -DevModuleName $devModule.BaseName -ProductionModuleName $productionModuleName
-                Repair-PlatyPSMarkdownPlaceholders -MarkdownPath $mdPath
-                
-                Write-Host "  ✓ Successfully updated $cmdlet.md" -ForegroundColor Green
-                $successCount++
-            }
-            catch {
-                Write-Host "  ✗ Failed to update $cmdlet.md: $_" -ForegroundColor Red
-                $failCount++
-            }
-        }
-        else {
-            Write-Host "Creating $mdPath..." -ForegroundColor Cyan
-            Try {
-                New-FlatMarkdownCommandHelp -CommandName $cmdlet -OutputFolder $DocumentationPath -TargetPath $mdPath
-                
-                Set-FlatMarkdownModuleMetadata -MarkdownPath $mdPath -DevModuleName $devModule.BaseName -ProductionModuleName $productionModuleName
-                Repair-PlatyPSMarkdownPlaceholders -MarkdownPath $mdPath
-                    
-                Write-Host "  ✓ Successfully created $cmdlet.md" -ForegroundColor Green
-                $createCount++ 
-            }
-            catch {
-                Write-Host "  ✗ Failed to create $cmdlet.md: $_" -ForegroundColor Red
-                $failCount++
-            }
-        }
-    }
-    
-    Write-Host ""
-    Write-Host "Summary:" -ForegroundColor Cyan
-    Write-Host "  Updated: $successCount" -ForegroundColor Green
-    Write-Host "  Created: $createCount" -ForegroundColor Green
-    if ($failCount -gt 0) {
-        Write-Host "  Failed/Missing: $failCount" -ForegroundColor Yellow
-    }
-    
-    # Regenerate external help after all documentation updates
-    if ($successCount -gt 0 -or $createCount -gt 0) {
-        Write-Host ""
-        Write-Host "Regenerating external help files..." -ForegroundColor Cyan
-        try {
-            $enUSPath = Join-Path $PSScriptRoot "en-US"
-            Export-FlatExternalHelp -DocumentationPath $DocumentationPath -OutputPath $enUSPath -ProductionModuleName $productionModuleName
-            Write-Host "  ✓ Successfully regenerated external help in $enUSPath" -ForegroundColor Green
-        }
-        catch {
-            Write-Host "  ✗ Failed to regenerate external help: $_" -ForegroundColor Red
-        }
-    }
+
+    Update-CmdletDocumentationFiles -Cmdlets $modifiedCmdlets -DocumentationPath $DocumentationPath -DevModuleName $devModule.BaseName -ProductionModuleName $productionModuleName -RepositoryRoot $PSScriptRoot -RecreateUpdatedDocs $RecreateUpdatedDocs
 }
 catch {
     Write-Error "An error occurred: $_"
