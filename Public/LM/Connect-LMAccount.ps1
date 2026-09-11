@@ -164,7 +164,7 @@ function Connect-LMAccount {
         }
 
         $CachedAccountSecrets = @(Get-SecretInfo -Vault Logic.Monitor | Where-Object {
-                $_.Metadata['Type'] -ne 'EAI' -and $_.Name -notlike '*LMSessionSync*'
+                $_.Metadata['Type'] -notin @('EAI', 'CP') -and $_.Name -notlike '*LMSessionSync*'
             })
 
         if ($CachedAccountName) {
