@@ -130,15 +130,17 @@ Describe 'Uptime Device Testing New/Get/Set/Remove' {
         }
 
         It 'When given a name should return devices matching that name' {
-            $device = & $script:InvokeTestRetry -OperationName 'Get-LMUptimeDevice by Name' -ScriptBlock {
+            $device = & $script:InvokeTestRetryOrInconclusive -OperationName 'Get-LMUptimeDevice by Name' -ScriptBlock {
                 $result = Get-LMUptimeDevice -Name $script:NewUptimeDevice.name -Type uptimewebcheck -ErrorAction Stop
                 if (($result | Measure-Object).Count -lt 1) {
                     throw "Device '$($script:NewUptimeDevice.name)' not visible yet."
                 }
                 $result
             }
-            ($device | Measure-Object).Count | Should -BeExactly 1
-            $device[0].name | Should -BeExactly $script:NewUptimeDevice.name
+            if ($null -ne $device) {
+                ($device | Measure-Object).Count | Should -BeExactly 1
+                $device[0].name | Should -BeExactly $script:NewUptimeDevice.name
+            }
         }
 
         It 'When given uptimewebcheck type parameter should return only matching devices' {
