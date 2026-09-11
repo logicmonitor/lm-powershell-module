@@ -17,8 +17,15 @@ jobs:
     environment: test
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install Pester
+        shell: powershell
+        run: |
+          if (-not (Get-Module -ListAvailable -Name Pester | Where-Object { $_.Version.Major -ge 5 })) {
+            Install-Module Pester -MinimumVersion 5.0.0 -Force -Scope CurrentUser
+          }
+
       - name: Build and Test 5.1
-      # API key generated in PSGallery
         env:
           LM_ACCESS_ID: ${{ secrets.LM_ACCESS_ID }}
           LM_ACCESS_KEY: ${{ secrets.LM_ACCESS_KEY }}
@@ -32,21 +39,38 @@ jobs:
           Get-Content ./Logic.Monitor.psd1
 
           $Data = @{
-            AccessId="$env:LM_ACCESS_ID"
-            AccessKey="$env:LM_ACCESS_KEY"
-            AccountName="$env:LM_PORTAL"
-            BearerToken="$env:LM_BEARER_TOKEN"
-            Module="./Logic.Monitor.psd1"
-            PreferredCollectorId="76"
+            AccessId = $env:LM_ACCESS_ID
+            AccessKey = $env:LM_ACCESS_KEY
+            AccountName = $env:LM_PORTAL
+            BearerToken = $env:LM_BEARER_TOKEN
+            Module = './Logic.Monitor.psd1'
+            PreferredCollectorId = '76'
           }
+
+          if ($env:LM_BEARER_TOKEN -and [string]::IsNullOrWhiteSpace($env:LM_ACCESS_KEY) -and $env:LM_PORTAL) {
+            $Data.AuthType = 'Bearer'
+          }
+          elseif ($env:LM_ACCESS_ID -and $env:LM_ACCESS_KEY -and $env:LM_PORTAL) {
+            $Data.AuthType = 'LMv1'
+          }
+
           $Version = $PSVersionTable.PSVersion
           Write-Host "Powershell version: $Version"
 
           $Container = New-PesterContainer -Path ./Tests/ -Data $Data
           $Result = Invoke-Pester -Container $Container -Output Detailed -PassThru
 
-          #Write OpsNote to test portal indicating test status
-          Connect-LMAccount -AccessId $env:LM_ACCESS_ID -AccessKey $env:LM_ACCESS_KEY -AccountName $env:LM_PORTAL -DisableConsoleLogging
-          $TimeNow = Get-Date -UFormat %m%d%Y-%H%M
-          $OpsNote = New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @("GithubActions","TestPipeline-Win5.1","PSVersion-$Version")
+          if ($env:LM_ACCESS_ID -and $env:LM_ACCESS_KEY -and $env:LM_PORTAL) {
+            Connect-LMAccount -AccessId $env:LM_ACCESS_ID -AccessKey $env:LM_ACCESS_KEY -AccountName $env:LM_PORTAL -DisableConsoleLogging
+            $TimeNow = Get-Date -UFormat %m%d%Y-%H%M
+            $null = New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @('GithubActions', 'TestPipeline-Win5.1', "PSVersion-$Version")
+          }
+          elseif ($env:LM_BEARER_TOKEN -and $env:LM_PORTAL) {
+            Connect-LMAccount -BearerToken $env:LM_BEARER_TOKEN -AccountName $env:LM_PORTAL -DisableConsoleLogging
+            $TimeNow = Get-Date -UFormat %m%d%Y-%H%M
+            $null = New-LMOpsNote -Note "Github test build submitted on $TimeNow - $($Result.Result)" -Tags @('GithubActions', 'TestPipeline-Win5.1', "PSVersion-$Version")
+          }
 
+          if ($Result.FailedCount -gt 0) {
+            exit $Result.FailedCount
+          }
