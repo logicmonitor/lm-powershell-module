@@ -51,10 +51,11 @@ Describe 'Build-EAISdtSchedulePayload' {
 
     It 'Rejects a StartDate in the past' {
         InModuleScope -ModuleName $script:DevModuleName {
+            $pastStart = (Get-EAISdtWallClockNow -Timezone 'America/New_York').AddHours(-1)
             {
                 Build-EAISdtScheduleFields -BoundParameters @{
                     Duration  = 60
-                    StartDate = (Get-Date).AddHours(-1)
+                    StartDate = $pastStart
                     Timezone  = 'America/New_York'
                 }
             } | Should -Throw '*must be in the future*'
