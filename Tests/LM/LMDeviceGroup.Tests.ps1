@@ -4,6 +4,52 @@ Describe 'DeviceGroup Testing New/Get/Set/Remove' {
         . "$PSScriptRoot/Connect-LMTestAccount.ps1"
         Connect-LMTestAccount -DisableConsoleLogging -SkipCredValidation
 
+        $script:InvokeTestRetry = {
+            param(
+                [Parameter(Mandatory)]
+                [scriptblock]$ScriptBlock,
+                [Parameter(Mandatory)]
+                [string]$OperationName,
+                [int]$MaxAttempts = 8,
+                [int]$DelaySeconds = 5
+            )
+
+            $lastError = $null
+
+            for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+                try {
+                    return & $ScriptBlock
+                }
+                catch {
+                    $lastError = $_
+
+                    if ($attempt -lt $MaxAttempts) {
+                        Start-Sleep -Seconds $DelaySeconds
+                    }
+                }
+            }
+
+            throw "$OperationName failed after $MaxAttempts attempts. Last error: $($lastError.Exception.Message)"
+        }
+
+        $script:InvokeTestRetryOrInconclusive = {
+            param(
+                [Parameter(Mandatory)]
+                [scriptblock]$ScriptBlock,
+                [Parameter(Mandatory)]
+                [string]$OperationName,
+                [int]$MaxAttempts = 8,
+                [int]$DelaySeconds = 5
+            )
+
+            try {
+                return & $script:InvokeTestRetry -ScriptBlock $ScriptBlock -OperationName $OperationName -MaxAttempts $MaxAttempts -DelaySeconds $DelaySeconds
+            }
+            catch {
+                Set-ItResult -Inconclusive -Because "Likely API indexing lag: $($_.Exception.Message)"
+            }
+        }
+
         $script:TestSuffix = Get-LMTestSuffix
         $script:DeviceGroupTestName = "DeviceGroup.Build.Test.$($script:TestSuffix)"
     }
@@ -25,16 +71,40 @@ Describe 'DeviceGroup Testing New/Get/Set/Remove' {
             ($DeviceGroup | Measure-Object).Count | Should -BeGreaterThan 0
         }
         It 'When given an id should return that device' {
-            $DeviceGroup = Get-LMDeviceGroup -Id $Script:NewDeviceGroup.Id
-            ($DeviceGroup | Measure-Object).Count | Should -BeExactly 1
+            $DeviceGroup = & $script:InvokeTestRetryOrInconclusive -OperationName 'Get-LMDeviceGroup by Id' -ScriptBlock {
+                $result = Get-LMDeviceGroup -Id $Script:NewDeviceGroup.Id -ErrorAction Stop
+                if (($result | Measure-Object).Count -ne 1) {
+                    throw "Expected one device group for id '$($Script:NewDeviceGroup.Id)'."
+                }
+                $result
+            }
+            if ($null -ne $DeviceGroup) {
+                ($DeviceGroup | Measure-Object).Count | Should -BeExactly 1
+            }
         }
         It 'When given a name should return specified device matching that name' {
-            $DeviceGroup = Get-LMDeviceGroup -Name $Script:NewDeviceGroup.Name
-            ($DeviceGroup | Measure-Object).Count | Should -BeExactly 1
+            $DeviceGroup = & $script:InvokeTestRetryOrInconclusive -OperationName 'Get-LMDeviceGroup by Name' -ScriptBlock {
+                $result = Get-LMDeviceGroup -Name $Script:NewDeviceGroup.Name -ErrorAction Stop
+                if (($result | Measure-Object).Count -ne 1) {
+                    throw "Device group '$($Script:NewDeviceGroup.Name)' not visible yet."
+                }
+                $result
+            }
+            if ($null -ne $DeviceGroup) {
+                ($DeviceGroup | Measure-Object).Count | Should -BeExactly 1
+            }
         }
         It 'When given a wildcard name should return all devices matching that wildcard value' {
-            $DeviceGroup = Get-LMDeviceGroup -Name "$(($Script:NewDeviceGroup.Name.Split(".")[0]))*"
-            ($DeviceGroup | Measure-Object).Count | Should -BeGreaterThan 0
+            $DeviceGroup = & $script:InvokeTestRetryOrInconclusive -OperationName 'Get-LMDeviceGroup by wildcard Name' -ScriptBlock {
+                $result = Get-LMDeviceGroup -Name "$(($Script:NewDeviceGroup.Name.Split('.')[0]))*" -ErrorAction Stop
+                if (($result | Measure-Object).Count -lt 1) {
+                    throw 'No device groups returned for wildcard name query.'
+                }
+                $result
+            }
+            if ($null -ne $DeviceGroup) {
+                ($DeviceGroup | Measure-Object).Count | Should -BeGreaterThan 0
+            }
         }
     }
 

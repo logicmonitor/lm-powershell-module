@@ -6,6 +6,8 @@ BeforeAll {
         $devModule = Join-Path $PSScriptRoot '..' '..' 'Dev.Logic.Monitor.psd1'
         $script:DevModuleName = Import-Module $devModule -Force -PassThru | Select-Object -ExpandProperty Name
     }
+
+    . (Join-Path $PSScriptRoot '..' 'Initialize-LMTestSecretManagement.ps1')
 }
 
 Describe 'EAI auth cmdlets' {
@@ -67,7 +69,7 @@ client_secret: file-secret
     }
 
     It 'Connects using a cached account by name' {
-        Mock Get-SecretVault { }
+        Initialize-LMTestSecretManagementMocks
         Mock Get-SecretInfo -ModuleName $script:DevModuleName {
             [PSCustomObject]@{
                 Name     = 'EAI:myorg'
@@ -95,8 +97,8 @@ client_secret: file-secret
     }
 
     It 'Connects using normalized selection numbers from -UseCachedCredential' {
+        Initialize-LMTestSecretManagementMocks
         InModuleScope -ModuleName $script:DevModuleName {
-            Mock Get-SecretVault { }
             Mock Get-SecretInfo {
                 @(
                     [PSCustomObject]@{

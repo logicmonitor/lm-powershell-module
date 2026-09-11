@@ -6,6 +6,8 @@ BeforeAll {
         $devModule = Join-Path $PSScriptRoot '..' '..' 'Dev.Logic.Monitor.psd1'
         $script:DevModuleName = Import-Module $devModule -Force -PassThru | Select-Object -ExpandProperty Name
     }
+
+    . (Join-Path $PSScriptRoot '..' 'Initialize-LMTestSecretManagement.ps1')
 }
 
 Describe 'Catchpoint auth cmdlets' {
@@ -58,7 +60,7 @@ Describe 'Catchpoint auth cmdlets' {
     }
 
     It 'Connects using a cached account by name' {
-        Mock Get-SecretVault { }
+        Initialize-LMTestSecretManagementMocks
         Mock Get-SecretInfo -ModuleName $script:DevModuleName {
             [PSCustomObject]@{
                 Name     = 'CP:prod'
@@ -87,8 +89,8 @@ Describe 'Catchpoint auth cmdlets' {
     }
 
     It 'Connects using normalized selection numbers from -UseCachedCredential' {
+        Initialize-LMTestSecretManagementMocks
         InModuleScope -ModuleName $script:DevModuleName {
-            Mock Get-SecretVault { }
             Mock Get-SecretInfo {
                 @(
                     [PSCustomObject]@{

@@ -28,11 +28,12 @@ Describe 'Connect-LMAccount cached GovCloud metadata' {
         }
 
         . "$PSScriptRoot/../../Public/LM/Connect-LMAccount.ps1"
+        . (Join-Path $PSScriptRoot '..' 'Initialize-LMTestSecretManagement.ps1')
     }
 
     BeforeEach {
         Remove-Variable LMAuth -Scope Script -ErrorAction SilentlyContinue
-        Mock Get-SecretVault { }
+        Initialize-LMTestSecretManagementMocks
         Mock Update-LogicMonitorModule { }
         Mock Get-Secret { 'cached-access-key' | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString }
     }
