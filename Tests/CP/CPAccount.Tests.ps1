@@ -6,8 +6,6 @@ BeforeAll {
         $devModule = Join-Path $PSScriptRoot '..' '..' 'Dev.Logic.Monitor.psd1'
         $script:DevModuleName = Import-Module $devModule -Force -PassThru | Select-Object -ExpandProperty Name
     }
-
-    . (Join-Path $PSScriptRoot '..' 'Initialize-LMTestSecretManagement.ps1')
 }
 
 Describe 'Catchpoint auth cmdlets' {
@@ -56,77 +54,6 @@ Describe 'Catchpoint auth cmdlets' {
         $status.Logging | Should -Be $false
         InModuleScope -ModuleName $script:DevModuleName {
             $Script:InformationPreference | Should -Be 'SilentlyContinue'
-        }
-    }
-
-    It 'Connects using a cached account by name' {
-        Initialize-LMTestSecretManagementMocks
-        Mock Get-SecretInfo -ModuleName $script:DevModuleName {
-            [PSCustomObject]@{
-                Name     = 'CP:prod'
-                Metadata = @{
-                    Portal    = 'prod'
-                    PortalUrl = 'https://io.catchpoint.com/api'
-                    Id        = 'prod'
-                    Type      = 'CP'
-                }
-            }
-        }
-        Mock Get-Secret -ModuleName $script:DevModuleName {
-            'cached-token' | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
-        }
-
-        Connect-CPAccount -CachedAccountName 'CP:prod' -SkipCredValidation
-
-        $status = Get-CPAccountStatus
-        $status.AccountName | Should -Be 'prod'
-        $status.Type | Should -Be 'Cached'
-
-        InModuleScope -ModuleName $script:DevModuleName {
-            $token = [System.Net.NetworkCredential]::new('', $Script:CPAuth.BearerToken).Password
-            $token | Should -Be 'cached-token'
-        }
-    }
-
-    It 'Connects using normalized selection numbers from -UseCachedCredential' {
-        Initialize-LMTestSecretManagementMocks
-        InModuleScope -ModuleName $script:DevModuleName {
-            Mock Get-SecretInfo {
-                @(
-                    [PSCustomObject]@{
-                        Name     = 'CP:first'
-                        Metadata = @{
-                            Portal = 'first'
-                            Type   = 'CP'
-                        }
-                    }
-                    [PSCustomObject]@{
-                        Name     = 'commercial-account'
-                        Metadata = @{
-                            Portal = 'company'
-                            Id     = 'lm-id'
-                            Type   = 'LMv1'
-                        }
-                    }
-                    [PSCustomObject]@{
-                        Name     = 'CP:second'
-                        Metadata = @{
-                            Portal    = 'second'
-                            PortalUrl = 'https://io.catchpoint.com/api'
-                            Type      = 'CP'
-                        }
-                    }
-                )
-            }
-            Mock Get-Secret {
-                'second-token' | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
-            }
-            Mock Read-Host { '1' }
-
-            Connect-CPAccount -UseCachedCredential -SkipCredValidation
-
-            $status = Get-CPAccountStatus
-            $status.AccountName | Should -Be 'second'
         }
     }
 

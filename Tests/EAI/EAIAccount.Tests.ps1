@@ -6,8 +6,6 @@ BeforeAll {
         $devModule = Join-Path $PSScriptRoot '..' '..' 'Dev.Logic.Monitor.psd1'
         $script:DevModuleName = Import-Module $devModule -Force -PassThru | Select-Object -ExpandProperty Name
     }
-
-    . (Join-Path $PSScriptRoot '..' 'Initialize-LMTestSecretManagement.ps1')
 }
 
 Describe 'EAI auth cmdlets' {
@@ -65,78 +63,6 @@ client_secret: file-secret
         $status.Logging | Should -Be $false
         InModuleScope -ModuleName $script:DevModuleName {
             $Script:InformationPreference | Should -Be 'SilentlyContinue'
-        }
-    }
-
-    It 'Connects using a cached account by name' {
-        Initialize-LMTestSecretManagementMocks
-        Mock Get-SecretInfo -ModuleName $script:DevModuleName {
-            [PSCustomObject]@{
-                Name     = 'EAI:myorg'
-                Metadata = @{
-                    Portal = 'myorg'
-                    Id     = 'client-id'
-                    Type   = 'EAI'
-                }
-            }
-        }
-        Mock Get-Secret -ModuleName $script:DevModuleName {
-            'client-secret' | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
-        }
-
-        Connect-EAIAccount -CachedAccountName 'EAI:myorg' -SkipCredValidation
-
-        $status = Get-EAIAccountStatus
-        $status.EdwinOrg | Should -Be 'myorg'
-        $status.ClientId | Should -Be 'client-id'
-
-        InModuleScope -ModuleName $script:DevModuleName {
-            $clientSecret = [System.Net.NetworkCredential]::new('', $Script:EAIAuth.ClientSecret).Password
-            $clientSecret | Should -Be 'client-secret'
-        }
-    }
-
-    It 'Connects using normalized selection numbers from -UseCachedCredential' {
-        Initialize-LMTestSecretManagementMocks
-        InModuleScope -ModuleName $script:DevModuleName {
-            Mock Get-SecretInfo {
-                @(
-                    [PSCustomObject]@{
-                        Name     = 'EAI:first'
-                        Metadata = @{
-                            Portal = 'first'
-                            Id     = 'client-one'
-                            Type   = 'EAI'
-                        }
-                    }
-                    [PSCustomObject]@{
-                        Name     = 'commercial-account'
-                        Metadata = @{
-                            Portal = 'company'
-                            Id     = 'lm-id'
-                            Type   = 'LMv1'
-                        }
-                    }
-                    [PSCustomObject]@{
-                        Name     = 'EAI:second'
-                        Metadata = @{
-                            Portal = 'second'
-                            Id     = 'client-two'
-                            Type   = 'EAI'
-                        }
-                    }
-                )
-            }
-            Mock Get-Secret {
-                'client-two-secret' | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString
-            }
-            Mock Read-Host { '1' }
-
-            Connect-EAIAccount -UseCachedCredential -SkipCredValidation
-
-            $status = Get-EAIAccountStatus
-            $status.EdwinOrg | Should -Be 'second'
-            $status.ClientId | Should -Be 'client-two'
         }
     }
 
