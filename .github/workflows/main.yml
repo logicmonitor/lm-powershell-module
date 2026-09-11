@@ -41,6 +41,27 @@ jobs:
         id: slack_payload
         shell: pwsh
         run: |
+          function Convert-GitHubMarkdownLineToSlackMrkdwn {
+              param(
+                  [string]$Line,
+                  [ref]$IsHeader
+              )
+
+              $IsHeader.Value = $false
+
+              if ($Line -match '^\s*#{1,3}\s+(?<title>.+)$') {
+                  $title = $Matches.title.Trim()
+                  if ($title -eq 'Change List') {
+                      return $null
+                  }
+
+                  $IsHeader.Value = $true
+                  return "*$title*"
+              }
+
+              return [regex]::Replace($Line, '\*\*(?<text>[^*]+)\*\*', '*${text}*')
+          }
+
           function ConvertTo-SlackMrkdwn {
               param([string]$Text)
 
@@ -49,7 +70,24 @@ jobs:
               }
 
               $normalized = $Text -replace "`r`n", "`n" -replace "`r", "`n"
-              $escaped = $normalized -replace '&', '&amp;' -replace '<', '&lt;' -replace '>', '&gt;'
+              $output = [System.Collections.Generic.List[string]]::new()
+
+              foreach ($line in ($normalized -split "`n")) {
+                  $isHeader = $false
+                  $converted = Convert-GitHubMarkdownLineToSlackMrkdwn -Line $line -IsHeader ([ref]$isHeader)
+                  if ($null -eq $converted) {
+                      continue
+                  }
+
+                  if ($isHeader -and $output.Count -gt 0 -and -not [string]::IsNullOrWhiteSpace($output[$output.Count - 1])) {
+                      $output.Add('')
+                  }
+
+                  $output.Add($converted)
+              }
+
+              $result = ($output -join "`n").Trim()
+              $escaped = $result -replace '&', '&amp;' -replace '<', '&lt;' -replace '>', '&gt;'
 
               if ($escaped.Length -gt 2900) {
                   return ($escaped.Substring(0, 2897) + '...')
@@ -58,109 +96,173 @@ jobs:
               return $escaped
           }
 
+          function Get-SlackReleaseNoteBlocks {
+              param([string]$Text)
+
+              if ([string]::IsNullOrWhiteSpace($Text)) {
+                  return @(
+                      [ordered]@{
+                          type = 'section'
+                          text = [ordered]@{
+                              type = 'mrkdwn'
+                              text = '_No release notes provided._'
+                          }
+                      }
+                  )
+              }
+
+              $normalized = $Text -replace "`r`n", "`n" -replace "`r", "`n"
+              $sections = [System.Collections.Generic.List[string]]::new()
+              $current = [System.Collections.Generic.List[string]]::new()
+
+              foreach ($line in ($normalized -split "`n")) {
+                  $isHeader = $false
+                  $converted = Convert-GitHubMarkdownLineToSlackMrkdwn -Line $line -IsHeader ([ref]$isHeader)
+                  if ($null -eq $converted) {
+                      continue
+                  }
+
+                  if ($isHeader -and $current.Count -gt 0) {
+                      $sections.Add(($current -join "`n").Trim())
+                      $current.Clear()
+                  }
+
+                  $current.Add($converted)
+              }
+
+              if ($current.Count -gt 0) {
+                  $sections.Add(($current -join "`n").Trim())
+              }
+
+              $blocks = [System.Collections.Generic.List[object]]::new()
+              foreach ($sectionText in $sections) {
+                  $escaped = $sectionText -replace '&', '&amp;' -replace '<', '&lt;' -replace '>', '&gt;'
+                  if ($escaped.Length -gt 2900) {
+                      $escaped = $escaped.Substring(0, 2897) + '...'
+                  }
+
+                  $blocks.Add([ordered]@{
+                      type = 'section'
+                      text = [ordered]@{
+                          type = 'mrkdwn'
+                          text = $escaped
+                      }
+                  })
+              }
+
+              if ($blocks.Count -eq 0) {
+                  $blocks.Add([ordered]@{
+                      type = 'section'
+                      text = [ordered]@{
+                          type = 'mrkdwn'
+                          text = '_No release notes provided._'
+                      }
+                  })
+              }
+
+              return $blocks
+          }
+
           $event = Get-Content -Raw $env:GITHUB_EVENT_PATH | ConvertFrom-Json
           $release = $event.release
 
           if ($null -eq $release) {
               $tagName = $env:GITHUB_REF_NAME
               $publishedAt = (Get-Date).ToString('o')
-              $releaseNotes = '_Release metadata was not available for this workflow run._'
+              $releaseNoteBlocks = Get-SlackReleaseNoteBlocks -Text '_Release metadata was not available for this workflow run._'
           }
           else {
               $tagName = [string]$release.tag_name
               $publishedAt = [string]$release.published_at
-              $releaseNotes = ConvertTo-SlackMrkdwn -Text ([string]$release.body)
+              $releaseNoteBlocks = Get-SlackReleaseNoteBlocks -Text ([string]$release.body)
           }
 
-          $payload = [ordered]@{
-              blocks = @(
+          $blocks = [System.Collections.Generic.List[object]]::new()
+          $blocks.Add([ordered]@{
+              type = 'header'
+              text = [ordered]@{
+                  type  = 'plain_text'
+                  text  = ":party-lm-bug: Logic.Monitor PowerShell Module Release ($tagName) :party-lm-bug:"
+                  emoji = $true
+              }
+          })
+          $blocks.Add([ordered]@{
+              type = 'context'
+              elements = @(
                   [ordered]@{
-                      type = 'header'
-                      text = [ordered]@{
-                          type  = 'plain_text'
-                          text  = ":party-lm-bug: Logic.Monitor PowerShell Module Release ($tagName) :party-lm-bug:"
-                          emoji = $true
-                      }
-                  }
-                  [ordered]@{
-                      type = 'context'
-                      elements = @(
-                          [ordered]@{
-                              type = 'mrkdwn'
-                              text = "*$publishedAt* | Logic.Monitor Update Announcements"
-                          }
-                      )
-                  }
-                  [ordered]@{ type = 'divider' }
-                  [ordered]@{
-                      type = 'header'
-                      text = [ordered]@{
-                          type  = 'plain_text'
-                          text  = ':powershell-core: Release Notes :powershell-core:'
-                          emoji = $true
-                      }
-                  }
-                  [ordered]@{
-                      type = 'section'
-                      text = [ordered]@{
-                          type = 'mrkdwn'
-                          text = $releaseNotes
-                      }
-                  }
-                  [ordered]@{ type = 'divider' }
-                  [ordered]@{
-                      type = 'section'
-                      text = [ordered]@{
-                          type = 'mrkdwn'
-                          text = '*Logic.Monitor* Release Notes'
-                      }
-                      accessory = [ordered]@{
-                          type      = 'button'
-                          text      = [ordered]@{ type = 'plain_text'; text = 'Release Notes'; emoji = $true }
-                          url       = 'https://github.com/logicmonitor/lm-powershell-module/releases'
-                          action_id = 'logicmonitor_release_notes'
-                      }
-                  }
-                  [ordered]@{
-                      type = 'section'
-                      text = [ordered]@{
-                          type = 'mrkdwn'
-                          text = '*Logic.Monitor.SE* Toolkit Release Notes'
-                      }
-                      accessory = [ordered]@{
-                          type      = 'button'
-                          text      = [ordered]@{ type = 'plain_text'; text = 'Release Notes'; emoji = $true }
-                          url       = 'https://github.com/logicmonitor/Logic.Monitor.SE/releases'
-                          action_id = 'logicmonitor_se_release_notes'
-                      }
-                  }
-                  [ordered]@{ type = 'divider' }
-                  [ordered]@{
-                      type = 'header'
-                      text = [ordered]@{
-                          type  = 'plain_text'
-                          text  = ':rocket: How to get the latest version :rocket:'
-                          emoji = $true
-                      }
-                  }
-                  [ordered]@{
-                      type = 'section'
-                      text = [ordered]@{
-                          type = 'mrkdwn'
-                          text = '```Update-Module -Name Logic.Monitor -Force```'
-                      }
-                  }
-                  [ordered]@{ type = 'divider' }
-                  [ordered]@{
-                      type = 'context'
-                      elements = @(
-                          [ordered]@{
-                              type = 'mrkdwn'
-                              text = ':pushpin: Do you have a feature request or bug report? <https://github.com/logicmonitor/lm-powershell-module/issues|Submit a GitHub Issue>.'
-                          }
-                      )
+                      type = 'mrkdwn'
+                      text = "*$publishedAt* | Logic.Monitor Update Announcements"
                   }
               )
+          })
+          $blocks.Add([ordered]@{ type = 'divider' })
+          $blocks.Add([ordered]@{
+              type = 'header'
+              text = [ordered]@{
+                  type  = 'plain_text'
+                  text  = ':powershell-core: Release Notes :powershell-core:'
+                  emoji = $true
+              }
+          })
+          foreach ($releaseNoteBlock in $releaseNoteBlocks) {
+              $blocks.Add($releaseNoteBlock)
+          }
+          $blocks.Add([ordered]@{ type = 'divider' })
+          $blocks.Add([ordered]@{
+              type = 'section'
+              text = [ordered]@{
+                  type = 'mrkdwn'
+                  text = '*Logic.Monitor* Release Notes'
+              }
+              accessory = [ordered]@{
+                  type      = 'button'
+                  text      = [ordered]@{ type = 'plain_text'; text = 'Release Notes'; emoji = $true }
+                  url       = 'https://github.com/logicmonitor/lm-powershell-module/releases'
+                  action_id = 'logicmonitor_release_notes'
+              }
+          })
+          $blocks.Add([ordered]@{
+              type = 'section'
+              text = [ordered]@{
+                  type = 'mrkdwn'
+                  text = '*Logic.Monitor.SE* Toolkit Release Notes'
+              }
+              accessory = [ordered]@{
+                  type      = 'button'
+                  text      = [ordered]@{ type = 'plain_text'; text = 'Release Notes'; emoji = $true }
+                  url       = 'https://github.com/logicmonitor/Logic.Monitor.SE/releases'
+                  action_id = 'logicmonitor_se_release_notes'
+              }
+          })
+          $blocks.Add([ordered]@{ type = 'divider' })
+          $blocks.Add([ordered]@{
+              type = 'header'
+              text = [ordered]@{
+                  type  = 'plain_text'
+                  text  = ':rocket: How to get the latest version :rocket:'
+                  emoji = $true
+              }
+          })
+          $blocks.Add([ordered]@{
+              type = 'section'
+              text = [ordered]@{
+                  type = 'mrkdwn'
+                  text = '```Update-Module -Name Logic.Monitor -Force```'
+              }
+          })
+          $blocks.Add([ordered]@{ type = 'divider' })
+          $blocks.Add([ordered]@{
+              type = 'context'
+              elements = @(
+                  [ordered]@{
+                      type = 'mrkdwn'
+                      text = ':pushpin: Do you have a feature request or bug report? <https://github.com/logicmonitor/lm-powershell-module/issues|Submit a GitHub Issue>.'
+                  }
+              )
+          })
+
+          $payload = [ordered]@{
+              blocks = $blocks
           }
 
           $json = $payload | ConvertTo-Json -Depth 20 -Compress

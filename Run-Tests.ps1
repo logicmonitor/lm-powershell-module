@@ -218,10 +218,10 @@ foreach ($key in @('AccessId', 'AccessKey', 'AccountName', 'BearerToken', 'Cache
 
 if ($credentials.CachedAccountName) {
     Write-Host "Using cached account '$($credentials.CachedAccountName)' ($($credentials.AuthType)) for integration tests." -ForegroundColor Cyan
-}
 
-. (Join-Path $PSScriptRoot 'Tests/Initialize-LMTestSecretManagement.ps1')
-Initialize-LMTestSecretManagement
+    . (Join-Path $PSScriptRoot 'Tests/Initialize-LMTestSecretManagement.ps1')
+    Initialize-LMTestSecretManagement
+}
 
 $testPath = Resolve-Path -Path $Path -ErrorAction Stop
 Write-Host "Running Pester against $testPath..." -ForegroundColor Cyan

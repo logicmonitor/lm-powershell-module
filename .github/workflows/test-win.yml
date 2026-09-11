@@ -57,9 +57,6 @@ jobs:
           $Version = $PSVersionTable.PSVersion
           Write-Host "Powershell version: $Version"
 
-          . ./Tests/Initialize-LMTestSecretManagement.ps1
-          Initialize-LMTestSecretManagement
-
           $Container = New-PesterContainer -Path ./Tests/ -Data $Data
           $Result = Invoke-Pester -Container $Container -Output Detailed -PassThru
 
