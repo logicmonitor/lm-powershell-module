@@ -1,13 +1,13 @@
 Describe 'Get-LMAlert Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/LM/Test-LMResponseHasPagination.ps1"
-        . "$PSScriptRoot/../Private/Shared/Add-ObjectTypeInfo.ps1"
-        . "$PSScriptRoot/../Private/LM/Get-LMPortalURI.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedGet.ps1"
-        . "$PSScriptRoot/../Private/LM/New-LMHeader.ps1"
-        . "$PSScriptRoot/../Private/LM/Resolve-LMDebugInfo.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMRestMethod.ps1"
-        . "$PSScriptRoot/../Public/LM/Get-LMAlert.ps1"
+        . "$PSScriptRoot/../../Private/LM/Test-LMResponseHasPagination.ps1"
+        . "$PSScriptRoot/../../Private/Shared/Add-ObjectTypeInfo.ps1"
+        . "$PSScriptRoot/../../Private/LM/Get-LMPortalURI.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMPaginatedGet.ps1"
+        . "$PSScriptRoot/../../Private/LM/New-LMHeader.ps1"
+        . "$PSScriptRoot/../../Private/LM/Resolve-LMDebugInfo.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMRestMethod.ps1"
+        . "$PSScriptRoot/../../Public/LM/Get-LMAlert.ps1"
     }
 
     BeforeEach {

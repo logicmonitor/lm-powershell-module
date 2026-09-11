@@ -1,9 +1,9 @@
 Describe 'Pagination Helper Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/LM/Test-LMResponseHasPagination.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedGet.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedPostV4.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMCursorPagedGet.ps1"
+        . "$PSScriptRoot/../../Private/LM/Test-LMResponseHasPagination.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMPaginatedGet.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMPaginatedPostV4.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMCursorPagedGet.ps1"
     }
 
     Describe 'Test-LMResponseHasPagination' {

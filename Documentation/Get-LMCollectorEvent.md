@@ -6,57 +6,45 @@ Locale: en-US
 Module Name: Logic.Monitor
 ms.date: 09/11/2026
 PlatyPS schema version: 2024-05-01
-title: Get-LMSDT
+title: Get-LMCollectorEvent
 ---
 
-# Get-LMSDT
+# Get-LMCollectorEvent
 
 ## SYNOPSIS
 
-Retrieves Scheduled Down Time (SDT) entries from LogicMonitor.
+Retrieves LogicMonitor collector events.
 
 ## SYNTAX
 
-### All (Default)
+### Id (Default)
 
 ```
-Get-LMSDT [-BatchSize <int>] [<CommonParameters>]
+Get-LMCollectorEvent -Id <int> [-BatchSize <int>] [<CommonParameters>]
 ```
 
-### Id
+### Name
 
 ```
-Get-LMSDT [-Id <string>] [-BatchSize <int>] [<CommonParameters>]
-```
-
-### Note
-
-```
-Get-LMSDT [-Note <string>] [-BatchSize <int>] [<CommonParameters>]
-```
-
-### Filter
-
-```
-Get-LMSDT [-Filter <Object>] [-BatchSize <int>] [<CommonParameters>]
+Get-LMCollectorEvent -Name <string> [-BatchSize <int>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 
-The Get-LMSDT function retrieves SDT entries from LogicMonitor.
-It can retrieve all SDT entries, a specific entry by ID or name, or filter the results.
+The Get-LMCollectorEvent function retrieves events for a specified collector from LogicMonitor.
+The collector can be identified by either ID or name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 
-#Retrieve all SDT entries
-Get-LMSDT
+#Retrieve collector events by collector ID
+Get-LMCollectorEvent -Id 123
 
 ### EXAMPLE 2
 
-#Retrieve a specific SDT entry by note/comment
-Get-LMSDT -Note "Maintenance Window"
+#Retrieve collector events by collector name
+Get-LMCollectorEvent -Name "Collector1"
 
 ## PARAMETERS
 
@@ -83,40 +71,20 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -Filter
-
-A filter object to apply when retrieving SDT entries.
-
-```yaml
-Type: System.Object
-DefaultValue: ''
-SupportsWildcards: false
-Aliases: []
-ParameterSets:
-- Name: Filter
-  Position: Named
-  IsRequired: false
-  ValueFromPipeline: false
-  ValueFromPipelineByPropertyName: false
-  ValueFromRemainingArguments: false
-DontShow: false
-AcceptedValues: []
-HelpMessage: ''
-```
-
 ### -Id
 
-The ID of the specific SDT entry to retrieve.
+The ID of the collector to retrieve events from.
+Required for the Id parameter set.
 
 ```yaml
-Type: System.String
-DefaultValue: ''
+Type: System.Int32
+DefaultValue: 0
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
 - Name: Id
   Position: Named
-  IsRequired: false
+  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -125,9 +93,10 @@ AcceptedValues: []
 HelpMessage: ''
 ```
 
-### -Note
+### -Name
 
-The note/comment of the specific SDT entry to retrieve.
+The name of the collector to retrieve events from.
+Required for the Name parameter set.
 
 ```yaml
 Type: System.String
@@ -135,9 +104,9 @@ DefaultValue: ''
 SupportsWildcards: false
 Aliases: []
 ParameterSets:
-- Name: Note
+- Name: Name
   Position: Named
-  IsRequired: false
+  IsRequired: true
   ValueFromPipeline: false
   ValueFromPipelineByPropertyName: false
   ValueFromRemainingArguments: false
@@ -159,7 +128,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Returns LogicMonitor.SDT objects.
+### Returns LogicMonitor.CollectorEvent objects.
 
 ## NOTES
 

@@ -65,11 +65,44 @@ function Get-UnpushedGitRange {
     return 'origin/main..HEAD'
 }
 
+function Get-WorkingTreeChangedPaths {
+    param(
+        [bool]$IncludeStaged = $true
+    )
+
+    $paths = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+
+    foreach ($path in @(git diff --name-only)) {
+        if ($path) {
+            [void]$paths.Add($path)
+        }
+    }
+
+    if ($IncludeStaged) {
+        foreach ($path in @(git diff --cached --name-only)) {
+            if ($path) {
+                [void]$paths.Add($path)
+            }
+        }
+
+        foreach ($path in @(git ls-files --others --exclude-standard)) {
+            if ($path) {
+                [void]$paths.Add($path)
+            }
+        }
+    }
+
+    return @($paths)
+}
+
 function Get-ModifiedPublicCmdletsFromGitPaths {
     param(
-        [Parameter(Mandatory)]
-        [string[]]$ChangedPaths
+        [string[]]$ChangedPaths = @()
     )
+
+    if (-not $ChangedPaths -or $ChangedPaths.Count -eq 0) {
+        return @()
+    }
 
     return $ChangedPaths | Where-Object {
         $_ -replace '\\', '/' -match '^Public/.+\.ps1$'
@@ -330,26 +363,22 @@ try {
             throw "Failed to list changed files for git range '$gitRange'."
         }
 
-        $modifiedCmdlets = Get-ModifiedPublicCmdletsFromGitPaths -ChangedPaths $changedPaths
         $noChangesMessage = "No modified cmdlet files found in unpushed commits."
     }
     else {
         Write-Host "Checking for modified PowerShell files in working tree..." -ForegroundColor Cyan
 
-        $gitStatus = if ($IncludeStaged) {
-            git status --porcelain
-        }
-        else {
-            git status --porcelain | Where-Object { $_ -match '^\s*M' }
-        }
+        $changedPaths = @(Get-WorkingTreeChangedPaths -IncludeStaged $IncludeStaged)
 
-        $changedPaths = $gitStatus | ForEach-Object {
-            ($_ -split '\s+', 2)[-1]
-        }
-
-        $modifiedCmdlets = Get-ModifiedPublicCmdletsFromGitPaths -ChangedPaths $changedPaths
         $noChangesMessage = "No modified cmdlet files found in git status."
     }
+
+    if (-not $changedPaths -or $changedPaths.Count -eq 0) {
+        Write-Host $noChangesMessage -ForegroundColor Yellow
+        return
+    }
+
+    $modifiedCmdlets = Get-ModifiedPublicCmdletsFromGitPaths -ChangedPaths $changedPaths
 
     if (-not $modifiedCmdlets) {
         Write-Host $noChangesMessage -ForegroundColor Yellow

@@ -8,8 +8,8 @@ The Get-LMSDT function retrieves SDT entries from LogicMonitor. It can retrieve 
 .PARAMETER Id
 The ID of the specific SDT entry to retrieve.
 
-.PARAMETER Name
-The name of the specific SDT entry to retrieve.
+.PARAMETER Note
+The note/comment of the specific SDT entry to retrieve.
 
 .PARAMETER Filter
 A filter object to apply when retrieving SDT entries.
@@ -22,8 +22,8 @@ The number of results to return per request. Must be between 1 and 1000. Default
 Get-LMSDT
 
 .EXAMPLE
-#Retrieve a specific SDT entry by name
-Get-LMSDT -Name "Maintenance Window"
+#Retrieve a specific SDT entry by note/comment
+Get-LMSDT -Note "Maintenance Window"
 
 .NOTES
 You must run Connect-LMAccount before running this command.
@@ -42,8 +42,8 @@ function Get-LMSDT {
         [Parameter(ParameterSetName = 'Id')]
         [String]$Id,
 
-        [Parameter(ParameterSetName = 'Name')]
-        [String]$Name,
+        [Parameter(ParameterSetName = 'Note')]
+        [String]$Note,
 
         [Parameter(ParameterSetName = 'Filter')]
         [Object]$Filter,
@@ -70,7 +70,7 @@ function Get-LMSDT {
             switch ($ParameterSetName) {
                 "All" { $QueryParams = "?size=$PageSize&offset=$Offset&sort=+id" }
                 "Id" { $RequestResourcePath = "$ResourcePath/$Id" }
-                "Name" { $QueryParams = "?filter=name:`"$Name`"&size=$PageSize&offset=$Offset&sort=+id" }
+                "Note" { $QueryParams = "?filter=comment:`"$Note`"&size=$PageSize&offset=$Offset&sort=+id" }
                 "Filter" {
                     $ValidFilter = Format-LMFilter -Filter $Filter -ResourcePath $ResourcePath
                     $QueryParams = "?filter=$ValidFilter&size=$PageSize&offset=$Offset&sort=+id"

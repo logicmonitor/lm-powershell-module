@@ -245,7 +245,7 @@ Describe 'Catchpoint private helpers' {
         Disconnect-CPAccount
 
         InModuleScope -ModuleName $script:DevModuleName {
-            Test-CPAuth | Should -Be $false
+            Test-CPAuth -ErrorAction SilentlyContinue | Should -Be $false
         }
     }
 

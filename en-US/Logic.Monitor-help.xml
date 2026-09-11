@@ -6338,6 +6338,139 @@ Get-LMCollectorDebugResult -SessionId 12345 -Name "Collector1"</maml:para>
   </command:command>
   <command:command>
     <command:details>
+      <command:name>Get-LMCollectorEvent</command:name>
+      <maml:description>
+        <maml:para>Retrieves LogicMonitor collector events.</maml:para>
+      </maml:description>
+      <command:verb>Get</command:verb>
+      <command:noun>LMCollectorEvent</command:noun>
+    </command:details>
+    <maml:description>
+      <maml:para>The Get-LMCollectorEvent function retrieves events for a specified collector from LogicMonitor. The collector can be identified by either ID or name.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-LMCollectorEvent</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>BatchSize</maml:name>
+          <maml:description>
+            <maml:para>The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Id</maml:name>
+          <maml:description>
+            <maml:para>The ID of the collector to retrieve events from.
+Required for the Id parameter set.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-LMCollectorEvent</maml:name>
+        <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>BatchSize</maml:name>
+          <maml:description>
+            <maml:para>The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.</maml:para>
+          </maml:description>
+          <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+          <maml:name>Name</maml:name>
+          <maml:description>
+            <maml:para>The name of the collector to retrieve events from.
+Required for the Name parameter set.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>BatchSize</maml:name>
+        <maml:description>
+          <maml:para>The number of results to return per request.
+Must be between 1 and 1000.
+Defaults to 1000.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Id</maml:name>
+        <maml:description>
+          <maml:para>The ID of the collector to retrieve events from.
+Required for the Id parameter set.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.Int32</command:parameterValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
+        <maml:name>Name</maml:name>
+        <maml:description>
+          <maml:para>The name of the collector to retrieve events from.
+Required for the Name parameter set.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="true">System.String</command:parameterValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <dev:name>None. You cannot pipe objects to this command.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <dev:name>Returns LogicMonitor.CollectorEvent objects.</dev:name>
+        </dev:type>
+        <maml:description>
+          <maml:para />
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>You must run Connect-LMAccount before running this command.</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>--------- EXAMPLE 1 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>#Retrieve collector events by collector ID
+Get-LMCollectorEvent -Id 123</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+      <command:example>
+        <maml:title>--------- EXAMPLE 2 ---------</maml:title>
+        <maml:introduction>
+          <maml:para>#Retrieve collector events by collector name
+Get-LMCollectorEvent -Name "Collector1"</maml:para>
+        </maml:introduction>
+        <dev:code />
+        <dev:remarks />
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version</maml:linkText>
+        <command:uri />
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command>
+    <command:details>
       <command:name>Get-LMCollectorGroup</command:name>
       <maml:description>
         <maml:para>Retrieves collector groups from LogicMonitor.</maml:para>
@@ -20939,9 +21072,9 @@ Defaults to 1000.</maml:para>
           <command:parameterValue required="false" variableLength="true">System.Int32</command:parameterValue>
         </command:parameter>
         <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
-          <maml:name>Name</maml:name>
+          <maml:name>Note</maml:name>
           <maml:description>
-            <maml:para>The name of the specific SDT entry to retrieve.</maml:para>
+            <maml:para>The note/comment of the specific SDT entry to retrieve.</maml:para>
           </maml:description>
           <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
         </command:parameter>
@@ -20991,9 +21124,9 @@ Defaults to 1000.</maml:para>
         <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
       </command:parameter>
       <command:parameter required="false" variableLength="false" globbing="false" pipelineInput="false" position="Named" aliases="none">
-        <maml:name>Name</maml:name>
+        <maml:name>Note</maml:name>
         <maml:description>
-          <maml:para>The name of the specific SDT entry to retrieve.</maml:para>
+          <maml:para>The note/comment of the specific SDT entry to retrieve.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="true">System.String</command:parameterValue>
       </command:parameter>
@@ -21036,8 +21169,8 @@ Get-LMSDT</maml:para>
       <command:example>
         <maml:title>--------- EXAMPLE 2 ---------</maml:title>
         <maml:introduction>
-          <maml:para>#Retrieve a specific SDT entry by name
-Get-LMSDT -Name "Maintenance Window"</maml:para>
+          <maml:para>#Retrieve a specific SDT entry by note/comment
+Get-LMSDT -Note "Maintenance Window"</maml:para>
         </maml:introduction>
         <dev:code />
         <dev:remarks />

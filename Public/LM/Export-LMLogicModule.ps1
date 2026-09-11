@@ -47,7 +47,7 @@ function Export-LMLogicModule {
         [String]$LogicModuleName,
 
         [Parameter(Mandatory)]
-        [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources", "logsources", "functions", "oids")]
+        [ValidateSet("datasources", "propertyrules", "eventsources", "topologysources", "configsources", "remediationsources", "diagnosticsources", "logsources", "functions", "oids")]
         [String]$Type,
 
         [String]$DownloadPath = (Get-Location).Path
@@ -68,44 +68,54 @@ function Export-LMLogicModule {
                     "datasources" {
                         $LogicModuleInfo = Get-LMDataSource -Name $LogicModuleName
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
-                        $QueryParams = "?format=xml&v=3"
+                        $QueryParams = "?format=xml"
                     }
                     "propertyrules" {
                         #Not implemented yet
                         $LogicModuleInfo = Get-LMPropertysource -Name $LogicModuleName
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
-                        $QueryParams = "?format=file&v=3"
+                        $QueryParams = "?format=file"
                     }
                     "eventsources" {
                         $LogicModuleInfo = Get-LMEventSource -Name $LogicModuleName
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
-                        $QueryParams = "?format=xml&v=3"
+                        $QueryParams = "?format=xml"
                     }
                     "topologysources" {
                         $LogicModuleInfo = Get-LMTopologySource -Name $LogicModuleName
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
-                        $QueryParams = "?format=file&v=3"
+                        $QueryParams = "?format=file"
                     }
                     "configsources" {
                         $LogicModuleInfo = Get-LMConfigSource -Name $LogicModuleName
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
-                        $QueryParams = "?format=xml&v=3"
+                        $QueryParams = "?format=xml"
+                    }
+                    "remediationsources" {
+                        $LogicModuleInfo = Get-LMRemediationSource -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file"
+                    }
+                    "diagnosticsources" {
+                        $LogicModuleInfo = Get-LMDiagnosticSource -Name $LogicModuleName
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file"
                     }
                     "logsources" {
                         $LogicModuleInfo = Get-LMLogSource -Name $LogicModuleName
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
-                        $QueryParams = "?format=xml&v=3"
+                        $QueryParams = "?format=xml"
                     }
                     "functions" {
                         $LogicModuleInfo = Get-LMAppliesToFunction -Name $LogicModuleName
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
-                        $QueryParams = "?format=file&v=3"
+                        $QueryParams = "?format=file"
                     }
                     "oids" {
                         $LogicModuleInfo = Get-LMSysOIDMap -Name $LogicModuleName
                         $FileName = $LogicModuleInfo.categories -replace ',', '_' -replace ' ', ''
                         $ExportPath = $DownloadPath + "\$FileName.json"
-                        $QueryParams = "?format=file&v=3"
+                        $QueryParams = "?format=file"
                     }
                 }
                 #Verify our query only returned one result
@@ -119,44 +129,54 @@ function Export-LMLogicModule {
                     "datasources" {
                         $LogicModuleInfo = Get-LMDatasource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
-                        $QueryParams = "?format=xml&v=3"
+                        $QueryParams = "?format=xml"
                     }
                     "propertyrules" {
                         #Not implemented yet
                         $LogicModuleInfo = Get-LMPropertysource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
-                        $QueryParams = "?format=file&v=3"
+                        $QueryParams = "?format=file"
                     }
                     "eventsources" {
                         $LogicModuleInfo = Get-LMEventSource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
-                        $QueryParams = "?format=xml&v=3"
+                        $QueryParams = "?format=xml"
                     }
                     "topologysources" {
                         $LogicModuleInfo = Get-LMTopologySource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
-                        $QueryParams = "?format=file&v=3"
+                        $QueryParams = "?format=file"
                     }
                     "configsources" {
                         $LogicModuleInfo = Get-LMConfigSource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
-                        $QueryParams = "?format=xml&v=3"
+                        $QueryParams = "?format=xml"
+                    }
+                    "remediationsources" {
+                        $LogicModuleInfo = Get-LMRemediationSource -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file"
+                    }
+                    "diagnosticsources" {
+                        $LogicModuleInfo = Get-LMDiagnosticSource -Id $LogicModuleId
+                        $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
+                        $QueryParams = "?format=file"
                     }
                     "logsources" {
                         $LogicModuleInfo = Get-LMLogSource -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).xml"
-                        $QueryParams = "?format=xml&v=3"
+                        $QueryParams = "?format=xml"
                     }
                     "functions" {
                         $LogicModuleInfo = Get-LMAppliesToFunction -Id $LogicModuleId
                         $ExportPath = $DownloadPath + "\$($LogicModuleInfo.name).json"
-                        $QueryParams = "?format=file&v=3"
+                        $QueryParams = "?format=file"
                     }
                     "oids" {
                         $LogicModuleInfo = Get-LMSysOIDMap -Id $LogicModuleId
                         $FileName = $LogicModuleInfo.categories -replace ',', '_' -replace ' ', ''
                         $ExportPath = $DownloadPath + "\$FileName.json"
-                        $QueryParams = "?format=file&v=3"
+                        $QueryParams = "?format=file"
                     }
                 }
             }

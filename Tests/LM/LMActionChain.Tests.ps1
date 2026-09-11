@@ -1,19 +1,19 @@
 Describe 'Action Chain Cmdlet Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/LM/Test-LMResponseHasPagination.ps1"
-        . "$PSScriptRoot/../Private/Shared/Add-ObjectTypeInfo.ps1"
-        . "$PSScriptRoot/../Private/LM/Format-LMData.ps1"
-        . "$PSScriptRoot/../Private/LM/Format-LMFilter.ps1"
-        . "$PSScriptRoot/../Private/LM/Get-LMPortalURI.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedGet.ps1"
-        . "$PSScriptRoot/../Private/LM/New-LMHeader.ps1"
-        . "$PSScriptRoot/../Private/LM/Resolve-LMDebugInfo.ps1"
-        . "$PSScriptRoot/../Private/Shared/Test-LookupResult.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMRestMethod.ps1"
-        . "$PSScriptRoot/../Public/LM/Get-LMActionChain.ps1"
-        . "$PSScriptRoot/../Public/LM/New-LMActionChain.ps1"
-        . "$PSScriptRoot/../Public/LM/Set-LMActionChain.ps1"
-        . "$PSScriptRoot/../Public/LM/Remove-LMActionChain.ps1"
+        . "$PSScriptRoot/../../Private/LM/Test-LMResponseHasPagination.ps1"
+        . "$PSScriptRoot/../../Private/Shared/Add-ObjectTypeInfo.ps1"
+        . "$PSScriptRoot/../../Private/LM/Format-LMData.ps1"
+        . "$PSScriptRoot/../../Private/LM/Format-LMFilter.ps1"
+        . "$PSScriptRoot/../../Private/LM/Get-LMPortalURI.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMPaginatedGet.ps1"
+        . "$PSScriptRoot/../../Private/LM/New-LMHeader.ps1"
+        . "$PSScriptRoot/../../Private/LM/Resolve-LMDebugInfo.ps1"
+        . "$PSScriptRoot/../../Private/Shared/Test-LookupResult.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMRestMethod.ps1"
+        . "$PSScriptRoot/../../Public/LM/Get-LMActionChain.ps1"
+        . "$PSScriptRoot/../../Public/LM/New-LMActionChain.ps1"
+        . "$PSScriptRoot/../../Public/LM/Set-LMActionChain.ps1"
+        . "$PSScriptRoot/../../Public/LM/Remove-LMActionChain.ps1"
     }
 
     BeforeEach {
@@ -113,19 +113,19 @@ Describe 'Action Chain Cmdlet Tests' {
 
 Describe 'Action Rule Cmdlet Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/LM/Test-LMResponseHasPagination.ps1"
-        . "$PSScriptRoot/../Private/Shared/Add-ObjectTypeInfo.ps1"
-        . "$PSScriptRoot/../Private/LM/Format-LMFilter.ps1"
-        . "$PSScriptRoot/../Private/LM/Get-LMPortalURI.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMPaginatedGet.ps1"
-        . "$PSScriptRoot/../Private/LM/New-LMHeader.ps1"
-        . "$PSScriptRoot/../Private/LM/Resolve-LMDebugInfo.ps1"
-        . "$PSScriptRoot/../Private/Shared/Test-LookupResult.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMRestMethod.ps1"
-        . "$PSScriptRoot/../Public/LM/Get-LMActionRule.ps1"
-        . "$PSScriptRoot/../Public/LM/New-LMActionRule.ps1"
-        . "$PSScriptRoot/../Public/LM/Set-LMActionRule.ps1"
-        . "$PSScriptRoot/../Public/LM/Remove-LMActionRule.ps1"
+        . "$PSScriptRoot/../../Private/LM/Test-LMResponseHasPagination.ps1"
+        . "$PSScriptRoot/../../Private/Shared/Add-ObjectTypeInfo.ps1"
+        . "$PSScriptRoot/../../Private/LM/Format-LMFilter.ps1"
+        . "$PSScriptRoot/../../Private/LM/Get-LMPortalURI.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMPaginatedGet.ps1"
+        . "$PSScriptRoot/../../Private/LM/New-LMHeader.ps1"
+        . "$PSScriptRoot/../../Private/LM/Resolve-LMDebugInfo.ps1"
+        . "$PSScriptRoot/../../Private/Shared/Test-LookupResult.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMRestMethod.ps1"
+        . "$PSScriptRoot/../../Public/LM/Get-LMActionRule.ps1"
+        . "$PSScriptRoot/../../Public/LM/New-LMActionRule.ps1"
+        . "$PSScriptRoot/../../Public/LM/Set-LMActionRule.ps1"
+        . "$PSScriptRoot/../../Public/LM/Remove-LMActionRule.ps1"
     }
 
     BeforeEach {
@@ -207,17 +207,17 @@ Describe 'Action Rule Cmdlet Tests' {
 
 Describe 'ADR Cmdlet Tests' {
     BeforeAll {
-        . "$PSScriptRoot/../Private/LM/Test-LMResponseHasPagination.ps1"
-        . "$PSScriptRoot/../Private/Shared/Add-ObjectTypeInfo.ps1"
-        . "$PSScriptRoot/../Private/LM/Get-LMPortalURI.ps1"
-        . "$PSScriptRoot/../Private/LM/New-LMHeader.ps1"
-        . "$PSScriptRoot/../Private/LM/Resolve-LMDebugInfo.ps1"
-        . "$PSScriptRoot/../Private/Shared/Test-LookupResult.ps1"
-        . "$PSScriptRoot/../Private/LM/Invoke-LMRestMethod.ps1"
-        . "$PSScriptRoot/../Public/LM/Get-LMDiagnosticRemediationModule.ps1"
-        . "$PSScriptRoot/../Public/LM/Get-LMDiagnosticRemediationExecutionResult.ps1"
-        . "$PSScriptRoot/../Public/LM/Get-LMDiagnosticSource.ps1"
-        . "$PSScriptRoot/../Public/LM/Get-LMRemediationSource.ps1"
+        . "$PSScriptRoot/../../Private/LM/Test-LMResponseHasPagination.ps1"
+        . "$PSScriptRoot/../../Private/Shared/Add-ObjectTypeInfo.ps1"
+        . "$PSScriptRoot/../../Private/LM/Get-LMPortalURI.ps1"
+        . "$PSScriptRoot/../../Private/LM/New-LMHeader.ps1"
+        . "$PSScriptRoot/../../Private/LM/Resolve-LMDebugInfo.ps1"
+        . "$PSScriptRoot/../../Private/Shared/Test-LookupResult.ps1"
+        . "$PSScriptRoot/../../Private/LM/Invoke-LMRestMethod.ps1"
+        . "$PSScriptRoot/../../Public/LM/Get-LMDiagnosticRemediationModule.ps1"
+        . "$PSScriptRoot/../../Public/LM/Get-LMDiagnosticRemediationExecutionResult.ps1"
+        . "$PSScriptRoot/../../Public/LM/Get-LMDiagnosticSource.ps1"
+        . "$PSScriptRoot/../../Public/LM/Get-LMRemediationSource.ps1"
     }
 
     BeforeEach {

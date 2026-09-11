@@ -4,7 +4,7 @@ external help file: Logic.Monitor-help.xml
 HelpUri: ''
 Locale: en-US
 Module Name: Logic.Monitor
-ms.date: 07/10/2026
+ms.date: 09/11/2026
 PlatyPS schema version: 2024-05-01
 title: Export-LMLogicModule
 ---
