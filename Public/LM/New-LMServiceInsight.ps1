@@ -236,13 +236,20 @@ function New-LMServiceInsight {
         if (-not $DataSourceDisplayName) {
             $DataSourceDisplayName = "$DisplayName Health"
         }
-        # LM's API rejects a DataSource displayName containing a hyphen
-        # anywhere but the last character - strip any that came from the
-        # Service Insight's own display name.
+        # LM's API rejects a DataSource name/displayName containing a
+        # hyphen anywhere but the last character - strip any that came
+        # from the Service Insight's own name/display name. Confirmed via
+        # a real CI failure: a test using a hyphenated -Name (e.g.
+        # "si-build-test-<suffix>") passed that hyphen straight into the
+        # DataSource's "name" field (unlike displayName, which was
+        # already being stripped), and the API rejected it with
+        # 'name "-" is only supported for DataSource name when it is the
+        # last char'.
+        $DataSourceName = ($Name -replace '-', '') + '_health'
         $DataSourceDisplayName = $DataSourceDisplayName -replace '-', ''
 
         $dataSourceConfig = [PSCustomObject]@{
-            name              = ($Name + '_health')
+            name              = $DataSourceName
             displayName       = $DataSourceDisplayName
             description       = $DataSourceDescription
             group             = ''

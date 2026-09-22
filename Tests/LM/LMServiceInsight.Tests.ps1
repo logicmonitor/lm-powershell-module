@@ -144,6 +144,22 @@ Describe 'ServiceInsight Testing New/Get/Set/Remove' {
     }
 }
 
+<#
+.NOTES
+The New-/Get-/Set-/Remove-LMDynamicServiceInsight cmdlets call
+LogicMonitor's v4 /serviceTemplates/* endpoints, which only accept
+-SessionSync (browser-session cookie) authentication - confirmed live by
+directly testing the endpoint with real LMv1 credentials, which the API
+rejected outright with "Authentication failed", independent of any
+client-side restriction in the cmdlets themselves. CI (test.yml) only
+ever authenticates via AccessId/AccessKey (LMv1) or BearerToken, so it
+can never exercise these cmdlets. Since auth type is only known once
+Connect-LMTestAccount actually runs (inside this block's own BeforeAll,
+not at Pester's discovery-time when -Skip on Describe would be
+evaluated), each It below opens with a runtime Set-ItResult -Skipped
+check instead, so CI reports an honest, deliberate skip rather than a
+failure for something it structurally cannot test.
+#>
 Describe 'DynamicServiceInsight Testing New/Get/Set/Remove' {
     BeforeAll {
         Import-Module $Module -Force
@@ -152,10 +168,16 @@ Describe 'DynamicServiceInsight Testing New/Get/Set/Remove' {
 
         $script:TplTestSuffix = Get-LMTestSuffix
         $script:TplTestName = "dsi-build-test-$($script:TplTestSuffix)"
+        $script:IsSessionSync = ($Script:LMAuth -and $Script:LMAuth.Type -eq 'SessionSync')
     }
 
     Describe 'New-LMDynamicServiceInsight' {
         It 'When given mandatory parameters, returns a created template with a resolvable id' {
+            if (-not $script:IsSessionSync) {
+                Set-ItResult -Skipped -Because "LMDynamicServiceInsight cmdlets require -SessionSync auth, which this environment isn't connected with."
+                return
+            }
+
             $response = New-LMDynamicServiceInsight -Name $script:TplTestName -Description "Pester test template" `
                 -Cardinality @(@{name = "testProperty"; type = "RESOURCE_PROPERTY" }) `
                 -PropertySelector @(@{value = @(); name = "testProperty"; type = "RESOURCE_PROPERTY"; inclusionType = "INCLUDE"; label = "testProperty"; isOpen = $true }) `
@@ -171,6 +193,11 @@ Describe 'DynamicServiceInsight Testing New/Get/Set/Remove' {
 
     Describe 'Get-LMDynamicServiceInsight' {
         It 'When given an id should return that template with the configured naming pattern' {
+            if (-not $script:IsSessionSync) {
+                Set-ItResult -Skipped -Because "LMDynamicServiceInsight cmdlets require -SessionSync auth, which this environment isn't connected with."
+                return
+            }
+
             $Template = Get-LMDynamicServiceInsight -Id $Script:NewTemplateId
             $Template | Should -Not -BeNullOrEmpty
             $Template.name | Should -Be $script:TplTestName
@@ -179,11 +206,21 @@ Describe 'DynamicServiceInsight Testing New/Get/Set/Remove' {
 
     Describe 'Set-LMDynamicServiceInsight' {
         It 'When given -IsEnabled only, applies a minimal partial update' {
+            if (-not $script:IsSessionSync) {
+                Set-ItResult -Skipped -Because "LMDynamicServiceInsight cmdlets require -SessionSync auth, which this environment isn't connected with."
+                return
+            }
+
             { Set-LMDynamicServiceInsight -Id $Script:NewTemplateId -IsEnabled $true -Confirm:$false -ErrorAction Stop } | Should -Not -Throw
             (Get-LMDynamicServiceInsight -Id $Script:NewTemplateId).isEnabled | Should -Be $true
         }
 
         It 'When given a field other than IsEnabled, preserves previously-set fields (full-object merge path)' {
+            if (-not $script:IsSessionSync) {
+                Set-ItResult -Skipped -Because "LMDynamicServiceInsight cmdlets require -SessionSync auth, which this environment isn't connected with."
+                return
+            }
+
             { Set-LMDynamicServiceInsight -Id $Script:NewTemplateId -Description "Updated by Pester" -Confirm:$false -ErrorAction Stop } | Should -Not -Throw
             $Updated = Get-LMDynamicServiceInsight -Id $Script:NewTemplateId
             $Updated.description | Should -Be "Updated by Pester"
@@ -193,6 +230,11 @@ Describe 'DynamicServiceInsight Testing New/Get/Set/Remove' {
 
     Describe 'Remove-LMDynamicServiceInsight' {
         It 'When given an id, removes the template from logic monitor' {
+            if (-not $script:IsSessionSync) {
+                Set-ItResult -Skipped -Because "LMDynamicServiceInsight cmdlets require -SessionSync auth, which this environment isn't connected with."
+                return
+            }
+
             { Remove-LMDynamicServiceInsight -Id $Script:NewTemplateId -Confirm:$false -ErrorAction Stop } | Should -Not -Throw
         }
     }
